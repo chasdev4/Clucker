@@ -2,7 +2,7 @@ Coding Standards and Best Practices
 
 Agreeing Members:
 Leandro Yabut
-Person O’Person 
+Charles Holdren
 Person VonPerson
 
 Purpose
