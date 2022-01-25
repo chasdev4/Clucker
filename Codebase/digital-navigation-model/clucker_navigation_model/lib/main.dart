@@ -16,10 +16,14 @@ void main() {
           '/NewCluck': (context) => const NewCluckScreen(),
           '/UserMenu': (context) => const UserMenuScreen(),
           '/Profile': (context) => const ProfileScreen(),
-          //'/Settings': (context) => const SettingScreen(),
+          //'/EditProfile': (context) => const EditProfileScreen(),
+          //'/Settings': (context) => const SettingsScreen(),
           //'/Followers': (context) => const FollowersScreen(),
           //'/Following': (context) => const FollowingScreen(),
           //'/BlockedUsers': (context) => const BlockedUsersScreen(),
+          //'/TermsOfUse': (context) => const TermsOfUseScreen(),
+          //'/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
+          //'/About': (context) => const AboutScreen(),
 
         }
     ),
