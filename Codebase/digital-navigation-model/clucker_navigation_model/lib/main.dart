@@ -16,7 +16,7 @@ void main() {
           '/NewCluck': (context) => const NewCluckScreen(),
           '/UserMenu': (context) => const UserMenuScreen(),
           '/Profile': (context) => const ProfileScreen(),
-          //'/EditProfile': (context) => const EditProfileScreen(),
+          '/EditProfile': (context) => const EditProfileScreen(),
           //'/Settings': (context) => const SettingsScreen(),
           //'/Followers': (context) => const FollowersScreen(),
           //'/Following': (context) => const FollowingScreen(),
@@ -139,6 +139,38 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Profile Screen'),
         backgroundColor: Colors.greenAccent,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget> [
+      Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget> [
+          Expanded(
+            child: ElevatedButton(
+              onPressed: (){
+                Navigator.pushNamed(context, '/EditProfile');
+              },
+              child: const Text('Edit Profile'),
+            ),
+          ),
+        ],
+      ),
+      ],
+    ),
+    );
+  }
+}
+
+class EditProfileScreen extends StatelessWidget {
+  const EditProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Profile Screen'),
+        backgroundColor: Colors.indigo.shade400,
       ),
       body: Column(
         children: <Widget> [
