@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.clucker_navigation_model">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="clucker_navigation_model"
         android:name="${applicationName}"
