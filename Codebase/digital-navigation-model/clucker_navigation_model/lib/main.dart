@@ -156,9 +156,10 @@ class ProfileScreen extends StatelessWidget {
         backgroundColor: Colors.greenAccent,
       ),
       body: Column(
+        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Expanded(
                 child: ElevatedButton(
@@ -171,7 +172,7 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
                 child: ElevatedButton(
@@ -184,7 +185,7 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
                 child: ElevatedButton(
@@ -209,24 +210,8 @@ class ProfileScreen extends StatelessWidget {
               ),
             ],
           ),
-        ],
-      ),
           const NavigationBar(),
-      ],
-    ),
-    );
-  }
-}
-
-class EditProfileScreen extends StatelessWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Profile Screen'),
-        backgroundColor: Colors.indigo.shade400,
+        ],
       ),
     );
   }
@@ -314,7 +299,7 @@ class SettingsScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}
 
 class BlockedUsersScreen extends StatelessWidget {
   const BlockedUsersScreen({Key? key}) : super(key: key);
@@ -332,7 +317,7 @@ class BlockedUsersScreen extends StatelessWidget {
 
 class TermsOfUseScreen extends StatelessWidget {
   const TermsOfUseScreen({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -360,7 +345,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
