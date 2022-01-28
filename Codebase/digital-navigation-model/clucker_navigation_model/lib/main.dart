@@ -13,11 +13,11 @@ void main() {
       '/Profile': (context) => const ProfileScreen(),
       '/EditProfile': (context) => const EditProfileScreen(),
       '/Settings': (context) => const SettingsScreen(),
-      //'/Followers': (context) => const FollowersScreen(),
-      //'/Following': (context) => const FollowingScreen(),
-      //'/BlockedUsers': (context) => const BlockedUsersScreen(),
-      //'/TermsOfUse': (context) => const TermsOfUseScreen(),
-      //'/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
+      '/Followers': (context) => const FollowersScreen(),
+      '/Following': (context) => const FollowingScreen(),
+      '/BlockedUsers': (context) => const BlockedUsersScreen(),
+      '/TermsOfUse': (context) => const TermsOfUseScreen(),
+      '/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
       '/About': (context) => const AboutScreen(),
     }),
   );
@@ -185,6 +185,9 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
+          const NavigationBar(),
+      ],
+    ),
     );
   }
 }
@@ -199,10 +202,19 @@ class EditProfileScreen extends StatelessWidget {
         title: const Text('Edit Profile Screen'),
         backgroundColor: Colors.indigo.shade400,
       ),
-      body: Column(
-        children: <Widget>[
-          Row(),
-        ],
+    );
+  }
+}
+
+class EditProfileScreen extends StatelessWidget {
+  const EditProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Profile Screen'),
+        backgroundColor: Colors.indigo.shade400,
       ),
     );
   }
@@ -276,11 +288,53 @@ class SettingsScreen extends StatelessWidget {
       ),
     );
   }
+} 
+
+class BlockedUsersScreen extends StatelessWidget {
+  const BlockedUsersScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Blocked Users Screen'),
+        backgroundColor: Colors.indigo.shade400,
+      ),
+    );
+  }
+}
+
+class TermsOfUseScreen extends StatelessWidget {
+  const TermsOfUseScreen({Key? key}) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Terms of Use Screen'),
+        backgroundColor: Colors.indigo.shade400,
+      ),
+    );
+  }
+}
+
+class PrivacyPolicyScreen extends StatelessWidget {
+  const PrivacyPolicyScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Privacy Policy Screen'),
+        backgroundColor: Colors.indigo.shade400,
+      ),
+    );
+  }
 }
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -410,6 +464,16 @@ class NotificationScreen extends StatelessWidget {
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget> [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, '/Profile');
+                  },
+                  child: const Text('Profile'),
+                ),
+              ),
+            ],
           ),
           const NavigationBar(),
         ],
