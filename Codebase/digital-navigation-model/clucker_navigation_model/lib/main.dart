@@ -168,7 +168,7 @@ class ProfileScreen extends StatelessWidget {
                   child: const Text('Edit Profile'),
                 ),
               ),
-              ],
+            ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -179,6 +179,19 @@ class ProfileScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/Settings');
                   },
                   child: const Text('Settings'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/Followers');
+                  },
+                  child: const Text('Followers'),
                 ),
               ),
             ],
@@ -341,6 +354,20 @@ class AboutScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('About Screen'),
         backgroundColor: Colors.deepOrange.shade400,
+      ),
+    );
+  }
+}
+
+class FollowersScreen extends StatelessWidget {
+  const FollowersScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Followers Screen'),
+        backgroundColor: Colors.indigo.shade400,
       ),
     );
   }
