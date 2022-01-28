@@ -17,7 +17,7 @@ void main() {
       //'/Following': (context) => const FollowingScreen(),
       '/BlockedUsers': (context) => const BlockedUsersScreen(),
       '/TermsOfUse': (context) => const TermsOfUseScreen(),
-      //'/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
+      '/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
       //'/About': (context) => const AboutScreen(),
     }),
   );
@@ -290,6 +290,19 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
+class BlockedUsersScreen extends StatelessWidget {
+  const BlockedUsersScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Blocked Users Screen'),
+        backgroundColor: Colors.indigo.shade400,
+      ),
+    );
+  }
+}
 
 class TermsOfUseScreen extends StatelessWidget {
   const TermsOfUseScreen({Key? key}) : super(key: key);
@@ -305,14 +318,14 @@ class TermsOfUseScreen extends StatelessWidget {
   }
 }
 
-class BlockedUsersScreen extends StatelessWidget {
-  const BlockedUsersScreen({Key? key}) : super(key: key);
+class PrivacyPolicyScreen extends StatelessWidget {
+  const PrivacyPolicyScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Blocked Users Screen'),
+        title: const Text('Privacy Policy Screen'),
         backgroundColor: Colors.indigo.shade400,
       ),
     );
