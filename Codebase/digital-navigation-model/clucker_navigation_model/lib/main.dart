@@ -198,7 +198,7 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
                 child: ElevatedButton(
@@ -210,7 +210,12 @@ class ProfileScreen extends StatelessWidget {
               ),
             ],
           ),
-          const NavigationBar(),
+          const Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: NavigationBar(),
+            ),
+          ),
         ],
       ),
     );
@@ -503,10 +508,10 @@ class NotificationScreen extends StatelessWidget {
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget> [
+            children: <Widget>[
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.pushNamed(context, '/Profile');
                   },
                   child: const Text('Profile'),
