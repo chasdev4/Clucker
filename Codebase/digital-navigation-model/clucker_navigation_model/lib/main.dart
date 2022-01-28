@@ -185,6 +185,9 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
+          const NavigationBar(),
+      ],
+    ),
     );
   }
 }
