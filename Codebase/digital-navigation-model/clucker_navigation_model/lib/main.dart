@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(
@@ -16,7 +15,7 @@ void main() {
       '/Settings': (context) => const SettingsScreen(),
       //'/Followers': (context) => const FollowersScreen(),
       //'/Following': (context) => const FollowingScreen(),
-      //'/BlockedUsers': (context) => const BlockedUsersScreen(),
+      '/BlockedUsers': (context) => const BlockedUsersScreen(),
       //'/TermsOfUse': (context) => const TermsOfUseScreen(),
       //'/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
       //'/About': (context) => const AboutScreen(),
@@ -274,6 +273,20 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BlockedUsersScreen extends StatelessWidget {
+  const BlockedUsersScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Blocked Users Screen'),
+        backgroundColor: Colors.indigo.shade400,
       ),
     );
   }
