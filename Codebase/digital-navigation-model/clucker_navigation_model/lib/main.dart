@@ -12,13 +12,13 @@ void main() {
       '/NewCluck': (context) => const NewCluckScreen(),
       '/Profile': (context) => const ProfileScreen(),
       '/EditProfile': (context) => const EditProfileScreen(),
-      //'/Settings': (context) => const SettingsScreen(),
-      //'/Followers': (context) => const FollowersScreen(),
+      '/Settings': (context) => const SettingsScreen(),
+      '/Followers': (context) => const FollowersScreen(),
       '/Following': (context) => const FollowingScreen(),
-      //'/BlockedUsers': (context) => const BlockedUsersScreen(),
-      //'/TermsOfUse': (context) => const TermsOfUseScreen(),
-      //'/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
-      //'/About': (context) => const AboutScreen(),
+      '/BlockedUsers': (context) => const BlockedUsersScreen(),
+      '/TermsOfUse': (context) => const TermsOfUseScreen(),
+      '/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
+      '/About': (context) => const AboutScreen(),
     }),
   );
 }
@@ -158,7 +158,7 @@ class ProfileScreen extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
                 child: ElevatedButton(
@@ -176,6 +176,19 @@ class ProfileScreen extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    Navigator.pushNamed(context, '/Settings');
+                  },
+                  child: const Text('Settings'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
                     Navigator.pushNamed(context, '/Following');
                   },
                   child: const Text('Following'),
@@ -183,7 +196,37 @@ class ProfileScreen extends StatelessWidget {
               ),
             ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/Followers');
+                  },
+                  child: const Text('Followers'),
+                ),
+              ),
+            ],
+          ),
         ],
+      ),
+          const NavigationBar(),
+      ],
+    ),
+    );
+  }
+}
+
+class EditProfileScreen extends StatelessWidget {
+  const EditProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Profile Screen'),
+        backgroundColor: Colors.indigo.shade400,
       ),
     );
   }
@@ -199,10 +242,145 @@ class EditProfileScreen extends StatelessWidget {
         title: const Text('Edit Profile Screen'),
         backgroundColor: Colors.indigo.shade400,
       ),
+    );
+  }
+}
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings Screen'),
+        backgroundColor: Colors.deepOrange.shade400,
+      ),
       body: Column(
         children: <Widget>[
-          Row(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/BlockedUsers');
+                  },
+                  child: const Text('Blocked Users'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/TermsOfUse');
+                  },
+                  child: const Text('Terms Of Use'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/PrivacyPolicy');
+                  },
+                  child: const Text('Privacy Policy'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/About');
+                  },
+                  child: const Text('About'),
+                ),
+              ),
+            ],
+          ),
         ],
+      ),
+    );
+  }
+} 
+
+class BlockedUsersScreen extends StatelessWidget {
+  const BlockedUsersScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Blocked Users Screen'),
+        backgroundColor: Colors.indigo.shade400,
+      ),
+    );
+  }
+}
+
+class TermsOfUseScreen extends StatelessWidget {
+  const TermsOfUseScreen({Key? key}) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Terms of Use Screen'),
+        backgroundColor: Colors.indigo.shade400,
+      ),
+    );
+  }
+}
+
+class PrivacyPolicyScreen extends StatelessWidget {
+  const PrivacyPolicyScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Privacy Policy Screen'),
+        backgroundColor: Colors.indigo.shade400,
+      ),
+    );
+  }
+}
+
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({Key? key}) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('About Screen'),
+        backgroundColor: Colors.deepOrange.shade400,
+      ),
+    );
+  }
+}
+
+class FollowersScreen extends StatelessWidget {
+  const FollowersScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Followers Screen'),
+        backgroundColor: Colors.indigo.shade400,
       ),
     );
   }
@@ -340,6 +518,16 @@ class NotificationScreen extends StatelessWidget {
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget> [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, '/Profile');
+                  },
+                  child: const Text('Profile'),
+                ),
+              ),
+            ],
           ),
           const NavigationBar(),
         ],
