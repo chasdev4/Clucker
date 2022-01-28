@@ -413,6 +413,16 @@ class NotificationScreen extends StatelessWidget {
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget> [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, '/Profile');
+                  },
+                  child: const Text('Profile'),
+                ),
+              ),
+            ],
           ),
           const NavigationBar(),
         ],
