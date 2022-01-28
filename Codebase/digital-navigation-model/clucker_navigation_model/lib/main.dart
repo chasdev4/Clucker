@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(
@@ -19,7 +18,7 @@ void main() {
       //'/BlockedUsers': (context) => const BlockedUsersScreen(),
       //'/TermsOfUse': (context) => const TermsOfUseScreen(),
       //'/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
-      //'/About': (context) => const AboutScreen(),
+      '/About': (context) => const AboutScreen(),
     }),
   );
 }
@@ -274,6 +273,20 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('About Screen'),
+        backgroundColor: Colors.deepOrange.shade400,
       ),
     );
   }
