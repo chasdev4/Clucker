@@ -2,32 +2,77 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(
-    MaterialApp(
-        title: 'Routes Practice',
-        initialRoute: '/SignIn',
-
-        routes: {
-          '/SignIn': (context) => const SignInScreen(),
-          '/SignUp': (context) => const SignUpScreen(),
-          '/Home': (context) => const HomeScreen(),
-          '/Search': (context) => const SearchScreen(),
-          '/Discover': (context) => const DiscoverScreen(),
-          '/Notification': (context) => const NotificationScreen(),
-          '/NewCluck': (context) => const NewCluckScreen(),
-          '/UserMenu': (context) => const UserMenuScreen(),
-          '/Profile': (context) => const ProfileScreen(),
-          '/EditProfile': (context) => const EditProfileScreen(),
-          //'/Settings': (context) => const SettingsScreen(),
-          //'/Followers': (context) => const FollowersScreen(),
-          //'/Following': (context) => const FollowingScreen(),
-          //'/BlockedUsers': (context) => const BlockedUsersScreen(),
-          //'/TermsOfUse': (context) => const TermsOfUseScreen(),
-          //'/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
-          //'/About': (context) => const AboutScreen(),
-
-        }
-    ),
+    MaterialApp(title: 'Routes Practice', initialRoute: '/SignIn', routes: {
+      '/SignIn': (context) => const SignInScreen(),
+      '/SignUp': (context) => const SignUpScreen(),
+      '/Home': (context) => const HomeScreen(),
+      '/Search': (context) => const SearchScreen(),
+      '/Discover': (context) => const DiscoverScreen(),
+      '/Notification': (context) => const NotificationScreen(),
+      '/NewCluck': (context) => const NewCluckScreen(),
+      '/Profile': (context) => const ProfileScreen(),
+      '/EditProfile': (context) => const EditProfileScreen(),
+      '/Settings': (context) => const SettingsScreen(),
+      //'/Followers': (context) => const FollowersScreen(),
+      //'/Following': (context) => const FollowingScreen(),
+      '/BlockedUsers': (context) => const BlockedUsersScreen(),
+      //'/TermsOfUse': (context) => const TermsOfUseScreen(),
+      //'/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
+      //'/About': (context) => const AboutScreen(),
+    }),
   );
+}
+
+class NavigationBar extends StatelessWidget {
+  const NavigationBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/Home');
+            },
+            child: const Text('Home'),
+          ),
+        ),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/Discover');
+            },
+            child: const Text('Disc-\nover'),
+          ),
+        ),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/NewCluck');
+            },
+            child: const Text('New\nCluck'),
+          ),
+        ),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/Search');
+            },
+            child: const Text('Search'),
+          ),
+        ),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/Notification');
+            },
+            child: const Text('Notifi-\ncation'),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class SignInScreen extends StatelessWidget {
@@ -44,10 +89,10 @@ class SignInScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Row(
-            children: <Widget> [
+            children: <Widget>[
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.pushNamed(context, '/Home');
                   },
                   child: const Text('Sign In'),
@@ -55,7 +100,7 @@ class SignInScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.pushNamed(context, '/SignUp');
                   },
                   child: const Text('Sign Up'),
@@ -83,43 +128,13 @@ class SignUpScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Row(
-            children: <Widget> [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('Sign Up'),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class UserMenuScreen extends StatelessWidget {
-  const UserMenuScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Menu'),
-        backgroundColor: Colors.yellowAccent,
-      ),
-      body: Column(
-        children: <Widget> [
-          Row(
-            children: <Widget> [
+            children: <Widget>[
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-
+                    Navigator.pushNamed(context, '/Home');
                   },
-                  child: const Text('Profile'),
+                  child: const Text('Sign Up'),
                 ),
               ),
             ],
@@ -141,21 +156,36 @@ class ProfileScreen extends StatelessWidget {
         backgroundColor: Colors.greenAccent,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget> [
-      Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget> [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: (){
-                Navigator.pushNamed(context, '/EditProfile');
-              },
-              child: const Text('Edit Profile'),
-            ),
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/EditProfile');
+                  },
+                  child: const Text('Edit Profile'),
+                ),
+              ),
+              ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/Settings');
+                  },
+                  child: const Text('Settings'),
+                ),
+              ),
+            ],
           ),
         ],
       ),
+          const NavigationBar(),
       ],
     ),
     );
@@ -176,6 +206,104 @@ class EditProfileScreen extends StatelessWidget {
   }
 }
 
+class EditProfileScreen extends StatelessWidget {
+  const EditProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Profile Screen'),
+        backgroundColor: Colors.indigo.shade400,
+      ),
+    );
+  }
+}
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings Screen'),
+        backgroundColor: Colors.deepOrange.shade400,
+      ),
+      body: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/BlockedUsers');
+                  },
+                  child: const Text('Blocked Users'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/TermsOfUse');
+                  },
+                  child: const Text('Terms Of Use'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/PrivacyPolicy');
+                  },
+                  child: const Text('Privacy Policy'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/About');
+                  },
+                  child: const Text('About'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BlockedUsersScreen extends StatelessWidget {
+  const BlockedUsersScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Blocked Users Screen'),
+        backgroundColor: Colors.indigo.shade400,
+      ),
+    );
+  }
+}
+
 class SearchScreen extends StatelessWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
@@ -189,64 +317,21 @@ class SearchScreen extends StatelessWidget {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget> [
+        children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget> [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/UserMenu');
-                  },
-                  child: const Text('User Menu'),
-                ),
-              ),
-            ],
-          ),
-          Row(
             children: <Widget>[
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/Profile');
                   },
-                  child: const Text('H'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Discover');
-                  },
-                  child: const Text('D'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/NewCluck');
-                  },
-                  child: const Text('NC'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Search');
-                  },
-                  child: const Text('S'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Notification');
-                  },
-                  child: const Text('N'),
+                  child: const Text('Profile'),
                 ),
               ),
             ],
           ),
+          const NavigationBar(),
         ],
       ),
     );
@@ -266,13 +351,13 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget> [
+        children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget> [
+            children: <Widget>[
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.pushNamed(context, '/Profile');
                   },
                   child: const Text('Profile'),
@@ -280,50 +365,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('H'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Discover');
-                  },
-                  child: const Text('D'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/NewCluck');
-                  },
-                  child: const Text('NC'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Search');
-                  },
-                  child: const Text('S'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Notification');
-                  },
-                  child: const Text('N'),
-                ),
-              ),
-            ],
-          ),
+          const NavigationBar(),
         ],
       ),
     );
@@ -343,64 +385,21 @@ class DiscoverScreen extends StatelessWidget {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget> [
+        children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget> [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/UserMenu');
-                  },
-                  child: const Text('User Menu'),
-                ),
-              ),
-            ],
-          ),
-          Row(
             children: <Widget>[
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/Profile');
                   },
-                  child: const Text('H'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Discover');
-                  },
-                  child: const Text('D'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/NewCluck');
-                  },
-                  child: const Text('NC'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Search');
-                  },
-                  child: const Text('S'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Notification');
-                  },
-                  child: const Text('N'),
+                  child: const Text('Profile'),
                 ),
               ),
             ],
           ),
+          const NavigationBar(),
         ],
       ),
     );
@@ -420,64 +419,21 @@ class NotificationScreen extends StatelessWidget {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget> [
+        children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget> [
               Expanded(
                 child: ElevatedButton(
                   onPressed: (){
-                    Navigator.pushNamed(context, '/UserMenu');
+                    Navigator.pushNamed(context, '/Profile');
                   },
-                  child: const Text('User Menu'),
+                  child: const Text('Profile'),
                 ),
               ),
             ],
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('H'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Discover');
-                  },
-                  child: const Text('D'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/NewCluck');
-                  },
-                  child: const Text('NC'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Search');
-                  },
-                  child: const Text('S'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Notification');
-                  },
-                  child: const Text('N'),
-                ),
-              ),
-            ],
-          ),
+          const NavigationBar(),
         ],
       ),
     );
@@ -496,52 +452,6 @@ class NewCluckScreen extends StatelessWidget {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget> [
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('H'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Discover');
-                  },
-                  child: const Text('D'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/NewCluck');
-                  },
-                  child: const Text('NC'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Search');
-                  },
-                  child: const Text('S'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Notification');
-                  },
-                  child: const Text('N'),
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
