@@ -18,7 +18,7 @@ void main() {
       //'/Following': (context) => const FollowingScreen(),
       //'/BlockedUsers': (context) => const BlockedUsersScreen(),
       //'/TermsOfUse': (context) => const TermsOfUseScreen(),
-      //'/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
+      '/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
       //'/About': (context) => const AboutScreen(),
     }),
   );
@@ -274,6 +274,20 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class PrivacyPolicyScreen extends StatelessWidget {
+  const PrivacyPolicyScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Privacy Policy Screen'),
+        backgroundColor: Colors.indigo.shade400,
       ),
     );
   }
