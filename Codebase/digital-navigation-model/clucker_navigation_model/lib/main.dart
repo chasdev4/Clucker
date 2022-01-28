@@ -17,7 +17,7 @@ void main() {
       //'/Followers': (context) => const FollowersScreen(),
       //'/Following': (context) => const FollowingScreen(),
       //'/BlockedUsers': (context) => const BlockedUsersScreen(),
-      //'/TermsOfUse': (context) => const TermsOfUseScreen(),
+      '/TermsOfUse': (context) => const TermsOfUseScreen(),
       //'/PrivacyPolicy': (context) => const PrivacyPolicyScreen(),
       //'/About': (context) => const AboutScreen(),
     }),
@@ -274,6 +274,20 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class TermsOfUseScreen extends StatelessWidget {
+  const TermsOfUseScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Terms of Use Screen'),
+        backgroundColor: Colors.indigo.shade400,
       ),
     );
   }
