@@ -41,7 +41,7 @@ class NavigationBar extends StatelessWidget {
             onPressed: (){
               Navigator.pushNamed(context, '/Home');
             },
-            child: const Text('H'),
+            child: const Text('Home'),
           ),
         ),
         Expanded(
@@ -49,7 +49,7 @@ class NavigationBar extends StatelessWidget {
             onPressed: (){
               Navigator.pushNamed(context, '/Discover');
             },
-            child: const Text('D'),
+            child: const Text('Disc-\nover'),
           ),
         ),
         Expanded(
@@ -57,7 +57,7 @@ class NavigationBar extends StatelessWidget {
             onPressed: (){
               Navigator.pushNamed(context, '/NewCluck');
             },
-            child: const Text('NC'),
+            child: const Text('New\nCluck'),
           ),
         ),
         Expanded(
@@ -65,7 +65,7 @@ class NavigationBar extends StatelessWidget {
             onPressed: (){
               Navigator.pushNamed(context, '/Search');
             },
-            child: const Text('S'),
+            child: const Text('Search'),
           ),
         ),
         Expanded(
@@ -73,7 +73,7 @@ class NavigationBar extends StatelessWidget {
             onPressed: (){
               Navigator.pushNamed(context, '/Notification');
             },
-            child: const Text('N'),
+            child: const Text('Notifi-\ncation'),
           ),
         ),
       ],
