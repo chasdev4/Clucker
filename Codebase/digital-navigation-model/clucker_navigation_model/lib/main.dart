@@ -189,6 +189,19 @@ class ProfileScreen extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    Navigator.pushNamed(context, '/Following');
+                  },
+                  child: const Text('Following'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
                     Navigator.pushNamed(context, '/Followers');
                   },
                   child: const Text('Followers'),
@@ -367,6 +380,20 @@ class FollowersScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Followers Screen'),
+        backgroundColor: Colors.indigo.shade400,
+      ),
+    );
+  }
+}
+
+class FollowingScreen extends StatelessWidget {
+  const FollowingScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Following Screen'),
         backgroundColor: Colors.indigo.shade400,
       ),
     );
