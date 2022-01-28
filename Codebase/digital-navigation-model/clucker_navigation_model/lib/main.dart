@@ -172,11 +172,6 @@ class EditProfileScreen extends StatelessWidget {
         title: const Text('Edit Profile Screen'),
         backgroundColor: Colors.indigo.shade400,
       ),
-      body: Column(
-        children: <Widget> [
-          Row(),
-        ],
-      ),
     );
   }
 }
