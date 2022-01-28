@@ -17,7 +17,7 @@ void main() {
           '/Profile': (context) => const ProfileScreen(),
           '/EditProfile': (context) => const EditProfileScreen(),
           //'/Settings': (context) => const SettingsScreen(),
-          //'/Followers': (context) => const FollowersScreen(),
+          '/Followers': (context) => const FollowersScreen(),
           //'/Following': (context) => const FollowingScreen(),
           //'/BlockedUsers': (context) => const BlockedUsersScreen(),
           //'/TermsOfUse': (context) => const TermsOfUseScreen(),
@@ -164,23 +164,35 @@ class ProfileScreen extends StatelessWidget {
         backgroundColor: Colors.greenAccent,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget> [
-      Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget> [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: (){
-                Navigator.pushNamed(context, '/EditProfile');
-              },
-              child: const Text('Edit Profile'),
-            ),
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/EditProfile');
+                  },
+                  child: const Text('Edit Profile'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/Followers');
+                  },
+                  child: const Text('Followers'),
+                ),
+              ),
+            ],
           ),
         ],
       ),
-      ],
-    ),
     );
   }
 }
@@ -196,9 +208,23 @@ class EditProfileScreen extends StatelessWidget {
         backgroundColor: Colors.indigo.shade400,
       ),
       body: Column(
-        children: <Widget> [
+        children: <Widget>[
           Row(),
         ],
+      ),
+    );
+  }
+}
+
+class FollowersScreen extends StatelessWidget {
+  const FollowersScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Followers Screen'),
+        backgroundColor: Colors.indigo.shade400,
       ),
     );
   }
