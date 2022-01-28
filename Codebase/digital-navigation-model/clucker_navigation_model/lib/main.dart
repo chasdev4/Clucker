@@ -202,10 +202,19 @@ class EditProfileScreen extends StatelessWidget {
         title: const Text('Edit Profile Screen'),
         backgroundColor: Colors.indigo.shade400,
       ),
-      body: Column(
-        children: <Widget>[
-          Row(),
-        ],
+    );
+  }
+}
+
+class EditProfileScreen extends StatelessWidget {
+  const EditProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Profile Screen'),
+        backgroundColor: Colors.indigo.shade400,
       ),
     );
   }
