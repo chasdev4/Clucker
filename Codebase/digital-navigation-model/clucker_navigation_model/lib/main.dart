@@ -14,7 +14,6 @@ void main() {
           '/Discover': (context) => const DiscoverScreen(),
           '/Notification': (context) => const NotificationScreen(),
           '/NewCluck': (context) => const NewCluckScreen(),
-          '/UserMenu': (context) => const UserMenuScreen(),
           '/Profile': (context) => const ProfileScreen(),
           '/EditProfile': (context) => const EditProfileScreen(),
           //'/Settings': (context) => const SettingsScreen(),
@@ -29,6 +28,60 @@ void main() {
     ),
   );
 }
+
+class NavigationBar extends StatelessWidget {
+  const NavigationBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: ElevatedButton(
+            onPressed: (){
+              Navigator.pushNamed(context, '/Home');
+            },
+            child: const Text('Home'),
+          ),
+        ),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: (){
+              Navigator.pushNamed(context, '/Discover');
+            },
+            child: const Text('Disc-\nover'),
+          ),
+        ),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: (){
+              Navigator.pushNamed(context, '/NewCluck');
+            },
+            child: const Text('New\nCluck'),
+          ),
+        ),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: (){
+              Navigator.pushNamed(context, '/Search');
+            },
+            child: const Text('Search'),
+          ),
+        ),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: (){
+              Navigator.pushNamed(context, '/Notification');
+            },
+            child: const Text('Notifi-\ncation'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -90,36 +143,6 @@ class SignUpScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/Home');
                   },
                   child: const Text('Sign Up'),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class UserMenuScreen extends StatelessWidget {
-  const UserMenuScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Menu'),
-        backgroundColor: Colors.yellowAccent,
-      ),
-      body: Column(
-        children: <Widget> [
-          Row(
-            children: <Widget> [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-
-                  },
-                  child: const Text('Profile'),
                 ),
               ),
             ],
@@ -201,57 +224,14 @@ class SearchScreen extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: (){
-                    Navigator.pushNamed(context, '/UserMenu');
+                    Navigator.pushNamed(context, '/Profile');
                   },
-                  child: const Text('User Menu'),
+                  child: const Text('Profile'),
                 ),
               ),
             ],
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('H'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Discover');
-                  },
-                  child: const Text('D'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/NewCluck');
-                  },
-                  child: const Text('NC'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Search');
-                  },
-                  child: const Text('S'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Notification');
-                  },
-                  child: const Text('N'),
-                ),
-              ),
-            ],
-          ),
+          const NavigationBar(),
         ],
       ),
     );
@@ -285,50 +265,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('H'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Discover');
-                  },
-                  child: const Text('D'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/NewCluck');
-                  },
-                  child: const Text('NC'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Search');
-                  },
-                  child: const Text('S'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Notification');
-                  },
-                  child: const Text('N'),
-                ),
-              ),
-            ],
-          ),
+          const NavigationBar(),
         ],
       ),
     );
@@ -355,57 +292,14 @@ class DiscoverScreen extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: (){
-                    Navigator.pushNamed(context, '/UserMenu');
+                    Navigator.pushNamed(context, '/Profile');
                   },
-                  child: const Text('User Menu'),
+                  child: const Text('Profile'),
                 ),
               ),
             ],
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('H'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Discover');
-                  },
-                  child: const Text('D'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/NewCluck');
-                  },
-                  child: const Text('NC'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Search');
-                  },
-                  child: const Text('S'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Notification');
-                  },
-                  child: const Text('N'),
-                ),
-              ),
-            ],
-          ),
+          const NavigationBar(),
         ],
       ),
     );
@@ -428,61 +322,8 @@ class NotificationScreen extends StatelessWidget {
         children: <Widget> [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget> [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/UserMenu');
-                  },
-                  child: const Text('User Menu'),
-                ),
-              ),
-            ],
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('H'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Discover');
-                  },
-                  child: const Text('D'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/NewCluck');
-                  },
-                  child: const Text('NC'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Search');
-                  },
-                  child: const Text('S'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Notification');
-                  },
-                  child: const Text('N'),
-                ),
-              ),
-            ],
-          ),
+          const NavigationBar(),
         ],
       ),
     );
@@ -501,52 +342,6 @@ class NewCluckScreen extends StatelessWidget {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget> [
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('H'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Discover');
-                  },
-                  child: const Text('D'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/NewCluck');
-                  },
-                  child: const Text('NC'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Search');
-                  },
-                  child: const Text('S'),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/Notification');
-                  },
-                  child: const Text('N'),
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
