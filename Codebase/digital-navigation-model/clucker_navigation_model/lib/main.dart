@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const eminencePurple = Color.fromARGB(255, 109, 64, 130);
+
 void main() {
   runApp(
     MaterialApp(title: 'Routes Practice', initialRoute: '/SignIn', routes: {
@@ -23,57 +25,88 @@ void main() {
   );
 }
 
+class NavigationButton extends StatelessWidget {
+  NavigationButton(@required this.buttonColor, @required this.routeName,
+      @required this.text);
+
+  final Color buttonColor;
+  final String routeName;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: buttonColor,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+          Navigator.pushNamed(context, routeName);
+        },
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 11,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class NavigationBar extends StatelessWidget {
-  const NavigationBar({Key? key}) : super(key: key);
+  NavigationBar(@required this.buttonColor);
+
+  final Color buttonColor;
+
+  @override
+  Widget build(BuildContext context) {
+    const double gapWidth = 2;
+
+    return Row(
+      children: <Widget>[
+        const SizedBox(width: gapWidth),
+        NavigationButton(buttonColor, '/Home', 'Home'),
+        const SizedBox(width: gapWidth),
+        NavigationButton(buttonColor, '/Discover', 'Discover'),
+        const SizedBox(width: gapWidth),
+        NavigationButton(buttonColor, '/NewCluck', 'New\nCluck'),
+        const SizedBox(width: gapWidth),
+        NavigationButton(buttonColor, '/Search', 'Search'),
+        const SizedBox(width: gapWidth),
+        NavigationButton(buttonColor, '/Notification', 'Notifi-\ncation'),
+        const SizedBox(width: gapWidth),
+      ],
+    );
+  }
+}
+
+class StandardButton extends StatelessWidget {
+  StandardButton(@required this.buttonColor, @required String this.routeName,
+      @required String this.text);
+
+  final Color buttonColor;
+  final String routeName;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
+        const SizedBox(width: 50),
         Expanded(
           child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: buttonColor,
+            ),
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/Home');
+              Navigator.pushNamed(context, routeName);
             },
-            child: const Text('Home'),
+            child: Text(text),
           ),
         ),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/Discover');
-            },
-            child: const Text('Disc-\nover'),
-          ),
-        ),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/NewCluck');
-            },
-            child: const Text('New\nCluck'),
-          ),
-        ),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/Search');
-            },
-            child: const Text('Search'),
-          ),
-        ),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/Notification');
-            },
-            child: const Text('Notifi-\ncation'),
-          ),
-        ),
+        const SizedBox(width: 50),
       ],
     );
   }
@@ -84,36 +117,63 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign-In Screen'),
-        backgroundColor: Colors.blueGrey,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('Sign In'),
+    const cluckerRed = Color.fromARGB(255, 255, 87, 87);
+
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Sign-In Screen'),
+          backgroundColor: cluckerRed,
+          automaticallyImplyLeading: false,
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 20,
                 ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/SignUp');
-                  },
-                  child: const Text('Sign Up'),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: cluckerRed,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/Home');
+                    },
+                    child: const Text('Sign In'),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      side: const BorderSide(color: cluckerRed, width: 3),
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/SignUp');
+                    },
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        color: cluckerRed,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -124,29 +184,20 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const orangeRed = Color.fromARGB(255, 255, 69, 0);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sign-Up Screen'),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: orangeRed,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    while (Navigator.canPop(context)){
+          while (Navigator.canPop(context)){
                       Navigator.popUntil(context, (route) => false);
                     }
-                    Navigator.pushNamed(context, '/Home');
-                  },
-                  child: const Text('Sign Up'),
-                ),
-              ),
-            ],
-          ),
+          StandardButton(orangeRed, '/Home', 'Sign Up'),
         ],
       ),
     );
@@ -158,70 +209,25 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const viridian = Color.fromARGB(255, 64, 130, 109);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile Screen'),
-        backgroundColor: Colors.greenAccent,
+        backgroundColor: viridian,
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/EditProfile');
-                  },
-                  child: const Text('Edit Profile'),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Settings');
-                  },
-                  child: const Text('Settings'),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Following');
-                  },
-                  child: const Text('Following'),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Followers');
-                  },
-                  child: const Text('Followers'),
-                ),
-              ),
-            ],
-          ),
-          const Expanded(
+          StandardButton(viridian, '/EditProfile', 'Edit Profile'),
+          StandardButton(viridian, '/Settings', 'Settings'),
+          StandardButton(viridian, '/Following', 'Following'),
+          StandardButton(viridian, '/Followers', 'Followers'),
+          StandardButton(viridian, '/SignIn', 'Log Out'),
+          Expanded(
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: NavigationBar(),
+              child: NavigationBar(viridian),
             ),
           ),
         ],
@@ -238,7 +244,7 @@ class EditProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile Screen'),
-        backgroundColor: Colors.indigo.shade400,
+        backgroundColor: eminencePurple,
       ),
     );
   }
@@ -249,65 +255,19 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const tomato = Color.fromARGB(255, 255, 99, 71);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings Screen'),
-        backgroundColor: Colors.deepOrange.shade400,
+        backgroundColor: tomato,
       ),
       body: Column(
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/BlockedUsers');
-                  },
-                  child: const Text('Blocked Users'),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/TermsOfUse');
-                  },
-                  child: const Text('Terms Of Use'),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/PrivacyPolicy');
-                  },
-                  child: const Text('Privacy Policy'),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/About');
-                  },
-                  child: const Text('About'),
-                ),
-              ),
-            ],
-          ),
+          StandardButton(tomato, '/BlockedUsers', 'Blocked Users'),
+          StandardButton(tomato, '/TermsOfUse', 'Terms Of Use'),
+          StandardButton(tomato, '/PrivacyPolicy', 'Privacy Policy'),
+          StandardButton(tomato, '/About', 'About'),
         ],
       ),
     );
@@ -364,7 +324,7 @@ class AboutScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('About Screen'),
-        backgroundColor: Colors.deepOrange.shade400,
+        backgroundColor: Colors.indigo.shade400,
       ),
     );
   }
@@ -378,7 +338,7 @@ class FollowersScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Followers Screen'),
-        backgroundColor: Colors.indigo.shade400,
+        backgroundColor: eminencePurple,
       ),
     );
   }
@@ -392,7 +352,7 @@ class FollowingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Following Screen'),
-        backgroundColor: Colors.indigo.shade400,
+        backgroundColor: eminencePurple,
       ),
     );
   }
@@ -403,30 +363,23 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Screen'),
-        backgroundColor: Colors.red,
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Profile');
-                  },
-                  child: const Text('Profile'),
-                ),
-              ),
-            ],
-          ),
-          const NavigationBar(),
-        ],
+    const royalBlue = Color.fromARGB(255, 65, 105, 225);
+
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Search Screen'),
+          backgroundColor: royalBlue,
+          automaticallyImplyLeading: false,
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            StandardButton(royalBlue, '/Profile', 'Profile'),
+            NavigationBar(royalBlue),
+          ],
+        ),
       ),
     );
   }
@@ -437,30 +390,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Screen'),
-        backgroundColor: Colors.green,
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Profile');
-                  },
-                  child: const Text('Profile'),
-                ),
-              ),
-            ],
-          ),
-          const NavigationBar(),
-        ],
+    const crimson = Color.fromARGB(255, 220, 20, 60);
+
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Home Screen'),
+          backgroundColor: crimson,
+          automaticallyImplyLeading: false,
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            StandardButton(crimson, '/Profile', 'Profile'),
+            NavigationBar(crimson),
+          ],
+        ),
       ),
     );
   }
@@ -471,30 +417,23 @@ class DiscoverScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Discover Screen'),
-        backgroundColor: Colors.blue,
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Profile');
-                  },
-                  child: const Text('Profile'),
-                ),
-              ),
-            ],
-          ),
-          const NavigationBar(),
-        ],
+    const corn = Color.fromARGB(255, 230, 184, 0);
+
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Discover Screen'),
+          backgroundColor: corn,
+          automaticallyImplyLeading: false,
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            StandardButton(corn, '/Profile', 'Profile'),
+            NavigationBar(corn),
+          ],
+        ),
       ),
     );
   }
@@ -505,30 +444,23 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notification Screen'),
-        backgroundColor: Colors.deepPurple,
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Profile');
-                  },
-                  child: const Text('Profile'),
-                ),
-              ),
-            ],
-          ),
-          const NavigationBar(),
-        ],
+    const patriarch = Color.fromARGB(255, 128, 0, 128);
+
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Notification Screen'),
+          backgroundColor: patriarch,
+          automaticallyImplyLeading: false,
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            StandardButton(patriarch, '/Profile', 'Profile'),
+            NavigationBar(patriarch),
+          ],
+        ),
       ),
     );
   }
@@ -542,7 +474,7 @@ class NewCluckScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Cluck Screen'),
-        backgroundColor: Colors.amber,
+        backgroundColor: const Color.fromARGB(255, 5, 144, 51),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
