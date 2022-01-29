@@ -25,6 +25,35 @@ void main() {
   );
 }
 
+class NavigationButton extends StatelessWidget {
+  NavigationButton(@required this.buttonColor, @required this.routeName,
+      @required this.text);
+
+  final Color buttonColor;
+  final String routeName;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: buttonColor,
+        ),
+        onPressed: () {
+          Navigator.pushNamed(context, routeName);
+        },
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 11,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class NavigationBar extends StatelessWidget {
   NavigationBar(@required this.buttonColor);
 
@@ -32,63 +61,21 @@ class NavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double gapWidth = 2;
+
     return Row(
       children: <Widget>[
-        Expanded(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: buttonColor,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/Home');
-            },
-            child: const Text('Home'),
-          ),
-        ),
-        Expanded(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: buttonColor,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/Discover');
-            },
-            child: const Text('Disc-\nover'),
-          ),
-        ),
-        Expanded(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: buttonColor,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/NewCluck');
-            },
-            child: const Text('New\nCluck'),
-          ),
-        ),
-        Expanded(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: buttonColor,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/Search');
-            },
-            child: const Text('Search'),
-          ),
-        ),
-        Expanded(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: buttonColor,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/Notification');
-            },
-            child: const Text('Notifi-\ncation'),
-          ),
-        ),
+        const SizedBox(width: gapWidth),
+        NavigationButton(buttonColor, '/Home', 'Home'),
+        const SizedBox(width: gapWidth),
+        NavigationButton(buttonColor, '/Discover', 'Discover'),
+        const SizedBox(width: gapWidth),
+        NavigationButton(buttonColor, '/NewCluck', 'New\nCluck'),
+        const SizedBox(width: gapWidth),
+        NavigationButton(buttonColor, '/Search', 'Search'),
+        const SizedBox(width: gapWidth),
+        NavigationButton(buttonColor, '/Notification', 'Notifi-\ncation'),
+        const SizedBox(width: gapWidth),
       ],
     );
   }
@@ -106,6 +93,7 @@ class StandardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
+        const SizedBox(width: 50),
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -117,6 +105,7 @@ class StandardButton extends StatelessWidget {
             child: Text(text),
           ),
         ),
+        const SizedBox(width: 50),
       ],
     );
   }
