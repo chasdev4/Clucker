@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-const cluckerRed = Color.fromARGB(255, 255, 87, 87);
-
 void main() {
   runApp(
     MaterialApp(title: 'Routes Practice', initialRoute: '/SignIn', routes: {
@@ -88,36 +86,16 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        bottomOpacity: 0.0,
-        elevation: 0.0,
-        title: const Text(
-          'Sign-In Screen',
-          style: TextStyle(
-            fontSize: 35,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-          //textAlign: TextAlign.justify,
-        ),
+        title: const Text('Sign-In Screen'),
+        backgroundColor: Colors.blueGrey,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          const Divider(
-            color: cluckerRed,
-            height: 20,
-            thickness: 2,
-            indent: 10,
-            endIndent: 10,
-          ),
           Row(
             children: <Widget>[
               Expanded(
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: cluckerRed,
-                  ),
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/Home');
@@ -127,22 +105,10 @@ class SignInScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    side: BorderSide(
-                        color: cluckerRed,
-                        width: 3
-                    ),
-                  ),
                   onPressed: () {
                     Navigator.pushNamed(context, '/SignUp');
                   },
-                  child: const Text(
-                      'Sign Up',
-                    style: TextStyle(
-                      color: cluckerRed,
-                    ),
-                  ),
+                  child: const Text('Sign Up'),
                 ),
               ),
             ],
@@ -171,7 +137,7 @@ class SignUpScreen extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    while (Navigator.canPop(context)) {
+                    while (Navigator.canPop(context)){
                       Navigator.popUntil(context, (route) => false);
                     }
                     Navigator.pushNamed(context, '/Home');
