@@ -41,6 +41,7 @@ class NavigationButton extends StatelessWidget {
           primary: buttonColor,
         ),
         onPressed: () {
+          Navigator.pop(context);
           Navigator.pushNamed(context, routeName);
         },
         child: Text(
@@ -140,6 +141,7 @@ class SignInScreen extends StatelessWidget {
                       primary: cluckerRed,
                     ),
                     onPressed: () {
+                      Navigator.pop(context);
                       Navigator.pushNamed(context, '/Home');
                     },
                     child: const Text('Sign In'),
@@ -192,6 +194,9 @@ class SignUpScreen extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
+          while (Navigator.canPop(context)){
+                      Navigator.popUntil(context, (route) => false);
+                    }
           StandardButton(orangeRed, '/Home', 'Sign Up'),
         ],
       ),
