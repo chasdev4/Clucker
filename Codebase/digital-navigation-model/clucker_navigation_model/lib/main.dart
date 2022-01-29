@@ -33,6 +33,7 @@ class NavigationBar extends StatelessWidget {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/Home');
             },
             child: const Text('Home'),
@@ -41,6 +42,7 @@ class NavigationBar extends StatelessWidget {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/Discover');
             },
             child: const Text('Disc-\nover'),
@@ -57,6 +59,7 @@ class NavigationBar extends StatelessWidget {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/Search');
             },
             child: const Text('Search'),
@@ -65,6 +68,7 @@ class NavigationBar extends StatelessWidget {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/Notification');
             },
             child: const Text('Notifi-\ncation'),
@@ -93,6 +97,7 @@ class SignInScreen extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    Navigator.pop(context);
                     Navigator.pushNamed(context, '/Home');
                   },
                   child: const Text('Sign In'),
@@ -132,6 +137,9 @@ class SignUpScreen extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    while (Navigator.canPop(context)){
+                      Navigator.popUntil(context, (route) => false);
+                    }
                     Navigator.pushNamed(context, '/Home');
                   },
                   child: const Text('Sign Up'),
