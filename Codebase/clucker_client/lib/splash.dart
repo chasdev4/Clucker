@@ -11,7 +11,7 @@ class SplashScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
           Image(
-            image: AssetImage('icons/clucker-icon.png'),
+            image: AssetImage('assets/icons/clucker-icon.png'),
             width: 256,
             height: 256,
           ),
