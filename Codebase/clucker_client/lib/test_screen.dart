@@ -1,4 +1,5 @@
 import 'package:clucker_client/navigation/main_navigation_bar.dart';
+import 'package:clucker_client/navigation/new_cluck_button.dart';
 import 'package:flutter/material.dart';
 
 class TestScreen extends StatelessWidget {
@@ -19,7 +20,7 @@ class TestScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: const MainNavigationBar(),
-      floatingActionButton: FloatingActionButton(onPressed: () => {}, child: const Icon(Icons.add)),
+      floatingActionButton: NewCluckButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

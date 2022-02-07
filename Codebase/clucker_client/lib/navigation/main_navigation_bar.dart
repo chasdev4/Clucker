@@ -11,30 +11,46 @@ class MainNavigationBar extends StatefulWidget {
 }
 
 class _MainNavigationBar extends State<MainNavigationBar> {
-
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.house), label: 'Feed'),
-            BottomNavigationBarItem(
-                icon: Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Icon(Icons.explore),
+    return BottomAppBar(
+      shape: const CircularNotchedRectangle(),
+      notchMargin: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 50),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.house), tooltip: 'Feed',),
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.explore), tooltip: 'Discover',)
+                  ],
                 ),
-                label: 'Explore'),
-            BottomNavigationBarItem(
-                icon: Padding(
-                  padding: EdgeInsets.only(left: 8),
-                  child: Icon(Icons.search),
-                ),
-                label: 'Search'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.notifications), label: 'Notifications')
+              ),
+            ),
+            Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 50),
+                  child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.search), tooltip: 'Search',),
+                    IconButton(
+                      onPressed: () {}, icon: const Icon(Icons.notifications), tooltip: 'Notifications',)
+              ],
+            ),
+                )),
           ],
-          type: BottomNavigationBarType.fixed,
-          showSelectedLabels: false,
-          showUnselectedLabels: false);
+        ),
+      ),
+    );
   }
 }
