@@ -16,9 +16,11 @@ class MyApp extends StatelessWidget {
       title: 'Clucker',
       theme: ThemeData(
         primarySwatch: Colors.red,
-        scaffoldBackgroundColor: Colors.white
+        fontFamily: 'OpenSans'
+        scaffoldBackgroundColor: Colors.white,
       ),
-      home: const TestScreen(),
+      home: const SplashScreen(),
     );
   }
 }
+

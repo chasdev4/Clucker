@@ -33,6 +33,7 @@ ExportedObj/
 *.sln
 *.suo
 *.tmp
+*.url
 *.user
 *.userprefs
 *.pidb
@@ -70,4 +71,4 @@ output_log.txt
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db
+Thumbs.db 
