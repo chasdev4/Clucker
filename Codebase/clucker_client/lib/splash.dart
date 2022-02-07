@@ -7,6 +7,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
+      color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
@@ -22,7 +23,7 @@ class SplashScreen extends StatelessWidget {
                     color: Colors.black,
                     decoration: TextDecoration.none,
                     fontFamily: 'OpenSans',
-                    fontWeight: FontWeight.w900
+                    fontWeight: FontWeight.w700
                 ),
           )
         ],
