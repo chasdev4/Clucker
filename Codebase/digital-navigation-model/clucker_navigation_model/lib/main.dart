@@ -26,12 +26,13 @@ void main() {
 }
 
 class NavigationButton extends StatelessWidget {
-  NavigationButton(@required this.buttonColor, @required this.routeName,
-      @required this.text);
+  const NavigationButton(this.buttonColor, this.routeName, this.text,
+      [this.isNewCluck = false]);
 
   final Color buttonColor;
   final String routeName;
   final String text;
+  final bool isNewCluck;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,9 @@ class NavigationButton extends StatelessWidget {
           primary: buttonColor,
         ),
         onPressed: () {
+          if (isNewCluck == false) {
+            Navigator.pop(context);
+          }
           Navigator.pushNamed(context, routeName);
         },
         child: Text(
@@ -55,7 +59,7 @@ class NavigationButton extends StatelessWidget {
 }
 
 class NavigationBar extends StatelessWidget {
-  NavigationBar(@required this.buttonColor);
+  const NavigationBar(this.buttonColor);
 
   final Color buttonColor;
 
@@ -70,7 +74,7 @@ class NavigationBar extends StatelessWidget {
         const SizedBox(width: gapWidth),
         NavigationButton(buttonColor, '/Discover', 'Discover'),
         const SizedBox(width: gapWidth),
-        NavigationButton(buttonColor, '/NewCluck', 'New\nCluck'),
+        NavigationButton(buttonColor, '/NewCluck', 'New\nCluck', true),
         const SizedBox(width: gapWidth),
         NavigationButton(buttonColor, '/Search', 'Search'),
         const SizedBox(width: gapWidth),
@@ -82,12 +86,13 @@ class NavigationBar extends StatelessWidget {
 }
 
 class StandardButton extends StatelessWidget {
-  StandardButton(@required this.buttonColor, @required String this.routeName,
-      @required String this.text);
+  const StandardButton(this.buttonColor, this.routeName, this.text,
+      [this.shouldPopAll = false]);
 
   final Color buttonColor;
   final String routeName;
   final String text;
+  final bool shouldPopAll;
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +105,11 @@ class StandardButton extends StatelessWidget {
               primary: buttonColor,
             ),
             onPressed: () {
+              if (shouldPopAll == true) {
+                while (Navigator.canPop(context)) {
+                  Navigator.popUntil(context, (route) => false);
+                }
+              }
               Navigator.pushNamed(context, routeName);
             },
             child: Text(text),
@@ -118,60 +128,58 @@ class SignInScreen extends StatelessWidget                         {
   Widget build(BuildContext context) {
     const cluckerRed = Color.fromARGB(255, 255, 87, 87);
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Sign-In Screen'),
-          backgroundColor: cluckerRed,
-          automaticallyImplyLeading: false,
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                SizedBox(
-                  width: 20,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sign-In Screen'),
+        backgroundColor: cluckerRed,
+        automaticallyImplyLeading: false,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              const SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: cluckerRed,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/Home');
+                  },
+                  child: const Text('Sign In'),
                 ),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: cluckerRed,
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    side: const BorderSide(color: cluckerRed, width: 3),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/SignUp');
+                  },
+                  child: const Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      color: cluckerRed,
                     ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/Home');
-                    },
-                    child: const Text('Sign In'),
                   ),
                 ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      side: const BorderSide(color: cluckerRed, width: 3),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/SignUp');
-                    },
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        color: cluckerRed,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -191,8 +199,8 @@ class SignUpScreen extends StatelessWidget {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          StandardButton(orangeRed, '/Home', 'Sign Up'),
+        children: const <Widget>[
+          StandardButton(orangeRed, '/Home', 'Sign Up', true),
         ],
       ),
     );
@@ -212,13 +220,12 @@ class ProfileScreen extends StatelessWidget {
         backgroundColor: viridian,
       ),
       body: Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
+        children: const <Widget>[
           StandardButton(viridian, '/EditProfile', 'Edit Profile'),
           StandardButton(viridian, '/Settings', 'Settings'),
           StandardButton(viridian, '/Following', 'Following'),
           StandardButton(viridian, '/Followers', 'Followers'),
-          StandardButton(viridian, '/SignIn', 'Log Out'),
+          StandardButton(viridian, '/SignIn', 'Log Out', true),
           Expanded(
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -258,7 +265,7 @@ class SettingsScreen extends StatelessWidget {
         backgroundColor: tomato,
       ),
       body: Column(
-        children: <Widget>[
+        children: const <Widget>[
           StandardButton(tomato, '/BlockedUsers', 'Blocked Users'),
           StandardButton(tomato, '/TermsOfUse', 'Terms Of Use'),
           StandardButton(tomato, '/PrivacyPolicy', 'Privacy Policy'),
@@ -360,21 +367,18 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const royalBlue = Color.fromARGB(255, 65, 105, 225);
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Search Screen'),
-          backgroundColor: royalBlue,
-          automaticallyImplyLeading: false,
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            StandardButton(royalBlue, '/Profile', 'Profile'),
-            NavigationBar(royalBlue),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Search Screen'),
+        backgroundColor: royalBlue,
+        automaticallyImplyLeading: false,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const <Widget>[
+          StandardButton(royalBlue, '/Profile', 'Profile'),
+          NavigationBar(royalBlue),
+        ],
       ),
     );
   }
@@ -387,21 +391,18 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const crimson = Color.fromARGB(255, 220, 20, 60);
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Home Screen'),
-          backgroundColor: crimson,
-          automaticallyImplyLeading: false,
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            StandardButton(crimson, '/Profile', 'Profile'),
-            NavigationBar(crimson),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Screen'),
+        backgroundColor: crimson,
+        automaticallyImplyLeading: false,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const <Widget>[
+          StandardButton(crimson, '/Profile', 'Profile'),
+          NavigationBar(crimson),
+        ],
       ),
     );
   }
@@ -414,21 +415,18 @@ class DiscoverScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const corn = Color.fromARGB(255, 230, 184, 0);
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Discover Screen'),
-          backgroundColor: corn,
-          automaticallyImplyLeading: false,
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            StandardButton(corn, '/Profile', 'Profile'),
-            NavigationBar(corn),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Discover Screen'),
+        backgroundColor: corn,
+        automaticallyImplyLeading: false,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const <Widget>[
+          StandardButton(corn, '/Profile', 'Profile'),
+          NavigationBar(corn),
+        ],
       ),
     );
   }
@@ -441,21 +439,18 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const patriarch = Color.fromARGB(255, 128, 0, 128);
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Notification Screen'),
-          backgroundColor: patriarch,
-          automaticallyImplyLeading: false,
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            StandardButton(patriarch, '/Profile', 'Profile'),
-            NavigationBar(patriarch),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Notification Screen'),
+        backgroundColor: patriarch,
+        automaticallyImplyLeading: false,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const <Widget>[
+          StandardButton(patriarch, '/Profile', 'Profile'),
+          NavigationBar(patriarch),
+        ],
       ),
     );
   }
