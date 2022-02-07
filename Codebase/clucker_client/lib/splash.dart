@@ -5,28 +5,30 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Image(
-            image: AssetImage('assets/icons/clucker-icon.png'),
-            width: 256,
-            height: 256,
-          ),
-          Text(
-            "Clucker",
-            style:
-                TextStyle(
-                    color: Colors.black,
-                    decoration: TextDecoration.none,
-                    fontFamily: 'OpenSans',
-                    fontWeight: FontWeight.w700
-                ),
-          )
-        ],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Image(
+              image: AssetImage('assets/icons/clucker-icon.png'),
+              width: 256,
+              height: 256,
+            ),
+            Text(
+              "Clucker",
+
+              style:
+              TextStyle(
+                  color: Colors.black,
+                  decoration: TextDecoration.none,
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 40
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
