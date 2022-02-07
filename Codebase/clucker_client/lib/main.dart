@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Clucker',
       theme: ThemeData(
         primarySwatch: Colors.red,
+        fontFamily: 'OpenSans'
       ),
       home: const SplashScreen(),
     );

@@ -18,7 +18,12 @@ class SplashScreen extends StatelessWidget {
           Text(
             "Clucker",
             style:
-                TextStyle(color: Colors.black, decoration: TextDecoration.none),
+                TextStyle(
+                    color: Colors.black,
+                    decoration: TextDecoration.none,
+                    fontFamily: 'OpenSans',
+                    fontWeight: FontWeight.w900
+                ),
           )
         ],
       ),
