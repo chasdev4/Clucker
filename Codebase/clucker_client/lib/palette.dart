@@ -2,7 +2,19 @@ import 'package:flutter/material.dart';
 
 // Header Dividers, Hyperlinks, Active Icons, Active Toggle Button, Solid Button Background.
 // (Default Theme) Secondary Button Border and Secondary Button Text
-const cluckerRed = Color.fromARGB(255, 255, 87, 87);
+Map<int, Color> cluckerRedCodes = {
+  50: const Color.fromRGBO(255, 87, 87, .1),
+  100: const Color.fromRGBO(255, 87, 87, .2),
+  200: const Color.fromRGBO(255, 87, 87, .3),
+  300: const Color.fromRGBO(255, 87, 87, .4),
+  400: const Color.fromRGBO(255, 87, 87, .5),
+  500: const Color.fromRGBO(255, 87, 87, .6),
+  600: const Color.fromRGBO(255, 87, 87, .7),
+  700: const Color.fromRGBO(255, 87, 87, .8),
+  800: const Color.fromRGBO(255, 87, 87, .9),
+  900: const Color.fromRGBO(255, 87, 87, 1),
+};
+MaterialColor cluckerRed = MaterialColor(0xFFFF5757, cluckerRedCodes);
 
 // Solid Button Text
 // (Default Theme) Background, Text Field Background
