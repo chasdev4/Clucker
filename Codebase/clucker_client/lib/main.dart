@@ -1,4 +1,5 @@
 import 'package:clucker_client/splash.dart';
+import 'package:clucker_client/test_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,8 +17,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
         fontFamily: 'OpenSans'
+        scaffoldBackgroundColor: Colors.white,
       ),
       home: const SplashScreen(),
     );
   }
 }
+
