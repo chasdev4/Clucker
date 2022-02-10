@@ -5,6 +5,7 @@ import com.clucker.cluckerserver.dto.UserResponse;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -38,11 +40,16 @@ public class UserController {
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRegistration registration) {
 
         User user = userService.createUser(registration);
+
+        log.info("Successfully registered {}!", user.getUsername());
+
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
                 .path("/{id}")
                 .buildAndExpand(user.getId())
                 .toUri();
+
+        log.info("User resource location: {}", uri);
 
         return ResponseEntity.created(uri)
                 .body(userService.mapToResponse(user));
