@@ -6,6 +6,7 @@ import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(@Valid UserRegistration registration) {
+        log.info("Attempting to register user: {}", registration.getUsername());
         User user = mapper.map(registration, User.class);
         return repository.save(user);
     }
