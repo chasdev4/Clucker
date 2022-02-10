@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: cluckerRed,
         primaryColor: cluckerRed.shade900,
       ),
-      home: const SplashScreen(),
+      home: const TestScreen(),
     );
   }
 }
