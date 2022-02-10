@@ -4,7 +4,6 @@ import com.clucker.cluckerserver.dto.validation.annotation.ValidPassword;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Objects;
 
 public class PasswordValidator implements ConstraintValidator<ValidPassword, String> {
 
