@@ -13,6 +13,8 @@ public interface UserService {
     User getUserById(Integer id);
     User getUserByUsername(String username);
     User getUserByEmail(String email);
+    boolean usernameAlreadyExists(String username);
+    boolean emailAlreadyExists(String email);
     User createUser(@Valid UserRegistration registration);
     UserResponse mapToResponse(User user);
 }

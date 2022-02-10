@@ -2,6 +2,7 @@ package com.clucker.cluckerserver.user.service;
 
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;
+import com.clucker.cluckerserver.exception.UserExistsException;
 import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.user.repository.UserRepository;
@@ -41,8 +42,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean usernameAlreadyExists(String username) {
+        return repository.findUserByUsername(username).isPresent();
+    }
+
+    @Override
+    public boolean emailAlreadyExists(String email) {
+        return repository.findUserByEmail(email).isPresent();
+    }
+
+    @Override
     public User createUser(@Valid UserRegistration registration) {
         log.info("Attempting to register user: {}", registration.getUsername());
+
+        if (usernameAlreadyExists(registration.getUsername()))
+            throw new UserExistsException("username", registration.getUsername());
+
+        if (emailAlreadyExists(registration.getEmail()))
+            throw new UserExistsException("email", registration.getEmail());
+
         User user = mapper.map(registration, User.class);
         return repository.save(user);
     }

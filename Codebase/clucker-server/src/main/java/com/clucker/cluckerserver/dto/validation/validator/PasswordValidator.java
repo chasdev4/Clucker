@@ -12,7 +12,7 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, Str
             "(?=.*[a-z])" +         // At least one lowercase letter
             "(?=.*[A-Z])" +         // At least one capital letter
             "(?=.*[@#$%^&+=_])" +   // At least one symbol
-            "{8,}$";                // At least 8 characters in length
+            ".{8,}$";                // At least 8 characters in length
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
