@@ -1,5 +1,6 @@
 package com.clucker.cluckerserver.dto;
 
+import com.clucker.cluckerserver.dto.validation.annotation.ValidPassword;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -15,6 +16,7 @@ public class UserRegistration {
     private String username;
 
     @NotBlank
+    @ValidPassword
     private String password;
 
     @Email

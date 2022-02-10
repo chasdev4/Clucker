@@ -46,9 +46,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse mapToResponse(User user) {
-        UserResponse response = mapper.map(user, UserResponse.class);
-        response.setJoined(LocalDate.now());
-        response.setLastLogin(LocalDateTime.now());
-        return response;
+        return mapper.map(user, UserResponse.class);
     }
 }
