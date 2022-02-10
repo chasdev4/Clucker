@@ -2,6 +2,8 @@ package com.clucker.cluckerserver.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -33,10 +35,10 @@ public class User {
     @NotNull
     private String password;
 
-    @CreatedDate
+    @CreationTimestamp
     private LocalDateTime joined;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private LocalDateTime lastModified;
 
     private LocalDateTime lastLogin;
