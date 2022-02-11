@@ -5,10 +5,12 @@ import com.clucker.cluckerserver.dto.UserResponse;
 import com.clucker.cluckerserver.exception.UserExistsException;
 import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.User;
+import com.clucker.cluckerserver.model.UserRole;
 import com.clucker.cluckerserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
+    private final PasswordEncoder encoder;
     private final ModelMapper mapper;
 
     @Override
@@ -62,6 +65,14 @@ public class UserServiceImpl implements UserService {
             throw new UserExistsException("email", registration.getEmail());
 
         User user = mapper.map(registration, User.class);
+
+        log.info("Hashing password...");
+        String hashedPassword = encoder.encode(registration.getPassword());
+        user.setPassword(hashedPassword);
+
+        log.info("Setting user role to CLUCKER");
+        user.setRole(UserRole.ROLE_CLUCKER);
+
         return repository.save(user);
     }
 

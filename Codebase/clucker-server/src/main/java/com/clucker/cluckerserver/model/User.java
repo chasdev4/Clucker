@@ -10,6 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
@@ -24,6 +26,10 @@ public class User {
     @Id
     @GeneratedValue
     private Integer id;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @Column(unique = true, nullable = false)
     private String username;
