@@ -10,3 +10,9 @@ spring:
     url: ${DB_HOST}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+
+app:
+  allow-all-get:
+    - "/health"
+  allow-all-post:
+    - "/users"
