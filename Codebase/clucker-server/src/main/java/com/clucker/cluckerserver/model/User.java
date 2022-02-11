@@ -31,11 +31,13 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
+    @NotNull
     private String username;
 
     @Email
-    @Column(unique = true, nullable = false)
+    @NotNull
+    @Column(unique = true)
     private String email;
 
     @NotNull
