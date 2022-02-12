@@ -1,4 +1,4 @@
-package com.clucker.cluckerserver.security;
+package com.clucker.cluckerserver.security.service;
 
 import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.User;

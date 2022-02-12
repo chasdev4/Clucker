@@ -1,7 +1,6 @@
 package com.clucker.cluckerserver.config;
 
-import com.clucker.cluckerserver.security.UserDetailsServiceImpl;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.clucker.cluckerserver.security.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

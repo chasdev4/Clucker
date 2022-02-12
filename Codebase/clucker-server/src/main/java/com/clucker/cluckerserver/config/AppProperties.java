@@ -20,6 +20,7 @@ public class AppProperties {
     public static class Security {
 
         private String jwtSecretKey;
+        private long jwtExpirationTime;
 
     }
 
