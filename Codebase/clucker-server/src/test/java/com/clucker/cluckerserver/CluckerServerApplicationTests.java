@@ -1,9 +1,9 @@
 package com.clucker.cluckerserver;
 
+import com.clucker.cluckerserver.annotation.IntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@IntegrationTest
 class CluckerServerApplicationTests {
 
     @Test
