@@ -1,6 +1,5 @@
 package com.clucker.cluckerserver.security.util;
 
-import com.clucker.cluckerserver.config.AppProperties;
 import com.clucker.cluckerserver.model.UserDetailsImpl;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtils {
 
-    private final AppProperties appProperties;
     private final Key jwtKey;
 
     public String generateJwt(Authentication authentication) {

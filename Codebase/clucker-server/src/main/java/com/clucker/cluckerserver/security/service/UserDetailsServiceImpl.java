@@ -1,6 +1,5 @@
 package com.clucker.cluckerserver.security.service;
 
-import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.model.UserDetailsImpl;
 import com.clucker.cluckerserver.user.repository.UserRepository;

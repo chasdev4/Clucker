@@ -1,6 +1,5 @@
 package com.clucker.cluckerserver.dto.validation.annotation;
 
-import com.clucker.cluckerserver.dto.validation.validator.PasswordValidator;
 import com.clucker.cluckerserver.dto.validation.validator.UsernameValidator;
 
 import javax.validation.Constraint;

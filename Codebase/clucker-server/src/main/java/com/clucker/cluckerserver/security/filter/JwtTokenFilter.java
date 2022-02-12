@@ -1,14 +1,12 @@
 package com.clucker.cluckerserver.security.filter;
 
 import com.clucker.cluckerserver.security.service.UserDetailsServiceImpl;
-import com.clucker.cluckerserver.security.util.JwtUtils;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -19,13 +17,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Key;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    private final JwtUtils jwtUtils;
+    private final Key jwtKey;
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
@@ -34,7 +33,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwt != null) {
-                String username = jwtUtils.getUsernameFromToken(jwt);
+                String username = Jwts.parserBuilder()
+                        .setSigningKey(jwtKey)
+                        .build()
+                        .parseClaimsJws(jwt)
+                        .getBody()
+                        .getSubject();
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails,

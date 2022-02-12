@@ -1,11 +1,13 @@
 package com.clucker.cluckerserver.config;
 
+import com.clucker.cluckerserver.security.filter.JwtProviderFilter;
+import com.clucker.cluckerserver.security.filter.JwtTokenFilter;
 import com.clucker.cluckerserver.security.service.UserDetailsServiceImpl;
-import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,23 +16,37 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final AppProperties appProperties;
-    private final UserDetailsServiceImpl userDetailsService;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private AppProperties appProperties;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtTokenFilter tokenFilter;
+
+    @Autowired
+    private Key jwtKey;
 
     @Bean
-    public Key jwtKey() {
-        return Keys.hmacShaKeyFor(appProperties.getSecurity()
-                .getJwtSecretKey().getBytes(StandardCharsets.UTF_8));
+    public JwtProviderFilter providerFilter() {
+        return new JwtProviderFilter(jwtKey);
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
@@ -41,6 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.cors().and().csrf().disable()
                 .httpBasic().disable()
                 .sessionManagement()
@@ -51,7 +68,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and()
+                .exceptionHandling()
+                .and()
+                .addFilter(providerFilter())
+                .addFilterBefore(tokenFilter, JwtProviderFilter.class);
     }
 
     private void allowPostRequests(HttpSecurity http) throws Exception {
