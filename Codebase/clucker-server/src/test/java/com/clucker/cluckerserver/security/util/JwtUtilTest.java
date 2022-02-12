@@ -1,13 +1,11 @@
 package com.clucker.cluckerserver.security.util;
 
 import com.clucker.cluckerserver.annotation.IntegrationTest;
-import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.model.UserDetailsImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class JwtUtilTest {
 
     @Autowired
-    JwtUtil jwtUtil;
+    JwtUtils jwtUtils;
     UserDetailsImpl userDetails;
     Authentication authentication;
 
@@ -31,14 +29,14 @@ class JwtUtilTest {
 
     @Test
     void test_generateJwt() {
-        String token = jwtUtil.generateJwt(authentication);
+        String token = jwtUtils.generateJwt(authentication);
         assertNotNull(token);
     }
 
     @Test
     void test_getUsernameFromToken() {
-        String token = jwtUtil.generateJwt(authentication);
-        String username = jwtUtil.getUsernameFromToken(token);
+        String token = jwtUtils.generateJwt(authentication);
+        String username = jwtUtils.getUsernameFromToken(token);
         assertEquals("testboy", username);
     }
 

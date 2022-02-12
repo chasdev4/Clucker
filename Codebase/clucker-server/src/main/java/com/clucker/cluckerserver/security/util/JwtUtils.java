@@ -3,7 +3,6 @@ package com.clucker.cluckerserver.security.util;
 import com.clucker.cluckerserver.config.AppProperties;
 import com.clucker.cluckerserver.model.UserDetailsImpl;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-public class JwtUtil {
+public class JwtUtils {
 
     private final AppProperties appProperties;
     private final Key jwtKey;
