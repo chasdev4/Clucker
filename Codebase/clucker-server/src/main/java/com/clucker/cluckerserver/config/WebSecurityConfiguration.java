@@ -1,7 +1,10 @@
 package com.clucker.cluckerserver.config;
 
 import com.clucker.cluckerserver.security.UserDetailsServiceImpl;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,6 +15,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -21,6 +27,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final AppProperties appProperties;
     private final UserDetailsServiceImpl userDetailsService;
     private final PasswordEncoder passwordEncoder;
+
+    @Bean
+    public Key jwtKey() {
+        return Keys.hmacShaKeyFor(appProperties.getSecurity()
+                .getJwtSecretKey().getBytes(StandardCharsets.UTF_8));
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

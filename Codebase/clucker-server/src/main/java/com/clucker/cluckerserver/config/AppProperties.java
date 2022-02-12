@@ -13,5 +13,14 @@ public class AppProperties {
 
     private String[] allowAllPost;
     private String[] allowAllGet;
+    private Security security = new Security();
+
+    @Getter
+    @Setter
+    public static class Security {
+
+        private String jwtSecretKey;
+
+    }
 
 }
