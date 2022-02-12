@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Getter
@@ -27,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
     private boolean enabled;
 
-    private static UserDetailsImpl fromUser(User user) {
+    public static UserDetailsImpl fromUser(User user) {
         List<GrantedAuthority> authorities = Collections.singletonList(
                 new SimpleGrantedAuthority(user.getRole().getRoleName())
         );
@@ -76,5 +77,17 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        UserDetailsImpl user = (UserDetailsImpl) obj;
+        return Objects.equals(id, user.getId()) ||
+                Objects.equals(username, user.getUsername()) ||
+                Objects.equals(email, user.getEmail());
     }
 }
