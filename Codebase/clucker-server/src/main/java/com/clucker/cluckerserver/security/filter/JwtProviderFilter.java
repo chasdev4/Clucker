@@ -3,6 +3,7 @@ package com.clucker.cluckerserver.security.filter;
 import com.clucker.cluckerserver.dto.AuthenticationRequest;
 import com.clucker.cluckerserver.exception.ForbiddenException;
 import com.clucker.cluckerserver.model.UserDetailsImpl;
+import com.clucker.cluckerserver.security.util.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtProviderFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final Key jwtKey;
+    private final JwtUtils jwtUtils;
 
     @Override
     @Autowired
@@ -51,12 +52,7 @@ public class JwtProviderFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authResult.getPrincipal();
-        String token = "Bearer " + Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
-                .setIssuedAt(new Date())
-                .signWith(jwtKey)
-                .compact();;
+        String token = "Bearer " + jwtUtils.generateJwt(authResult);
         response.setHeader(HttpHeaders.AUTHORIZATION, token);
     }
 }

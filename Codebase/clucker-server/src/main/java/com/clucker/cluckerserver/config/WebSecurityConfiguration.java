@@ -3,6 +3,8 @@ package com.clucker.cluckerserver.config;
 import com.clucker.cluckerserver.security.filter.JwtProviderFilter;
 import com.clucker.cluckerserver.security.filter.JwtTokenFilter;
 import com.clucker.cluckerserver.security.service.UserDetailsServiceImpl;
+import com.clucker.cluckerserver.security.util.JwtUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,31 +18,21 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.security.Key;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AppProperties appProperties;
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtTokenFilter tokenFilter;
-
-    @Autowired
-    private Key jwtKey;
+    private final AppProperties appProperties;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenFilter tokenFilter;
+    private final JwtUtils jwtUtils;
 
     @Bean
     public JwtProviderFilter providerFilter() {
-        return new JwtProviderFilter(jwtKey);
+        return new JwtProviderFilter(jwtUtils);
     }
 
     @Override

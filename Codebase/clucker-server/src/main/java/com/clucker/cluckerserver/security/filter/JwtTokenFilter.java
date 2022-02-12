@@ -1,6 +1,7 @@
 package com.clucker.cluckerserver.security.filter;
 
 import com.clucker.cluckerserver.security.service.UserDetailsServiceImpl;
+import com.clucker.cluckerserver.security.util.JwtUtils;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ import java.security.Key;
 @Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    private final Key jwtKey;
+    private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
@@ -33,12 +34,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwt != null) {
-                String username = Jwts.parserBuilder()
-                        .setSigningKey(jwtKey)
-                        .build()
-                        .parseClaimsJws(jwt)
-                        .getBody()
-                        .getSubject();
+                String username = jwtUtils.getUsernameFromToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails,

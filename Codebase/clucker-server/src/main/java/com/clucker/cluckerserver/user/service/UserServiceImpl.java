@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
         log.info("Setting user role to CLUCKER");
         user.setRole(UserRole.ROLE_CLUCKER);
 
-        user.setEnabled(true);
+        user.setEnabled(true); // Set to enabled for now
 
         return repository.save(user);
     }
