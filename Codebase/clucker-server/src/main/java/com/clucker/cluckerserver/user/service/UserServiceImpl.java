@@ -80,4 +80,5 @@ public class UserServiceImpl implements UserService {
     public UserResponse mapToResponse(User user) {
         return mapper.map(user, UserResponse.class);
     }
+
 }
