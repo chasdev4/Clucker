@@ -11,9 +11,11 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+
 app:
   allow-all-get:
     - "/health"
+    - "/users/available-usernames"
   allow-all-post:
     - "/users"
   security:
