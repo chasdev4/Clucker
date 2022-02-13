@@ -1,5 +1,6 @@
 package com.clucker.cluckerserver.controller;
 
+import com.clucker.cluckerserver.exception.ForbiddenException;
 import com.clucker.cluckerserver.exception.HttpException;
 import com.clucker.cluckerserver.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body("Validation for this request failed. Please try again.");
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<String> handleForbiddenException(ForbiddenException exception) {
+        log.error(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(exception.getMessage());
     }
 
     @ExceptionHandler(HttpException.class)
