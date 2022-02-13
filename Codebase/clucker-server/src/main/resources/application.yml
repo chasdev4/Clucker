@@ -16,3 +16,5 @@ app:
     - "/health"
   allow-all-post:
     - "/users"
+  security:
+    jwt-secret-key: ${JWT_SECRET_KEY}

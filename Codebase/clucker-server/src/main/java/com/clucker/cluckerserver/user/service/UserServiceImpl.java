@@ -14,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -72,6 +70,8 @@ public class UserServiceImpl implements UserService {
 
         log.info("Setting user role to CLUCKER");
         user.setRole(UserRole.ROLE_CLUCKER);
+
+        user.setEnabled(true); // Set to enabled for now
 
         return repository.save(user);
     }
