@@ -12,7 +12,7 @@ class TextBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _TextBoxPackager packager = _TextBoxPackager(text, false, isObscuredText);
-    return _TextBoxFactory(packager.buildPackage());
+    return _TextBoxFactory(packager.buildPackage(), 50);
   }
 }
 
@@ -22,7 +22,7 @@ class SearchBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _TextBoxPackager packager = _TextBoxPackager('Search', true, false);
-    return _TextBoxFactory(packager.buildPackage());
+    return _TextBoxFactory(packager.buildPackage(), 10);
   }
 }
 
@@ -82,14 +82,15 @@ class _TextBoxPackager {
 }
 
 class _TextBoxFactory extends StatelessWidget {
-  const _TextBoxFactory(this.package);
+  const _TextBoxFactory(this.package, this.horizontalPadding);
 
   final List<Widget> package;
+  final double horizontalPadding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
       child: Stack(alignment: Alignment.centerRight, children: package),
     );
   }
