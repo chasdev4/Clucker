@@ -73,4 +73,28 @@ public class UserController {
 
     }
 
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserResponse> updateUser(@RequestBody @Valid User userDetails) {
+
+        User user = userService.getUserById(userDetails.getId());
+
+        user.setUsername(userDetails.getUsername());
+        user.setEmail(userDetails.getEmail());
+        user.setLastModified(LocalDateTime.now());
+
+        log.info("Found User {}!", userDetails.getUsername());
+
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(user.getId())
+                .toUri();
+
+        log.info("User resource location: {}", uri);
+
+        return ResponseEntity.created(uri)
+                .body(userService.mapToResponse(user));
+
+    }
+
 }
