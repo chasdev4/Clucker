@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/users")
@@ -78,21 +79,13 @@ public class UserController {
 
         User user = userService.getUserById(userDetails.getId());
 
+        log.info("Found User {}!", userDetails.getUsername());
+
         user.setUsername(userDetails.getUsername());
         user.setEmail(userDetails.getEmail());
         user.setLastModified(LocalDateTime.now());
 
-        log.info("Found User {}!", userDetails.getUsername());
-
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequestUri()
-                .path("/{id}")
-                .buildAndExpand(user.getId())
-                .toUri();
-
-        log.info("User resource location: {}", uri);
-
-        return ResponseEntity.created(uri)
+        return ResponseEntity.ok()
                 .body(userService.mapToResponse(user));
 
     }
