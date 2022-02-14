@@ -16,10 +16,13 @@ Map<int, Color> cluckerRedCodes = {
 };
 MaterialColor cluckerRed = MaterialColor(0xFFFF5757, cluckerRedCodes);
 
-// Solid Button Text
+// (Both) Solid Button Text
 // (Default Theme) Background, Text Field Background
 // (Dark Mode) Text, Inactive Icon, Inactive Text, Secondary Button Text
 const white = Colors.white;
+
+// (Default Theme) Hint text, text box border
+const lightGrey = Color.fromARGB(255, 205, 205, 205);
 
 //#region Default Theme
 
