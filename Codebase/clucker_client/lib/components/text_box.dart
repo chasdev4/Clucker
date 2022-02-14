@@ -99,7 +99,7 @@ class _TextBoxBuilder extends StatelessWidget {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
         border: const OutlineInputBorder(
-            borderRadius: const BorderRadius.all(Radius.elliptical(3, 3))),
+            borderRadius: BorderRadius.all(Radius.elliptical(3, 3))),
         hintText: text,
         hintStyle: const TextStyle(
           color: lightGrey,
