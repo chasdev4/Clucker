@@ -11,7 +11,6 @@ class StandardButton extends StatelessWidget {
   final double height = 50;
   late Color textColor;
   late Color buttonColor;
-  late Color secondaryButtonColor;
 
   @override
   Widget build(BuildContext context) {
