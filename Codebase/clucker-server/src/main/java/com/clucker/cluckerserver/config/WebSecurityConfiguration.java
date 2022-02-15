@@ -57,6 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         allowGetRequests(http);
         allowPostRequests(http);
+        allowPutRequests(http);
 
         http.authorizeRequests()
                 .anyRequest()
@@ -85,6 +86,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, appProperties.getAllowAllGet())
+                .permitAll();
+    }
+
+    private void allowPutRequests(HttpSecurity http) throws Exception {
+        if (appProperties.getAllowAllPut() == null ||
+                appProperties.getAllowAllPut().length == 0)
+            return;
+
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.PUT, appProperties.getAllowAllPut())
                 .permitAll();
     }
 }
