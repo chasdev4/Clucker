@@ -2,6 +2,7 @@ package com.clucker.cluckerserver.user.controller;
 
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;
+import com.clucker.cluckerserver.dto.UserUpdateRequest;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/users")
@@ -74,20 +74,11 @@ public class UserController {
 
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResponse> updateUser(@RequestBody @Valid User userDetails) {
-
-        User user = userService.getUserById(userDetails.getId());
-
-        log.info("Found User {}!", userDetails.getUsername());
-
-        user.setUsername(userDetails.getUsername());
-        user.setEmail(userDetails.getEmail());
-        user.setLastModified(LocalDateTime.now());
-
-        return ResponseEntity.ok()
-                .body(userService.mapToResponse(user));
-
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUser(@PathVariable int id, @RequestBody @Valid UserUpdateRequest updateRequest) {
+        log.info("Requesting to update user information for user with id {}...", id);
+        userService.updateUser(id, updateRequest);
     }
 
 }

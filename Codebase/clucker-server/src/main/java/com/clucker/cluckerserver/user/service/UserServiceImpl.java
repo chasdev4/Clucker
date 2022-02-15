@@ -2,6 +2,7 @@ package com.clucker.cluckerserver.user.service;
 
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;
+import com.clucker.cluckerserver.dto.UserUpdateRequest;
 import com.clucker.cluckerserver.exception.UserExistsException;
 import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.User;
@@ -9,6 +10,7 @@ import com.clucker.cluckerserver.model.UserRole;
 import com.clucker.cluckerserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,18 +28,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Integer id) {
+        log.info("Attempting to find user with id: {}", id);
         return repository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
     public User getUserByUsername(String username) {
+        log.info("Attempting to find user with username: {}", username);
         return repository.findUserByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
     public User getUserByEmail(String email) {
+        log.info("Attempting to find user with email: {}", email);
         return repository.findUserByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
     }
@@ -79,6 +84,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse mapToResponse(User user) {
         return mapper.map(user, UserResponse.class);
+    }
+
+    @Override
+    public void updateUser(int id, UserUpdateRequest updateRequest) {
+
+        User user = getUserById(id);
+
+        if (StringUtils.isNotBlank(updateRequest.getUsername()))
+            user.setUsername(updateRequest.getUsername());
+
+        if (StringUtils.isNotBlank(updateRequest.getEmail()))
+            user.setEmail(updateRequest.getEmail());
+
+        repository.save(user);
+
     }
 
 }
