@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class StandardButton extends StatelessWidget {
-  StandardButton(this.text, this.routeName, [this.isSecondary = false]);
 
   final String text;
   final String routeName;
@@ -9,14 +8,14 @@ class StandardButton extends StatelessWidget {
 
   final double width = 250;
   final double height = 50;
-  late Color textColor;
-  late Color buttonColor;
+
+  const StandardButton({Key? key, required this.text, required this.routeName, this.isSecondary = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    textColor = (isSecondary == true) ? Colors.red : Colors.white;
-    buttonColor = (isSecondary == false) ? Colors.red : Colors.white;
-    secondaryButtonColor = Colors.white;
+    var textColor = (isSecondary == true) ? Colors.red : Colors.white;
+    var buttonColor = (isSecondary == false) ? Colors.red : Colors.white;
+    var secondaryButtonColor = Colors.white;
     return _ButtonFactory(text, routeName, isSecondary, width, height,
         textColor, buttonColor, secondaryButtonColor);
   }
