@@ -18,5 +18,6 @@ app:
     - "/users/available-usernames"
   allow-all-post:
     - "/users"
+
   security:
     jwt-secret-key: ${JWT_SECRET_KEY}

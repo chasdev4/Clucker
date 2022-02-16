@@ -2,6 +2,7 @@ package com.clucker.cluckerserver.user.controller;
 
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;
+import com.clucker.cluckerserver.dto.UserUpdateRequest;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,13 @@ public class UserController {
         return ResponseEntity.created(uri)
                 .body(userService.mapToResponse(user));
 
+    }
+
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUser(@PathVariable int id, @RequestBody @Valid UserUpdateRequest updateRequest) {
+        log.info("Requesting to update user information for user with id {}...", id);
+        userService.updateUser(id, updateRequest);
     }
 
 }

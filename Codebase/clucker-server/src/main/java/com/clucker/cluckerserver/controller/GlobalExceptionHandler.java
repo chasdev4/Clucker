@@ -6,9 +6,14 @@ import com.clucker.cluckerserver.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j(topic = "Exception Handler")
@@ -23,15 +28,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleValidationError(MethodArgumentNotValidException exception) {
+    public ResponseEntity<List<String>> handleValidationError(MethodArgumentNotValidException exception) {
         log.error(exception.getMessage());
+        List<String> fieldErrors = exception.getFieldErrors().stream()
+                .map(FieldError::getDefaultMessage).collect(Collectors.toList());
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body("Validation for this request failed. Please try again.");
+                .badRequest()
+                .body(fieldErrors);
     }
 
-    @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<String> handleForbiddenException(ForbiddenException exception) {
+    @ExceptionHandler({ ForbiddenException.class, AccessDeniedException.class})
+    public ResponseEntity<String> handleForbiddenException(Exception exception) {
         log.error(exception.getMessage());
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
