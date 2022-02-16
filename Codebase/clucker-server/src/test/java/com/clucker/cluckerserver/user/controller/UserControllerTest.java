@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.transaction.Transactional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,7 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @IntegrationTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
+@Transactional
 class UserControllerTest {
 
     @Autowired
@@ -100,7 +103,7 @@ class UserControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(request);
 
-        mockMvc.perform(put("/users/{}", id)
+        mockMvc.perform(put("/users/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isOk());
