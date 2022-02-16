@@ -146,6 +146,43 @@ class UserControllerTest {
         assertEquals("newusername", user_after_update.getUsername());
     }
 
+    @Test
+    @WithMockUser(username = "someoneelse", roles = {"CLUCKER"})
+    void test_updateUser_status_403_if_userIsNotAuthorized() throws Exception {
+        UserRegistration registration = UserRegistration.builder()
+                .username("toupdate")
+                .password("TestP@ssword123")
+                .email("testemail123@gmail.com")
+                .build();
+
+        UserRegistration registration2 = UserRegistration.builder()
+                .username("someoneelse")
+                .password("TestP@ssword123")
+                .email("testemail1234@gmail.com")
+                .build();
+
+        testRegisterUser(registration);
+        testRegisterUser(registration2);
+
+        User user = userService.getUserByUsername("toupdate");
+
+        assertNotNull(user);
+
+        int id = user.getId();
+
+        UserUpdateRequest request = UserUpdateRequest.builder()
+                .username("newusername")
+                .build();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String body = mapper.writeValueAsString(request);
+
+        mockMvc.perform(put("/users/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isForbidden());
+    }
+
     private void testRegisterUser(UserRegistration registration) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(registration);
