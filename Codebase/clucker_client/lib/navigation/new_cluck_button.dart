@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class NewCluckButton extends StatelessWidget {
+  const NewCluckButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
