@@ -5,13 +5,13 @@ import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserUpdateRequest;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.user.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @IntegrationTest
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 @Transactional
 class UserControllerTest {
 
@@ -79,7 +79,42 @@ class UserControllerTest {
     }
 
     @Test
-    void test_updateUser_usernameIsChanged() throws Exception {
+    @WithMockUser(username = "testboy", roles = {"ADMIN"})
+    void test_updateUser_usernameIsChanged_when_userIsAdmin() throws Exception {
+
+        UserRegistration registration = UserRegistration.builder()
+                .username("toupdate")
+                .password("TestP@ssword123")
+                .email("testemail123@gmail.com")
+                .build();
+
+        testRegisterUser(registration);
+
+        User user = userService.getUserByUsername("toupdate");
+
+        assertNotNull(user);
+
+        int id = user.getId();
+
+        UserUpdateRequest request = UserUpdateRequest.builder()
+                .username("newusername")
+                .build();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String body = mapper.writeValueAsString(request);
+
+        mockMvc.perform(put("/users/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk());
+
+        User user_after_update = userService.getUserById(id);
+        assertEquals("newusername", user_after_update.getUsername());
+    }
+
+    @Test
+    @WithMockUser(username = "toupdate", roles = {"CLUCKER"})
+    void test_updateUser_usernameIsChanged_when_userIsClucker() throws Exception {
 
         UserRegistration registration = UserRegistration.builder()
                 .username("toupdate")

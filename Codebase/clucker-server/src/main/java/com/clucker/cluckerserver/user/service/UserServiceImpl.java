@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -86,6 +87,7 @@ public class UserServiceImpl implements UserService {
         return mapper.map(user, UserResponse.class);
     }
 
+    @PreAuthorize("@userResponseAuthorizer.canAccess(#id)")
     @Override
     public void updateUser(int id, UserUpdateRequest updateRequest) {
 
