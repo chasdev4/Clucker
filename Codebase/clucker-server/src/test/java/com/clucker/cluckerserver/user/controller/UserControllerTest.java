@@ -38,7 +38,6 @@ class UserControllerTest {
     @Autowired
     PasswordEncoder encoder;
 
-
     @Test
     void test_createUser_passwordIsHashed() throws Exception {
 
