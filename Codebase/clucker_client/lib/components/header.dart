@@ -3,9 +3,9 @@ import 'package:clucker_client/components/divider.dart';
 import 'package:flutter/material.dart';
 
 class HeaderWithAvatar extends StatelessWidget with PreferredSizeWidget {
-  HeaderWithAvatar(this.avatar);
+  HeaderWithAvatar(this.titleText);
 
-  final String avatar;
+  final String titleText;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -19,23 +19,14 @@ class HeaderWithAvatar extends StatelessWidget with PreferredSizeWidget {
             bottomOpacity: 0.0,
             elevation: 0.0,
             title: Text(
-              ' ' + avatar,
+              ' ' + titleText,
               style: const TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
-            actions: [
-              Transform.scale(
-                scale: 1.3,
-                origin: Offset(66, 0),
-                child: IconButton(
-                  icon: const CircleCrop('assets/icons/avatar_256x256.png'),
-                  onPressed: () {},
-                ),
-              ),
-            ],
+            actions: [const AvatarButton(),],
           ),
           ),
           const HeaderDivider(),
@@ -43,6 +34,23 @@ class HeaderWithAvatar extends StatelessWidget with PreferredSizeWidget {
     );
   }
 }
+
+class AvatarButton extends StatelessWidget {
+  const AvatarButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+      scale: 1.3,
+      origin: Offset(66, 0),
+      child: IconButton(
+        icon: const CircleCrop('assets/icons/avatar_256x256.png'),
+        onPressed: () {},
+      ),
+    );
+  }
+}
+
 
 class CircleCrop extends StatelessWidget {
   const CircleCrop(this.image);
