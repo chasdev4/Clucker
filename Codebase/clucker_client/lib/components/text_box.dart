@@ -42,12 +42,12 @@ class _TextBoxPackager {
         cursorColor: const Color.fromARGB(255, 100, 100, 100),
         cursorWidth: 1.1,
         decoration: InputDecoration(
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: lightGrey, width: 1.3),
+          focusedBorder:  OutlineInputBorder(
+            borderSide: BorderSide(color: Palette.lightGrey, width: 1.3),
           ),
-          enabledBorder: const OutlineInputBorder(
+          enabledBorder:  OutlineInputBorder(
             borderSide: BorderSide(
-              color: lightGrey,
+              color: Palette.lightGrey,
               width: 1,
             ),
           ),
@@ -56,8 +56,8 @@ class _TextBoxPackager {
           border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.elliptical(3, 3))),
           hintText: text,
-          hintStyle: const TextStyle(
-            color: lightGrey,
+          hintStyle: TextStyle(
+            color: Palette.lightGrey.toMaterialColor(),
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -66,9 +66,9 @@ class _TextBoxPackager {
 
     if (isSearchField == true) {
       package.add(IconButton(
-        icon: const ImageIcon(
-          AssetImage('assets/icons/search_icon_256x256.png'),
-          color: black,
+        icon: ImageIcon(
+          const AssetImage('assets/icons/search_icon_256x256.png'),
+          color: Colors.black,
           size: 22,
         ),
         onPressed: () {

@@ -44,7 +44,7 @@ class Palette {
   static _PaletteColor white = _PaletteColor.fromARGB(255, 255, 255, 255);
 
 // (Default Theme) Hint text, text box border
-const lightGrey = Color.fromARGB(255, 205, 205, 205);
+    static _PaletteColor lightGrey = _PaletteColor.fromARGB(255, 205, 205, 205);
 
 //#region Default Theme
 
