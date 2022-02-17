@@ -1,6 +1,6 @@
 import 'package:clucker_client/navigation/main_navigation_bar.dart';
 import 'package:clucker_client/navigation/new_cluck_button.dart';
-import 'package:clucker_client/header.dart';
+import 'package:clucker_client/components/header.dart';
 import 'package:flutter/material.dart';
 
 class TestScreen extends StatelessWidget {
