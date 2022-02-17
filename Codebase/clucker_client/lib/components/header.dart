@@ -1,6 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors
 import 'package:flutter/material.dart';
 
+import 'circle_crop.dart';
+
 class HeaderWithAvatar extends StatelessWidget with PreferredSizeWidget {
   HeaderWithAvatar(this.avatar);
 
@@ -27,31 +29,11 @@ class HeaderWithAvatar extends StatelessWidget with PreferredSizeWidget {
           scale: 1.3,
           origin: Offset(66, 0),
           child: IconButton(
-            icon: const CircleCrop('assets/icons/avatar_256x256.png'),
+            icon: const ImageCircleCrop(image: 'assets/icons/avatar_256x256.png'),
             onPressed: () {},
           ),
         ),
       ],
-    );
-  }
-}
-
-class CircleCrop extends StatelessWidget {
-  const CircleCrop(this.image);
-
-  final String image;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white,
-        image: DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(image),
-        ),
-      ),
     );
   }
 }

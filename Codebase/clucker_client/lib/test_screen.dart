@@ -3,6 +3,9 @@ import 'package:clucker_client/navigation/new_cluck_button.dart';
 import 'package:clucker_client/components/header.dart';
 import 'package:flutter/material.dart';
 
+import 'components/clucker_app_bar.dart';
+import 'components/user_avatar.dart';
+
 class TestScreen extends StatelessWidget {
 
   const TestScreen({Key? key}) : super(key: key);
@@ -10,17 +13,17 @@ class TestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HeaderWithAvatar('Feed'),
+      appBar: const CluckerAppBar(
+        title: "Sign Up",
+        actions: [
+          UserAvatar(
+            avatarImage: 'assets/icons/avatar_256x256.png',
+          )
+        ],
+      ),
       body: Center(
         child: Column(
           children: const [
-            Divider(
-              color: Colors.red,
-              height: 6,
-              thickness: 2,
-              indent: 20,
-              endIndent: 20,
-            ),
             Text('Test Text')
           ],
         ),
