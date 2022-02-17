@@ -2,6 +2,7 @@ package com.clucker.cluckerserver.user.service;
 
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;
+import com.clucker.cluckerserver.dto.UserUpdateRequest;
 import com.clucker.cluckerserver.model.User;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +18,5 @@ public interface UserService {
     boolean emailAlreadyExists(String email);
     User createUser(@Valid UserRegistration registration);
     UserResponse mapToResponse(User user);
+    void updateUser(int id, @Valid UserUpdateRequest updateRequest);
 }

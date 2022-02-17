@@ -1,49 +1,58 @@
 import 'package:flutter/material.dart';
 
-// Header Dividers, Hyperlinks, Active Icons, Active Toggle Button, Solid Button Background.
+class _PaletteColor extends Color{
+  _PaletteColor.fromARGB(this.a, this.r, this.g, this.b) : super.fromARGB(a, r, g, b);
+
+  final int a;
+  final int r;
+  final int g;
+  final int b;
+
+  int argbToHex() {
+    return int.parse(
+        '0x${a.toRadixString(16)}${r.toRadixString(16)}${g.toRadixString(16)}${b.toRadixString(16)}');
+  }
+
+  MaterialColor toMaterialColor() {
+    Map<int, Color> colorCodes = {
+      50: Color.fromRGBO(r, g, b, .1),
+      100: Color.fromRGBO(r, g, b, .2),
+      200: Color.fromRGBO(r, g, b, .3),
+      300: Color.fromRGBO(r, g, b, .4),
+      400: Color.fromRGBO(r, g, b, .5),
+      500: Color.fromRGBO(r, g, b, .6),
+      600: Color.fromRGBO(r, g, b, .7),
+      700: Color.fromRGBO(r, g, b, .8),
+      800: Color.fromRGBO(r, g, b, .9),
+      900: Color.fromRGBO(r, g, b, 1),
+    };
+
+    return MaterialColor(argbToHex(), colorCodes);
+  }
+  
+}
+
+class Palette {
+
+  // Header Dividers, Hyperlinks, Active Icons, Active Toggle Button, Solid Button Background.
 // (Default Theme) Secondary Button Border and Secondary Button Text
-Map<int, Color> cluckerRedCodes = {
-  50: const Color.fromRGBO(255, 87, 87, .1),
-  100: const Color.fromRGBO(255, 87, 87, .2),
-  200: const Color.fromRGBO(255, 87, 87, .3),
-  300: const Color.fromRGBO(255, 87, 87, .4),
-  400: const Color.fromRGBO(255, 87, 87, .5),
-  500: const Color.fromRGBO(255, 87, 87, .6),
-  600: const Color.fromRGBO(255, 87, 87, .7),
-  700: const Color.fromRGBO(255, 87, 87, .8),
-  800: const Color.fromRGBO(255, 87, 87, .9),
-  900: const Color.fromRGBO(255, 87, 87, 1),
-};
-MaterialColor cluckerRed = MaterialColor(0xFFFF5757, cluckerRedCodes);
+  static _PaletteColor cluckerRed = _PaletteColor.fromARGB(255, 255, 87, 87);
 
 // Solid Button Text
 // (Default Theme) Background, Text Field Background
 // (Dark Mode) Text, Inactive Icon, Inactive Text, Secondary Button Text
-const white = Colors.white;
+  static _PaletteColor white = _PaletteColor.fromARGB(255, 255, 255, 255);
 
 //#region Default Theme
 
 // Text, Inactive Icon, Inactive Text
-const black = Colors.black;
+  static _PaletteColor black = _PaletteColor.fromARGB(0, 0, 0, 0);
 
 // Standard Dividers, Inactive Toggle Button, Button Widget (on click)
-const mercuryGray = Color.fromARGB(255, 230, 230, 230);
+  static _PaletteColor mercuryGray = _PaletteColor.fromARGB(255, 230, 230, 230);
 
 // Comments and Settings Background Color
-const porcelain = Color.fromARGB(255, 242, 242, 242);
+  static _PaletteColor porcelain = _PaletteColor.fromARGB(255, 242, 242, 242);
 
 //#endregion
-
-
-//#region Dark Mode
-
-// Background
-const gunmetal = Color.fromARGB(255, 44, 48, 54);
-
-// Standard Dividers, Text Field Background, Secondary Button Background
-const cloudyGrey = Color.fromARGB(255, 104, 106, 108);
-
-// Comments, Settings, Button Widget (on click)
-const cinder = Color.fromARGB(255, 19, 24, 28);
-
-//#endregion
+}

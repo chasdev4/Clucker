@@ -11,21 +11,19 @@ class StandardButton extends StatelessWidget {
   final double height = 50;
   late Color textColor;
   late Color buttonColor;
-  late Color secondaryButtonColor;
 
   @override
   Widget build(BuildContext context) {
     textColor = (isSecondary == true) ? Colors.red : Colors.white;
     buttonColor = (isSecondary == false) ? Colors.red : Colors.white;
-    secondaryButtonColor = Colors.white;
     return _ButtonFactory(text, routeName, isSecondary, width, height,
-        textColor, buttonColor, secondaryButtonColor);
+        textColor, buttonColor);
   }
 }
 
 class _ButtonFactory extends StatelessWidget {
   const _ButtonFactory(this.text, this.routeName, this.isSecondary, this.width,
-      this.height, this.textColor, this.buttonColor, this.secondaryButtonColor);
+      this.height, this.textColor, this.buttonColor);
 
   final String text;
   final String routeName;
@@ -34,7 +32,6 @@ class _ButtonFactory extends StatelessWidget {
   final double height;
   final Color textColor;
   final Color buttonColor;
-  final Color secondaryButtonColor;
 
   @override
   Widget build(BuildContext context) {
