@@ -11,10 +11,36 @@ class HeaderWithAvatar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
   @override
   Widget build(BuildContext context) {
+    return _HeaderFactory(titleText, true);
+  }
+}
+
+class HeaderWithoutAvatar extends StatelessWidget with PreferredSizeWidget {
+  HeaderWithoutAvatar(this.titleText);
+
+  final String titleText;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  @override
+  Widget build(BuildContext context) {
+    return _HeaderFactory(titleText, false);
+  }
+}
+
+
+class _HeaderFactory extends StatelessWidget {
+  _HeaderFactory(this.titleText, this.withAvatar);
+
+  final String titleText;
+  final bool withAvatar;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
-        children: [
-          Expanded(child:
-          AppBar(
+      children: [
+        Expanded(
+          child: AppBar(
             backgroundColor: Colors.transparent,
             bottomOpacity: 0.0,
             elevation: 0.0,
@@ -26,14 +52,15 @@ class HeaderWithAvatar extends StatelessWidget with PreferredSizeWidget {
                 color: Colors.black,
               ),
             ),
-            actions: [const AvatarButton(),],
+            actions: (withAvatar == false) ? [const SizedBox()] : [const AvatarButton(),],
           ),
-          ),
-          const HeaderDivider(),
-        ],
+        ),
+        const HeaderDivider(),
+      ],
     );
   }
 }
+
 
 class AvatarButton extends StatelessWidget {
   const AvatarButton({Key? key}) : super(key: key);
