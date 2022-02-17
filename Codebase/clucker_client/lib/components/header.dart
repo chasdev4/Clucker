@@ -28,12 +28,26 @@ class HeaderWithoutAvatar extends StatelessWidget with PreferredSizeWidget {
   }
 }
 
+class HeaderCentered extends StatelessWidget with PreferredSizeWidget {
+  HeaderCentered(this.titleText);
+
+  final String titleText;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  @override
+  Widget build(BuildContext context) {
+    return _HeaderFactory(titleText, false, true);
+  }
+}
+
 
 class _HeaderFactory extends StatelessWidget {
-  _HeaderFactory(this.titleText, this.withAvatar);
+  _HeaderFactory(this.titleText, this.withAvatar, [this.isCentered = false]);
 
   final String titleText;
   final bool withAvatar;
+  final bool isCentered;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +57,7 @@ class _HeaderFactory extends StatelessWidget {
           child: AppBar(
             backgroundColor: Colors.transparent,
             bottomOpacity: 0.0,
+            centerTitle: true,
             elevation: 0.0,
             title: Text(
               ' ' + titleText,
