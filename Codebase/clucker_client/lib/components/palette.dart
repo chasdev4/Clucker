@@ -38,10 +38,13 @@ class Palette {
 // (Default Theme) Secondary Button Border and Secondary Button Text
   static _PaletteColor cluckerRed = _PaletteColor.fromARGB(255, 255, 87, 87);
 
-// Solid Button Text
+// (Both) Solid Button Text
 // (Default Theme) Background, Text Field Background
 // (Dark Mode) Text, Inactive Icon, Inactive Text, Secondary Button Text
   static _PaletteColor white = _PaletteColor.fromARGB(255, 255, 255, 255);
+
+// (Default Theme) Hint text, text box border
+const lightGrey = Color.fromARGB(255, 205, 205, 205);
 
 //#region Default Theme
 
