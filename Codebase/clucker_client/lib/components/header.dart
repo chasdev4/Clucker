@@ -57,7 +57,7 @@ class _HeaderFactory extends StatelessWidget {
           child: AppBar(
             backgroundColor: Colors.transparent,
             bottomOpacity: 0.0,
-            centerTitle: true,
+            centerTitle: isCentered,
             elevation: 0.0,
             title: Text(
               ' ' + titleText,
