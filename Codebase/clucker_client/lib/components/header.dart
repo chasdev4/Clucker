@@ -1,4 +1,5 @@
 // ignore_for_file: use_key_in_widget_constructors
+import 'package:clucker_client/components/divider.dart';
 import 'package:flutter/material.dart';
 
 class HeaderWithAvatar extends StatelessWidget with PreferredSizeWidget {
@@ -10,28 +11,35 @@ class HeaderWithAvatar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      bottomOpacity: 0.0,
-      elevation: 0.0,
-      title: Text(
-        ' ' + avatar,
-        style: const TextStyle(
-          fontSize: 36,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      ),
-      actions: [
-        Transform.scale(
-          scale: 1.3,
-          origin: Offset(66, 0),
-          child: IconButton(
-            icon: const CircleCrop('assets/icons/avatar_256x256.png'),
-            onPressed: () {},
+    return Column(
+        children: [
+          Expanded(child:
+          AppBar(
+            backgroundColor: Colors.transparent,
+            bottomOpacity: 0.0,
+            elevation: 0.0,
+            title: Text(
+              ' ' + avatar,
+              style: const TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            actions: [
+              Transform.scale(
+                scale: 1.3,
+                origin: Offset(66, 0),
+                child: IconButton(
+                  icon: const CircleCrop('assets/icons/avatar_256x256.png'),
+                  onPressed: () {},
+                ),
+              ),
+            ],
           ),
-        ),
-      ],
+          ),
+          const HeaderDivider(),
+        ],
     );
   }
 }

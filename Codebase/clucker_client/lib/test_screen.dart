@@ -14,13 +14,6 @@ class TestScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: const [
-            Divider(
-              color: Colors.red,
-              height: 6,
-              thickness: 2,
-              indent: 20,
-              endIndent: 20,
-            ),
             Text('Test Text')
           ],
         ),
