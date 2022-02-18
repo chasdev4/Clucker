@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
+import 'package:flutter/services.dart';
 
 class TextBox extends StatefulWidget {
   TextBox({Key? key}) : super(key: key);
@@ -26,82 +27,93 @@ class TextBox extends StatefulWidget {
 class _TextBoxState extends State<TextBox> {
   String enteredText = '';
   int counter = 0;
+  int numLines = 1;
 
   @override
   Widget build(BuildContext context) {
-    double sendButtonSize = 35;
+    double sendButtonSize = (widget.isCluckField == true) ? 35 : 0;
     return Padding(
         padding: EdgeInsets.symmetric(
             horizontal: widget.horizontalPadding, vertical: 6),
-        child: Row(children: [
-          Flexible(child:
-          Stack(alignment: Alignment.centerRight, children: [
-            TextField(
-              obscureText: widget.obscureText,
-              cursorColor: const Color.fromARGB(255, 100, 100, 100),
-              cursorWidth: 1.1,
-              decoration: InputDecoration(
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: lightGrey, width: 1.3),
-                ),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(
+        child: Row(crossAxisAlignment: widget.isCluckField == true
+            ? CrossAxisAlignment.end : CrossAxisAlignment.center, children: [
+          Flexible(
+            child: Stack(alignment: Alignment.centerRight, children: [
+              TextField(
+                obscureText: widget.obscureText,
+                cursorColor: const Color.fromARGB(255, 100, 100, 100),
+                cursorWidth: 1.1,
+                keyboardType: widget.isCluckField == true ? TextInputType.multiline : TextInputType.text,
+                minLines: 1,
+                maxLines: 9,
+                decoration: InputDecoration(
+                  suffixIcon: widget.isSearchField == true ? IconButton(
+                    icon: const ImageIcon(
+                      AssetImage('assets/icons/search_icon_256x256.png'),
+                      color: black,
+                      size: 22,
+                    ),
+                    onPressed: () {
+                      // do something
+                    },
+                  ) : null,
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: lightGrey, width: 1.3),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: lightGrey,
+                      width: 1,
+                    ),
+                  ),
+                  contentPadding:
+                      EdgeInsets.fromLTRB(10, 6, sendButtonSize + 6, 6),
+                  border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.elliptical(3, 3))),
+                  hintText: widget.hintText,
+                  hintStyle: const TextStyle(
                     color: lightGrey,
-                    width: 1,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.elliptical(3, 3))),
-                hintText: widget.hintText,
-                hintStyle: const TextStyle(
-                  color: lightGrey,
-                  fontWeight: FontWeight.w400,
+                onChanged: (value) {
+                  setState(() {
+                    enteredText = value;
+                    counter = 0;
+
+                    for (int i = 0; i < enteredText.length; i++) {
+                      if (enteredText[i] == ' ' || enteredText[i] == '\n') {
+                        counter++;
+                      }
+                    }
+                  });
+                },
+              ),
+              Positioned(
+                right: 0.001,
+                bottom: 5,
+                child: SizedBox(
+                  width: 40,
+                  child: widget.isCluckField == true
+                          ? Column(children: [
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                '$counter/6  ',
+                                style: TextStyle(
+                                  fontFamily: 'OpenSans',
+                                  fontWeight: FontWeight.bold,
+                                  color: cluckerRed.shade400,
+                                  fontSize: 14,
+                                ),
+                              )
+                            ])
+                          : const SizedBox(),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  enteredText = value;
-                  counter = 0;
-                  for (int i = 0; i < enteredText.length; i++) {
-                    if (enteredText[i] == ' ') {
-                      counter++;
-                    }
-                  }
-                });
-              },
-            ),
-            Container(
-              child: widget.isSearchField == true
-                  ? IconButton(
-                      icon: const ImageIcon(
-                        AssetImage('assets/icons/search_icon_256x256.png'),
-                        color: black,
-                        size: 22,
-                      ),
-                      onPressed: () {
-                        // do something
-                      },
-                    )
-                  : widget.isCluckField == true
-                      ? Column(children: [
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(
-                            '$counter/6  ',
-                            style: TextStyle(
-                              fontFamily: 'OpenSans',
-                              fontWeight: FontWeight.bold,
-                              color: cluckerRed.shade400,
-                              fontSize: 15,
-                            ),
-                          )
-                        ])
-                      : const SizedBox(),
-            ),
-          ]), ),
+            ]),
+          ),
           SizedBox(
             width: sendButtonSize,
             height: sendButtonSize,
