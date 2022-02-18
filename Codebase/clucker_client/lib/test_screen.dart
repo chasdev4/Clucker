@@ -1,6 +1,5 @@
 import 'package:clucker_client/navigation/main_navigation_bar.dart';
 import 'package:clucker_client/navigation/new_cluck_button.dart';
-import 'package:clucker_client/components/header.dart';
 import 'package:flutter/material.dart';
 
 import 'components/clucker_app_bar.dart';
@@ -17,7 +16,7 @@ class TestScreen extends StatelessWidget {
         title: "Feed",
         actions: [
           UserAvatar(
-            avatarImage: 'assets/icons/avatar_256x256.png',
+            avatarImage: 'assets/icons/chicken.jpg',
           )
         ],
       ),

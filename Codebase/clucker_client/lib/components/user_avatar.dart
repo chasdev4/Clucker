@@ -10,14 +10,18 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => {
-        // Implement this
-      },
-      icon: avatarImage == null ?
-            const Icon(FontAwesomeIcons.solidUserCircle) :
-            ImageCircleCrop(image: avatarImage!),
-      iconSize: 40,
+    return Container(
+      padding: const EdgeInsets.all(10),
+      child: IconButton(
+        onPressed: () => {
+          // Implement this
+        },
+        icon: avatarImage == null ?
+              const Icon(FontAwesomeIcons.solidUserCircle) :
+              ImageCircleCrop(image: avatarImage!),
+        iconSize: 40,
+        color: Colors.black,
+      ),
     );
   }
 

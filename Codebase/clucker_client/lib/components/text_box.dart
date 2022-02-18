@@ -1,4 +1,7 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
+import 'package:clucker_client/components/palette.dart';
 
 class TextBox extends StatelessWidget {
   const TextBox(this.text, [this.isObscuredText = false]);
@@ -8,33 +11,43 @@ class TextBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _TextBoxFactory(text, isObscuredText);
+    _TextBoxPackager packager = _TextBoxPackager(text, false, isObscuredText);
+    return _TextBoxFactory(packager.buildPackage(), 50);
   }
 }
 
-class _TextBoxFactory extends StatelessWidget {
-  const _TextBoxFactory(this.text, this.isObscuredText);
-
-  final String text;
-  final bool isObscuredText;
+class SearchBox extends StatelessWidget {
+  const SearchBox({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const exampleGrey = Color.fromARGB(255, 205, 205, 205);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 6),
-      child: TextField(
+    _TextBoxPackager packager = _TextBoxPackager('Search', true, false);
+    return _TextBoxFactory(packager.buildPackage(), 10);
+  }
+}
+
+class _TextBoxPackager {
+  final String text;
+  final bool isSearchField;
+  final bool isObscuredText;
+
+  _TextBoxPackager(this.text, this.isSearchField, this.isObscuredText);
+
+  List<Widget> buildPackage() {
+    var package = <Widget>[];
+
+    package.add(
+      TextField(
         obscureText: isObscuredText,
         cursorColor: const Color.fromARGB(255, 100, 100, 100),
         cursorWidth: 1.1,
         decoration: InputDecoration(
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-                color: exampleGrey, width: 1.3),
+          focusedBorder:  OutlineInputBorder(
+            borderSide: BorderSide(color: Palette.lightGrey, width: 1.3),
           ),
-          enabledBorder: const OutlineInputBorder(
+          enabledBorder:  OutlineInputBorder(
             borderSide: BorderSide(
-              color: exampleGrey,
+              color: Palette.lightGrey,
               width: 1,
             ),
           ),
@@ -43,12 +56,42 @@ class _TextBoxFactory extends StatelessWidget {
           border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.elliptical(3, 3))),
           hintText: text,
-          hintStyle: const TextStyle(
-            color: exampleGrey,
+          hintStyle: TextStyle(
+            color: Palette.lightGrey.toMaterialColor(),
             fontWeight: FontWeight.w400,
           ),
         ),
       ),
+    );
+
+    if (isSearchField == true) {
+      package.add(IconButton(
+        icon: ImageIcon(
+          const AssetImage('assets/icons/search_icon_256x256.png'),
+          color: Colors.black,
+          size: 22,
+        ),
+        onPressed: () {
+          // do something
+        },
+      ));
+    }
+
+    return package;
+  }
+}
+
+class _TextBoxFactory extends StatelessWidget {
+  const _TextBoxFactory(this.package, this.horizontalPadding);
+
+  final List<Widget> package;
+  final double horizontalPadding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
+      child: Stack(alignment: Alignment.centerRight, children: package),
     );
   }
 }

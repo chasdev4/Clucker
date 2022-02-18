@@ -10,11 +10,11 @@ class NewCluckButton extends StatelessWidget {
       height: 80,
       width: 80,
       child: FloatingActionButton(
+        backgroundColor: Palette.cluckerRed,
         onPressed: () {},
         child: const Icon(Icons.add, size: 30,),
         elevation: 5,
-        tooltip: 'New Cluck',
-        backgroundColor: Palette.cluckerRed,
+        tooltip: 'New Cluck'
       ),
     );
   }

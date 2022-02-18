@@ -13,7 +13,7 @@ class ImageCircleCrop extends StatelessWidget {
         shape: BoxShape.circle,
         color: Colors.white,
         image: DecorationImage(
-          fit: BoxFit.fitWidth,
+          fit: BoxFit.cover,
           image: AssetImage(image),
         ),
       ),
