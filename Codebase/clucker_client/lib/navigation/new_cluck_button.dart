@@ -2,6 +2,8 @@ import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
 
 class NewCluckButton extends StatelessWidget {
+  const NewCluckButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -12,7 +14,7 @@ class NewCluckButton extends StatelessWidget {
         onPressed: () {},
         child: const Icon(Icons.add, size: 30,),
         elevation: 5,
-        tooltip: 'New Cluck',
+        tooltip: 'New Cluck'
       ),
     );
   }
