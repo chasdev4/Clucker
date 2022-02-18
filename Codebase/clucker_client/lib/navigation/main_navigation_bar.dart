@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainNavigationBar extends StatefulWidget {
   const MainNavigationBar({Key? key}) : super(key: key);
@@ -28,8 +29,8 @@ class _MainNavigationBar extends State<MainNavigationBar> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.house), tooltip: 'Feed',),
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.explore), tooltip: 'Discover',)
+                    IconButton(onPressed: () {}, icon: const Icon(FontAwesomeIcons.home), tooltip: 'Feed',),
+                    IconButton(onPressed: () {}, icon: const Icon(FontAwesomeIcons.compass), tooltip: 'Discover',)
                   ],
                 ),
               ),
@@ -41,9 +42,9 @@ class _MainNavigationBar extends State<MainNavigationBar> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.search), tooltip: 'Search',),
+                    IconButton(onPressed: () {}, icon: const Icon(FontAwesomeIcons.search), tooltip: 'Search',),
                     IconButton(
-                      onPressed: () {}, icon: const Icon(Icons.notifications), tooltip: 'Notifications',)
+                      onPressed: () {}, icon: const Icon(FontAwesomeIcons.bell), tooltip: 'Notifications',)
               ],
             ),
                 )),
