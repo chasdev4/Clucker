@@ -19,14 +19,21 @@ class LoginPage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const <Widget> [
-            CircleAvatar(
-              radius: 125,
-              backgroundImage: AssetImage('assets/icons/clucker_logo_1024x1024.png'),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget> [
+            Column(
+              children: const <Widget> [
+                SizedBox(
+                  height: 25,
+                ),
+                CircleAvatar(
+                  radius: 125,
+                  backgroundImage: AssetImage('assets/icons/clucker_logo_1024x1024.png'),
+                ),
+                Text('Login'),
+              ],
             ),
-            
           ],
         ),
       ),
