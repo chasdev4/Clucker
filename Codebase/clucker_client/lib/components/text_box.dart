@@ -31,7 +31,7 @@ class _TextBoxState extends State<TextBox> {
 
   @override
   Widget build(BuildContext context) {
-    double sendButtonSize = (widget.isCluckField == true) ? 35 : 0;
+    double sendButtonSize = (widget.isCluckField == true) ? 50 : 0;
     return Padding(
         padding: EdgeInsets.symmetric(
             horizontal: widget.horizontalPadding, vertical: 6),
@@ -40,6 +40,7 @@ class _TextBoxState extends State<TextBox> {
           Flexible(
             child: Stack(alignment: Alignment.centerRight, children: [
               TextField(
+
                 obscureText: widget.obscureText,
                 cursorColor: const Color.fromARGB(255, 100, 100, 100),
                 cursorWidth: 1.1,
@@ -67,7 +68,7 @@ class _TextBoxState extends State<TextBox> {
                     ),
                   ),
                   contentPadding:
-                      EdgeInsets.fromLTRB(10, 6, sendButtonSize + 6, 6),
+                      EdgeInsets.fromLTRB(10, 6, 41, 6),
                   border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.elliptical(3, 3))),
                   hintText: widget.hintText,
@@ -124,7 +125,7 @@ class _TextBoxState extends State<TextBox> {
                       color: black,
                       size: sendButtonSize,
                     ),
-                    padding: const EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 0),
                     onPressed: () {
                       // do something
                     },
