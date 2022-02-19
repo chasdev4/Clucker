@@ -45,7 +45,7 @@ class _TextBoxState extends State<TextBox> {
                 cursorWidth: 1.1,
                 keyboardType: widget.isCluckField == true ? TextInputType.multiline : TextInputType.text,
                 minLines: 1,
-                maxLines: 9,
+                maxLines: widget.isCluckField == true ? 9 : 1,
                 decoration: InputDecoration(
                   suffixIcon: widget.isSearchField == true ? IconButton(
                     icon: const ImageIcon(
