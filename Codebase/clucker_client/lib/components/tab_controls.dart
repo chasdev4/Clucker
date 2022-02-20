@@ -2,12 +2,12 @@ import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
 
 class TabControls extends StatefulWidget with PreferredSizeWidget {
-  const TabControls(
-      {Key? key,
-      required this.isSearchTabs,
-      this.height = 48,
-      this.padding = 15})
-      : super(key: key);
+  const TabControls({
+    Key? key,
+    required this.isSearchTabs,
+    this.height = 48,
+    this.padding = 15,
+  }) : super(key: key);
   @override
   Size get preferredSize => Size.fromHeight(height);
 
@@ -22,6 +22,7 @@ class TabControls extends StatefulWidget with PreferredSizeWidget {
 class _TabControlsState extends State<TabControls> {
   String followerCount = '2.3K';
   String followingCount = '4.5M';
+  bool leftTabActive = true;
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +33,21 @@ class _TabControlsState extends State<TabControls> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TabButton((widget.isSearchTabs == true)
-                ? 'Clucks'
-                : '$followingCount Following'),
+            TabButton(
+                (widget.isSearchTabs == true)
+                    ? 'Clucks'
+                    : '$followingCount Following',
+                true, ),
             Container(
               width: 3,
               height: widget.height,
               color: Palette.lightGrey,
             ),
-            TabButton((widget.isSearchTabs == true)
-                ? 'Users'
-                : '$followerCount Followers'),
+            TabButton(
+                (widget.isSearchTabs == true)
+                    ? 'Users'
+                    : '$followerCount Followers',
+                false),
           ],
         ),
         PreferredSize(
@@ -57,20 +62,37 @@ class _TabControlsState extends State<TabControls> {
     ));
   }
 
-  Container TabButton(String text) {
-    return Container(
+  SizedBox TabButton(String text, bool isLeftTab) {
+    return SizedBox(
       width: ((MediaQuery.of(context).size.width / 2) - widget.padding),
       height: widget.height,
       child: RawMaterialButton(
-          onPressed: () {},
-          child: Text(
-            text,
-            style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: Palette.black,
-                fontSize: 18),
-          ),
+        onPressed: () {
+          setState(() {
+            if (widget.isSearchTabs == true && isLeftTab == true && leftTabActive == false) {
+              leftTabActive = true;
+            }
+            else if (widget.isSearchTabs == true && isLeftTab == false && leftTabActive == true) {
+              leftTabActive = false;
+            }
+          });
+
+        },
+        child: Text(
+          text,
+          style: TextStyle(
+              fontWeight: FontWeight.w700,
+              color: ((widget.isSearchTabs == true &&
+                          leftTabActive == true &&
+                          isLeftTab == true) ||
+                      (widget.isSearchTabs == true &&
+                          leftTabActive == false &&
+                          isLeftTab == false))
+                  ? Palette.cluckerRed
+                  : Palette.black,
+              fontSize: 18),
         ),
+      ),
     );
   }
 }
