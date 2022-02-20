@@ -33,7 +33,7 @@ class _TabControlsState extends State<TabControls> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TabButton(
+            _TabButton(
                 (widget.isSearchTabs == true)
                     ? 'Clucks'
                     : '$followingCount Following',
@@ -43,7 +43,7 @@ class _TabControlsState extends State<TabControls> {
               height: widget.height,
               color: Palette.lightGrey,
             ),
-            TabButton(
+            _TabButton(
                 (widget.isSearchTabs == true)
                     ? 'Users'
                     : '$followerCount Followers',
@@ -62,7 +62,7 @@ class _TabControlsState extends State<TabControls> {
     ));
   }
 
-  SizedBox TabButton(String text, bool isLeftTab) {
+  SizedBox _TabButton(String text, bool isLeftTab) {
     return SizedBox(
       width: ((MediaQuery.of(context).size.width / 2) - widget.padding),
       height: widget.height,
