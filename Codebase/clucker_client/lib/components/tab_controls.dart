@@ -1,6 +1,5 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
-import 'package:clucker_client/components/divider.dart';
 
 class TabControls extends StatefulWidget with PreferredSizeWidget {
   const TabControls(
