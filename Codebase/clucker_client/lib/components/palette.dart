@@ -49,7 +49,7 @@ class Palette {
 //#region Default Theme
 
 // Text, Inactive Icon, Inactive Text
-  static _PaletteColor black = _PaletteColor.fromARGB(0, 0, 0, 0);
+  static _PaletteColor black = _PaletteColor.fromARGB(255, 0, 0, 0);
 
 // Standard Dividers, Inactive Toggle Button, Button Widget (on click)
   static _PaletteColor mercuryGray = _PaletteColor.fromARGB(255, 230, 230, 230);
