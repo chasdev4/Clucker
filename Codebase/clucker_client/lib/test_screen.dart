@@ -1,5 +1,6 @@
 import 'package:clucker_client/navigation/main_navigation_bar.dart';
 import 'package:clucker_client/navigation/new_cluck_button.dart';
+import 'package:clucker_client/components/tab_controls.dart';
 import 'package:flutter/material.dart';
 
 import 'components/clucker_app_bar.dart';
@@ -23,7 +24,8 @@ class TestScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: const [
-            Text('Test Text')
+            SizedBox(height: 34,),
+            TabControls(isSearchTabs: false),
           ],
         ),
       ),

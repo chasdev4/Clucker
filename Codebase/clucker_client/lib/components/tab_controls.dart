@@ -5,7 +5,7 @@ class TabControls extends StatefulWidget with PreferredSizeWidget {
   const TabControls({
     Key? key,
     required this.isSearchTabs,
-    this.height = 48,
+    this.height = 46,
     this.padding = 15,
   }) : super(key: key);
   @override
@@ -34,10 +34,11 @@ class _TabControlsState extends State<TabControls> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _TabButton(
-                (widget.isSearchTabs == true)
-                    ? 'Clucks'
-                    : '$followingCount Following',
-                true, ),
+              (widget.isSearchTabs == true)
+                  ? 'Clucks'
+                  : '$followingCount Following',
+              true,
+            ),
             Container(
               width: 3,
               height: widget.height,
@@ -69,14 +70,16 @@ class _TabControlsState extends State<TabControls> {
       child: RawMaterialButton(
         onPressed: () {
           setState(() {
-            if (widget.isSearchTabs == true && isLeftTab == true && leftTabActive == false) {
+            if (widget.isSearchTabs == true &&
+                isLeftTab == true &&
+                leftTabActive == false) {
               leftTabActive = true;
-            }
-            else if (widget.isSearchTabs == true && isLeftTab == false && leftTabActive == true) {
+            } else if (widget.isSearchTabs == true &&
+                isLeftTab == false &&
+                leftTabActive == true) {
               leftTabActive = false;
             }
           });
-
         },
         child: Text(
           text,
@@ -90,7 +93,7 @@ class _TabControlsState extends State<TabControls> {
                           isLeftTab == false))
                   ? Palette.cluckerRed
                   : Palette.black,
-              fontSize: 18),
+              fontSize: 20),
         ),
       ),
     );
