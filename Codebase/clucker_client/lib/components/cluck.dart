@@ -49,20 +49,16 @@ class _EggControlsState extends State<EggControls> {
 
             if ((index == 0 && isSelected[index] == true) ||
                 (index == 1 && isSelected[index] == false)) {
-              print('Addition 1');
               eggCount++;
             } else if ((index == 0 && isSelected[index] == false) ||
                 (index == 1 && isSelected[index] == true)) {
-              print('Subtraction 1');
               eggCount--;
             }
 
             if (index == 1 && previousSelection[0] == true){
-              print('Subtraction 2');
               eggCount--;
             }
             else if (index == 0 && previousSelection[1] == true){
-              print('Addition 2');
               eggCount++;
             }
 
