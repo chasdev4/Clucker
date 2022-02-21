@@ -13,6 +13,7 @@ public class AppProperties {
 
     private String[] allowAllPost;
     private String[] allowAllGet;
+    private String[] allowAllPut;
     private Security security = new Security();
 
     @Getter
