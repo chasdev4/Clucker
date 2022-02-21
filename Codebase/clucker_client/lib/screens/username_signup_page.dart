@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
+import 'package:clucker_client/screens/email_signup_page.dart';
 
 class UsernamePage extends StatelessWidget {
   const UsernamePage({Key? key}) : super(key: key);
@@ -28,7 +29,7 @@ class UsernameForm extends StatefulWidget {
 
 class _UsernameFormState extends State<UsernameForm> {
 
-  final _usernameFromKey = GlobalKey<FormState>();
+  final _usernameFormKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
 
   String username = '';
@@ -42,7 +43,7 @@ class _UsernameFormState extends State<UsernameForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _usernameFromKey,
+      key: _usernameFormKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget> [
@@ -69,6 +70,11 @@ class _UsernameFormState extends State<UsernameForm> {
             onPress: () {
               username = usernameController.text;
               print(username);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EmailPage(username: username)),
+              );
             },
           ),
         ],
