@@ -1,5 +1,6 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewCluckButton extends StatelessWidget {
   const NewCluckButton({Key? key}) : super(key: key);
@@ -10,13 +11,16 @@ class NewCluckButton extends StatelessWidget {
       height: 80,
       width: 80,
       child: FloatingActionButton(
-        backgroundColor: Palette.cluckerRed,
-        onPressed: () {},
-        child: const Icon(Icons.add, size: 30,),
-        elevation: 5,
-        tooltip: 'New Cluck'
-      ),
+          backgroundColor: Colors.white,
+          onPressed: () {},
+          child: Icon(
+            FontAwesomeIcons.plusCircle,
+            size: 80,
+            color: Palette.cluckerRed,
+          ),
+          elevation: 0,
+
+          tooltip: 'New Cluck'),
     );
   }
-
 }
