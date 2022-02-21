@@ -121,7 +121,7 @@ class StandardButton extends StatelessWidget {
   }
 }
 
-class SignInScreen extends StatelessWidget                         {
+class SignInScreen extends StatelessWidget {
   const SignInScreen({Key? key}) : super(key: key);
 
   @override
