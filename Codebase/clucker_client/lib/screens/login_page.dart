@@ -6,7 +6,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: LogInForm(),
     );
   }
@@ -22,6 +22,19 @@ class LogInForm extends StatefulWidget {
 class _LogInFormState extends State<LogInForm> {
 
   final _logInFormKey = GlobalKey<FormState>();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  String username = '';
+  String password = '';
+
+
+  @override
+  void Dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +63,7 @@ class _LogInFormState extends State<LogInForm> {
                   height: 50,
                   width: 250,
                   child: TextFormField(
+                    controller: usernameController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please Enter Username!';
@@ -69,6 +83,7 @@ class _LogInFormState extends State<LogInForm> {
                   height: 50,
                   width: 250,
                   child: TextFormField(
+                    controller: passwordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please Enter Password!';
@@ -79,13 +94,18 @@ class _LogInFormState extends State<LogInForm> {
                       border: UnderlineInputBorder(),
                       hintText: 'Enter Password...',
                     ),
+                    obscureText: true,
                   ),
                 ),
               ),
               ElevatedButton(
                 onPressed: () {
                   if (_logInFormKey.currentState!.validate()) {
+                    username = usernameController.text;
+                    password = passwordController.text;
 
+                    print(username);
+                    print(password);
                   }
                 },
                 child: const Text('Log-In'),
