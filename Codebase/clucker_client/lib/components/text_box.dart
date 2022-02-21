@@ -1,97 +1,137 @@
-// ignore_for_file: use_key_in_widget_constructors
-
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
+import 'package:flutter/services.dart';
 
-class TextBox extends StatelessWidget {
-  const TextBox(this.text, [this.isObscuredText = false]);
+class TextBox extends StatefulWidget {
+  TextBox({Key? key}) : super(key: key);
 
-  final String text;
-  final bool isObscuredText;
+  late String hintText;
+  late bool isSearchField;
+  late bool isCluckField;
+  late bool obscureText;
+  late double horizontalPadding;
+
+  void setValues(String hintText, bool isSearchField, bool isCluckField,
+      bool obscureText, double horizontalPadding) {
+    this.hintText = hintText;
+    this.isSearchField = isSearchField;
+    this.isCluckField = isCluckField;
+    this.obscureText = obscureText;
+    this.horizontalPadding = horizontalPadding;
+  }
+
+  @override
+  _TextBoxState createState() => _TextBoxState();
+}
+
+class _TextBoxState extends State<TextBox> {
+  String enteredText = '';
+  int counter = 0;
+  int numLines = 1;
 
   @override
   Widget build(BuildContext context) {
-    _TextBoxPackager packager = _TextBoxPackager(text, false, isObscuredText);
-    return _TextBoxFactory(packager.buildPackage(), 50);
-  }
-}
-
-class SearchBox extends StatelessWidget {
-  const SearchBox({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    _TextBoxPackager packager = _TextBoxPackager('Search', true, false);
-    return _TextBoxFactory(packager.buildPackage(), 10);
-  }
-}
-
-class _TextBoxPackager {
-  final String text;
-  final bool isSearchField;
-  final bool isObscuredText;
-
-  _TextBoxPackager(this.text, this.isSearchField, this.isObscuredText);
-
-  List<Widget> buildPackage() {
-    var package = <Widget>[];
-
-    package.add(
-      TextField(
-        obscureText: isObscuredText,
-        cursorColor: const Color.fromARGB(255, 100, 100, 100),
-        cursorWidth: 1.1,
-        decoration: InputDecoration(
-          focusedBorder:  OutlineInputBorder(
-            borderSide: BorderSide(color: Palette.lightGrey, width: 1.3),
-          ),
-          enabledBorder:  OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Palette.lightGrey,
-              width: 1,
-            ),
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-          border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.elliptical(3, 3))),
-          hintText: text,
-          hintStyle: TextStyle(
-            color: Palette.lightGrey.toMaterialColor(),
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ),
-    );
-
-    if (isSearchField == true) {
-      package.add(IconButton(
-        icon: ImageIcon(
-          const AssetImage('assets/icons/search_icon_256x256.png'),
-          color: Colors.black,
-          size: 22,
-        ),
-        onPressed: () {
-          // do something
-        },
-      ));
-    }
-
-    return package;
-  }
-}
-
-class _TextBoxFactory extends StatelessWidget {
-  const _TextBoxFactory(this.package, this.horizontalPadding);
-
-  final List<Widget> package;
-  final double horizontalPadding;
-
-  @override
-  Widget build(BuildContext context) {
+    double sendButtonSize = (widget.isCluckField == true) ? 50 : 0;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
-      child: Stack(alignment: Alignment.centerRight, children: package),
-    );
+        padding: EdgeInsets.symmetric(
+            horizontal: widget.horizontalPadding, vertical: 6),
+        child: Row(crossAxisAlignment: widget.isCluckField == true
+            ? CrossAxisAlignment.end : CrossAxisAlignment.center, children: [
+          Flexible(
+            child: Stack(alignment: Alignment.centerRight, children: [
+              TextField(
+
+                obscureText: widget.obscureText,
+                cursorColor: const Color.fromARGB(255, 100, 100, 100),
+                cursorWidth: 1.1,
+                keyboardType: widget.isCluckField == true ? TextInputType.multiline : TextInputType.text,
+                minLines: 1,
+                maxLines: widget.isCluckField == true ? 9 : 1,
+                decoration: InputDecoration(
+                  suffixIcon: widget.isSearchField == true ? IconButton(
+                    icon: const ImageIcon(
+                      AssetImage('assets/icons/search_icon_256x256.png'),
+                      color: black,
+                      size: 22,
+                    ),
+                    onPressed: () {
+                      // do something
+                    },
+                  ) : null,
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: lightGrey, width: 1.3),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: lightGrey,
+                      width: 1,
+                    ),
+                  ),
+                  contentPadding:
+                      EdgeInsets.fromLTRB(10, 6, 41, 6),
+                  border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.elliptical(3, 3))),
+                  hintText: widget.hintText,
+                  hintStyle: const TextStyle(
+                    color: lightGrey,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    enteredText = value;
+                    counter = 0;
+
+                    for (int i = 0; i < enteredText.length; i++) {
+                      if (enteredText[i] == ' ' || enteredText[i] == '\n') {
+                        counter++;
+                      }
+                    }
+                  });
+                },
+              ),
+              Positioned(
+                right: 0.001,
+                bottom: 5,
+                child: SizedBox(
+                  width: 40,
+                  child: widget.isCluckField == true
+                          ? Column(children: [
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                '$counter/6  ',
+                                style: TextStyle(
+                                  fontFamily: 'OpenSans',
+                                  fontWeight: FontWeight.bold,
+                                  color: cluckerRed.shade400,
+                                  fontSize: 14,
+                                ),
+                              )
+                            ])
+                          : const SizedBox(),
+                ),
+              ),
+            ]),
+          ),
+          SizedBox(
+            width: sendButtonSize,
+            height: sendButtonSize,
+            child: widget.isCluckField == true
+                ? IconButton(
+                    icon: ImageIcon(
+                      const AssetImage('assets/icons/send_icon_256x256.png'),
+                      color: black,
+                      size: sendButtonSize,
+                    ),
+                    padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 0),
+                    onPressed: () {
+                      // do something
+                    },
+                  )
+                : null,
+          ),
+        ]));
   }
 }
