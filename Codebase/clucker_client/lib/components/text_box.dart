@@ -42,7 +42,7 @@ class _TextBoxState extends State<TextBox> {
             ? 32
             : 0;
     double validationIconSize =
-        (widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin ||
+        (widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp ||
                 widget.textBoxProfile == TextBoxProfile.emailField)
             ? 30
             : 0;
