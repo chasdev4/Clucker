@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
+import 'package:clucker_client/screens/username_signup_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -85,7 +86,10 @@ class _LogInFormState extends State<LogInForm> {
             text: 'Sign-Up',
             routeName: '',
             onPress: () {
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const UsernamePage()),
+              );
             },
             isSecondary: true,
           ),
