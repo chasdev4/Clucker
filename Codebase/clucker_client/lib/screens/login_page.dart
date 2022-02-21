@@ -56,21 +56,11 @@ class _LogInFormState extends State<LogInForm> {
             ),
           ),
           TextBox(
-            hintText: 'Enter Username',
-            isSearchField: false,
-            isCluckField: false,
-            isValidationField: true,
-            obscureText: false,
-            validationProfile: Validation.usernameField,
+            textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
             controller: usernameController,
           ),
           TextBox(
-            hintText: 'Enter Password',
-            isSearchField: false,
-            isCluckField: false,
-            isValidationField: true,
-            obscureText: true,
-            validationProfile: Validation.passwordField,
+            textBoxProfile: TextBoxProfile.passwordFieldLogin,
             controller: passwordController,
           ),
           StandardButton(
