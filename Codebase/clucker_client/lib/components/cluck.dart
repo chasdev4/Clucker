@@ -12,7 +12,7 @@ class EggControls extends StatefulWidget {
 }
 
 class _EggControlsState extends State<EggControls> {
-  // TODO: Update placeholder
+  // TODO: Update placeholder to retrieve rating count from Cluck or Comment
   int eggCount = 123;
 
   List<bool> isSelected = [false, false];
@@ -27,6 +27,7 @@ class _EggControlsState extends State<EggControls> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Text('$eggCount',
           style: TextStyle(
+              height: 0,
               fontWeight: FontWeight.w900,
               fontSize: widget.buttonSize - 14,
               color: Palette.cluckerRed)),
