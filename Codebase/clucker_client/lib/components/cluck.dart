@@ -16,7 +16,6 @@ class _EggControlsState extends State<EggControls> {
   int eggCount = 123;
 
   List<bool> isSelected = [false, false];
-  int lastSelection = -1;
   Color activeBackground = Palette.cluckerRed;
   Color activeForeground = Palette.cluckerRedLight;
   Color inactiveBackground = Palette.mercuryGray;
@@ -35,11 +34,6 @@ class _EggControlsState extends State<EggControls> {
       ToggleButtons(
         onPressed: (int index) {
           setState(() {
-            if ((isSelected[0] == true && index == 0) ||
-                (isSelected[1] == true && index == 1)) {
-              lastSelection = index;
-            }
-
             for (int buttonIndex = 0;
                 buttonIndex < isSelected.length;
                 buttonIndex++) {
@@ -55,14 +49,6 @@ class _EggControlsState extends State<EggControls> {
             } else if ((index == 0 && isSelected[index] == false) ||
                 (index == 1 && isSelected[index] == true)) {
               eggCount--;
-            }
-
-            if (index != lastSelection) {
-              if (lastSelection == 0) {
-                eggCount--;
-              } else if (lastSelection == 1) {
-                eggCount++;
-              }
             }
           });
         },
