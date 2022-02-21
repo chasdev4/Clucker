@@ -38,6 +38,9 @@ class Palette {
 // (Default Theme) Secondary Button Border and Secondary Button Text
   static _PaletteColor cluckerRed = _PaletteColor.fromARGB(255, 255, 87, 87);
 
+  // Plus and minus overlay
+  static _PaletteColor cluckerRedLight = _PaletteColor.fromARGB(255, 255, 187, 187);
+
 // (Both) Solid Button Text
 // (Default Theme) Background, Text Field Background
 // (Dark Mode) Text, Inactive Icon, Inactive Text, Secondary Button Text
@@ -50,8 +53,8 @@ class Palette {
 
 // Text, Inactive Icon, Inactive Text
   static _PaletteColor black = _PaletteColor.fromARGB(255, 0, 0, 0);
-
-  // Text, Inactive Icon, Inactive Text
+  
+ // Inactive Navigation icon
   static _PaletteColor offBlack = _PaletteColor.fromARGB(255, 75, 75, 75);
 
 // Standard Dividers, Inactive Toggle Button, Button Widget (on click)
