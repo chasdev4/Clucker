@@ -69,7 +69,7 @@ class _TextBoxState extends State<TextBox> {
                               icon: const ImageIcon(
                                 AssetImage(
                                     'assets/icons/search_icon_256x256.png'),
-                                color: black,
+                                color: Colors.black,
                                 size: 22,
                               ),
                               onPressed: () {
@@ -77,10 +77,10 @@ class _TextBoxState extends State<TextBox> {
                               },
                             )
                           : null,
-                      focusedBorder: const OutlineInputBorder(
+                      focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: lightGrey, width: 1.3),
                       ),
-                      enabledBorder: const OutlineInputBorder(
+                      enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: lightGrey,
                           width: 1,
