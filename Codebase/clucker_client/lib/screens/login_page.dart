@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:clucker_client/components/text_box.dart';
+import 'package:clucker_client/components/standard_button.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -28,7 +30,6 @@ class _LogInFormState extends State<LogInForm> {
   String username = '';
   String password = '';
 
-
   @override
   void Dispose() {
     usernameController.dispose();
@@ -40,81 +41,53 @@ class _LogInFormState extends State<LogInForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _logInFormKey,
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Image(
-                image: AssetImage('assets/icons/clucker_logo_256x256.png'),
-              ),
-              const Text(
-                'Clucker',
-                style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontSize: 45,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: SizedBox(
-                  height: 50,
-                  width: 250,
-                  child: TextFormField(
-                    controller: usernameController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter Username!';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: 'Enter Username...',
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: SizedBox(
-                  height: 50,
-                  width: 250,
-                  child: TextFormField(
-                    controller: passwordController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter Password!';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: 'Enter Password...',
-                    ),
-                    obscureText: true,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_logInFormKey.currentState!.validate()) {
-                    username = usernameController.text;
-                    password = passwordController.text;
+          const Image(
+            image: AssetImage('assets/icons/clucker_logo_256x256.png'),
+          ),
+          const Text(
+            'Clucker',
+            style: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 45,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          TextBox(
+            hintText: 'Enter Username',
+            isSearchField: false,
+            isCluckField: false,
+            isValidationField: true,
+            obscureText: false,
+            validationProfile: Validation.usernameField,
+            controller: usernameController,
+          ),
+          TextBox(
+            hintText: 'Enter Password',
+            isSearchField: false,
+            isCluckField: false,
+            isValidationField: true,
+            obscureText: true,
+            validationProfile: Validation.passwordField,
+            controller: passwordController,
+          ),
+          StandardButton(
+            text: 'Log-In',
+            routeName: '',
+            onPress: () {
+              print(usernameController.text);
+              print(passwordController.text);
+            },
+          ),
+          StandardButton(
+            text: 'Sign-Up',
+            routeName: '',
+            onPress: () {
 
-                    print(username);
-                    print(password);
-                  }
-                },
-                child: const Text('Log-In'),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('Sign-Up'),
-              ),
-            ],
+            },
+            isSecondary: true,
           ),
         ],
       ),

@@ -4,17 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/services.dart';
 
-enum Validation { usernameField, emailField }
+enum Validation { usernameField, emailField, passwordField }
 
 class TextBox extends StatefulWidget {
-  TextBox(
+  const TextBox(
       {Key? key,
       required this.hintText,
       required this.isSearchField,
       required this.isCluckField,
       required this.isValidationField,
       required this.obscureText,
-      required this.validationProfile})
+      required this.validationProfile,
+      this.controller})
       : super(key: key);
 
   final String hintText;
@@ -23,6 +24,7 @@ class TextBox extends StatefulWidget {
   final bool isValidationField;
   final bool obscureText;
   final Validation validationProfile;
+  final TextEditingController? controller;
 
   @override
   _TextBoxState createState() => _TextBoxState();
@@ -54,7 +56,10 @@ class _TextBoxState extends State<TextBox> {
             children: [
               Flexible(
                 child: Stack(alignment: Alignment.centerRight, children: [
-                  TextField(
+                  TextFormField(
+                    controller: widget.isValidationField == true
+                        ? widget.controller
+                        : null,
                     obscureText: widget.obscureText,
                     cursorColor: const Color.fromARGB(255, 100, 100, 100),
                     cursorWidth: 1.1,
@@ -78,11 +83,11 @@ class _TextBoxState extends State<TextBox> {
                             )
                           : null,
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: lightGrey, width: 1.3),
+                        borderSide: BorderSide(color: Palette.lightGrey, width: 1.3),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: lightGrey,
+                          color: Palette.lightGrey,
                           width: 1,
                         ),
                       ),
@@ -91,8 +96,8 @@ class _TextBoxState extends State<TextBox> {
                           borderRadius:
                               BorderRadius.all(Radius.elliptical(3, 3))),
                       hintText: widget.hintText,
-                      hintStyle: const TextStyle(
-                        color: lightGrey,
+                      hintStyle: TextStyle(
+                        color: Palette.lightGrey,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -142,7 +147,7 @@ class _TextBoxState extends State<TextBox> {
                                 style: TextStyle(
                                   fontFamily: 'OpenSans',
                                   fontWeight: FontWeight.bold,
-                                  color: cluckerRed.shade400,
+                                  color: Palette.cluckerRed.toMaterialColor().shade400,
                                   fontSize: 14,
                                 ),
                               )
@@ -168,7 +173,7 @@ class _TextBoxState extends State<TextBox> {
                         icon: ImageIcon(
                           const AssetImage(
                               'assets/icons/send_icon_256x256.png'),
-                          color: black,
+                          color: Palette.black,
                           size: sendButtonSize,
                         ),
                         padding: const EdgeInsets.only(
