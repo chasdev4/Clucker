@@ -63,13 +63,10 @@ class _FollowButtonState extends State<FollowButton> {
               : const BorderSide(style: BorderStyle.none),
         ),
         onPressed: () {
-          if (widget.buttonProfile == FollowButtonProfile.follow ||
-              widget.buttonProfile == FollowButtonProfile.followSmall ||
-              widget.buttonProfile == FollowButtonProfile.block) {
-            setState(() {
-              isSecondary = !isSecondary;
-            });
-          }
+          setState(() {
+            isSecondary = !isSecondary;
+          });
+
           widget.onPress();
         },
       ),
