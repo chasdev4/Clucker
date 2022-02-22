@@ -28,11 +28,10 @@ class TextBox extends StatefulWidget {
 }
 
 class _TextBoxState extends State<TextBox> {
-  double horizontalPadding = 0;
   String enteredText = '';
   int counter = 0;
   int numLines = 1;
-  IconData validationIcon = Icons.question_mark;
+  IconData validationIcon = FontAwesomeIcons.solidQuestionCircle;
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +43,14 @@ class _TextBoxState extends State<TextBox> {
     double validationIconSize =
         (widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp ||
                 widget.textBoxProfile == TextBoxProfile.emailField)
-            ? 30
+            ? 24
             : 0;
-    horizontalPadding = (widget.textBoxProfile != TextBoxProfile.cluckField &&
-            widget.textBoxProfile != TextBoxProfile.searchField &&
-            widget.textBoxProfile != TextBoxProfile.commentField)
-        ? 50
-        : 10;
+    double horizontalPadding =
+        (widget.textBoxProfile != TextBoxProfile.cluckField &&
+                widget.textBoxProfile != TextBoxProfile.searchField &&
+                widget.textBoxProfile != TextBoxProfile.commentField)
+            ? 50
+            : 10;
 
     return Padding(
         padding:
@@ -149,23 +149,33 @@ class _TextBoxState extends State<TextBox> {
                     onChanged: (value) {
                       setState(() {
                         enteredText = value;
+
                         if (widget.textBoxProfile ==
                             TextBoxProfile.usernameFieldSignUp) {
                           // //TODO: Connect the backend for username validation
                         } else if (widget.textBoxProfile ==
                             TextBoxProfile.emailField) {
-                          //   //TODO: Connect the backend for email validation
+                          // //TODO: Connect the backend for email validation
                         }
-                        //Timer(Duration(seconds: 6), callback);
-                        // if (enteredText.length == 0) {
-                        //validationIcon = Icons.question_mark;
-                        // }
-                        // else if (enteredText already exists) {
-                        //  validationIcon = Icons.close;
-                        // } else {
-                        //  validationIcon = Icons.check_circle;
-                        // }
-                        else if (widget.textBoxProfile ==
+
+                        if (widget.textBoxProfile ==
+                                TextBoxProfile.usernameFieldSignUp ||
+                            widget.textBoxProfile ==
+                                TextBoxProfile.emailField) {
+                          if (enteredText.isEmpty) {
+                            print('Text length is ${enteredText.length}');
+                            validationIcon = FontAwesomeIcons.solidQuestionCircle;
+                          } else if (enteredText.length > 0 &&
+                              enteredText.length < 4) {
+                            print('Text length is ${enteredText.length}');
+                            validationIcon = FontAwesomeIcons.solidTimesCircle;
+                          } else if (enteredText.length > 3) {
+                            print('Text length is ${enteredText.length}');
+                            validationIcon = FontAwesomeIcons.solidCheckCircle;
+                          }
+                        }
+
+                        if (widget.textBoxProfile ==
                             TextBoxProfile.passwordFieldSignUp) {
                           //TODO: Set the state of the meter based on the password field algorithm
                         } else if (widget.textBoxProfile ==
@@ -231,26 +241,32 @@ class _TextBoxState extends State<TextBox> {
                 child: widget.textBoxProfile == TextBoxProfile.cluckField ||
                         widget.textBoxProfile == TextBoxProfile.commentField
                     ? IconButton(
-                          icon: Icon(
-                            FontAwesomeIcons.solidPaperPlane,
-                            color: Palette.cluckerRed,
-                            size: sendButtonSize,
-                          ),
-                          padding: const EdgeInsets.only(
-                              left: 10, top: 5, bottom: 20, right: 10),
-                          onPressed: () {
-                            // do something
-                          },
-                        )
+                        icon: Icon(
+                          FontAwesomeIcons.solidPaperPlane,
+                          color: Palette.cluckerRed,
+                          size: sendButtonSize,
+                        ),
+                        padding: const EdgeInsets.only(
+                            left: 10, top: 5, bottom: 20, right: 10),
+                        onPressed: () {
+                          // do something
+                        },
+                      )
                     : widget.textBoxProfile ==
                                 TextBoxProfile.usernameFieldSignUp ||
                             widget.textBoxProfile == TextBoxProfile.emailField
                         ? Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Icon(
-                              Icons.circle,
+                              validationIcon,
                               size: validationIconSize,
-                              color: Colors.grey,
+                              color: validationIcon ==
+                                      FontAwesomeIcons.solidQuestionCircle
+                                  ? Palette.lightGrey
+                                  : validationIcon ==
+                                          FontAwesomeIcons.solidTimesCircle
+                                      ? Colors.red.shade600
+                                      : Colors.green.shade600,
                             ),
                           )
                         : null,
