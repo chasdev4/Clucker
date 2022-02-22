@@ -4,6 +4,7 @@ import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/screens/email_signup_page.dart';
 import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/services/user_service.dart';
 
 class UsernamePage extends StatelessWidget {
   const UsernamePage({Key? key}) : super(key: key);
@@ -38,6 +39,7 @@ class _UsernameFormState extends State<UsernameForm> {
   final _usernameFormKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
 
+  UserService userService = UserService();
   String username = '';
 
   @override
@@ -68,14 +70,31 @@ class _UsernameFormState extends State<UsernameForm> {
           StandardButton(
             text: 'Next',
             routeName: '',
-            onPress: () {
+            onPress: () async {
               username = usernameController.text;
-              print(username);
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EmailPage(username: username)),
-              );
+              bool isGood = await userService.usernameAvailable(username);
+
+              if (isGood) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EmailPage(username: username))
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Username Conflict'),
+                    content: const Text('Username is already taken!'),
+                    actions: <Widget> [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              }
             },
           ),
         ],
