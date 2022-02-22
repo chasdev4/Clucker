@@ -1,5 +1,6 @@
 package com.clucker.cluckerserver.controller;
 
+import com.clucker.cluckerserver.dto.ValidationErrorResponse;
 import com.clucker.cluckerserver.exception.ForbiddenException;
 import com.clucker.cluckerserver.exception.HttpException;
 import com.clucker.cluckerserver.exception.NotFoundException;
@@ -28,13 +29,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<String>> handleValidationError(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ValidationErrorResponse> handleValidationError(MethodArgumentNotValidException exception) {
         log.error(exception.getMessage());
         List<String> fieldErrors = exception.getFieldErrors().stream()
-                .map(FieldError::getDefaultMessage).collect(Collectors.toList());
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.toList());
+        ValidationErrorResponse response = new ValidationErrorResponse();
+        response.setErrors(fieldErrors);
         return ResponseEntity
                 .badRequest()
-                .body(fieldErrors);
+                .body(response);
     }
 
     @ExceptionHandler({ ForbiddenException.class, AccessDeniedException.class})

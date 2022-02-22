@@ -1,5 +1,6 @@
 package com.clucker.cluckerserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,9 +12,13 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,6 +42,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     @NotNull
     private String password;
 
@@ -49,5 +55,9 @@ public class User {
     private LocalDateTime lastLogin;
 
     private boolean enabled;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "author")
+    private List<Cluck> clucks;
 
 }
