@@ -1,5 +1,32 @@
 import 'package:flutter/material.dart';
 
+enum StandardButtonProfile {
+  standard,
+  save,
+  cancel,
+  revert
+}
+
+enum StatefulButtonProfile {
+  follow,
+  followSmall,
+}
+
+class StatefulButton extends StatefulWidget {
+  const StatefulButton({Key? key}) : super(key: key);
+
+  @override
+  _StatefulButtonState createState() => _StatefulButtonState();
+}
+
+class _StatefulButtonState extends State<StatefulButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+
 class StandardButton extends StatelessWidget {
 
   final String text;
@@ -37,27 +64,25 @@ class _ButtonFactory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ElevatedButton button = ElevatedButton(
-      child: Text(
-        text,
-        style: TextStyle(
-            color: textColor, fontSize: 15, fontWeight: FontWeight.w500),
+    return Padding(
+      child: ElevatedButton(
+        child: Text(
+          text,
+          style: TextStyle(
+              color: textColor, fontSize: 15, fontWeight: FontWeight.w500),
+        ),
+        style: ElevatedButton.styleFrom(
+          fixedSize: Size(width, height),
+          primary: buttonColor,
+          side: (isSecondary == true)
+              ? BorderSide(color: textColor, width: 2.5, style: BorderStyle.solid)
+              : const BorderSide(style: BorderStyle.none),
+        ),
+        onPressed: () {
+          onPress();
+        },
       ),
-      style: ElevatedButton.styleFrom(
-        fixedSize: Size(width, height),
-        primary: buttonColor,
-        side: (isSecondary == true)
-            ? BorderSide(color: textColor, width: 2.5, style: BorderStyle.solid)
-            : const BorderSide(style: BorderStyle.none),
-      ),
-      onPressed: () {
-        onPress();
-      },
-    );
-
-    return Container(
-      child: button,
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: horizontalPadding),
     );
   }
 }
