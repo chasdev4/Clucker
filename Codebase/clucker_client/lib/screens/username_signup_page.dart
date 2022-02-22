@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/screens/email_signup_page.dart';
-import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/services/user_service.dart';
+import '../components/functions.dart';
 
 class UsernamePage extends StatelessWidget {
   const UsernamePage({Key? key}) : super(key: key);
@@ -40,7 +40,7 @@ class _UsernameFormState extends State<UsernameForm> {
   final usernameController = TextEditingController();
 
   UserService userService = UserService();
-  String username = '';
+  Functions functions = Functions();
 
   @override
   void Dispose() {
@@ -71,29 +71,18 @@ class _UsernameFormState extends State<UsernameForm> {
             text: 'Next',
             routeName: '',
             onPress: () async {
-              username = usernameController.text;
 
-              bool isGood = await userService.usernameAvailable(username);
-
-              if (isGood) {
+              if (await userService.usernameAvailable(usernameController.text)) {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => EmailPage(username: username))
+                    MaterialPageRoute(builder:
+                        (context) => EmailPage(username: usernameController.text))
                 );
               } else {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Username Conflict'),
-                    content: const Text('Username is already taken!'),
-                    actions: <Widget> [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'OK'),
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  ),
-                );
+                functions.oneButtonDialog(
+                    context,
+                    'Username Conflict',
+                    'Username is already taken!');
               }
             },
           ),
