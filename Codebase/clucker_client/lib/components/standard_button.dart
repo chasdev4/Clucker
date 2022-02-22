@@ -73,7 +73,7 @@ class StandardButton extends StatelessWidget {
                                   width: 2.5,
                                   style: BorderStyle.solid)),
                           onPressed: () {
-                            onPress();
+                            //TODO: Implement Cancel logic here
                           },
                           icon: Icon(
                             FontAwesomeIcons.solidTrashAlt,
@@ -97,7 +97,7 @@ class StandardButton extends StatelessWidget {
                             primary: textColor,
                           ),
                           onPressed: () {
-                            onPress();
+                            //TODO: Implement Save logic here
                           },
                           icon: const Icon(FontAwesomeIcons.solidSave,),
                           label: const Text(' Save', style: TextStyle(
