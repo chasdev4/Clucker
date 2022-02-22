@@ -32,7 +32,7 @@ class _TextBoxState extends State<TextBox> {
   String enteredText = '';
   int counter = 0;
   int numLines = 1;
-  IconData validationIcon = Icons.question_mark;
+  IconData validationIcon = FontAwesomeIcons.question;
 
   @override
   Widget build(BuildContext context) {
