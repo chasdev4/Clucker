@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
+import 'package:clucker_client/models/user_registration.dart';
+import 'package:clucker_client/services/user_service.dart';
 import 'package:clucker_client/components/palette.dart';
+import 'package:http/http.dart';
 
 class EmailPage extends StatelessWidget {
   const EmailPage({Key? key, required this.username}) : super(key: key);
@@ -37,12 +40,12 @@ class EmailForm extends StatefulWidget {
 }
 
 class _EmailFormState extends State<EmailForm> {
-
   final _emailFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final firstPasswordController = TextEditingController();
   final secondPasswordController = TextEditingController();
 
+  UserService userService = UserService();
   String email = '';
   String password = '';
 
@@ -52,7 +55,7 @@ class _EmailFormState extends State<EmailForm> {
       key: _emailFormKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget> [
+        children: <Widget>[
           const Text(
             'Please enter your email address',
             style: TextStyle(
@@ -84,22 +87,57 @@ class _EmailFormState extends State<EmailForm> {
           StandardButton(
             text: 'Sign-Up',
             routeName: '',
-            onPress: () {
+            onPress: () async {
               email = emailController.text;
 
-              if (firstPasswordController.text == secondPasswordController.text) {
+              if (firstPasswordController.text ==
+                  secondPasswordController.text) {
                 password = firstPasswordController.text;
 
-                print('Username: ${widget.username} \n'
-                    'Email Address: $email \n'
-                    'Password: $password');
+                UserRegistration userRegistration = UserRegistration(
+                    username: widget.username,
+                    password: password,
+                    email: email);
+
+                Response response =
+                    await userService.registerUser(userRegistration);
+
+                if (response.statusCode == 201) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Account Created'),
+                      content: const Text('Start Clucking!'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('ERROR'),
+                      content: Text(response.body),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               } else {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
                     title: const Text('Password Conflict'),
                     content: const Text('Passwords must match!'),
-                    actions: <Widget> [
+                    actions: <Widget>[
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'OK'),
                         child: const Text('OK'),
