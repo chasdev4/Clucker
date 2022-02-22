@@ -1,8 +1,8 @@
+import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-enum StandardButtonProfile { standard, save, cancel, revert }
-
-enum FollowButtonProfile { standard, small, block }
+enum StandardButtonProfile { standard, saveCancel }
 
 class StandardButton extends StatelessWidget {
   const StandardButton(
@@ -23,79 +23,99 @@ class StandardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double horizontalPadding =
-        (standardButtonProfile == StandardButtonProfile.standard) ? 50 : 6;
+        (standardButtonProfile == StandardButtonProfile.standard) ? 50 : 15;
+    const double buttonHeight = 45;
 
-    Color textColor = (isSecondary == true) ? Colors.red : Colors.white;
-    Color buttonColor = (isSecondary == false) ? Colors.red : Colors.white;
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      SizedBox(
-        width: horizontalPadding,
-      ),
-      Expanded(
-        child: ElevatedButton(
-          child: Text(
-            text,
-            style: TextStyle(
-                color: textColor, fontSize: 15, fontWeight: FontWeight.w500),
+    Color textColor =
+        (isSecondary == true) ? Palette.cluckerRed : Palette.white;
+    Color buttonColor =
+        (isSecondary == false) ? Palette.cluckerRed : Palette.white;
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 6),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          SizedBox(
+            width: horizontalPadding,
           ),
-          style: ElevatedButton.styleFrom(
-            primary: buttonColor,
-            side: (isSecondary == true)
-                ? BorderSide(
-                    color: textColor, width: 2.5, style: BorderStyle.solid)
-                : const BorderSide(style: BorderStyle.none),
+          standardButtonProfile == StandardButtonProfile.standard
+              ? Expanded(
+                  child: SizedBox(
+                  height: buttonHeight,
+                  child: ElevatedButton(
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                          color: textColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: buttonColor,
+                      side: (isSecondary == true)
+                          ? BorderSide(
+                              color: textColor,
+                              width: 2.5,
+                              style: BorderStyle.solid)
+                          : const BorderSide(style: BorderStyle.none),
+                    ),
+                    onPressed: () {
+                      onPress();
+                    },
+                  ),
+                ))
+              : Expanded(
+                  child: SizedBox(
+                      height: buttonHeight,
+                      child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                              primary: buttonColor,
+                              side: BorderSide(
+                                  color: textColor,
+                                  width: 2.5,
+                                  style: BorderStyle.solid)),
+                          onPressed: () {
+                            onPress();
+                          },
+                          icon: Icon(
+                            FontAwesomeIcons.solidTrashAlt,
+                            color: Palette.cluckerRed,
+                          ),
+                          label: Text(
+                            ' Cancel',
+                            style: TextStyle(color: textColor, fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ))),
+                ),
+          SizedBox(
+            width: horizontalPadding,
           ),
-          onPressed: () {
-            onPress();
-          },
-        ),
-      ),
-      SizedBox(
-        width: horizontalPadding,
-      ),
-    ]);
+          standardButtonProfile != StandardButtonProfile.standard
+              ? Expanded(
+                  child: SizedBox(
+                      height: buttonHeight,
+                      child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            primary: textColor,
+                          ),
+                          onPressed: () {
+                            onPress();
+                          },
+                          icon: const Icon(FontAwesomeIcons.solidSave,),
+                          label: const Text(' Save', style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500
+                          ),))))
+              : const SizedBox(
+                  height: 0,
+                  width: 0,
+                ),
+          standardButtonProfile != StandardButtonProfile.standard
+              ? SizedBox(
+                  width: horizontalPadding,
+                )
+              : const SizedBox(
+                  height: 0,
+                  width: 0,
+                ),
+        ]));
   }
 }
-
-// class FollowButton extends StatefulWidget {
-//   const FollowButton({Key? key}) : super(key: key);
-//
-//   final String text;
-//   final String routeName;
-//   final Function onPress;
-//   final bool isSecondary;
-//   final Color textColor;
-//   final Color buttonColor;
-//
-//   final double width = 250;
-//   final double height = 50;
-//
-//   @override
-//   _FollowButtonState createState() => _FollowButtonState();
-// }
-//
-// class _FollowButtonState extends State<FollowButton> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       child: ElevatedButton(
-//         child: Text(
-//           text,
-//           style: TextStyle(
-//               color: textColor, fontSize: 15, fontWeight: FontWeight.w500),
-//         ),
-//         style: ElevatedButton.styleFrom(
-//           fixedSize: Size(width, height),
-//           primary: buttonColor,
-//           side: (isSecondary == true)
-//               ? BorderSide(color: textColor, width: 2.5, style: BorderStyle.solid)
-//               : const BorderSide(style: BorderStyle.none),
-//         ),
-//         onPressed: () {
-//           onPress();
-//         },
-//       ),
-//       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: horizontalPadding),
-//     );;
-//   }
-// }
