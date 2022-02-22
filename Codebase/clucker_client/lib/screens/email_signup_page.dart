@@ -6,7 +6,7 @@ import 'package:clucker_client/models/user_registration.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:http/http.dart';
-import '../components/functions.dart';
+import '../components/DialogUtil.dart';
 
 class EmailPage extends StatelessWidget {
   const EmailPage({Key? key, required this.username}) : super(key: key);
@@ -48,7 +48,7 @@ class _EmailFormState extends State<EmailForm> {
   final secondPasswordController = TextEditingController();
 
   UserService userService = UserService();
-  Functions functions = Functions();
+  DialogUtil dialogUtil = DialogUtil();
 
   @override
   Widget build(BuildContext context) {
@@ -101,18 +101,18 @@ class _EmailFormState extends State<EmailForm> {
                     await userService.registerUser(userRegistration);
 
                 if (response.statusCode == 201) {
-                  functions.oneButtonDialog(
+                  dialogUtil.oneButtonDialog(
                       context,
                       'Account Created',
                       'Start Clucking!');
                 } else {
-                  functions.oneButtonDialog(
+                  dialogUtil.oneButtonDialog(
                       context,
                       'ERROR',
                       response.body);
                 }
               } else {
-                functions.oneButtonDialog(
+                dialogUtil.oneButtonDialog(
                     context,
                     'Password Conflict',
                     'Passwords must match!');

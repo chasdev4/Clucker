@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Functions {
+class DialogUtil {
 
   void oneButtonDialog(BuildContext _context, String _title, String _body) {
     showDialog(

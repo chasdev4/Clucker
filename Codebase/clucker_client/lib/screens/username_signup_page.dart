@@ -4,7 +4,7 @@ import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/screens/email_signup_page.dart';
 import 'package:clucker_client/services/user_service.dart';
-import '../components/functions.dart';
+import '../components/DialogUtil.dart';
 
 class UsernamePage extends StatelessWidget {
   const UsernamePage({Key? key}) : super(key: key);
@@ -40,7 +40,7 @@ class _UsernameFormState extends State<UsernameForm> {
   final usernameController = TextEditingController();
 
   UserService userService = UserService();
-  Functions functions = Functions();
+  DialogUtil dialogUtil = DialogUtil();
 
   @override
   void Dispose() {
@@ -79,7 +79,7 @@ class _UsernameFormState extends State<UsernameForm> {
                         (context) => EmailPage(username: usernameController.text))
                 );
               } else {
-                functions.oneButtonDialog(
+                dialogUtil.oneButtonDialog(
                     context,
                     'Username Conflict',
                     'Username is already taken!');
