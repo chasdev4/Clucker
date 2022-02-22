@@ -1,7 +1,3 @@
-
-import 'package:clucker_client/components/follow_button.dart';
-import 'package:clucker_client/components/standard_button.dart';
-import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/navigation/main_navigation_bar.dart';
 import 'package:clucker_client/navigation/new_cluck_button.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +6,7 @@ import 'components/clucker_app_bar.dart';
 import 'components/user_avatar.dart';
 
 class TestScreen extends StatelessWidget {
+
   const TestScreen({Key? key}) : super(key: key);
 
   @override
@@ -25,10 +22,8 @@ class TestScreen extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          children: [
-            FollowButton(buttonProfile: FollowButtonProfile.follow, onPress: (){}),
-            FollowButton(buttonProfile: FollowButtonProfile.followSmall, onPress: (){}),
-            FollowButton(buttonProfile: FollowButtonProfile.block, onPress: (){}),
+          children: const [
+            Text('Test Text')
           ],
         ),
       ),
@@ -37,4 +32,5 @@ class TestScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+
 }
