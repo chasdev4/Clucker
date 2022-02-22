@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/screens/email_signup_page.dart';
+import 'package:clucker_client/components/palette.dart';
 
 class UsernamePage extends StatelessWidget {
   const UsernamePage({Key? key}) : super(key: key);
@@ -12,8 +13,13 @@ class UsernamePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-            'Sign-Up'
+            'Sign-Up',
+        style: TextStyle(
+          fontFamily: 'OpenSans',
+          fontSize: 40,
+          fontWeight: FontWeight.w700,
         ),
+      ),
       ),
       body: const UsernameForm(),
     );
@@ -56,12 +62,7 @@ class _UsernameFormState extends State<UsernameForm> {
             ),
           ),
           TextBox(
-            hintText: 'Enter Your New Username',
-            isSearchField: false,
-            isCluckField: false,
-            isValidationField: true,
-            obscureText: false,
-            validationProfile: Validation.usernameField,
+            textBoxProfile: TextBoxProfile.usernameFieldSignUp,
             controller: usernameController,
           ),
           StandardButton(

@@ -65,10 +65,7 @@ class _TextBoxState extends State<TextBox> {
               Flexible(
                 child: Stack(alignment: Alignment.center, children: [
                   TextFormField(
-                    controller: widget.textBoxProfile ==
-                            TextBoxProfile.emailOrUsernameFieldLogin
-                        ? widget.controller
-                        : null,
+                    controller: widget.controller,
                     obscureText: widget.textBoxProfile ==
                                 TextBoxProfile.passwordFieldLogin ||
                             widget.textBoxProfile ==

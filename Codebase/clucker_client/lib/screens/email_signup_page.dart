@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
+import 'package:clucker_client/components/palette.dart';
 
 class EmailPage extends StatelessWidget {
   const EmailPage({Key? key, required this.username}) : super(key: key);
@@ -13,7 +14,12 @@ class EmailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Sign-Up'
+          'Sign-Up',
+          style: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 40,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
       body: EmailForm(username: username),
@@ -56,12 +62,7 @@ class _EmailFormState extends State<EmailForm> {
             ),
           ),
           TextBox(
-            hintText: 'Email Address',
-            isSearchField: false,
-            isCluckField: false,
-            isValidationField: true,
-            obscureText: false,
-            validationProfile: Validation.emailField,
+            textBoxProfile: TextBoxProfile.emailField,
             controller: emailController,
           ),
           const Text(
@@ -73,21 +74,11 @@ class _EmailFormState extends State<EmailForm> {
             ),
           ),
           TextBox(
-            hintText: 'Password',
-            isSearchField: false,
-            isCluckField: false,
-            isValidationField: true,
-            obscureText: true,
-            validationProfile: Validation.emailField,
+            textBoxProfile: TextBoxProfile.passwordFieldSignUp,
             controller: firstPasswordController,
           ),
           TextBox(
-            hintText: 'Confirm Password',
-            isSearchField: false,
-            isCluckField: false,
-            isValidationField: true,
-            obscureText: true,
-            validationProfile: Validation.emailField,
+            textBoxProfile: TextBoxProfile.passwordFieldSignUp,
             controller: secondPasswordController,
           ),
           StandardButton(
