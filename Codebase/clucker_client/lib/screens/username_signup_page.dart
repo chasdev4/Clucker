@@ -54,21 +54,21 @@ class _UsernameFormState extends State<UsernameForm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const Text(
+          SizedBox(width: MediaQuery.of(context).size.width - 100,child: const Text(
             'What would you like to be called?',
             style: TextStyle(
               fontFamily: 'OpenSans',
-              fontStyle: FontStyle.italic,
-              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
             ),
-          ),
+          ),),
           TextBox(
             textBoxProfile: TextBoxProfile.usernameFieldSignUp,
             controller: usernameController,
             onEditingComplete: () async {
+             if (_usernameFormKey.currentState!.validate()) {}
               username = usernameController.text;
               return await userService.usernameAvailable(username);
-
             },
           ),
           StandardButton(
@@ -79,25 +79,17 @@ class _UsernameFormState extends State<UsernameForm> {
 
               bool isGood = await userService.usernameAvailable(username);
 
-              if (isGood) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EmailPage(username: username)));
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Username Conflict'),
-                    content: const Text('Username is already taken!'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'OK'),
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  ),
-                );
+              if (_usernameFormKey.currentState!.validate()) {
+
+              }
+
+              if (username.isNotEmpty) {
+                if (isGood && username.isNotEmpty) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EmailPage(username: username)));
+                }
               }
             },
           ),

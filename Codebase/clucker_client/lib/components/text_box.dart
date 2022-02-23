@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
@@ -37,10 +38,12 @@ class _TextBoxState extends State<TextBox> {
   int numLines = 1;
   IconData validationIcon = FontAwesomeIcons.solidQuestionCircle;
   bool usernameAvailable = false;
-  bool loading = false;
+  bool iconAnimation = false;
+  bool validatorError = false;
 
   @override
   Widget build(BuildContext context) {
+    //#region Initializing size variables
     double sendButtonSize =
         (widget.textBoxProfile == TextBoxProfile.cluckField ||
                 widget.textBoxProfile == TextBoxProfile.commentField)
@@ -57,6 +60,7 @@ class _TextBoxState extends State<TextBox> {
                 widget.textBoxProfile != TextBoxProfile.commentField)
             ? 50
             : 10;
+    //#endregion
 
     return Padding(
         padding:
@@ -72,26 +76,23 @@ class _TextBoxState extends State<TextBox> {
                 child: Stack(alignment: Alignment.center, children: [
                   TextFormField(
                     controller: widget.controller,
-                    obscureText: widget.textBoxProfile ==
-                                TextBoxProfile.passwordFieldLogin ||
-                            widget.textBoxProfile ==
-                                TextBoxProfile.passwordFieldSignUp
-                        ? true
-                        : false,
                     cursorColor: const Color.fromARGB(255, 100, 100, 100),
                     cursorWidth: 1.1,
-                    keyboardType: widget.textBoxProfile ==
-                                TextBoxProfile.cluckField ||
-                            widget.textBoxProfile == TextBoxProfile.commentField
-                        ? TextInputType.multiline
-                        : TextInputType.text,
-                    minLines: 1,
-                    maxLines: widget.textBoxProfile ==
-                                TextBoxProfile.cluckField ||
-                            widget.textBoxProfile == TextBoxProfile.commentField
-                        ? 9
-                        : 1,
                     decoration: InputDecoration(
+                      border: const OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.elliptical(3, 3))),
+                      contentPadding: const EdgeInsets.fromLTRB(10, 6, 41, 6),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Palette.lightGrey,
+                          width: 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Palette.lightGrey, width: 1.3),
+                      ),
                       suffixIcon:
                           widget.textBoxProfile == TextBoxProfile.searchField
                               ? IconButton(
@@ -106,20 +107,6 @@ class _TextBoxState extends State<TextBox> {
                                   },
                                 )
                               : null,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Palette.lightGrey, width: 1.3),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Palette.lightGrey,
-                          width: 1,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.fromLTRB(10, 6, 41, 6),
-                      border: const OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.elliptical(3, 3))),
                       hintText: widget.textBoxProfile ==
                               TextBoxProfile.emailOrUsernameFieldLogin
                           ? 'Enter Username'
@@ -152,9 +139,41 @@ class _TextBoxState extends State<TextBox> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
+                    keyboardType: widget.textBoxProfile ==
+                                TextBoxProfile.cluckField ||
+                            widget.textBoxProfile == TextBoxProfile.commentField
+                        ? TextInputType.multiline
+                        : TextInputType.text,
+                    maxLines: widget.textBoxProfile ==
+                                TextBoxProfile.cluckField ||
+                            widget.textBoxProfile == TextBoxProfile.commentField
+                        ? 9
+                        : 1,
+                    minLines: 1,
+                    obscureText: widget.textBoxProfile ==
+                                TextBoxProfile.passwordFieldLogin ||
+                            widget.textBoxProfile ==
+                                TextBoxProfile.passwordFieldSignUp
+                        ? true
+                        : false,
+                    validator: (value) {
+                      if (iconAnimation) {
+                        return null;
+                      } else if (value == null || value.isEmpty) {
+                        validatorError = false;
+                        return null;
+                      } else {
+                        if (!usernameAvailable) {
+                          validatorError = true;
+                          return 'The username \'$value\' is already taken.';
+                        }
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     onEditingComplete: () async {
                       usernameAvailable = await widget.onEditingComplete();
-                      loading = false;
+                      iconAnimation = false;
 
                       setState(() {
                         if (widget.textBoxProfile ==
@@ -162,11 +181,14 @@ class _TextBoxState extends State<TextBox> {
                             widget.textBoxProfile ==
                                 TextBoxProfile.emailField) {
                           if (enteredText.isEmpty) {
+                            validatorError = false;
                             validationIcon =
                                 FontAwesomeIcons.solidQuestionCircle;
                           } else if (!usernameAvailable) {
+                            validatorError = true;
                             validationIcon = FontAwesomeIcons.solidTimesCircle;
                           } else if (usernameAvailable) {
+                            validatorError = false;
                             validationIcon = FontAwesomeIcons.solidCheckCircle;
                           }
                         }
@@ -174,15 +196,16 @@ class _TextBoxState extends State<TextBox> {
                     },
                     onChanged: (value) async {
                       enteredText = value;
+                      validatorError = false;
 
                       setState(() {
                         enteredText = value;
 
                         if (enteredText.isEmpty) {
-                          loading = false;
+                          iconAnimation = false;
                           validationIcon = FontAwesomeIcons.solidQuestionCircle;
-                        }else {
-                          loading = true;
+                        } else {
+                          iconAnimation = true;
                         }
 
                         if (widget.textBoxProfile ==
@@ -266,32 +289,43 @@ class _TextBoxState extends State<TextBox> {
                                     TextBoxProfile.usernameFieldSignUp ||
                                 widget.textBoxProfile ==
                                     TextBoxProfile.emailField) &&
-                            loading == false)
+                            iconAnimation == false)
                         ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Icon(
-                              validationIcon,
-                              size: validationIconSize,
-                              color: validationIcon ==
-                                      FontAwesomeIcons.solidQuestionCircle
-                                  ? Palette.lightGrey
-                                  : validationIcon ==
-                                          FontAwesomeIcons.solidTimesCircle
-                                      ? Colors.red.shade600
-                                      : Colors.green.shade600,
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Transform.translate(
+                              offset: Offset(0, validatorError ? -10 : 0),
+                              child: Icon(
+                                validationIcon,
+                                size: validationIconSize,
+                                color: validationIcon ==
+                                        FontAwesomeIcons.solidQuestionCircle
+                                    ? Palette.lightGrey
+                                    : validationIcon ==
+                                            FontAwesomeIcons.solidTimesCircle
+                                        ? Colors.red.shade600
+                                        : Colors.green.shade600,
+                              ),
                             ),
                           )
                         : ((widget.textBoxProfile ==
                                         TextBoxProfile.usernameFieldSignUp ||
                                     widget.textBoxProfile ==
                                         TextBoxProfile.emailField) &&
-                                loading == true)
+                                iconAnimation == true)
                             ? Padding(
                                 padding: const EdgeInsets.only(left: 10),
-                                        child: Transform.scale(scale: 1.654, origin: Offset(-7.6, -1.3737),child: LoadingFlipping.circle(                                          backgroundColor: Palette.lightGrey,
-                                          borderColor: Palette.lightGrey,
-                                          size: validationIconSize,
-                                        )))
+                                child: Transform.scale(
+                                    scale: 1.654,
+                                    origin: Offset(
+                                        -7.6,
+                                        validatorError
+                                            ? -10 - 1.3737
+                                            : -1.3737),
+                                    child: LoadingFlipping.circle(
+                                      backgroundColor: Palette.lightGrey,
+                                      borderColor: Palette.lightGrey,
+                                      size: validationIconSize,
+                                    )))
                             : null,
               ),
             ]));
