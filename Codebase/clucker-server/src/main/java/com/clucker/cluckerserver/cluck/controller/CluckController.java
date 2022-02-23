@@ -1,6 +1,7 @@
 package com.clucker.cluckerserver.cluck.controller;
 
 import com.clucker.cluckerserver.cluck.service.CluckService;
+import com.clucker.cluckerserver.dto.CluckResponse;
 import com.clucker.cluckerserver.dto.PostCluck;
 import com.clucker.cluckerserver.model.Cluck;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +29,14 @@ public class CluckController {
     @GetMapping("/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public Cluck getCluckById(@PathVariable String id) {
-        return cluckService.getCluckById(id);
+    public CluckResponse getCluckById(@PathVariable String id) {
+        return cluckService.mapToResponse(cluckService.getCluckById(id));
     }
 
-    @PreAuthorize("hasRole('CLUCKER')")
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public Cluck postCluck(@RequestBody @Valid PostCluck postCluck, Authentication authentication) {
-        return cluckService.postCluck(postCluck, authentication);
+    public CluckResponse postCluck(@RequestBody @Valid PostCluck postCluck, Authentication authentication) {
+        return cluckService.mapToResponse(cluckService.postCluck(postCluck, authentication));
     }
 
 
