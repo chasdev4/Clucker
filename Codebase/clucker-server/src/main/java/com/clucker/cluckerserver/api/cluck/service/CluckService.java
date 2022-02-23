@@ -35,10 +35,11 @@ public class CluckService {
         return cluckRepository.findById(id).orElseThrow(CluckNotFoundException::new);
     }
 
-    public Page<Cluck> getClucksByAuthor(String username, Pageable pageable) {
-        if (!userService.usernameAlreadyExists(username))
+    public Page<Cluck> getClucksByAuthor(int id, Pageable pageable) {
+        if (!userService.userExists(id))
             throw new UserNotFoundException();
-        return cluckRepository.getAllByAuthorUsername(username, pageable);
+
+        return cluckRepository.getAllByAuthorId(id, pageable);
     }
 
     @PreAuthorize("hasRole('CLUCKER')")

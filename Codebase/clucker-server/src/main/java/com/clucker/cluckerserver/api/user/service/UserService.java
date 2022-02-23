@@ -16,6 +16,7 @@ public interface UserService {
     User getUserByEmail(String email);
     boolean usernameAlreadyExists(String username);
     boolean emailAlreadyExists(String email);
+    boolean userExists(int id);
     User createUser(@Valid UserRegistration registration);
     UserResponse mapToResponse(User user);
     void updateUser(int id, @Valid UserUpdateRequest updateRequest);

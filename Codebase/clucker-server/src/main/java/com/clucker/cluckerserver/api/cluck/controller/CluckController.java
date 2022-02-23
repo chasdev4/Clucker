@@ -21,7 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 
-@RestController
+@RestController("cluck.controller")
 @RequestMapping("/clucks")
 @RequiredArgsConstructor
 public class CluckController {

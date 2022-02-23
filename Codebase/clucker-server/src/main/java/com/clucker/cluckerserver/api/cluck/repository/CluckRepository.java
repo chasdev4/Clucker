@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface CluckRepository extends JpaRepository<Cluck, UUID> {
-    Page<Cluck> getAllByAuthorUsername(String username, Pageable pageable);
+    Page<Cluck> getAllByAuthorId(int id, Pageable pageable);
 }
