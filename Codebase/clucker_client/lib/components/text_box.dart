@@ -180,6 +180,7 @@ class _TextBoxState extends State<TextBox> {
 
                         if (enteredText.isEmpty) {
                           loading = false;
+                          validationIcon = FontAwesomeIcons.solidQuestionCircle;
                         }else {
                           loading = true;
                         }
