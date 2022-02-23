@@ -67,7 +67,7 @@ class _EmailFormState extends State<EmailForm> {
           TextBox(
             textBoxProfile: TextBoxProfile.emailField,
             controller: emailController,
-            onChange: (){},
+            onEditingComplete: (){},
           ),
           const Text(
             'Please enter a password',
@@ -80,12 +80,12 @@ class _EmailFormState extends State<EmailForm> {
           TextBox(
             textBoxProfile: TextBoxProfile.passwordFieldSignUp,
             controller: firstPasswordController,
-            onChange: () {},
+            onEditingComplete: () {},
           ),
           TextBox(
             textBoxProfile: TextBoxProfile.passwordFieldSignUp,
             controller: secondPasswordController,
-            onChange: () {},
+            onEditingComplete: () {},
           ),
           StandardButton(
             text: 'Sign-Up',

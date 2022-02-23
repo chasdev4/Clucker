@@ -65,10 +65,9 @@ class _UsernameFormState extends State<UsernameForm> {
           TextBox(
             textBoxProfile: TextBoxProfile.usernameFieldSignUp,
             controller: usernameController,
-            onChange: () async {
+            onEditingComplete: () async {
               username = usernameController.text;
               return await userService.usernameAvailable(username);
-
 
             },
           ),

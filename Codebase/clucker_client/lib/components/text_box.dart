@@ -1,6 +1,4 @@
-import 'dart:async';
-
-import 'package:clucker_client/services/user_service.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/services.dart';
@@ -18,12 +16,16 @@ enum TextBoxProfile {
 }
 
 class TextBox extends StatefulWidget {
-  const TextBox({Key? key, required this.textBoxProfile, this.controller, required this.onChange})
+  const TextBox(
+      {Key? key,
+      required this.textBoxProfile,
+      this.controller,
+      required this.onEditingComplete})
       : super(key: key);
 
   final TextBoxProfile textBoxProfile;
   final TextEditingController? controller;
-  final Function onChange;
+  final Function onEditingComplete;
 
   @override
   _TextBoxState createState() => _TextBoxState();
@@ -35,6 +37,7 @@ class _TextBoxState extends State<TextBox> {
   int numLines = 1;
   IconData validationIcon = FontAwesomeIcons.solidQuestionCircle;
   bool usernameAvailable = false;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -149,26 +152,36 @@ class _TextBoxState extends State<TextBox> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    onChanged: (value) async {
-                      enteredText = value;
-
-                      usernameAvailable = await widget.onChange();
-                      print('Username is $usernameAvailable');
+                    onEditingComplete: () async {
+                      usernameAvailable = await widget.onEditingComplete();
+                      loading = false;
 
                       setState(() {
-                        enteredText = value;
-
                         if (widget.textBoxProfile ==
                                 TextBoxProfile.usernameFieldSignUp ||
                             widget.textBoxProfile ==
                                 TextBoxProfile.emailField) {
                           if (enteredText.isEmpty) {
-                            validationIcon = FontAwesomeIcons.solidQuestionCircle;
+                            validationIcon =
+                                FontAwesomeIcons.solidQuestionCircle;
                           } else if (!usernameAvailable) {
                             validationIcon = FontAwesomeIcons.solidTimesCircle;
                           } else if (usernameAvailable) {
                             validationIcon = FontAwesomeIcons.solidCheckCircle;
                           }
+                        }
+                      });
+                    },
+                    onChanged: (value) async {
+                      enteredText = value;
+
+                      setState(() {
+                        enteredText = value;
+
+                        if (enteredText.isEmpty) {
+                          loading = false;
+                        }else {
+                          loading = true;
                         }
 
                         if (widget.textBoxProfile ==
@@ -248,11 +261,13 @@ class _TextBoxState extends State<TextBox> {
                           // do something
                         },
                       )
-                    : widget.textBoxProfile ==
-                                TextBoxProfile.usernameFieldSignUp ||
-                            widget.textBoxProfile == TextBoxProfile.emailField
+                    : ((widget.textBoxProfile ==
+                                    TextBoxProfile.usernameFieldSignUp ||
+                                widget.textBoxProfile ==
+                                    TextBoxProfile.emailField) &&
+                            loading == false)
                         ? Padding(
-                            padding: const EdgeInsets.only(left: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Icon(
                               validationIcon,
                               size: validationIconSize,
@@ -265,7 +280,18 @@ class _TextBoxState extends State<TextBox> {
                                       : Colors.green.shade600,
                             ),
                           )
-                        : null,
+                        : ((widget.textBoxProfile ==
+                                        TextBoxProfile.usernameFieldSignUp ||
+                                    widget.textBoxProfile ==
+                                        TextBoxProfile.emailField) &&
+                                loading == true)
+                            ? Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                        child: Transform.scale(scale: 1.654, origin: Offset(-7.6, -1.3737),child: LoadingFlipping.circle(                                          backgroundColor: Palette.lightGrey,
+                                          borderColor: Palette.lightGrey,
+                                          size: validationIconSize,
+                                        )))
+                            : null,
               ),
             ]));
   }
