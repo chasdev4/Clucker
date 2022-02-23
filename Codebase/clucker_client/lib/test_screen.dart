@@ -1,4 +1,3 @@
-import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/navigation/main_navigation_bar.dart';
 import 'package:clucker_client/navigation/new_cluck_button.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +22,8 @@ class TestScreen extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          children: [
-            Text('Test Text'),
-            TextBox(textBoxProfile: TextBoxProfile.emailField, onEditingComplete: (){},)
+          children: const [
+            Text('Test Text')
           ],
         ),
       ),
