@@ -16,6 +16,7 @@ app:
   allow-all-get:
     - "/health"
     - "/users/available-usernames"
+    - "/clucks/**"
   allow-all-post:
     - "/users"
 

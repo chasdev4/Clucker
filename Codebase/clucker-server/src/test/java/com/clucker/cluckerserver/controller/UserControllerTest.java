@@ -1,4 +1,4 @@
-package com.clucker.cluckerserver.user.controller;
+package com.clucker.cluckerserver.controller;
 
 import com.clucker.cluckerserver.annotation.IntegrationTest;
 import com.clucker.cluckerserver.dto.UserRegistration;

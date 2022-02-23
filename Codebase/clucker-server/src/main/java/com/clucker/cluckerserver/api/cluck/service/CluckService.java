@@ -10,6 +10,7 @@ import com.clucker.cluckerserver.model.Cluck;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.api.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +22,14 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CluckService {
 
     private final CluckRepository cluckRepository;
     private final UserService userService;
     private final ModelMapper modelMapper;
 
+    @PreAuthorize("permitAll()")
     public Cluck getCluckById(String uuid) {
         UUID id = UUID.fromString(uuid);
         return cluckRepository.findById(id).orElseThrow(CluckNotFoundException::new);
@@ -47,12 +50,18 @@ public class CluckService {
 
         User user = userService.getUserByUsername(username);
 
+        log.info("User '{}' requesting to post a new cluck.", user.getUsername());
+
         Cluck cluck = Cluck.builder()
                 .body(postCluck.getBody())
                 .author(user)
                 .build();
 
-        return cluckRepository.save(cluck);
+        Cluck saved = cluckRepository.save(cluck);
+
+        log.info("User '{}' posted a new cluck ({}).", user.getUsername(), saved.getId().toString());
+
+        return saved;
 
     }
 
