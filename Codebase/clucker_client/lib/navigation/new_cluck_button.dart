@@ -22,18 +22,18 @@ class _NewCluckButtonState extends State<NewCluckButton> {
     return SizedBox(
       height: 80,
       width: 80,
-      child: getKeyboardState() ? FloatingActionButton(
+      child: getKeyboardState()
+          ? FloatingActionButton(
               backgroundColor: Palette.white,
-              onPressed: () {
-                setState(() {});
-              },
+              onPressed: () {},
               child: Icon(
                 FontAwesomeIcons.plusCircle,
                 size: 80,
                 color: Palette.cluckerRed,
               ),
               elevation: 0,
-              tooltip: 'New Cluck') : null,
+              tooltip: 'New Cluck')
+          : null,
     );
   }
 }
