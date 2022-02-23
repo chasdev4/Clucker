@@ -1,6 +1,6 @@
-package com.clucker.cluckerserver.cluck.service;
+package com.clucker.cluckerserver.api.cluck.service;
 
-import com.clucker.cluckerserver.cluck.repository.CluckRepository;
+import com.clucker.cluckerserver.api.cluck.repository.CluckRepository;
 import com.clucker.cluckerserver.dto.CluckResponse;
 import com.clucker.cluckerserver.dto.PostCluck;
 import com.clucker.cluckerserver.exception.CluckNotFoundException;
@@ -8,7 +8,7 @@ import com.clucker.cluckerserver.exception.UnauthorizedException;
 import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.Cluck;
 import com.clucker.cluckerserver.model.User;
-import com.clucker.cluckerserver.user.service.UserService;
+import com.clucker.cluckerserver.api.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;

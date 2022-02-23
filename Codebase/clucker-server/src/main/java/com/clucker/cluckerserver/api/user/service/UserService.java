@@ -1,4 +1,4 @@
-package com.clucker.cluckerserver.user.service;
+package com.clucker.cluckerserver.api.user.service;
 
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;

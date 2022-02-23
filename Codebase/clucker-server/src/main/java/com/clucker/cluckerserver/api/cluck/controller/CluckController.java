@@ -1,12 +1,10 @@
-package com.clucker.cluckerserver.cluck.controller;
+package com.clucker.cluckerserver.api.cluck.controller;
 
-import com.clucker.cluckerserver.cluck.service.CluckService;
+import com.clucker.cluckerserver.api.cluck.service.CluckService;
 import com.clucker.cluckerserver.dto.CluckResponse;
 import com.clucker.cluckerserver.dto.PostCluck;
-import com.clucker.cluckerserver.model.Cluck;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

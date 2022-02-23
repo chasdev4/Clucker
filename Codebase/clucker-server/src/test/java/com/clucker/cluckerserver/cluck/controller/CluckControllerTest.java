@@ -1,9 +1,10 @@
 package com.clucker.cluckerserver.cluck.controller;
 
 import com.clucker.cluckerserver.annotation.IntegrationTest;
+import com.clucker.cluckerserver.api.cluck.service.CluckService;
 import com.clucker.cluckerserver.dto.PostCluck;
 import com.clucker.cluckerserver.dto.UserRegistration;
-import com.clucker.cluckerserver.user.service.UserService;
+import com.clucker.cluckerserver.api.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,6 +34,9 @@ class CluckControllerTest {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CluckService cluckService;
 
     @BeforeEach
     void setupUser() {
@@ -59,7 +64,7 @@ class CluckControllerTest {
         mockMvc.perform(post("/clucks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.body").value(cluckBody))
                 .andExpect(jsonPath("$.author").value("testboy"));
 

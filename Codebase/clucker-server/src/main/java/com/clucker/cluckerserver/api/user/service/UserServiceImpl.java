@@ -1,5 +1,6 @@
-package com.clucker.cluckerserver.user.service;
+package com.clucker.cluckerserver.api.user.service;
 
+import com.clucker.cluckerserver.api.user.repository.UserRepository;
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;
 import com.clucker.cluckerserver.dto.UserUpdateRequest;
@@ -7,7 +8,6 @@ import com.clucker.cluckerserver.exception.UserExistsException;
 import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.model.UserRole;
-import com.clucker.cluckerserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

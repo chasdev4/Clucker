@@ -1,4 +1,4 @@
-package com.clucker.cluckerserver.user.repository;
+package com.clucker.cluckerserver.api.user.repository;
 
 import com.clucker.cluckerserver.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
