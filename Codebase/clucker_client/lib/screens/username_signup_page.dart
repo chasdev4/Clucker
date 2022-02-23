@@ -4,6 +4,7 @@ import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/screens/email_signup_page.dart';
 import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/services/user_service.dart';
 
 class UsernamePage extends StatelessWidget {
   const UsernamePage({Key? key}) : super(key: key);
@@ -13,13 +14,13 @@ class UsernamePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-            'Sign-Up',
-        style: TextStyle(
-          fontFamily: 'OpenSans',
-          fontSize: 40,
-          fontWeight: FontWeight.w700,
+          'Sign-Up',
+          style: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 40,
+            fontWeight: FontWeight.w700,
+          ),
         ),
-      ),
       ),
       body: const UsernameForm(),
     );
@@ -34,10 +35,10 @@ class UsernameForm extends StatefulWidget {
 }
 
 class _UsernameFormState extends State<UsernameForm> {
-
   final _usernameFormKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
 
+  UserService userService = UserService();
   String username = '';
 
   @override
@@ -52,7 +53,7 @@ class _UsernameFormState extends State<UsernameForm> {
       key: _usernameFormKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget> [
+        children: <Widget>[
           const Text(
             'What would you like to be called?',
             style: TextStyle(
@@ -64,18 +65,41 @@ class _UsernameFormState extends State<UsernameForm> {
           TextBox(
             textBoxProfile: TextBoxProfile.usernameFieldSignUp,
             controller: usernameController,
+            onChange: () async {
+              username = usernameController.text;
+              return await userService.usernameAvailable(username);
+
+
+            },
           ),
           StandardButton(
             text: 'Next',
             routeName: '',
-            onPress: () {
+            onPress: () async {
               username = usernameController.text;
-              print(username);
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EmailPage(username: username)),
-              );
+              bool isGood = await userService.usernameAvailable(username);
+
+              if (isGood) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EmailPage(username: username)));
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Username Conflict'),
+                    content: const Text('Username is already taken!'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              }
             },
           ),
         ],

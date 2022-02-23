@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/services.dart';
@@ -17,11 +18,12 @@ enum TextBoxProfile {
 }
 
 class TextBox extends StatefulWidget {
-  const TextBox({Key? key, required this.textBoxProfile, this.controller})
+  const TextBox({Key? key, required this.textBoxProfile, this.controller, required this.onChange})
       : super(key: key);
 
   final TextBoxProfile textBoxProfile;
   final TextEditingController? controller;
+  final Function onChange;
 
   @override
   _TextBoxState createState() => _TextBoxState();
@@ -32,6 +34,7 @@ class _TextBoxState extends State<TextBox> {
   int counter = 0;
   int numLines = 1;
   IconData validationIcon = FontAwesomeIcons.solidQuestionCircle;
+  bool usernameAvailable = false;
 
   @override
   Widget build(BuildContext context) {
@@ -146,31 +149,24 @@ class _TextBoxState extends State<TextBox> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    onChanged: (value) {
+                    onChanged: (value) async {
+                      enteredText = value;
+
+                      usernameAvailable = await widget.onChange();
+                      print('Username is $usernameAvailable');
+
                       setState(() {
                         enteredText = value;
-
-                        if (widget.textBoxProfile ==
-                            TextBoxProfile.usernameFieldSignUp) {
-                          // //TODO: Connect the backend for username validation
-                        } else if (widget.textBoxProfile ==
-                            TextBoxProfile.emailField) {
-                          // //TODO: Connect the backend for email validation
-                        }
 
                         if (widget.textBoxProfile ==
                                 TextBoxProfile.usernameFieldSignUp ||
                             widget.textBoxProfile ==
                                 TextBoxProfile.emailField) {
                           if (enteredText.isEmpty) {
-                            print('Text length is ${enteredText.length}');
                             validationIcon = FontAwesomeIcons.solidQuestionCircle;
-                          } else if (enteredText.length > 0 &&
-                              enteredText.length < 4) {
-                            print('Text length is ${enteredText.length}');
+                          } else if (!usernameAvailable) {
                             validationIcon = FontAwesomeIcons.solidTimesCircle;
-                          } else if (enteredText.length > 3) {
-                            print('Text length is ${enteredText.length}');
+                          } else if (usernameAvailable) {
                             validationIcon = FontAwesomeIcons.solidCheckCircle;
                           }
                         }
