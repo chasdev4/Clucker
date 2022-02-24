@@ -2,6 +2,7 @@ package com.clucker.cluckerserver.search;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -19,6 +20,11 @@ public class SimpleSearchSpecification<T> implements Specification<T> {
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+        if (StringUtils.isBlank(searchString)) {
+            return null;
+        }
+
         String[] searchTerms = getSearchString().split("[\\s,]");
 
         Predicate[] predicates = Arrays.stream(searchTerms)

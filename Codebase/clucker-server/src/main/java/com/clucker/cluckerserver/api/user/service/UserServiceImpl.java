@@ -8,10 +8,13 @@ import com.clucker.cluckerserver.exception.UserExistsException;
 import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.model.UserRole;
+import com.clucker.cluckerserver.search.SimpleSearchSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -101,6 +104,12 @@ public class UserServiceImpl implements UserService {
 
         repository.save(user);
 
+    }
+
+    @Override
+    public Page<User> getUsers(Pageable pageable, String search) {
+        SimpleSearchSpecification<User> spec = new SimpleSearchSpecification<>(search);
+        return repository.findAll(spec, pageable);
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.Cluck;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.api.user.service.UserService;
+import com.clucker.cluckerserver.search.SimpleSearchSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -40,6 +41,11 @@ public class CluckService {
             throw new UserNotFoundException();
 
         return cluckRepository.getAllByAuthorId(id, pageable);
+    }
+
+    public Page<Cluck> getClucks(Pageable pageable, String search) {
+        SimpleSearchSpecification<Cluck> spec = new SimpleSearchSpecification<>(search);
+        return cluckRepository.findAll(spec, pageable);
     }
 
     @PreAuthorize("hasRole('CLUCKER')")
