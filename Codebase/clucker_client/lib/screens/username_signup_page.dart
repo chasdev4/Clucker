@@ -41,8 +41,7 @@ class _UsernameFormState extends State<UsernameForm> {
   UserService userService = UserService();
   String username = '';
 
-  @override
-  void Dispose() {
+  void disposeController() {
     usernameController.dispose();
     super.dispose();
   }
@@ -67,6 +66,12 @@ class _UsernameFormState extends State<UsernameForm> {
             controller: usernameController,
             onEditingComplete: () async {
              if (_usernameFormKey.currentState!.validate()) {}
+              username = usernameController.text;
+              return await userService.usernameAvailable(username);
+            },
+            onChanged: () async {
+              if (_usernameFormKey.currentState!.validate()) {
+              }
               username = usernameController.text;
               return await userService.usernameAvailable(username);
             },
