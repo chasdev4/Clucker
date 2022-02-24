@@ -57,7 +57,7 @@ class _TextBoxState extends State<TextBox> {
     //#endregion
 
     return Padding(
-        padding:
+        padding: isValidationField() ? EdgeInsets.fromLTRB(horizontalPadding, 6, horizontalPadding + 10, 6) :
             EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
         child: Row(
             crossAxisAlignment: isCluckField()
@@ -69,7 +69,8 @@ class _TextBoxState extends State<TextBox> {
                   TextFormField(
                     controller: widget.controller,
                     inputFormatters: [
-                      widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp
+                      widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp ||
+                          widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin
                           ? FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]"))
                       : widget.textBoxProfile == TextBoxProfile.emailFieldSignUp
                           ? FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9@.]"))
@@ -80,7 +81,7 @@ class _TextBoxState extends State<TextBox> {
                               TextBoxProfile.usernameFieldSignUp
                           ? 20
                           : widget.textBoxProfile ==
-                                  TextBoxProfile.emailFieldSignUp
+                                  TextBoxProfile.emailFieldSignUp || widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin
                               ? 50
                               : isCluckField()
                                   ? 120
@@ -92,7 +93,7 @@ class _TextBoxState extends State<TextBox> {
                       border: const OutlineInputBorder(
                           borderRadius:
                               BorderRadius.all(Radius.elliptical(3, 3))),
-                      contentPadding: const EdgeInsets.fromLTRB(10, 6, 41, 6),
+                      contentPadding: EdgeInsets.fromLTRB(10, 6, isCluckField() || widget.textBoxProfile == TextBoxProfile.searchField ? 41 : 10, 6),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Palette.lightGrey,
