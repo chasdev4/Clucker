@@ -185,7 +185,6 @@ class _TextBoxState extends State<TextBox> {
                         }
                       },
                       onChanged: (value) {
-                        print('${value.length}');
                         enteredText = '';
                         if (isValidationField()) {
                           setState(() {
@@ -218,13 +217,11 @@ class _TextBoxState extends State<TextBox> {
                               if (wordCount == 5) {
                                 for (int i = 0; i < enteredText.length - 2; i++) {
                                   if ((enteredText[i] != ' ' || enteredText[i] != '\n')) {
-                                    print('added to temp');
                                     temp += enteredText[i];
                                   }
                                 }
                                 setState(() {
                                   enteredText = temp;
-                                  print('$enteredText');
                                 });
 
                               }
@@ -423,9 +420,6 @@ class _TextBoxState extends State<TextBox> {
 
   bool checkMaxWordCount() {
     if (enteredText.isNotEmpty) {
-      print('checkMaxWordCount returns ${enteredText[enteredText.length - 1] == ' ' ||
-          enteredText[enteredText.length - 1] == '\n'}'
-      );
       return enteredText[enteredText.length - 1] == ' ' ||
           enteredText[enteredText.length - 1] == '\n';
     } else {
