@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+import 'package:flutter/services.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
@@ -60,16 +60,32 @@ class _TextBoxState extends State<TextBox> {
         padding:
             EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
         child: Row(
-            crossAxisAlignment:
-                widget.textBoxProfile == TextBoxProfile.cluckField ||
-                        widget.textBoxProfile == TextBoxProfile.commentField
-                    ? CrossAxisAlignment.end
-                    : CrossAxisAlignment.center,
+            crossAxisAlignment: isCluckField()
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.center,
             children: [
               Flexible(
                 child: Stack(alignment: Alignment.center, children: [
                   TextFormField(
                     controller: widget.controller,
+                    inputFormatters: [
+                      widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp
+                          ? FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]"))
+                      : widget.textBoxProfile == TextBoxProfile.emailFieldSignUp
+                          ? FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9@.]"))
+                          : isValidationField()
+                          ? FilteringTextInputFormatter.deny(RegExp(' '))
+                          : FilteringTextInputFormatter.allow(RegExp(' ')),
+                      LengthLimitingTextInputFormatter(widget.textBoxProfile ==
+                              TextBoxProfile.usernameFieldSignUp
+                          ? 20
+                          : widget.textBoxProfile ==
+                                  TextBoxProfile.emailFieldSignUp
+                              ? 50
+                              : isCluckField()
+                                  ? 120
+                                  : 240)
+                    ],
                     cursorColor: const Color.fromARGB(255, 100, 100, 100),
                     cursorWidth: 1.1,
                     decoration: InputDecoration(
@@ -130,7 +146,7 @@ class _TextBoxState extends State<TextBox> {
                       } else {
                         if (!usernameAvailable) {
                           validatorError = true;
-                          return 'The username \'$value\' is already taken.';
+                          return 'Username unavailable';
                         }
                       }
                       return null;
@@ -149,11 +165,9 @@ class _TextBoxState extends State<TextBox> {
                         enteredText = value;
 
                         if (enteredText.isEmpty || timerActive == false) {
-                          log('##### ANIMATION OFF #####');
                           iconAnimation = false;
                           validationIcon = FontAwesomeIcons.solidQuestionCircle;
                         } else if (timerActive == true) {
-                          log('##### ANIMATION ON #####');
                           iconAnimation = true;
                         }
 
@@ -177,25 +191,24 @@ class _TextBoxState extends State<TextBox> {
                     bottom: 5,
                     child: SizedBox(
                       width: 40,
-                      child:
-                          isCluckField()
-                              ? Column(children: [
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
-                                  Text(
-                                    '$counter/6  ',
-                                    style: TextStyle(
-                                      fontFamily: 'OpenSans',
-                                      fontWeight: FontWeight.bold,
-                                      color: Palette.cluckerRed
-                                          .toMaterialColor()
-                                          .shade400,
-                                      fontSize: 14,
-                                    ),
-                                  )
-                                ])
-                              : const SizedBox(),
+                      child: isCluckField()
+                          ? Column(children: [
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                '$counter/6  ',
+                                style: TextStyle(
+                                  fontFamily: 'OpenSans',
+                                  fontWeight: FontWeight.bold,
+                                  color: Palette.cluckerRed
+                                      .toMaterialColor()
+                                      .shade400,
+                                  fontSize: 14,
+                                ),
+                              )
+                            ])
+                          : const SizedBox(),
                     ),
                   ),
                 ]),
@@ -203,10 +216,7 @@ class _TextBoxState extends State<TextBox> {
               SizedBox(
                 width: isCluckField()
                     ? sendButtonSize + 10
-                    : widget.textBoxProfile ==
-                                TextBoxProfile.usernameFieldSignUp ||
-                            widget.textBoxProfile ==
-                                TextBoxProfile.emailFieldSignUp
+                    : isValidationField()
                         ? validationIconSize
                         : 0,
                 height: isCluckField()
@@ -245,8 +255,7 @@ class _TextBoxState extends State<TextBox> {
                               ),
                             ),
                           )
-                        : ((isValidationField()) &&
-                                iconAnimation == true)
+                        : ((isValidationField()) && iconAnimation == true)
                             ? Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Transform.scale(
@@ -270,7 +279,7 @@ class _TextBoxState extends State<TextBox> {
   void _startTimer() {
     setState(() {
       timerActive = true;
-      _timer = Timer(const Duration(seconds: 3), () {
+      _timer = Timer(const Duration(seconds: 6), () {
         updateAnimation();
       });
     });
@@ -299,22 +308,22 @@ class _TextBoxState extends State<TextBox> {
     return widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin
         ? 'Enter Username'
         : widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp
-        ? 'Pick a Username'
-        : widget.textBoxProfile == TextBoxProfile.passwordFieldLogin
-        ? 'Enter Password'
-        : widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp
-        ? 'Enter a Password'
-        : widget.textBoxProfile == TextBoxProfile.emailFieldSignUp
-        ? 'Email'
-        : widget.textBoxProfile == TextBoxProfile.cluckField
-        ? 'What do you want to Cluck about?'
-        : widget.textBoxProfile ==
-        TextBoxProfile.commentField
-        ? 'Comment on this Cluck...'
-        : widget.textBoxProfile ==
-        TextBoxProfile.searchField
-        ? 'Search'
-        : 'Cluck cluck, cluck cluck cluck';
+            ? 'Pick a Username'
+            : widget.textBoxProfile == TextBoxProfile.passwordFieldLogin
+                ? 'Enter Password'
+                : widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp
+                    ? 'Enter a Password'
+                    : widget.textBoxProfile == TextBoxProfile.emailFieldSignUp
+                        ? 'Email'
+                        : widget.textBoxProfile == TextBoxProfile.cluckField
+                            ? 'What do you want to Cluck about?'
+                            : widget.textBoxProfile ==
+                                    TextBoxProfile.commentField
+                                ? 'Comment on this Cluck...'
+                                : widget.textBoxProfile ==
+                                        TextBoxProfile.searchField
+                                    ? 'Search'
+                                    : 'Cluck cluck, cluck cluck cluck';
   }
 
   void updateAnimation() async {
@@ -324,8 +333,7 @@ class _TextBoxState extends State<TextBox> {
       if (isValidationField()) {
         if (enteredText.isEmpty) {
           validatorError = false;
-          validationIcon =
-              FontAwesomeIcons.solidQuestionCircle;
+          validationIcon = FontAwesomeIcons.solidQuestionCircle;
         } else if (!usernameAvailable) {
           validatorError = true;
           validationIcon = FontAwesomeIcons.solidTimesCircle;
