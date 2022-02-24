@@ -4,7 +4,7 @@ server:
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_HOST}
@@ -16,6 +16,8 @@ app:
   allow-all-get:
     - "/health"
     - "/users/available-usernames"
+    - "/users/*/clucks"
+    - "/clucks/**"
   allow-all-post:
     - "/users"
 
