@@ -79,13 +79,13 @@ class _EmailFormState extends State<EmailForm> {
             ),
           ),
           TextBox(
-            textBoxProfile: TextBoxProfile.passwordFieldSignUp,
+            textBoxProfile: TextBoxProfile.passwordFieldMeterSignUp,
             controller: firstPasswordController,
             onEditingComplete: () {},
             onChanged: (){},
           ),
           TextBox(
-            textBoxProfile: TextBoxProfile.passwordFieldSignUp,
+            textBoxProfile: TextBoxProfile.passwordFieldValidationSignUp,
             controller: secondPasswordController,
             onEditingComplete: () {},
             onChanged: (){},
