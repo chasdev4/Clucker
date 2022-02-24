@@ -37,7 +37,7 @@ class TextBox extends StatefulWidget {
 class _TextBoxState extends State<TextBox> {
   //#region States
   String enteredText = '';
-  int counter = 0;
+  int wordCount = 0;
   IconData validationIcon = FontAwesomeIcons.solidQuestionCircle;
   bool usernameAvailable = false;
   bool iconAnimation = false;
@@ -48,157 +48,213 @@ class _TextBoxState extends State<TextBox> {
   @override
   Widget build(BuildContext context) {
     //#region Initializing size variables
-    double sendButtonSize = (isCluckField()) ? 32 : 0;
+    _timer = Timer(const Duration(seconds: 6), () {
+      updateAnimation();
+    });
+    double sendButtonSize = (isCluckCommentField()) ? 32 : 0;
     double validationIconSize = (isValidationField()) ? 24 : 0;
-    double horizontalPadding =
-        (!isCluckField() && widget.textBoxProfile != TextBoxProfile.searchField)
-            ? 50
-            : 10;
+    double horizontalPadding = (!isCluckCommentField() &&
+            widget.textBoxProfile != TextBoxProfile.searchField)
+        ? 50
+        : 10;
     //#endregion
 
     return Padding(
-        padding: isValidationField() ? EdgeInsets.fromLTRB(horizontalPadding, 6, horizontalPadding + 10, 6) :
-            EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
+        padding: isValidationField()
+            ? EdgeInsets.fromLTRB(
+                horizontalPadding, 6, horizontalPadding + 10, 6)
+            : EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
         child: Row(
-            crossAxisAlignment: isCluckField()
+            crossAxisAlignment: isCluckCommentField()
                 ? CrossAxisAlignment.end
                 : CrossAxisAlignment.center,
             children: [
               Flexible(
                 child: Stack(alignment: Alignment.center, children: [
                   TextFormField(
-                    controller: widget.controller,
-                    inputFormatters: [
-                      widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp ||
-                          widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin
-                          ? FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]"))
-                      : widget.textBoxProfile == TextBoxProfile.emailFieldSignUp
-                          ? FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9@.]"))
-                          : isValidationField()
-                          ? FilteringTextInputFormatter.deny(RegExp(' '))
-                          : FilteringTextInputFormatter.allow(RegExp(' ')),
-                      LengthLimitingTextInputFormatter(widget.textBoxProfile ==
-                              TextBoxProfile.usernameFieldSignUp
-                          ? 20
-                          : widget.textBoxProfile ==
-                                  TextBoxProfile.emailFieldSignUp || widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin
-                              ? 50
-                              : isCluckField()
-                                  ? 120
-                                  : 240)
-                    ],
-                    cursorColor: const Color.fromARGB(255, 100, 100, 100),
-                    cursorWidth: 1.1,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.elliptical(3, 3))),
-                      contentPadding: EdgeInsets.fromLTRB(10, 6, isCluckField() || widget.textBoxProfile == TextBoxProfile.searchField ? 41 : 10, 6),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
+                      controller: widget.controller,
+                      inputFormatters: [
+                        isUsernameFieldSignUp()
+                            ? FilteringTextInputFormatter.allow(
+                                RegExp("[a-zA-Z0-9]"))
+                            : isEmailFieldSignUp()
+                                ? FilteringTextInputFormatter.allow(
+                                    RegExp("[a-zA-Z0-9@.]"))
+                                : isLoginSignUpField()
+                                    ? FilteringTextInputFormatter.deny(
+                                        RegExp(' '))
+                                    : FilteringTextInputFormatter.deny(''),
+                        wordCount == 6
+                            ? LengthLimitingTextInputFormatter(
+                                checkMaxWordCount()
+                                    ? enteredText.length
+                                    : 240)
+                            : FilteringTextInputFormatter.deny(''),
+                        LengthLimitingTextInputFormatter(widget
+                                    .textBoxProfile ==
+                                TextBoxProfile.usernameFieldSignUp
+                            ? 20
+                            : widget.textBoxProfile ==
+                                        TextBoxProfile.emailFieldSignUp ||
+                                    widget.textBoxProfile ==
+                                        TextBoxProfile.emailOrUsernameFieldLogin
+                                ? 50
+                                : isCluckCommentField()
+                                    ? 120
+                                    : 240)
+                      ],
+                      cursorColor: const Color.fromARGB(255, 100, 100, 100),
+                      cursorWidth: 1.1,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.elliptical(3, 3))),
+                        contentPadding: EdgeInsets.fromLTRB(
+                            10,
+                            6,
+                            isCluckCommentField() ||
+                                    widget.textBoxProfile ==
+                                        TextBoxProfile.searchField
+                                ? 41
+                                : 10,
+                            6),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Palette.lightGrey,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Palette.lightGrey, width: 1.3),
+                        ),
+                        suffixIcon:
+                            widget.textBoxProfile == TextBoxProfile.searchField
+                                ? IconButton(
+                                    icon: Icon(
+                                      FontAwesomeIcons.search,
+                                      color: Palette.cluckerRed
+                                          .toMaterialColor()
+                                          .shade800,
+                                      size: 22,
+                                    ),
+                                    onPressed: () {
+                                      // do something
+                                    },
+                                  )
+                                : null,
+                        hintText: getHintText(),
+                        hintStyle: TextStyle(
                           color: Palette.lightGrey,
-                          width: 1,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Palette.lightGrey, width: 1.3),
-                      ),
-                      suffixIcon:
-                          widget.textBoxProfile == TextBoxProfile.searchField
-                              ? IconButton(
-                                  icon: const ImageIcon(
-                                    AssetImage(
-                                        'assets/icons/search_icon_256x256.png'),
-                                    color: Colors.black,
-                                    size: 22,
-                                  ),
-                                  onPressed: () {
-                                    // do something
-                                  },
-                                )
-                              : null,
-                      hintText: getHintText(),
-                      hintStyle: TextStyle(
-                        color: Palette.lightGrey,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    keyboardType: widget.textBoxProfile ==
-                                TextBoxProfile.cluckField ||
-                            widget.textBoxProfile == TextBoxProfile.commentField
-                        ? TextInputType.multiline
-                        : TextInputType.text,
-                    maxLines: isCluckField() ? 9 : 1,
-                    minLines: 1,
-                    obscureText: widget.textBoxProfile ==
-                                TextBoxProfile.passwordFieldLogin ||
-                            widget.textBoxProfile ==
-                                TextBoxProfile.passwordFieldSignUp
-                        ? true
-                        : false,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      if (iconAnimation) {
-                        return null;
-                      } else if (value == null || value.isEmpty) {
-                        validatorError = false;
-                        return null;
-                      } else {
-                        if (!usernameAvailable) {
-                          validatorError = true;
-                          return 'Username unavailable';
-                        }
-                      }
-                      return null;
-                    },
-                    onEditingComplete: () async {
-                      updateAnimation();
-                    },
-                    onChanged: (value) async {
-                      setState(() {
-                        _startTimer();
-                      });
-                      enteredText = value;
-                      validatorError = false;
-
-                      setState(() {
-                        enteredText = value;
-
-                        if (enteredText.isEmpty || timerActive == false) {
-                          iconAnimation = false;
-                          validationIcon = FontAwesomeIcons.solidQuestionCircle;
-                        } else if (timerActive == true) {
-                          iconAnimation = true;
-                        }
-
-                        if (widget.textBoxProfile ==
-                            TextBoxProfile.passwordFieldSignUp) {
-                          //TODO: Set the state of the meter based on the password field algorithm
-                        } else if (isCluckField()) {
-                          counter = 0;
-                          for (int i = 0; i < enteredText.length; i++) {
-                            if (enteredText[i] == ' ' ||
-                                enteredText[i] == '\n') {
-                              counter++;
+                      keyboardType: isCluckCommentField()
+                          ? TextInputType.multiline
+                          : TextInputType.text,
+                      maxLines: isCluckCommentField() ? 9 : 1,
+                      minLines: 1,
+                      obscureText: widget.textBoxProfile ==
+                                  TextBoxProfile.passwordFieldLogin ||
+                              widget.textBoxProfile ==
+                                  TextBoxProfile.passwordFieldSignUp
+                          ? true
+                          : false,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: isValidationField()
+                          ? (value) {
+                              if (iconAnimation) {
+                                return null;
+                              } else if (value == null || value.isEmpty) {
+                                validatorError = false;
+                                return null;
+                              } else {
+                                if (!usernameAvailable) {
+                                  validatorError = true;
+                                  return 'Username unavailable';
+                                }
+                              }
+                              return null;
                             }
-                          }
+                          : (value) {
+                              return null;
+                            },
+                      onEditingComplete: () {
+                        if (isValidationField()) {
+                          updateAnimation();
                         }
-                      });
-                    },
-                  ),
+                      },
+                      onChanged: (value) {
+                        print('${value.length}');
+                        enteredText = '';
+                        if (isValidationField()) {
+                          setState(() {
+                            _startTimer();
+                          });
+                        }
+                        if (wordCount <= 6) {
+                          enteredText = value;
+                        }
+                        if (value.isNotEmpty) {
+                          validatorError = false;
+
+                          setState(() {
+                            enteredText = value;
+
+                            if (enteredText.isEmpty || timerActive == false) {
+                              iconAnimation = false;
+                              validationIcon =
+                                  FontAwesomeIcons.solidQuestionCircle;
+                            } else if (timerActive == true) {
+                              iconAnimation = true;
+                            }
+
+                            if (widget.textBoxProfile ==
+                                TextBoxProfile.passwordFieldSignUp) {
+                              //TODO: Set the state of the meter based on the password field algorithm
+                            } else if (isCluckCommentField()) {
+                              wordCount = enteredText.isEmpty ? 0 : 1;
+                              String temp = '';
+                              if (wordCount == 5) {
+                                for (int i = 0; i < enteredText.length - 2; i++) {
+                                  if ((enteredText[i] != ' ' || enteredText[i] != '\n')) {
+                                    print('added to temp');
+                                    temp += enteredText[i];
+                                  }
+                                }
+                                setState(() {
+                                  enteredText = temp;
+                                  print('$enteredText');
+                                });
+
+                              }
+                              for (int i = 1; i < enteredText.length; i++) {
+                                if (i > 1) {
+                                  if ((enteredText[i - 1] == ' ' ||
+                                          enteredText[i - 1] == '\n') &&
+                                      (enteredText[i] != ' ' ||
+                                          enteredText != '\n')) {
+                                    wordCount++;
+                                  }
+                                }
+                                }
+
+                            }
+                          });
+                        }
+                      }),
                   Positioned(
                     right: 0.001,
                     bottom: 5,
                     child: SizedBox(
                       width: 40,
-                      child: isCluckField()
+                      child: isCluckCommentField()
                           ? Column(children: [
                               const SizedBox(
                                 height: 12,
                               ),
                               Text(
-                                '$counter/6  ',
+                                '$wordCount/6  ',
                                 style: TextStyle(
                                   fontFamily: 'OpenSans',
                                   fontWeight: FontWeight.bold,
@@ -215,17 +271,17 @@ class _TextBoxState extends State<TextBox> {
                 ]),
               ),
               SizedBox(
-                width: isCluckField()
+                width: isCluckCommentField()
                     ? sendButtonSize + 10
                     : isValidationField()
                         ? validationIconSize
                         : 0,
-                height: isCluckField()
+                height: isCluckCommentField()
                     ? sendButtonSize + 10
                     : isValidationField()
                         ? validationIconSize
                         : 0,
-                child: isCluckField()
+                child: isCluckCommentField()
                     ? IconButton(
                         icon: Icon(
                           FontAwesomeIcons.solidPaperPlane,
@@ -278,12 +334,14 @@ class _TextBoxState extends State<TextBox> {
 
 //#region Timer
   void _startTimer() {
-    setState(() {
-      timerActive = true;
-      _timer = Timer(const Duration(seconds: 6), () {
-        updateAnimation();
+    if (isValidationField()) {
+      setState(() {
+        timerActive = true;
+        _timer = Timer(const Duration(seconds: 6), () {
+          updateAnimation();
+        });
       });
-    });
+    }
   }
 
   @override
@@ -294,12 +352,27 @@ class _TextBoxState extends State<TextBox> {
   //#endregion
 
 //#region Comparisons
+  bool isLoginSignUpField() {
+    return isValidationField() ||
+        widget.textBoxProfile == TextBoxProfile.passwordFieldLogin ||
+        widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin ||
+        widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp;
+  }
+
+  bool isUsernameFieldSignUp() {
+    return widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp;
+  }
+
+  bool isEmailFieldSignUp() {
+    return widget.textBoxProfile == TextBoxProfile.emailFieldSignUp;
+  }
+
   bool isValidationField() {
     return widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp ||
         widget.textBoxProfile == TextBoxProfile.emailFieldSignUp;
   }
 
-  bool isCluckField() {
+  bool isCluckCommentField() {
     return widget.textBoxProfile == TextBoxProfile.cluckField ||
         widget.textBoxProfile == TextBoxProfile.commentField;
   }
@@ -328,21 +401,35 @@ class _TextBoxState extends State<TextBox> {
   }
 
   void updateAnimation() async {
-    usernameAvailable = await widget.onEditingComplete();
-    iconAnimation = false;
-    setState(() {
-      if (isValidationField()) {
-        if (enteredText.isEmpty) {
-          validatorError = false;
-          validationIcon = FontAwesomeIcons.solidQuestionCircle;
-        } else if (!usernameAvailable) {
-          validatorError = true;
-          validationIcon = FontAwesomeIcons.solidTimesCircle;
-        } else if (usernameAvailable) {
-          validatorError = false;
-          validationIcon = FontAwesomeIcons.solidCheckCircle;
+    if (isValidationField()) {
+      usernameAvailable = await widget.onEditingComplete();
+      iconAnimation = false;
+      setState(() {
+        if (isValidationField()) {
+          if (enteredText.isEmpty) {
+            validatorError = false;
+            validationIcon = FontAwesomeIcons.solidQuestionCircle;
+          } else if (!usernameAvailable) {
+            validatorError = true;
+            validationIcon = FontAwesomeIcons.solidTimesCircle;
+          } else if (usernameAvailable) {
+            validatorError = false;
+            validationIcon = FontAwesomeIcons.solidCheckCircle;
+          }
         }
-      }
-    });
+      });
+    }
+  }
+
+  bool checkMaxWordCount() {
+    if (enteredText.isNotEmpty) {
+      print('checkMaxWordCount returns ${enteredText[enteredText.length - 1] == ' ' ||
+          enteredText[enteredText.length - 1] == '\n'}'
+      );
+      return enteredText[enteredText.length - 1] == ' ' ||
+          enteredText[enteredText.length - 1] == '\n';
+    } else {
+      return false;
+    }
   }
 }
