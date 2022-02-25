@@ -1,4 +1,5 @@
 import 'package:clucker_client/screens/email_signup_page.dart';
+import 'package:clucker_client/screens/username_signup_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
