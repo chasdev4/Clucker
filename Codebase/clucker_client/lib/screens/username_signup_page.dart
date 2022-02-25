@@ -98,7 +98,6 @@ class _UsernameFormState extends State<UsernameForm> {
 
                   if (_usernameFormKey.currentState!.validate()) {}
 
-                  if (username.isNotEmpty) {
                     if (isGood && username.isNotEmpty) {
                       Navigator.push(
                           context,
@@ -106,7 +105,6 @@ class _UsernameFormState extends State<UsernameForm> {
                               builder: (context) =>
                                   EmailPage(username: username)));
                     }
-                  }
                 },
               ),
               StandardButton(
