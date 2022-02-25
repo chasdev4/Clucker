@@ -15,16 +15,7 @@ class EmailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Sign-Up',
-          style: TextStyle(
-            fontFamily: 'OpenSans',
-            fontSize: 40,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
+      resizeToAvoidBottomInset: false,
       body: EmailForm(username: username),
     );
   }
@@ -53,16 +44,41 @@ class _EmailFormState extends State<EmailForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _emailFormKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Container(
+      alignment: Alignment.center,
+        child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          const Text(
-            'Please enter your email address',
-            style: TextStyle(
-              fontFamily: 'OpenSans',
-              fontStyle: FontStyle.italic,
-              fontSize: 20,
+          Padding(
+            padding: EdgeInsets.only(top: 125),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width - 50,
+              child: const Text(
+                'Sign Up',
+                style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 36,
+                ),
+              ),
             ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 6,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width - 100,
+            child: const Text(
+              'Enter your email and password...',
+              style: TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 15,
           ),
           TextBox(
             textBoxProfile: TextBoxProfile.emailFieldSignUp,
@@ -70,22 +86,14 @@ class _EmailFormState extends State<EmailForm> {
             onEditingComplete: (){},
             onChanged: (){},
           ),
-          const Text(
-            'Please enter a password',
-            style: TextStyle(
-              fontFamily: 'OpenSans',
-              fontStyle: FontStyle.italic,
-              fontSize: 20,
-            ),
-          ),
           TextBox(
-            textBoxProfile: TextBoxProfile.passwordFieldMeterSignUp,
+            textBoxProfile: TextBoxProfile.passwordFieldSignUp,
             controller: firstPasswordController,
             onEditingComplete: () {},
             onChanged: (){},
           ),
           TextBox(
-            textBoxProfile: TextBoxProfile.passwordFieldValidationSignUp,
+            textBoxProfile: TextBoxProfile.passwordFieldConfirmSignUp,
             controller: secondPasswordController,
             onEditingComplete: () {},
             onChanged: (){},
@@ -154,8 +162,16 @@ class _EmailFormState extends State<EmailForm> {
               }
             },
           ),
+          StandardButton(
+            text: 'Back',
+            routeName: '',
+            onPress: () {
+              Navigator.pop(context);
+            },
+            isSecondary: true,
+          ),
         ],
-      ),
+      ),),
     );
   }
 }

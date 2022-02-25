@@ -12,6 +12,7 @@ class UsernamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      resizeToAvoidBottomInset: false,
       body: UsernameForm(),
     );
   }
@@ -38,9 +39,7 @@ class _UsernameFormState extends State<UsernameForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Form(
+    return Form(
         key: _usernameFormKey,
         child: Container(
           alignment: Alignment.center,
@@ -110,10 +109,17 @@ class _UsernameFormState extends State<UsernameForm> {
                   }
                 },
               ),
+              StandardButton(
+                text: 'Back',
+                routeName: '',
+                onPress: () {
+                  Navigator.pop(context);
+                },
+                isSecondary: true,
+              ),
             ],
           ),
         ),
-      ),
     );
   }
 }
