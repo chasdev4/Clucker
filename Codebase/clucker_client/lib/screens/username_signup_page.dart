@@ -11,18 +11,8 @@ class UsernamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Sign-Up',
-          style: TextStyle(
-            fontFamily: 'OpenSans',
-            fontSize: 40,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
-      body: const UsernameForm(),
+    return const Scaffold(
+      body: UsernameForm(),
     );
   }
 }
@@ -48,57 +38,81 @@ class _UsernameFormState extends State<UsernameForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _usernameFormKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(width: MediaQuery.of(context).size.width - 100,child: const Text(
-            'What would you like to be called?',
-            style: TextStyle(
-              fontFamily: 'OpenSans',
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-            ),
-          ),),
-          TextBox(
-            textBoxProfile: TextBoxProfile.usernameFieldSignUp,
-            controller: usernameController,
-            onEditingComplete: () async {
-             if (_usernameFormKey.currentState!.validate()) {}
-              username = usernameController.text;
-              return await userService.usernameAvailable(username);
-            },
-            onChanged: () async {
-              if (_usernameFormKey.currentState!.validate()) {
-              }
-              username = usernameController.text;
-              return await userService.usernameAvailable(username);
-            },
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Form(
+        key: _usernameFormKey,
+        child: Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: 125),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width - 50,
+                  child: const Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      fontFamily: 'OpenSans',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 36,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 5,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 100,
+                child: const Text(
+                  'What would you like to be called?',
+                  style: TextStyle(
+                    fontFamily: 'OpenSans',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              TextBox(
+                textBoxProfile: TextBoxProfile.usernameFieldSignUp,
+                controller: usernameController,
+                onEditingComplete: () async {
+                  if (_usernameFormKey.currentState!.validate()) {}
+                  username = usernameController.text;
+                  return await userService.usernameAvailable(username);
+                },
+                onChanged: () async {
+                  if (_usernameFormKey.currentState!.validate()) {}
+                  username = usernameController.text;
+                  return await userService.usernameAvailable(username);
+                },
+              ),
+              StandardButton(
+                text: 'Next',
+                routeName: '',
+                onPress: () async {
+                  username = usernameController.text;
+
+                  bool isGood = await userService.usernameAvailable(username);
+
+                  if (_usernameFormKey.currentState!.validate()) {}
+
+                  if (username.isNotEmpty) {
+                    if (isGood && username.isNotEmpty) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  EmailPage(username: username)));
+                    }
+                  }
+                },
+              ),
+            ],
           ),
-          StandardButton(
-            text: 'Next',
-            routeName: '',
-            onPress: () async {
-              username = usernameController.text;
-
-              bool isGood = await userService.usernameAvailable(username);
-
-              if (_usernameFormKey.currentState!.validate()) {
-
-              }
-
-              if (username.isNotEmpty) {
-                if (isGood && username.isNotEmpty) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EmailPage(username: username)));
-                }
-              }
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
