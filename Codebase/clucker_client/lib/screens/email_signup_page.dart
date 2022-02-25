@@ -64,7 +64,7 @@ class _EmailFormState extends State<EmailForm> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 6,
+              height: MediaQuery.of(context).size.height / 8,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width - 100,
