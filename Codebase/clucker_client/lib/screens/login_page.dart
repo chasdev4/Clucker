@@ -1,8 +1,8 @@
+import 'package:clucker_client/screens/email_signup_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
-import 'package:clucker_client/screens/username_signup_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _LogInFormState extends State<LogInForm> {
   String password = '';
 
   @override
-  void Dispose() {
+  void dispose() {
     usernameController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -72,8 +72,6 @@ class _LogInFormState extends State<LogInForm> {
             text: 'Log-In',
             routeName: '',
             onPress: () {
-              print(usernameController.text);
-              print(passwordController.text);
             },
           ),
           StandardButton(
