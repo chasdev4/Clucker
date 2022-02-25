@@ -59,10 +59,14 @@ class _LogInFormState extends State<LogInForm> {
           TextBox(
             textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
             controller: usernameController,
+            onEditingComplete: (){},
+            onChanged: (){},
           ),
           TextBox(
             textBoxProfile: TextBoxProfile.passwordFieldLogin,
             controller: passwordController,
+            onEditingComplete: (){},
+            onChanged: (){},
           ),
           StandardButton(
             text: 'Log-In',
