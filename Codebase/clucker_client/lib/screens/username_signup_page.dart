@@ -40,6 +40,20 @@ class _UsernameFormState extends State<UsernameForm> {
 
   String username = '';
 
+  late FocusNode focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   void Dispose() {
     usernameController.dispose();
@@ -64,6 +78,7 @@ class _UsernameFormState extends State<UsernameForm> {
           TextBox(
             textBoxProfile: TextBoxProfile.usernameFieldSignUp,
             controller: usernameController,
+            focusNode: focusNode,
           ),
           StandardButton(
             text: 'Next',

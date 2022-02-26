@@ -14,11 +14,12 @@ enum TextBoxProfile {
 }
 
 class TextBox extends StatefulWidget {
-  const TextBox({Key? key, required this.textBoxProfile, this.controller})
+  const TextBox({Key? key, required this.textBoxProfile, this.controller, required this.focusNode})
       : super(key: key);
 
   final TextBoxProfile textBoxProfile;
   final TextEditingController? controller;
+  final FocusNode focusNode;
 
   @override
   _TextBoxState createState() => _TextBoxState();
@@ -33,6 +34,7 @@ class _TextBoxState extends State<TextBox> {
 
   @override
   Widget build(BuildContext context) {
+
     double sendButtonSize =
         (widget.textBoxProfile == TextBoxProfile.cluckField ||
                 widget.textBoxProfile == TextBoxProfile.commentField)
@@ -53,15 +55,16 @@ class _TextBoxState extends State<TextBox> {
         padding:
             EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
         child: Row(
-            crossAxisAlignment:
-                widget.textBoxProfile == TextBoxProfile.cluckField ||
-                        widget.textBoxProfile == TextBoxProfile.commentField
-                    ? CrossAxisAlignment.end
+            crossAxisAlignment: widget.textBoxProfile == TextBoxProfile.cluckField ||
+                widget.textBoxProfile == TextBoxProfile.commentField ? CrossAxisAlignment.end
                     : CrossAxisAlignment.center,
             children: [
               Flexible(
                 child: Stack(alignment: Alignment.center, children: [
                   TextFormField(
+                    focusNode: widget.focusNode,
+                    autofocus: widget.textBoxProfile == TextBoxProfile.cluckField ||
+                        widget.textBoxProfile == TextBoxProfile.commentField ? true : false,
                     controller: widget.controller,
                     obscureText: widget.textBoxProfile ==
                                 TextBoxProfile.passwordFieldLogin ||

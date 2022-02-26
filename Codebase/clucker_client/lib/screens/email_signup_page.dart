@@ -28,7 +28,7 @@ class EmailPage extends StatelessWidget {
 }
 
 class EmailForm extends StatefulWidget {
-  const EmailForm({Key? key, required this.username}) : super(key: key);
+  EmailForm({Key? key, required this.username}) : super(key: key);
 
   final String username;
 
@@ -37,7 +37,6 @@ class EmailForm extends StatefulWidget {
 }
 
 class _EmailFormState extends State<EmailForm> {
-
   final _emailFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final firstPasswordController = TextEditingController();
@@ -45,6 +44,20 @@ class _EmailFormState extends State<EmailForm> {
 
   String email = '';
   String password = '';
+
+  late FocusNode focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +77,7 @@ class _EmailFormState extends State<EmailForm> {
           TextBox(
             textBoxProfile: TextBoxProfile.emailField,
             controller: emailController,
+            focusNode: focusNode,
           ),
           const Text(
             'Please enter a password',
@@ -76,10 +90,12 @@ class _EmailFormState extends State<EmailForm> {
           TextBox(
             textBoxProfile: TextBoxProfile.passwordFieldSignUp,
             controller: firstPasswordController,
+            focusNode: focusNode,
           ),
           TextBox(
             textBoxProfile: TextBoxProfile.passwordFieldSignUp,
             controller: secondPasswordController,
+            focusNode: focusNode,
           ),
           StandardButton(
             text: 'Sign-Up',

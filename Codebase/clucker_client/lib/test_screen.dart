@@ -5,9 +5,27 @@ import 'package:flutter/material.dart';
 import 'components/clucker_app_bar.dart';
 import 'components/user_avatar.dart';
 
-class TestScreen extends StatelessWidget {
-
+class TestScreen extends StatefulWidget {
   const TestScreen({Key? key}) : super(key: key);
+
+  @override
+  _TestScreenState createState() => _TestScreenState();
+}
+
+class _TestScreenState extends State<TestScreen> {
+  late FocusNode focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +45,8 @@ class TestScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const MainNavigationBar(),
-      floatingActionButton: const NewCluckButton(),
+      bottomNavigationBar: MainNavigationBar(focusNode: focusNode,),
+      floatingActionButton: NewCluckButton(focusNode: focusNode,),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

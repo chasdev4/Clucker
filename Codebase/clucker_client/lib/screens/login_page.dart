@@ -31,8 +31,17 @@ class _LogInFormState extends State<LogInForm> {
   String username = '';
   String password = '';
 
+  late FocusNode focusNode;
+
   @override
-  void Dispose() {
+  void initState() {
+    super.initState();
+    focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
     usernameController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -59,10 +68,12 @@ class _LogInFormState extends State<LogInForm> {
           TextBox(
             textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
             controller: usernameController,
+            focusNode: focusNode,
           ),
           TextBox(
             textBoxProfile: TextBoxProfile.passwordFieldLogin,
             controller: passwordController,
+            focusNode: focusNode,
           ),
           StandardButton(
             text: 'Log-In',
