@@ -22,18 +22,6 @@ class _NewCluckButtonState extends State<NewCluckButton> {
             MediaQuery.of(context).size.height / 36));
   }
 
-  int countNewLines() {
-    numNewLines = 0;
-    if (cluckController.text.isNotEmpty) {
-      for (int i = 0; i < cluckController.text.length; i++) {
-        if (cluckController.text[i] == '\n') {
-          numNewLines++;
-        }
-      }
-    }
-    return numNewLines;
-  }
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -58,6 +46,8 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   }
 
   void _showOverlay(BuildContext context) async {
+    double barHeight = 260;
+
     OverlayState? overlayState = Overlay.of(context);
     late OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(builder: (context) {
@@ -66,20 +56,22 @@ class _NewCluckButtonState extends State<NewCluckButton> {
           onTap: () {},
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-             height: MediaQuery.of(context).size.height -
-                 125 - MediaQuery.of(context).viewInsets.bottom,
+            height: MediaQuery.of(context).size.height -
+                barHeight -
+                MediaQuery.of(context).viewInsets.bottom,
             child: RawMaterialButton(
               fillColor: Palette.black.toMaterialColor().shade300,
               splashColor: Colors.transparent,
               onPressed: () {
-                if (widget.focusNode.hasFocus) {
-                  widget.focusNode.unfocus();
-                } else {
-                  overlayEntry.remove();
-                  setState(() {
+                setState(() {
+                  barHeight = 125;
+                  if (widget.focusNode.hasFocus) {
+                    widget.focusNode.unfocus();
+                  } else {
+                    overlayEntry.remove();
                     cluckBarVisible = false;
-                  });
-                }
+                  }
+                });
               },
             ),
           ),
@@ -87,12 +79,12 @@ class _NewCluckButtonState extends State<NewCluckButton> {
         Stack(alignment: Alignment.bottomCenter, children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 124,
+            height: barHeight - 1,
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
-                  spreadRadius: 2,
+                  spreadRadius: 1,
                   offset: const Offset(0, -1.45),
-                  color: Palette.lightGrey.toMaterialColor().shade400)
+                  color: Palette.mercuryGray.toMaterialColor().shade400)
             ]),
           ),
           Row(
@@ -100,7 +92,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 125,
+                height: barHeight,
                 color: Palette.white,
                 child: Material(
                     color: Colors.transparent,
@@ -119,16 +111,19 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                           textBoxProfile: TextBoxProfile.cluckField,
                           controller: cluckController,
                           focusNode: widget.focusNode,
+                          onTap: (){setState(() {
+                            barHeight = 260;
+                          });}
                         ),
                       ],
                     )),
               ),
             ],
-          )
+          ),
         ]),
       ]);
     });
     cluckBarVisible = true;
     overlayState?.insert(overlayEntry);
   }
-}
+        }

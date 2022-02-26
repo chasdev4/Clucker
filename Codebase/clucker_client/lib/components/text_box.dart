@@ -14,12 +14,13 @@ enum TextBoxProfile {
 }
 
 class TextBox extends StatefulWidget {
-  const TextBox({Key? key, required this.textBoxProfile, this.controller, required this.focusNode})
+  const TextBox({Key? key, required this.textBoxProfile, this.controller, required this.focusNode, this.onTap})
       : super(key: key);
 
   final TextBoxProfile textBoxProfile;
   final TextEditingController? controller;
   final FocusNode focusNode;
+  final Function? onTap;
 
   @override
   _TextBoxState createState() => _TextBoxState();
@@ -79,7 +80,9 @@ class _TextBoxState extends State<TextBox> {
                             widget.textBoxProfile == TextBoxProfile.commentField
                         ? TextInputType.multiline
                         : TextInputType.text,
-                    minLines: 1,
+                    minLines: (widget.textBoxProfile ==
+                        TextBoxProfile.cluckField ||
+                        widget.textBoxProfile == TextBoxProfile.commentField) && widget.focusNode.hasFocus ? 9 : 1,
                     maxLines: widget.textBoxProfile ==
                                 TextBoxProfile.cluckField ||
                             widget.textBoxProfile == TextBoxProfile.commentField
@@ -146,6 +149,9 @@ class _TextBoxState extends State<TextBox> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
+                    onTap: () {
+                      widget.onTap!();
+                      },
                     onChanged: (value) {
                       setState(() {
                         enteredText = value;
