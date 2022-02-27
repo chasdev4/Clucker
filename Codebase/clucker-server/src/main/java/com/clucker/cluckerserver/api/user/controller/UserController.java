@@ -1,10 +1,10 @@
-package com.clucker.cluckerserver.user.controller;
+package com.clucker.cluckerserver.api.user.controller;
 
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;
 import com.clucker.cluckerserver.dto.UserUpdateRequest;
 import com.clucker.cluckerserver.model.User;
-import com.clucker.cluckerserver.user.service.UserService;
+import com.clucker.cluckerserver.api.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 
-@RestController
+@RestController("user.controller")
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Slf4j
