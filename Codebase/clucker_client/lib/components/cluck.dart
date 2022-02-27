@@ -1,6 +1,49 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:clucker_client/components/user_avatar.dart';
+
+class Cluck extends StatefulWidget {
+  const Cluck({Key? key, required this.cluckText}) : super(key: key);
+
+  final String cluckText;
+
+  @override
+  _CluckState createState() => _CluckState();
+}
+
+class _CluckState extends State<Cluck> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const UserAvatar(
+          avatarImage: 'assets/icons/chicken.jpg',
+        ),
+        Column(
+          children: [
+            const Text(
+              'Username',
+            ),
+            Text(
+              widget.cluckText,
+            ),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text(
+              'Time',
+            ),
+            EggControls()
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 
 class EggControls extends StatefulWidget {
   const EggControls({Key? key, this.buttonSize = 25}) : super(key: key);
