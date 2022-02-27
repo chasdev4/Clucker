@@ -2,6 +2,7 @@ import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewCluckButton extends StatefulWidget {
@@ -64,7 +65,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
               splashColor: Colors.transparent,
               onPressed: () {
                 setState(() {
-                  barHeight = 125;
+                  barHeight = countNewLines() <= 1 ? 125 : countNewLines() >= 9 ? 260 : (((numNewLines + 1) * 19.285) + 90);
                   if (widget.focusNode.hasFocus) {
                     widget.focusNode.unfocus();
                   } else {
@@ -99,22 +100,37 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                     child: Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.all(10),
-                          width: MediaQuery.of(context).size.width - 50,
-                          child: const Text(
-                            'New Cluck',
-                            style: TextStyle(
-                                fontSize: 28, fontWeight: FontWeight.w900),
-                          ),
-                        ),
+                            padding: EdgeInsets.all(widget.focusNode.hasFocus ? 3 : 13),
+                            width: MediaQuery.of(context).size.width - 50,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(padding: EdgeInsets.only(left: widget.focusNode.hasFocus ? 10 : 0), child: const Text(
+                                  'New Cluck',
+                                  style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w900),
+                                ),),
+                                const SizedBox(),
+                                widget.focusNode.hasFocus ?
+                                IconButton(
+                                    onPressed: () {
+                                      overlayEntry.remove();
+                                      cluckBarVisible = false;
+                                    },
+                                    icon: Icon(FontAwesomeIcons.times, size: 26, color: Palette.offBlack,)) : const SizedBox(),
+                              ],
+                            )),
                         TextBox(
-                          textBoxProfile: TextBoxProfile.cluckField,
-                          controller: cluckController,
-                          focusNode: widget.focusNode,
-                          onTap: (){setState(() {
-                            barHeight = 260;
-                          });}
-                        ),
+                            textBoxProfile: TextBoxProfile.cluckField,
+                            controller: cluckController,
+                            focusNode: widget.focusNode,
+                            onTap: () {
+                              setState(() {
+                                barHeight = 260;
+                              });
+                            }),
                       ],
                     )),
               ),
@@ -126,4 +142,16 @@ class _NewCluckButtonState extends State<NewCluckButton> {
     cluckBarVisible = true;
     overlayState?.insert(overlayEntry);
   }
+
+  int countNewLines() {
+    numNewLines = 0;
+    if (cluckController.text.isNotEmpty) {
+      for (int i = 0; i < cluckController.text.length; i++) {
+        if (cluckController.text[i] == '\n') {
+          numNewLines++;
         }
+      }
+    }
+    return numNewLines;
+  }
+}
