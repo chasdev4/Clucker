@@ -71,6 +71,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                   } else {
                     overlayEntry.remove();
                     cluckBarVisible = false;
+                    cluckController.text = '';
                   }
                 });
               },
