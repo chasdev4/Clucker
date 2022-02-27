@@ -3,16 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/screens/email_signup_page.dart';
-import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/services/user_service.dart';
+import '../components/DialogUtil.dart';
 
 class UsernamePage extends StatelessWidget {
   const UsernamePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: UsernameForm(),
     );
   }
 }
@@ -29,7 +27,7 @@ class _UsernameFormState extends State<UsernameForm> {
   final usernameController = TextEditingController();
 
   UserService userService = UserService();
-  String username = '';
+  DialogUtil dialogUtil = DialogUtil();
 
   void disposeController() {
     usernameController.dispose();
@@ -93,7 +91,6 @@ class _UsernameFormState extends State<UsernameForm> {
                 text: 'Next',
                 routeName: '',
                 onPress: () async {
-                  username = usernameController.text;
 
                   bool isGood = await userService.usernameAvailable(username);
 
