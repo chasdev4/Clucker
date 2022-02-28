@@ -14,11 +14,13 @@ class TestScreen extends StatefulWidget {
 
 class _TestScreenState extends State<TestScreen> {
   late FocusNode focusNode;
+  late bool overlayVisible;
 
   @override
   void initState() {
     super.initState();
     focusNode = FocusNode();
+    overlayVisible = false;
   }
 
   @override
@@ -29,26 +31,39 @@ class _TestScreenState extends State<TestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CluckerAppBar(
-        title: "Feed",
-        actions: [
-          UserAvatar(
-            avatarImage: 'assets/icons/chicken.jpg',
-          )
-        ],
-      ),
-      body: Center(
-        child: Column(
-          children: const [
-            Text('Test Text')
-          ],
-        ),
-      ),
-      bottomNavigationBar: MainNavigationBar(focusNode: focusNode,),
-      floatingActionButton: NewCluckButton(focusNode: focusNode,),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
+    return WillPopScope(
+        onWillPop: () async {
+          if (overlayVisible) {
 
+          }
+          return !overlayVisible;
+        },
+        child: Scaffold(
+          appBar: const CluckerAppBar(
+            title: "Feed",
+            actions: [
+              UserAvatar(
+                avatarImage: 'assets/icons/chicken.jpg',
+              )
+            ],
+          ),
+          body: Center(
+            child: Column(
+              children: const [Text('Test Text')],
+            ),
+          ),
+          bottomNavigationBar: MainNavigationBar(
+            focusNode: focusNode,
+          ),
+          floatingActionButton: NewCluckButton(
+              focusNode: focusNode,
+              overlayVisible: overlayVisible,
+              setOverlayState: (bool overlayState) {
+                  overlayVisible = overlayState;
+
+              }),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+        ));
+  }
 }
