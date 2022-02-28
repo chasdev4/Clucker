@@ -66,12 +66,13 @@ class _NewCluckButtonState extends State<NewCluckButton> {
               onPressed: () {
                 setState(() {
                   barHeight = countNewLines() <= 1 ? 125 : countNewLines() >= 9 ? 260 : (((numNewLines + 1) * 19.285) + 90);
-                  if (widget.focusNode.hasFocus) {
-                    widget.focusNode.unfocus();
-                  } else {
+                  if (MediaQuery.of(context).viewInsets.bottom == 0) {
                     overlayEntry.remove();
                     cluckBarVisible = false;
                     cluckController.text = '';
+                  }
+                  else {
+                    widget.focusNode.unfocus();
                   }
                 });
               },
