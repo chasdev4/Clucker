@@ -6,16 +6,28 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewCluckButton extends StatefulWidget {
-  const NewCluckButton({Key? key, required this.focusNode}) : super(key: key);
+  const NewCluckButton({Key? key, required this.focusNode, required this.overlayVisible, required this.setOverlayState}) : super(key: key);
   final FocusNode focusNode;
+  final bool overlayVisible;
+  final Function setOverlayState;
 
   @override
   _NewCluckButtonState createState() => _NewCluckButtonState();
 }
 
 class _NewCluckButtonState extends State<NewCluckButton> {
-  int numNewLines = 0;
-  bool cluckBarVisible = false;
+  late int numNewLines;
+  late bool overlayVisible;
+
+  @override
+  void initState() {
+    super.initState();
+    numNewLines = 0;
+    overlayVisible = widget.overlayVisible;
+    widget.setOverlayState(overlayVisible);
+  }
+
+
   final cluckController = TextEditingController();
   bool getKeyboardState() {
     return ((MediaQuery.of(context).viewInsets.bottom >= 0 &&
@@ -28,12 +40,13 @@ class _NewCluckButtonState extends State<NewCluckButton> {
     return SizedBox(
       height: 80,
       width: 80,
-      child: getKeyboardState() && cluckBarVisible == false
+      child: getKeyboardState() && overlayVisible == false
           ? FloatingActionButton(
               backgroundColor: Palette.white,
               onPressed: () {
                 _showOverlay(context);
                 widget.focusNode.requestFocus();
+                widget.setOverlayState(overlayVisible);
               },
               child: Icon(
                 FontAwesomeIcons.plusCircle,
@@ -68,7 +81,8 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                   barHeight = countNewLines() <= 1 ? 125 : countNewLines() >= 9 ? 260 : (((numNewLines + 1) * 19.285) + 90);
                   if (MediaQuery.of(context).viewInsets.bottom == 0) {
                     overlayEntry.remove();
-                    cluckBarVisible = false;
+                    overlayVisible = false;
+                    widget.setOverlayState(overlayVisible);
                     cluckController.text = '';
                   }
                   else {
@@ -119,7 +133,8 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                 IconButton(
                                     onPressed: () {
                                       overlayEntry.remove();
-                                      cluckBarVisible = false;
+                                      overlayVisible = false;
+                                      widget.setOverlayState(overlayVisible);
                                     },
                                     icon: Icon(FontAwesomeIcons.times, size: 26, color: Palette.offBlack,)) : const SizedBox(),
                               ],
@@ -141,7 +156,9 @@ class _NewCluckButtonState extends State<NewCluckButton> {
         ]),
       ]);
     });
-    cluckBarVisible = true;
+
+    overlayVisible = true;
+    widget.setOverlayState(overlayVisible);
     overlayState?.insert(overlayEntry);
   }
 
