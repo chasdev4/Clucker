@@ -82,11 +82,11 @@ class _TextBoxState extends State<TextBox> {
                         : TextInputType.text,
                     minLines: (widget.textBoxProfile ==
                         TextBoxProfile.cluckField ||
-                        widget.textBoxProfile == TextBoxProfile.commentField) && widget.focusNode.hasFocus ? 9 : 1,
+                        widget.textBoxProfile == TextBoxProfile.commentField) && widget.focusNode.hasFocus ? 7 : 1,
                     maxLines: widget.textBoxProfile ==
                                 TextBoxProfile.cluckField ||
                             widget.textBoxProfile == TextBoxProfile.commentField
-                        ? 9
+                        ? 7
                         : 1,
                     decoration: InputDecoration(
                       suffixIcon:

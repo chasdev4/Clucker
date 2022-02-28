@@ -60,7 +60,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   }
 
   void _showOverlay(BuildContext context) async {
-    double barHeight = 260;
+    double barHeight = 218;
 
     OverlayState? overlayState = Overlay.of(context);
     late OverlayEntry overlayEntry;
@@ -145,7 +145,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                             focusNode: widget.focusNode,
                             onTap: () {
                               setState(() {
-                                barHeight = 260;
+                                barHeight = 218;
                               });
                             }),
                       ],
