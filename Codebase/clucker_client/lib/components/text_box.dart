@@ -22,14 +22,14 @@ class TextBox extends StatefulWidget {
       {Key? key,
       required this.textBoxProfile,
       this.controller,
-      required this.onEditingComplete,
-      required this.onChanged})
+      this.onEditingComplete,
+      this.onChanged})
       : super(key: key);
 
   final TextBoxProfile textBoxProfile;
   final TextEditingController? controller;
-  final Function onEditingComplete;
-  final Function onChanged;
+  final Function? onEditingComplete;
+  final Function? onChanged;
 
   @override
   _TextBoxState createState() => _TextBoxState();
@@ -59,357 +59,365 @@ class _TextBoxState extends State<TextBox> {
     timerActive = false;
   }
 
-@override
-void dispose() {
-    super.dispose();
-}
-
   //#endregion
 
   @override
   Widget build(BuildContext context) {
     //#region Initializing size variables
-    double sendButtonSize = (isCluckCommentField()) ? 32 : 0;
-    double validationIconSize = (isValidationField()) ? 24 : 0;
-    horizontalPadding = (!isCluckCommentField() &&
+    double sendButtonSize = (isCluckOrCommentField()) ? 32 : 0;
+    double validationIconSize = (isAnyValidationField()) ? 24 : 0;
+    horizontalPadding = (!isCluckOrCommentField() &&
             widget.textBoxProfile != TextBoxProfile.searchField)
         ? 50
         : 10;
     //#endregion
 
     return Padding(
-        padding: isValidationField()
+      padding: isAnyValidationField()
           ? EdgeInsets.fromLTRB(horizontalPadding, 6, horizontalPadding + 10, 6)
-            : EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
-        child: Row(
-            crossAxisAlignment: isCluckCommentField()
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Stack(alignment: Alignment.center, children: [
-                  TextFormField(
-                      controller: widget.controller,
-                      inputFormatters: [
-                        // Username Sign Up Field
-                        isUsernameFieldSignUp()
-                            ? FilteringTextInputFormatter.allow(
-                                RegExp("[a-zA-Z0-9]"))
-                            // Email Sign Up Field
-                            : isEmailFieldSignUp()
-                                ? FilteringTextInputFormatter.allow(
-                                    RegExp("[a-zA-Z0-9@.]"))
-                                // Login / Sign Up Fields
-                                : isLoginSignUpField()
-                                    ? FilteringTextInputFormatter.deny(
-                                        RegExp(' '))
-                                    : FilteringTextInputFormatter.deny(''),
-                        // Cluck or Comment Field
-                        wordCount == 6
-                            ? LengthLimitingTextInputFormatter(
-                              checkMaxWordCount() ? enteredText.length : 240)
-                            : FilteringTextInputFormatter.deny(''),
-                      LengthLimitingTextInputFormatter(widget.textBoxProfile ==
-                                TextBoxProfile.usernameFieldSignUp
-                            ? 20
-                            : widget.textBoxProfile ==
-                                        TextBoxProfile.emailFieldSignUp ||
-                                    widget.textBoxProfile ==
-                                        TextBoxProfile.emailOrUsernameFieldLogin
-                                ? 50
-                                : isCluckCommentField()
-                                    ? 120
-                                    : 240)
-                      ],
-                      cursorColor: const Color.fromARGB(255, 100, 100, 100),
-                      cursorWidth: 1.1,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.elliptical(3, 3))),
-                        contentPadding: EdgeInsets.fromLTRB(
-                            10,
-                            6,
-                            isCluckCommentField() ||
-                                    widget.textBoxProfile ==
-                                        TextBoxProfile.searchField
-                                ? 41
-                                : 10,
-                            6),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Palette.lightGrey,
-                            width: 1,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Palette.lightGrey, width: 1.3),
-                        ),
-                        suffixIcon:
-                            widget.textBoxProfile == TextBoxProfile.searchField
-                                ? IconButton(
-                                    icon: Icon(
-                                      FontAwesomeIcons.search,
-                                      color: Palette.cluckerRed
-                                          .toMaterialColor()
-                                          .shade800,
-                                      size: 22,
-                                    ),
-                                    onPressed: () {
-                                      // do something
-                                    },
-                                  )
-                                : null,
-                        hintText: getHintText(),
-                        hintStyle: TextStyle(
+          : EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
+      child: Row(
+          crossAxisAlignment: isCluckOrCommentField()
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Stack(alignment: Alignment.center, children: [
+                TextFormField(
+                    controller: widget.controller,
+                    inputFormatters: getInputFormatters(),
+                    cursorColor: const Color.fromARGB(255, 100, 100, 100),
+                    cursorWidth: 1.1,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.elliptical(3, 3))),
+                      contentPadding: EdgeInsets.fromLTRB(
+                          10,
+                          6,
+                          isCluckOrCommentField() ||
+                                  widget.textBoxProfile ==
+                                      TextBoxProfile.searchField
+                              ? 41
+                              : 10,
+                          6),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
                           color: Palette.lightGrey,
-                          fontWeight: FontWeight.w400,
+                          width: 1,
                         ),
                       ),
-                      keyboardType: isCluckCommentField()
-                          ? TextInputType.multiline
-                          : TextInputType.text,
-                      maxLines: isCluckCommentField() ? 9 : 1,
-                      minLines: 1,
-                      obscureText: widget.textBoxProfile ==
-                                  TextBoxProfile.passwordFieldLogin ||
-                              widget.textBoxProfile ==
-                                TextBoxProfile.passwordFieldSignUp ||
-                            widget.textBoxProfile ==
-                                  TextBoxProfile.confirmPasswordFieldSignUp
-                          ? true
-                          : false,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: isValidationField()
-                          ? (value) {
-                              if (iconAnimation) {
-                                return null;
-                              } else if (value == null || value.isEmpty) {
-                                validatorError = false;
-                                return null;
-                              } else {
-                                if (!usernameAvailable) {
-                                  validatorError = true;
-                                  return 'Username unavailable';
-                                }
-                              }
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Palette.lightGrey, width: 1.3),
+                      ),
+                      suffixIcon:
+                          widget.textBoxProfile == TextBoxProfile.searchField
+                              ? IconButton(
+                                  icon: Icon(
+                                    FontAwesomeIcons.search,
+                                    color: Palette.cluckerRed
+                                        .toMaterialColor()
+                                        .shade800,
+                                    size: 22,
+                                  ),
+                                  onPressed: () {
+                                    // do something
+                                  },
+                                )
+                              : null,
+                      hintText: getHintText(),
+                      hintStyle: TextStyle(
+                        color: Palette.lightGrey,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    keyboardType: isCluckOrCommentField()
+                        ? TextInputType.multiline
+                        : TextInputType.text,
+                    maxLines: isCluckOrCommentField() ? 9 : 1,
+                    minLines: 1,
+                    obscureText: isAnyPasswordField() ? true : false,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: isUsernameFieldSignUp()
+                        ? (value) {
+                            if (iconAnimation) {
                               return null;
+                            } else if (value == null || value.isEmpty) {
+                              validatorError = false;
+                              return null;
+                            } else {
+                              if (!usernameAvailable) {
+                                validatorError = true;
+                                return 'Username unavailable';
+                              }
                             }
-                        : widget.textBoxProfile ==
-                                TextBoxProfile.passwordFieldSignUp
+                            return null;
+                          }
+                        : isPasswordFieldSignUp()
                             ? (value) {
-                                if (value == null || value.isEmpty) {
+                                if (iconAnimation) {
+                                  return null;
+                                } else if (value == null || value.isEmpty) {
                                   return null;
                                 } else {
-                                  // TODO: Password validation
+                                  String pattern =
+                                      r'^(?=.*[0-9])(?=.*[a-z])(?=.*)(?=.*[@#$%^&+=_!]).{8,}$';
+                                  RegExp regExp = RegExp(pattern);
+
+                                  if (!regExp.hasMatch(enteredText)) {
+                                    return 'Invalid password';
+                                  }
                                 }
                                 return null;
                               }
-                          : (value) {
-                              return null;
-                            },
-                      onEditingComplete: () {
-                        if (isValidationField()) {
-                          updateAnimation();
-                        }
-                      },
-                      onChanged: (value) {
-                        enteredText = '';
-                        if (isValidationField()) {
-                          setState(() {
-                            _startTimer();
-                          });
-                        }
-                        if (wordCount <= 6) {
+                            : (value) {
+                                return null;
+                              },
+                    onEditingComplete: () {
+                      if (isAnyValidationField()) {
+                        updateValidationState();
+                      }
+                    },
+                    onChanged: (value) {
+                      enteredText = '';
+                      if (isAnyValidationField()) {
+                        setState(() {
+                          if (iconAnimation) {
+                            _timer.cancel();
+                          }
+                          _startTimer();
+                        });
+                      }
+                      if (isConfirmPasswordFieldSignUp() && enteredText.isNotEmpty) {
+                          validatorError = widget.onChanged!(value);
+                          iconAnimation = false;
+                      }
+
+                      if (wordCount <= 6) {
+                        enteredText = value;
+                      }
+                      if (value.isNotEmpty) {
+                        validatorError = false;
+
+                        setState(() {
                           enteredText = value;
-                        }
-                        if (value.isNotEmpty) {
-                          validatorError = false;
 
-                          setState(() {
-                            enteredText = value;
+                          if (enteredText.isEmpty || timerActive == false) {
+                            iconAnimation = false;
+                            validationIcon =
+                                FontAwesomeIcons.solidQuestionCircle;
+                          } else if (timerActive == true) {
+                            iconAnimation = true;
+                          }
 
-                            if (enteredText.isEmpty || timerActive == false) {
-                              iconAnimation = false;
-                              validationIcon =
-                                  FontAwesomeIcons.solidQuestionCircle;
-                            } else if (timerActive == true) {
-                              iconAnimation = true;
-                            }
-
-                            if (widget.textBoxProfile ==
-                                TextBoxProfile.passwordFieldSignUp) {
-                              //TODO: Set the state of the meter based on the password field algorithm
-                            } else if (isCluckCommentField()) {
-                              wordCount = enteredText.isEmpty ? 0 : 1;
-                              String temp = '';
-                              if (wordCount == 5) {
-                                for (int i = 0;
-                                    i < enteredText.length - 2;
-                                    i++) {
-                                  if ((enteredText[i] != ' ' ||
-                                      enteredText[i] != '\n')) {
-                                    temp += enteredText[i];
-                                  }
+                          if (widget.textBoxProfile ==
+                              TextBoxProfile.passwordFieldSignUp) {
+                            //TODO: Set the state of the meter based on the password field algorithm
+                          } else if (isCluckOrCommentField()) {
+                            wordCount = enteredText.isEmpty ? 0 : 1;
+                            String temp = '';
+                            if (wordCount == 5) {
+                              for (int i = 0; i < enteredText.length - 2; i++) {
+                                if ((enteredText[i] != ' ' ||
+                                    enteredText[i] != '\n')) {
+                                  temp += enteredText[i];
                                 }
-                                setState(() {
-                                  enteredText = temp;
-                                });
                               }
-                              for (int i = 1; i < enteredText.length; i++) {
-                                if (i > 1) {
-                                  if ((enteredText[i - 1] == ' ' ||
-                                          enteredText[i - 1] == '\n') &&
-                                      (enteredText[i] != ' ' ||
-                                          enteredText != '\n')) {
-                                    wordCount++;
-                                  }
+                              setState(() {
+                                enteredText = temp;
+                              });
+                            }
+                            for (int i = 1; i < enteredText.length; i++) {
+                              if (i > 1) {
+                                if ((enteredText[i - 1] == ' ' ||
+                                        enteredText[i - 1] == '\n') &&
+                                    (enteredText[i] != ' ' ||
+                                        enteredText != '\n')) {
+                                  wordCount++;
                                 }
                               }
                             }
-                          });
-                        }
-                      }),
-                  Positioned(
-                    right: 0.001,
-                    bottom: 5,
-                    child: SizedBox(
-                      width: 40,
-                      child: isCluckCommentField()
-                          ? Column(children: [
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Text(
-                                '$wordCount/6  ',
-                                style: TextStyle(
-                                  fontFamily: 'OpenSans',
-                                  fontWeight: FontWeight.bold,
-                                  color: Palette.cluckerRed
-                                      .toMaterialColor()
-                                      .shade400,
-                                  fontSize: 14,
-                                ),
-                              )
-                            ])
-                          : const SizedBox(),
-                    ),
-                  ),
-                ]),
-              ),
-              SizedBox(
-                width: isCluckCommentField()
-                    ? sendButtonSize + 10
-                    : isValidationField()
-                        ? validationIconSize
-                        : 0,
-                height: isCluckCommentField()
-                    ? sendButtonSize + 10
-                    : isValidationField()
-                        ? validationIconSize
-                        : 0,
-                child: isCluckCommentField()
-                    ? IconButton(
-                        icon: Icon(
-                          FontAwesomeIcons.solidPaperPlane,
-                          color: Palette.cluckerRed,
-                          size: sendButtonSize,
-                        ),
-                        padding: const EdgeInsets.only(
-                            left: 10, top: 5, bottom: 20, right: 10),
-                        onPressed: () {
-                          // do something
-                        },
-                      )
-                    : (isValidationField() && iconAnimation == false)
-                        ? Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Transform.translate(
-                              offset: Offset(0, validatorError ? -10 : 0),
-                              child: Icon(
-                                validationIcon,
-                                size: validationIconSize,
-                                color: validationIcon ==
-                                        FontAwesomeIcons.solidQuestionCircle
-                                    ? Palette.lightGrey
-                                    : validationIcon ==
-                                            FontAwesomeIcons.solidTimesCircle
-                                        ? Colors.red.shade600
-                                        : Colors.green.shade600,
-                              ),
+                          }
+                        });
+                      }
+                    }),
+                Positioned(
+                  right: 0.001,
+                  bottom: 5,
+                  child: SizedBox(
+                    width: 40,
+                    child: isCluckOrCommentField()
+                        ? Column(children: [
+                            const SizedBox(
+                              height: 12,
                             ),
-                          )
-                        : ((isValidationField()) && iconAnimation == true)
-                            ? Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Transform.scale(
-                                    scale: 1.654,
+                            Text(
+                              '$wordCount/6  ',
+                              style: TextStyle(
+                                fontFamily: 'OpenSans',
+                                fontWeight: FontWeight.bold,
+                                color: Palette.cluckerRed
+                                    .toMaterialColor()
+                                    .shade400,
+                                fontSize: 14,
+                              ),
+                            )
+                          ])
+                        : const SizedBox(),
+                  ),
+                ),
+              ]),
+            ),
+            SizedBox(
+              width: isCluckOrCommentField()
+                  ? sendButtonSize + 10
+                  : isAnyValidationField()
+                      ? validationIconSize
+                      : 0,
+              height: isCluckOrCommentField()
+                  ? sendButtonSize + 10
+                  : isAnyValidationField()
+                      ? validationIconSize
+                      : 0,
+              child: isCluckOrCommentField()
+                  ? IconButton(
+                      icon: Icon(
+                        FontAwesomeIcons.solidPaperPlane,
+                        color: Palette.cluckerRed,
+                        size: sendButtonSize,
+                      ),
+                      padding: const EdgeInsets.only(
+                          left: 10, top: 5, bottom: 20, right: 10),
+                      onPressed: () {
+                        // do something
+                      },
+                    )
+                  : (isAnyValidationField() && iconAnimation == false)
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Transform.translate(
+                            offset: Offset(0, validatorError ? -10 : 0),
+                            child: Icon(
+                              validationIcon,
+                              size: validationIconSize,
+                              color: validationIcon ==
+                                      FontAwesomeIcons.solidQuestionCircle
+                                  ? Palette.lightGrey
+                                  : validationIcon ==
+                                          FontAwesomeIcons.solidTimesCircle
+                                      ? Colors.red.shade600
+                                      : Colors.green.shade600,
+                            ),
+                          ),
+                        )
+                      : ((isAnyValidationField()) && iconAnimation == true)
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Transform.scale(
+                                  scale: 1.654,
                                   origin: Offset(-7.6,
                                       validatorError ? -10 - 1.3737 : -1.3737),
-                                    child: LoadingFlipping.circle(
-                                      backgroundColor: Palette.lightGrey,
-                                      borderColor: Palette.lightGrey,
-                                      size: validationIconSize,
-                                    )))
-                            : null,
-              ),
+                                  child: LoadingFlipping.circle(
+                                    backgroundColor: Palette.lightGrey,
+                                    borderColor: Palette.lightGrey,
+                                    size: validationIconSize,
+                                  )))
+                          : null,
+            ),
           ]),
     );
   }
 
-//#region Timer
   void _startTimer() {
-    if (isValidationField()) {
+    if (isAnyValidationField()) {
       setState(() {
         timerActive = true;
-        _timer = Timer(const Duration(seconds: 6), () {
-          updateAnimation();
+        _timer = Timer(Duration(seconds: isUsernameFieldSignUp() ? 6 : 3), () {
+          updateValidationState();
         });
       });
     }
   }
 
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-  //#endregion
+  void updateValidationState() async {
+    bool validPassword = false;
+    bool passwordsMatch = false;
+    if (isAnyValidationField()) {
+      if (isUsernameFieldSignUp()) {
+        usernameAvailable = await widget.onEditingComplete!();
+      } else if (isPasswordFieldSignUp() && enteredText.isNotEmpty) {
+        String pattern =
+            r'^(?=.*[0-9])(?=.*[a-z])(?=.*)(?=.*[@#$%^&+=_!]).{8,}$';
+        RegExp regExp = RegExp(pattern);
 
-//#region Comparisons
-  bool isLoginSignUpField() {
-    return isValidationField() ||
-        widget.textBoxProfile == TextBoxProfile.passwordFieldLogin ||
-        widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin;
-  }
-
-  bool isPasswordField() {
-    return widget.textBoxProfile == TextBoxProfile.passwordFieldLogin ||
-        widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp ||
-        widget.textBoxProfile == TextBoxProfile.passwordFieldConfirmSignUp;
-  }
-
-  bool isUsernameFieldSignUp() {
-    return widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp;
-  }
-
-  bool isEmailFieldSignUp() {
-    return widget.textBoxProfile == TextBoxProfile.emailFieldSignUp;
-  }
-
-  bool isValidationField() {
-    return widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp ||
-        widget.textBoxProfile == TextBoxProfile.emailFieldSignUp ||
-        widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp ||
-        widget.textBoxProfile == TextBoxProfile.confirmPasswordFieldSignUp;
+        validPassword = regExp.hasMatch(enteredText);
+      }else if (isConfirmPasswordFieldSignUp() && enteredText.isNotEmpty) {
+        passwordsMatch = widget.onChanged!();
+      }
+      iconAnimation = false;
+      setState(() {
+        if (enteredText.isEmpty) {
+          validatorError = false;
+          validationIcon = FontAwesomeIcons.solidQuestionCircle;
+        } else if ((isUsernameFieldSignUp() && !usernameAvailable) ||
+            (isPasswordFieldSignUp() && !validPassword) || (isConfirmPasswordFieldSignUp() && !passwordsMatch)) {
+          validatorError = true;
+          validationIcon = FontAwesomeIcons.solidTimesCircle;
+        } else if ((isUsernameFieldSignUp() && usernameAvailable) ||
+            (isPasswordFieldSignUp() && validPassword) || (isConfirmPasswordFieldSignUp() && passwordsMatch)) {
+          validatorError = false;
+          validationIcon = FontAwesomeIcons.solidCheckCircle;
+        }
+      });
+    }
   }
 
-  bool isCluckCommentField() {
-    return widget.textBoxProfile == TextBoxProfile.cluckField ||
-        widget.textBoxProfile == TextBoxProfile.commentField;
+  bool checkMaxWordCount() {
+    if (enteredText.isNotEmpty) {
+      return enteredText[enteredText.length - 1] == ' ' ||
+          enteredText[enteredText.length - 1] == '\n';
+    } else {
+      return false;
+    }
   }
-  //#endregion
+
+  List<TextInputFormatter> getInputFormatters() {
+    List<TextInputFormatter> inputFormatters = [];
+    bool lengthLimitAlreadyEnforced = false;
+
+    // All Login / Sign Up Fields
+    if (isAnyLoginOrSignUpField()) {
+      inputFormatters.add(FilteringTextInputFormatter.deny(RegExp(' ')));
+    }
+
+    // Username Selection Field
+    if (isUsernameFieldSignUp()) {
+      inputFormatters
+          .add(FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]")));
+      inputFormatters.add(LengthLimitingTextInputFormatter(20));
+      lengthLimitAlreadyEnforced = true;
+    }
+
+    // Email Sign Up Field
+    if (isEmailFieldSignUp()) {
+      // inputFormatters.add(FilteringTextInputFormatter.allow(
+      // RegExp("[a-zA-Z0-9@.]")));
+    }
+
+    // Cluck or Comment Field
+    if (isCluckOrCommentField() && wordCount == 6) {
+      inputFormatters.add(LengthLimitingTextInputFormatter(
+          checkMaxWordCount() ? enteredText.length : 120));
+      lengthLimitAlreadyEnforced = true;
+    }
+
+    if (!lengthLimitAlreadyEnforced) {
+      inputFormatters.add(LengthLimitingTextInputFormatter(128));
+    }
+
+    return inputFormatters;
+  }
 
   String getHintText() {
     return widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin
@@ -437,33 +445,54 @@ void dispose() {
                                         : 'Cluck cluck, cluck cluck cluck';
   }
 
-  void updateAnimation() async {
-    if (isValidationField()) {
-      usernameAvailable = await widget.onEditingComplete();
-      iconAnimation = false;
-      setState(() {
-        if (isValidationField()) {
-          if (enteredText.isEmpty) {
-            validatorError = false;
-            validationIcon = FontAwesomeIcons.solidQuestionCircle;
-          } else if (!usernameAvailable) {
-            validatorError = true;
-            validationIcon = FontAwesomeIcons.solidTimesCircle;
-          } else if (usernameAvailable) {
-            validatorError = false;
-            validationIcon = FontAwesomeIcons.solidCheckCircle;
-          }
-        }
-      });
-    }
+  //#region Comparisons
+
+  bool isEmailOrUsernameFieldLogin() {
+    return widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin;
   }
 
-  bool checkMaxWordCount() {
-    if (enteredText.isNotEmpty) {
-      return enteredText[enteredText.length - 1] == ' ' ||
-          enteredText[enteredText.length - 1] == '\n';
-    } else {
-      return false;
-    }
+  bool isPasswordFieldLogin() {
+    return widget.textBoxProfile == TextBoxProfile.passwordFieldLogin;
   }
+
+  bool isUsernameFieldSignUp() {
+    return widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp;
+  }
+
+  bool isEmailFieldSignUp() {
+    return widget.textBoxProfile == TextBoxProfile.emailFieldSignUp;
+  }
+
+  bool isPasswordFieldSignUp() {
+    return widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp;
+  }
+
+  bool isConfirmPasswordFieldSignUp() {
+    return widget.textBoxProfile == TextBoxProfile.confirmPasswordFieldSignUp;
+  }
+
+  bool isAnyLoginOrSignUpField() {
+    return isAnyValidationField() ||
+        widget.textBoxProfile == TextBoxProfile.passwordFieldLogin ||
+        widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin;
+  }
+
+  bool isAnyPasswordField() {
+    return widget.textBoxProfile == TextBoxProfile.passwordFieldLogin ||
+        widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp ||
+        widget.textBoxProfile == TextBoxProfile.confirmPasswordFieldSignUp;
+  }
+
+  bool isAnyValidationField() {
+    return widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp ||
+        widget.textBoxProfile == TextBoxProfile.emailFieldSignUp ||
+        widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp ||
+        widget.textBoxProfile == TextBoxProfile.confirmPasswordFieldSignUp;
+  }
+
+  bool isCluckOrCommentField() {
+    return widget.textBoxProfile == TextBoxProfile.cluckField ||
+        widget.textBoxProfile == TextBoxProfile.commentField;
+  }
+//#endregion
 }

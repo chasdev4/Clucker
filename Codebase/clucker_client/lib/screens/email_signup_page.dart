@@ -32,11 +32,12 @@ class EmailForm extends StatefulWidget {
 }
 
 class _EmailFormState extends State<EmailForm> {
-
   final _emailFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final firstPasswordController = TextEditingController();
   final secondPasswordController = TextEditingController();
+
+  String email = '';
 
   UserService userService = UserService();
   DialogUtil dialogUtil = DialogUtil();
@@ -47,22 +48,22 @@ class _EmailFormState extends State<EmailForm> {
       key: _emailFormKey,
       child: Container(
         alignment: Alignment.center,
-      child: Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top: 125),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width - 50,
                 child: const Text(
                   'Sign Up',
-            style: TextStyle(
-              fontFamily: 'OpenSans',
+                  style: TextStyle(
+                    fontFamily: 'OpenSans',
                     fontWeight: FontWeight.bold,
                     fontSize: 36,
-            ),
-          ),
-          ),
+                  ),
+                ),
+              ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height / 8,
@@ -71,44 +72,32 @@ class _EmailFormState extends State<EmailForm> {
               width: MediaQuery.of(context).size.width - 100,
               child: const Text(
                 'Enter your email and password...',
-            style: TextStyle(
-              fontFamily: 'OpenSans',
+                style: TextStyle(
+                  fontFamily: 'OpenSans',
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
-            ),
-          ),
+                ),
+              ),
             ),
             const SizedBox(
               height: 15,
             ),
-          TextBox(
-                textBoxProfile: TextBoxProfile.emailFieldSignUp,
-                controller: emailController,
-                onEditingComplete: () async {
-                  if (_emailFormKey.currentState!.validate()) {}
-                  email = emailController.text;
-                  return await userService.emailAvailable(email);
-                },
-                onChanged: () async {
-                  if (_emailFormKey.currentState!.validate()) {}
-                  email = emailController.text;
-                  return await userService.emailAvailable(email);
-                }),
             TextBox(
-              textBoxProfile: TextBoxProfile.passwordFieldSignUp,
-            controller: firstPasswordController,
-            onEditingComplete: () {},
-            onChanged: (){},
-          ),
-          TextBox(
-            textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,
-            controller: secondPasswordController,
+              textBoxProfile: TextBoxProfile.emailFieldSignUp,
+              controller: emailController,
+            ),
+            TextBox(
+                textBoxProfile: TextBoxProfile.passwordFieldSignUp,
+                controller: firstPasswordController,
+               ),
+            TextBox(
+              textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,
+              controller: secondPasswordController,
               onEditingComplete: () {
                 if (firstPasswordController.text ==
                     secondPasswordController.text) {
                   return true;
-                }
-                else {
+                } else {
                   return false;
                 }
               },
@@ -116,46 +105,37 @@ class _EmailFormState extends State<EmailForm> {
                 if (firstPasswordController.text ==
                     secondPasswordController.text) {
                   return true;
-                }
-                else {
+                } else {
                   return false;
                 }
               },
-          ),
-          StandardButton(
-            text: 'Sign-Up',
-            routeName: '',
-            onPress: () async {
-              if (firstPasswordController.text ==
-                  secondPasswordController.text) {
+            ),
+            StandardButton(
+              text: 'Sign-Up',
+              routeName: '',
+              onPress: () async {
+                if (firstPasswordController.text ==
+                    secondPasswordController.text) {
+                  UserRegistration userRegistration = UserRegistration(
+                      username: widget.username,
+                      password: firstPasswordController.text,
+                      email: emailController.text);
 
-                UserRegistration userRegistration = UserRegistration(
-                    username: widget.username,
-                    password: firstPasswordController.text,
-                    email: emailController.text);
+                  Response response =
+                      await userService.registerUser(userRegistration);
 
-                Response response =
-                    await userService.registerUser(userRegistration);
-
-                if (response.statusCode == 201) {
-                  dialogUtil.oneButtonDialog(
-                      context,
-                      'Account Created',
-                      'Start Clucking!');
+                  if (response.statusCode == 201) {
+                    dialogUtil.oneButtonDialog(
+                        context, 'Account Created', 'Start Clucking!');
+                  } else {
+                    dialogUtil.oneButtonDialog(context, 'ERROR', response.body);
+                  }
                 } else {
                   dialogUtil.oneButtonDialog(
-                      context,
-                      'ERROR',
-                      response.body);
+                      context, 'Password Conflict', 'Passwords must match!');
                 }
-              } else {
-                dialogUtil.oneButtonDialog(
-                    context,
-                    'Password Conflict',
-                    'Passwords must match!');
-              }
-            },
-          ),
+              },
+            ),
             StandardButton(
               text: 'Back',
               routeName: '',
@@ -164,8 +144,8 @@ class _EmailFormState extends State<EmailForm> {
               },
               isSecondary: true,
             ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }

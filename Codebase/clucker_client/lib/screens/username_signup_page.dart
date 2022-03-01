@@ -29,6 +29,8 @@ class _UsernameFormState extends State<UsernameForm> {
   final _usernameFormKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
 
+  String username = '';
+
   UserService userService = UserService();
   DialogUtil dialogUtil = DialogUtil();
 

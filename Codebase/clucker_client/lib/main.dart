@@ -1,3 +1,4 @@
+import 'package:clucker_client/screens/email_signup_page.dart';
 import 'package:clucker_client/splash.dart';
 import 'package:clucker_client/test_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Palette.cluckerRed.toMaterialColor(),
         primaryColor: Palette.cluckerRed,
       ),
-      home: const LoginPage(),
+      home: const EmailPage(username: 'username'),
     );
   }
 }
