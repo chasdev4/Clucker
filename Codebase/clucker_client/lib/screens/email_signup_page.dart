@@ -6,6 +6,7 @@ import 'package:clucker_client/models/user_registration.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:http/http.dart';
+import '../components/DialogUtil.dart';
 
 class EmailPage extends StatelessWidget {
   const EmailPage({Key? key, required this.username}) : super(key: key);
@@ -40,14 +41,14 @@ class EmailForm extends StatefulWidget {
 }
 
 class _EmailFormState extends State<EmailForm> {
+
   final _emailFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final firstPasswordController = TextEditingController();
   final secondPasswordController = TextEditingController();
 
   UserService userService = UserService();
-  String email = '';
-  String password = '';
+  DialogUtil dialogUtil = DialogUtil();
 
   @override
   Widget build(BuildContext context) {
@@ -94,63 +95,33 @@ class _EmailFormState extends State<EmailForm> {
             text: 'Sign-Up',
             routeName: '',
             onPress: () async {
-              email = emailController.text;
-
               if (firstPasswordController.text ==
                   secondPasswordController.text) {
-                password = firstPasswordController.text;
 
                 UserRegistration userRegistration = UserRegistration(
                     username: widget.username,
-                    password: password,
-                    email: email);
+                    password: firstPasswordController.text,
+                    email: emailController.text);
 
                 Response response =
                     await userService.registerUser(userRegistration);
 
                 if (response.statusCode == 201) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('Account Created'),
-                      content: const Text('Start Clucking!'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'OK'),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
+                  dialogUtil.oneButtonDialog(
+                      context,
+                      'Account Created',
+                      'Start Clucking!');
                 } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('ERROR'),
-                      content: Text(response.body),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'OK'),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
+                  dialogUtil.oneButtonDialog(
+                      context,
+                      'ERROR',
+                      response.body);
                 }
               } else {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Password Conflict'),
-                    content: const Text('Passwords must match!'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'OK'),
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  ),
-                );
+                dialogUtil.oneButtonDialog(
+                    context,
+                    'Password Conflict',
+                    'Passwords must match!');
               }
             },
           ),
