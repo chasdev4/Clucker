@@ -42,6 +42,25 @@ class _EmailFormState extends State<EmailForm> {
   UserService userService = UserService();
   DialogUtil dialogUtil = DialogUtil();
 
+  late FocusNode focusNodeEmail;
+  late FocusNode focusNodePassword;
+  late FocusNode focusNodeConfirmPassword;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNodeEmail = FocusNode();
+    focusNodePassword = FocusNode();
+    focusNodeConfirmPassword = FocusNode();
+  }
+
+  @override dispose() {
+    focusNodeEmail.dispose();
+    focusNodePassword.dispose();
+    focusNodeConfirmPassword.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -85,14 +104,17 @@ class _EmailFormState extends State<EmailForm> {
             TextBox(
               textBoxProfile: TextBoxProfile.emailFieldSignUp,
               controller: emailController,
+              focusNode: focusNodeEmail,
             ),
             TextBox(
                 textBoxProfile: TextBoxProfile.passwordFieldSignUp,
                 controller: firstPasswordController,
+              focusNode: focusNodePassword,
                ),
             TextBox(
               textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,
               controller: secondPasswordController,
+              focusNode: focusNodeConfirmPassword,
               onEditingComplete: () {
                 if (firstPasswordController.text ==
                     secondPasswordController.text) {

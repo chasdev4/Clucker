@@ -22,12 +22,14 @@ class TextBox extends StatefulWidget {
       {Key? key,
       required this.textBoxProfile,
       this.controller,
+      this.focusNode,
       this.onEditingComplete,
       this.onChanged})
       : super(key: key);
 
   final TextBoxProfile textBoxProfile;
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final Function? onEditingComplete;
   final Function? onChanged;
 
@@ -85,6 +87,7 @@ class _TextBoxState extends State<TextBox> {
               child: Stack(alignment: Alignment.center, children: [
                 TextFormField(
                     controller: widget.controller,
+                    focusNode: widget.focusNode ?? FocusNode(),
                     inputFormatters: getInputFormatters(),
                     cursorColor: const Color.fromARGB(255, 100, 100, 100),
                     cursorWidth: 1.1,
@@ -154,7 +157,7 @@ class _TextBoxState extends State<TextBox> {
                             }
                             return null;
                           }
-                        : isPasswordFieldSignUp()
+                        : isEmailFieldSignUp()
                             ? (value) {
                                 if (iconAnimation) {
                                   return null;
@@ -162,18 +165,49 @@ class _TextBoxState extends State<TextBox> {
                                   return null;
                                 } else {
                                   String pattern =
-                                      r'^(?=.*[0-9])(?=.*[a-z])(?=.*)(?=.*[@#$%^&+=_!]).{8,}$';
+                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                                   RegExp regExp = RegExp(pattern);
 
                                   if (!regExp.hasMatch(enteredText)) {
-                                    return 'Invalid password';
+                                    return 'Invalid email address';
                                   }
                                 }
                                 return null;
                               }
-                            : (value) {
-                                return null;
-                              },
+                            : isPasswordFieldSignUp()
+                                ? (value) {
+                                    if (iconAnimation) {
+                                      return null;
+                                    } else if (value == null || value.isEmpty) {
+                                      return null;
+                                    } else {
+                                      String pattern =
+                                          r'^(?=.*[0-9])(?=.*[a-z])(?=.*)(?=.*[@#$%^&+=_!]).{8,}$';
+                                      RegExp regExp = RegExp(pattern);
+
+                                      if (!regExp.hasMatch(enteredText)) {
+                                        return 'Invalid password';
+                                      }
+                                    }
+                                    return null;
+                                  }
+                                : isConfirmPasswordFieldSignUp()
+                                    ? (value) {
+                                        if (iconAnimation) {
+                                          return null;
+                                        } else if (value == null ||
+                                            value.isEmpty) {
+                                          return null;
+                                        } else {
+                                          if (!widget.onChanged!()) {
+                                            return 'Passwords do not match';
+                                          }
+                                        }
+                                        return null;
+                                      }
+                                    : (value) {
+                                        return null;
+                                      },
                     onEditingComplete: () {
                       if (isAnyValidationField()) {
                         updateValidationState();
@@ -189,9 +223,10 @@ class _TextBoxState extends State<TextBox> {
                           _startTimer();
                         });
                       }
-                      if (isConfirmPasswordFieldSignUp() && enteredText.isNotEmpty) {
-                          validatorError = widget.onChanged!(value);
-                          iconAnimation = false;
+                      if (isConfirmPasswordFieldSignUp() &&
+                          enteredText.isNotEmpty) {
+                        validatorError = widget.onChanged!(value);
+                        iconAnimation = false;
                       }
 
                       if (wordCount <= 6) {
@@ -341,31 +376,43 @@ class _TextBoxState extends State<TextBox> {
   }
 
   void updateValidationState() async {
+    bool validEmail = false;
     bool validPassword = false;
     bool passwordsMatch = false;
     if (isAnyValidationField()) {
       if (isUsernameFieldSignUp()) {
         usernameAvailable = await widget.onEditingComplete!();
+      } else if (isEmailFieldSignUp() && enteredText.isNotEmpty) {
+        String pattern =
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        RegExp regExp = RegExp(pattern);
+
+        validEmail = regExp.hasMatch(enteredText);
       } else if (isPasswordFieldSignUp() && enteredText.isNotEmpty) {
         String pattern =
             r'^(?=.*[0-9])(?=.*[a-z])(?=.*)(?=.*[@#$%^&+=_!]).{8,}$';
         RegExp regExp = RegExp(pattern);
 
         validPassword = regExp.hasMatch(enteredText);
-      }else if (isConfirmPasswordFieldSignUp() && enteredText.isNotEmpty) {
+      } else if (isConfirmPasswordFieldSignUp() && enteredText.isNotEmpty) {
         passwordsMatch = widget.onChanged!();
       }
+
       iconAnimation = false;
       setState(() {
         if (enteredText.isEmpty) {
           validatorError = false;
           validationIcon = FontAwesomeIcons.solidQuestionCircle;
         } else if ((isUsernameFieldSignUp() && !usernameAvailable) ||
-            (isPasswordFieldSignUp() && !validPassword) || (isConfirmPasswordFieldSignUp() && !passwordsMatch)) {
+            (isEmailFieldSignUp() && !validEmail) ||
+            (isPasswordFieldSignUp() && !validPassword) ||
+            (isConfirmPasswordFieldSignUp() && !passwordsMatch)) {
           validatorError = true;
           validationIcon = FontAwesomeIcons.solidTimesCircle;
         } else if ((isUsernameFieldSignUp() && usernameAvailable) ||
-            (isPasswordFieldSignUp() && validPassword) || (isConfirmPasswordFieldSignUp() && passwordsMatch)) {
+            (isEmailFieldSignUp() && validEmail) ||
+            (isPasswordFieldSignUp() && validPassword) ||
+            (isConfirmPasswordFieldSignUp() && passwordsMatch)) {
           validatorError = false;
           validationIcon = FontAwesomeIcons.solidCheckCircle;
         }

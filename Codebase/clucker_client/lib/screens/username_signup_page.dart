@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
@@ -49,7 +48,7 @@ class _UsernameFormState extends State<UsernameForm> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: 125),
+                padding: const EdgeInsets.only(top: 125),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width - 50,
                   child: const Text(
