@@ -37,21 +37,37 @@ class TextBox extends StatefulWidget {
 
 class _TextBoxState extends State<TextBox> {
   //#region States
-  String enteredText = '';
-  int wordCount = 0;
-  IconData validationIcon = FontAwesomeIcons.solidQuestionCircle;
-  bool usernameAvailable = false;
-  bool iconAnimation = false;
-  bool validatorError = false;
-  bool timerActive = false;
+  late String enteredText;
+  late int wordCount;
+  late IconData validationIcon;
+  late bool usernameAvailable;
+  late bool iconAnimation;
+  late bool validatorError;
+  late bool timerActive;
   late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    enteredText = '';
+    wordCount = 0;
+    validationIcon = FontAwesomeIcons.solidQuestionCircle;
+    usernameAvailable = false;
+    iconAnimation = false;
+    validatorError = false;
+    timerActive = false;
+  }
+
+@override
+void dispose() {
+    super.dispose();
+}
+
   //#endregion
+
   @override
   Widget build(BuildContext context) {
     //#region Initializing size variables
-    _timer = Timer(const Duration(seconds: 6), () {
-      updateAnimation();
-    });
     double sendButtonSize = (isCluckCommentField()) ? 32 : 0;
     double validationIconSize = (isValidationField()) ? 24 : 0;
     double horizontalPadding = (!isCluckCommentField() &&
@@ -79,11 +95,11 @@ class _TextBoxState extends State<TextBox> {
                         isUsernameFieldSignUp()
                             ? FilteringTextInputFormatter.allow(
                                 RegExp("[a-zA-Z0-9]"))
-                        // Email Sign Up Field
+                            // Email Sign Up Field
                             : isEmailFieldSignUp()
                                 ? FilteringTextInputFormatter.allow(
                                     RegExp("[a-zA-Z0-9@.]"))
-                        // Login / Sign Up Fields
+                                // Login / Sign Up Fields
                                 : isLoginSignUpField()
                                     ? FilteringTextInputFormatter.deny(
                                         RegExp(' '))
@@ -91,10 +107,8 @@ class _TextBoxState extends State<TextBox> {
                         // Cluck or Comment Field
                         wordCount == 6
                             ? LengthLimitingTextInputFormatter(
-                                checkMaxWordCount()
-                                    ? enteredText.length
-                                    : 240)
-                        // Else, all other cases
+                                checkMaxWordCount() ? enteredText.length : 240)
+                            // Else, all other cases
                             : FilteringTextInputFormatter.deny(''),
                         LengthLimitingTextInputFormatter(widget
                                     .textBoxProfile ==
@@ -164,7 +178,8 @@ class _TextBoxState extends State<TextBox> {
                                   TextBoxProfile.passwordFieldLogin ||
                               widget.textBoxProfile ==
                                   TextBoxProfile.passwordFieldSignUp ||
-                      widget.textBoxProfile == TextBoxProfile.confirmPasswordFieldSignUp
+                              widget.textBoxProfile ==
+                                  TextBoxProfile.confirmPasswordFieldSignUp
                           ? true
                           : false,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -222,15 +237,17 @@ class _TextBoxState extends State<TextBox> {
                               wordCount = enteredText.isEmpty ? 0 : 1;
                               String temp = '';
                               if (wordCount == 5) {
-                                for (int i = 0; i < enteredText.length - 2; i++) {
-                                  if ((enteredText[i] != ' ' || enteredText[i] != '\n')) {
+                                for (int i = 0;
+                                    i < enteredText.length - 2;
+                                    i++) {
+                                  if ((enteredText[i] != ' ' ||
+                                      enteredText[i] != '\n')) {
                                     temp += enteredText[i];
                                   }
                                 }
                                 setState(() {
                                   enteredText = temp;
                                 });
-
                               }
                               for (int i = 1; i < enteredText.length; i++) {
                                 if (i > 1) {
@@ -241,8 +258,7 @@ class _TextBoxState extends State<TextBox> {
                                     wordCount++;
                                   }
                                 }
-                                }
-
+                              }
                             }
                           });
                         }
@@ -392,19 +408,21 @@ class _TextBoxState extends State<TextBox> {
                 ? 'Enter Password'
                 : widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp
                     ? 'Enter your Password'
-    : widget.textBoxProfile == TextBoxProfile.confirmPasswordFieldSignUp ?
-        'Re-enter your password'
-                    : widget.textBoxProfile == TextBoxProfile.emailFieldSignUp
-                        ? 'Email'
-                        : widget.textBoxProfile == TextBoxProfile.cluckField
-                            ? 'What do you want to Cluck about?'
-                            : widget.textBoxProfile ==
-                                    TextBoxProfile.commentField
-                                ? 'Comment on this Cluck...'
+                    : widget.textBoxProfile ==
+                            TextBoxProfile.confirmPasswordFieldSignUp
+                        ? 'Re-enter your password'
+                        : widget.textBoxProfile ==
+                                TextBoxProfile.emailFieldSignUp
+                            ? 'Email'
+                            : widget.textBoxProfile == TextBoxProfile.cluckField
+                                ? 'What do you want to Cluck about?'
                                 : widget.textBoxProfile ==
-                                        TextBoxProfile.searchField
-                                    ? 'Search'
-                                    : 'Cluck cluck, cluck cluck cluck';
+                                        TextBoxProfile.commentField
+                                    ? 'Comment on this Cluck...'
+                                    : widget.textBoxProfile ==
+                                            TextBoxProfile.searchField
+                                        ? 'Search'
+                                        : 'Cluck cluck, cluck cluck cluck';
   }
 
   void updateAnimation() async {
