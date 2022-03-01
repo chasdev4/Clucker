@@ -44,6 +44,7 @@ class _TextBoxState extends State<TextBox> {
   late bool iconAnimation;
   late bool validatorError;
   late bool timerActive;
+  late double horizontalPadding;
   late Timer _timer;
 
   @override
@@ -70,7 +71,7 @@ void dispose() {
     //#region Initializing size variables
     double sendButtonSize = (isCluckCommentField()) ? 32 : 0;
     double validationIconSize = (isValidationField()) ? 24 : 0;
-    double horizontalPadding = (!isCluckCommentField() &&
+    horizontalPadding = (!isCluckCommentField() &&
             widget.textBoxProfile != TextBoxProfile.searchField)
         ? 50
         : 10;
@@ -78,8 +79,7 @@ void dispose() {
 
     return Padding(
         padding: isValidationField()
-            ? EdgeInsets.fromLTRB(
-                horizontalPadding, 6, horizontalPadding + 10, 6)
+          ? EdgeInsets.fromLTRB(horizontalPadding, 6, horizontalPadding + 10, 6)
             : EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 6),
         child: Row(
             crossAxisAlignment: isCluckCommentField()
@@ -107,11 +107,9 @@ void dispose() {
                         // Cluck or Comment Field
                         wordCount == 6
                             ? LengthLimitingTextInputFormatter(
-                                checkMaxWordCount() ? enteredText.length : 240)
-                            // Else, all other cases
+                              checkMaxWordCount() ? enteredText.length : 240)
                             : FilteringTextInputFormatter.deny(''),
-                        LengthLimitingTextInputFormatter(widget
-                                    .textBoxProfile ==
+                      LengthLimitingTextInputFormatter(widget.textBoxProfile ==
                                 TextBoxProfile.usernameFieldSignUp
                             ? 20
                             : widget.textBoxProfile ==
@@ -177,8 +175,8 @@ void dispose() {
                       obscureText: widget.textBoxProfile ==
                                   TextBoxProfile.passwordFieldLogin ||
                               widget.textBoxProfile ==
-                                  TextBoxProfile.passwordFieldSignUp ||
-                              widget.textBoxProfile ==
+                                TextBoxProfile.passwordFieldSignUp ||
+                            widget.textBoxProfile ==
                                   TextBoxProfile.confirmPasswordFieldSignUp
                           ? true
                           : false,
@@ -198,6 +196,16 @@ void dispose() {
                               }
                               return null;
                             }
+                        : widget.textBoxProfile ==
+                                TextBoxProfile.passwordFieldSignUp
+                            ? (value) {
+                                if (value == null || value.isEmpty) {
+                                  return null;
+                                } else {
+                                  // TODO: Password validation
+                                }
+                                return null;
+                              }
                           : (value) {
                               return null;
                             },
@@ -337,11 +345,8 @@ void dispose() {
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Transform.scale(
                                     scale: 1.654,
-                                    origin: Offset(
-                                        -7.6,
-                                        validatorError
-                                            ? -10 - 1.3737
-                                            : -1.3737),
+                                  origin: Offset(-7.6,
+                                      validatorError ? -10 - 1.3737 : -1.3737),
                                     child: LoadingFlipping.circle(
                                       backgroundColor: Palette.lightGrey,
                                       borderColor: Palette.lightGrey,
@@ -349,7 +354,8 @@ void dispose() {
                                     )))
                             : null,
               ),
-            ]));
+          ]),
+    );
   }
 
 //#region Timer
@@ -378,6 +384,12 @@ void dispose() {
         widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin;
   }
 
+  bool isPasswordField() {
+    return widget.textBoxProfile == TextBoxProfile.passwordFieldLogin ||
+        widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp ||
+        widget.textBoxProfile == TextBoxProfile.passwordFieldConfirmSignUp;
+  }
+
   bool isUsernameFieldSignUp() {
     return widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp;
   }
@@ -401,7 +413,7 @@ void dispose() {
 
   String getHintText() {
     return widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin
-        ? 'Enter Username'
+        ? 'Email or Username'
         : widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp
             ? 'Pick a Username'
             : widget.textBoxProfile == TextBoxProfile.passwordFieldLogin
@@ -410,7 +422,7 @@ void dispose() {
                     ? 'Enter your Password'
                     : widget.textBoxProfile ==
                             TextBoxProfile.confirmPasswordFieldSignUp
-                        ? 'Re-enter your password'
+                        ? 'Confirm password'
                         : widget.textBoxProfile ==
                                 TextBoxProfile.emailFieldSignUp
                             ? 'Email'

@@ -31,7 +31,7 @@ class StandardButton extends StatelessWidget {
     Color buttonColor =
         (isSecondary == false) ? Palette.cluckerRed : Palette.white;
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(vertical: 6),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           SizedBox(
             width: horizontalPadding,

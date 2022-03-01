@@ -16,16 +16,7 @@ class EmailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Sign-Up',
-          style: TextStyle(
-            fontFamily: 'OpenSans',
-            fontSize: 40,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
+      resizeToAvoidBottomInset: false,
       body: EmailForm(username: username),
     );
   }
@@ -54,33 +45,57 @@ class _EmailFormState extends State<EmailForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _emailFormKey,
+      child: Container(
+        alignment: Alignment.center,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          const Text(
-            'Please enter your email address',
+            Padding(
+              padding: const EdgeInsets.only(top: 125),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width - 50,
+                child: const Text(
+                  'Sign Up',
             style: TextStyle(
               fontFamily: 'OpenSans',
-              fontStyle: FontStyle.italic,
-              fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 36,
             ),
           ),
-          TextBox(
-            textBoxProfile: TextBoxProfile.emailFieldSignUp,
-            controller: emailController,
-            onEditingComplete: (){},
-            onChanged: (){},
           ),
-          const Text(
-            'Please enter a password',
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 8,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 100,
+              child: const Text(
+                'Enter your email and password...',
             style: TextStyle(
               fontFamily: 'OpenSans',
-              fontStyle: FontStyle.italic,
-              fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
             ),
           ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
           TextBox(
-            textBoxProfile: TextBoxProfile.passwordFieldSignUp,
+                textBoxProfile: TextBoxProfile.emailFieldSignUp,
+                controller: emailController,
+                onEditingComplete: () async {
+                  if (_emailFormKey.currentState!.validate()) {}
+                  email = emailController.text;
+                  return await userService.emailAvailable(email);
+                },
+                onChanged: () async {
+                  if (_emailFormKey.currentState!.validate()) {}
+                  email = emailController.text;
+                  return await userService.emailAvailable(email);
+                }),
+            TextBox(
+              textBoxProfile: TextBoxProfile.passwordFieldSignUp,
             controller: firstPasswordController,
             onEditingComplete: () {},
             onChanged: (){},
@@ -88,8 +103,24 @@ class _EmailFormState extends State<EmailForm> {
           TextBox(
             textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,
             controller: secondPasswordController,
-            onEditingComplete: () {},
-            onChanged: (){},
+              onEditingComplete: () {
+                if (firstPasswordController.text ==
+                    secondPasswordController.text) {
+                  return true;
+                }
+                else {
+                  return false;
+                }
+              },
+              onChanged: () {
+                if (firstPasswordController.text ==
+                    secondPasswordController.text) {
+                  return true;
+                }
+                else {
+                  return false;
+                }
+              },
           ),
           StandardButton(
             text: 'Sign-Up',
@@ -125,7 +156,16 @@ class _EmailFormState extends State<EmailForm> {
               }
             },
           ),
+            StandardButton(
+              text: 'Back',
+              routeName: '',
+              onPress: () {
+                Navigator.pop(context);
+              },
+              isSecondary: true,
+            ),
         ],
+      ),
       ),
     );
   }

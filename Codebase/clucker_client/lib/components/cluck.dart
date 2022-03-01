@@ -66,11 +66,11 @@ class _EggControlsState extends State<EggControls> {
         },
         isSelected: isSelected,
         children: [
-          EggButton(
+          eggButton(
               FontAwesomeIcons.plus,
               isSelected[0] == false ? inactiveBackground : activeBackground,
               isSelected[0] == false ? inactiveForeground : activeForeground),
-          EggButton(
+          eggButton(
               FontAwesomeIcons.minus,
               isSelected[1] == false ? inactiveBackground : activeBackground,
               isSelected[1] == false ? inactiveForeground : activeForeground),
@@ -83,7 +83,7 @@ class _EggControlsState extends State<EggControls> {
     ]));
   }
 
-  Stack EggButton(
+  Stack eggButton(
       IconData symbol, Color backgroundColor, Color foregroundColor) {
     return Stack(
       children: [
