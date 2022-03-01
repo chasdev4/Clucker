@@ -9,8 +9,8 @@ enum TextBoxProfile {
   emailOrUsernameFieldLogin,
   usernameFieldSignUp,
   passwordFieldLogin,
-  passwordFieldMeterSignUp,
-  passwordFieldValidationSignUp,
+  passwordFieldSignUp,
+  confirmPasswordFieldSignUp,
   emailFieldSignUp,
   cluckField,
   commentField,
@@ -75,21 +75,26 @@ class _TextBoxState extends State<TextBox> {
                   TextFormField(
                       controller: widget.controller,
                       inputFormatters: [
+                        // Username Sign Up Field
                         isUsernameFieldSignUp()
                             ? FilteringTextInputFormatter.allow(
                                 RegExp("[a-zA-Z0-9]"))
+                        // Email Sign Up Field
                             : isEmailFieldSignUp()
                                 ? FilteringTextInputFormatter.allow(
                                     RegExp("[a-zA-Z0-9@.]"))
+                        // Login / Sign Up Fields
                                 : isLoginSignUpField()
                                     ? FilteringTextInputFormatter.deny(
                                         RegExp(' '))
                                     : FilteringTextInputFormatter.deny(''),
+                        // Cluck or Comment Field
                         wordCount == 6
                             ? LengthLimitingTextInputFormatter(
                                 checkMaxWordCount()
                                     ? enteredText.length
                                     : 240)
+                        // Else, all other cases
                             : FilteringTextInputFormatter.deny(''),
                         LengthLimitingTextInputFormatter(widget
                                     .textBoxProfile ==
@@ -158,8 +163,8 @@ class _TextBoxState extends State<TextBox> {
                       obscureText: widget.textBoxProfile ==
                                   TextBoxProfile.passwordFieldLogin ||
                               widget.textBoxProfile ==
-                                  TextBoxProfile.passwordFieldMeterSignUp ||
-                      widget.textBoxProfile == TextBoxProfile.passwordFieldValidationSignUp
+                                  TextBoxProfile.passwordFieldSignUp ||
+                      widget.textBoxProfile == TextBoxProfile.confirmPasswordFieldSignUp
                           ? true
                           : false,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -211,7 +216,7 @@ class _TextBoxState extends State<TextBox> {
                             }
 
                             if (widget.textBoxProfile ==
-                                TextBoxProfile.passwordFieldMeterSignUp) {
+                                TextBoxProfile.passwordFieldSignUp) {
                               //TODO: Set the state of the meter based on the password field algorithm
                             } else if (isCluckCommentField()) {
                               wordCount = enteredText.isEmpty ? 0 : 1;
@@ -354,8 +359,7 @@ class _TextBoxState extends State<TextBox> {
   bool isLoginSignUpField() {
     return isValidationField() ||
         widget.textBoxProfile == TextBoxProfile.passwordFieldLogin ||
-        widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin ||
-        widget.textBoxProfile == TextBoxProfile.passwordFieldValidationSignUp;
+        widget.textBoxProfile == TextBoxProfile.emailOrUsernameFieldLogin;
   }
 
   bool isUsernameFieldSignUp() {
@@ -368,7 +372,9 @@ class _TextBoxState extends State<TextBox> {
 
   bool isValidationField() {
     return widget.textBoxProfile == TextBoxProfile.usernameFieldSignUp ||
-        widget.textBoxProfile == TextBoxProfile.emailFieldSignUp;
+        widget.textBoxProfile == TextBoxProfile.emailFieldSignUp ||
+        widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp ||
+        widget.textBoxProfile == TextBoxProfile.confirmPasswordFieldSignUp;
   }
 
   bool isCluckCommentField() {
@@ -384,9 +390,9 @@ class _TextBoxState extends State<TextBox> {
             ? 'Pick a Username'
             : widget.textBoxProfile == TextBoxProfile.passwordFieldLogin
                 ? 'Enter Password'
-                : widget.textBoxProfile == TextBoxProfile.passwordFieldMeterSignUp
+                : widget.textBoxProfile == TextBoxProfile.passwordFieldSignUp
                     ? 'Enter your Password'
-    : widget.textBoxProfile == TextBoxProfile.passwordFieldValidationSignUp ?
+    : widget.textBoxProfile == TextBoxProfile.confirmPasswordFieldSignUp ?
         'Re-enter your password'
                     : widget.textBoxProfile == TextBoxProfile.emailFieldSignUp
                         ? 'Email'
