@@ -27,13 +27,15 @@ class UsernameForm extends StatefulWidget {
 class _UsernameFormState extends State<UsernameForm> {
   final _usernameFormKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
+  final usernameFocusNode = FocusNode();
 
   String username = '';
 
   UserService userService = UserService();
   DialogUtil dialogUtil = DialogUtil();
 
-  void disposeController() {
+  @override
+  void dispose() {
     usernameController.dispose();
     super.dispose();
   }
@@ -78,6 +80,7 @@ class _UsernameFormState extends State<UsernameForm> {
               TextBox(
                 textBoxProfile: TextBoxProfile.usernameFieldSignUp,
                 controller: usernameController,
+                focusNode: usernameFocusNode,
                 onEditingComplete: () async {
                   if (_usernameFormKey.currentState!.validate()) {}
                   username = usernameController.text;
