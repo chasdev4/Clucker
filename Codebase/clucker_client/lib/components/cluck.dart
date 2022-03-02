@@ -23,33 +23,51 @@ class Cluck extends StatefulWidget {
 class _CluckState extends State<Cluck> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        const UserAvatar(
-          avatarImage: 'assets/icons/chicken.jpg',
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
+        Row(
           children: [
+            const UserAvatar(
+              avatarImage: 'assets/icons/chicken.jpg',
+            ),
             Text(
-              widget.username,
+                widget.username,
+              style: const TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+            const Spacer(),
+            const Text(
+                'Time',
+              style: TextStyle(
+                fontFamily: 'OpenSans',
+                fontStyle: FontStyle.italic,
+                fontSize: 20,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: 40,
             ),
             Text(
               widget.cluckText,
+              style: const TextStyle(
+                fontFamily: 'OpenSans',
+                fontSize: 20,
+              ),
             ),
+            const Spacer(),
+            EggControls(eggCount: widget.eggCount),
           ],
         ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Time',
-            ),
-            EggControls(eggCount: widget.eggCount)
-          ],
+        const Divider(
+
         ),
       ],
     );
