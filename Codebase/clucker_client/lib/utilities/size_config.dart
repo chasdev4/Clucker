@@ -1,5 +1,9 @@
 import 'package:flutter/widgets.dart';
 
+// Source: Medium.com (May 18, 2019)
+// Author: Daniele Cambi
+// Link: https://medium.com/flutter-community/flutter-effectively-scale-ui-according-to-different-screen-sizes-2cb7c115ea0a
+
 class SizeConfig {
   static MediaQueryData _mediaQueryData = const MediaQueryData();
   static double screenWidth = 0;

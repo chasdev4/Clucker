@@ -129,24 +129,48 @@ class _EmailFormState extends State<EmailForm> {
               text: 'Sign-Up',
               routeName: '',
               onPress: () async {
-                if (passwordController.text == confirmPasswordController.text) {
-                  UserRegistration userRegistration = UserRegistration(
-                      username: widget.username,
-                      password: passwordController.text,
-                      email: emailController.text);
+                List<String> errorMessages = [];
+                Response response = Response('', 404);
+                if (passwordController.text.isNotEmpty &&
+                    confirmPasswordController.text.isNotEmpty &&
+                    emailController.text.isNotEmpty) {
+                  if (passwordController.text == confirmPasswordController.text) {
+                    UserRegistration userRegistration = UserRegistration(
+                        username: widget.username,
+                        password: passwordController.text,
+                        email: emailController.text);
 
-                  Response response =
-                      await userService.registerUser(userRegistration);
+                    response =
+                        await userService.registerUser(userRegistration);
+                  }
 
-                  if (response.statusCode == 201) {
+                  if (response.statusCode == 201 && passwordController.text == confirmPasswordController.text) {
                     dialogUtil.oneButtonDialog(
                         context, 'Account Created', 'Start Clucking!');
-                  } else {
-                    dialogUtil.oneButtonDialog(context, 'ERROR', response.body);
+                  } else if (response.body.contains('email')){
+                    errorMessages.add('A Clucker account with the email \'${emailController.text}\' already exists.');
                   }
-                } else {
+                }
+
+                if (passwordController.text !=
+                    confirmPasswordController.text) {
+                  errorMessages
+                      .add('The passwords you provided do not match. Please re-enter your password.');
+                }
+                if (errorMessages.length == 1) {
                   dialogUtil.oneButtonDialog(
-                      context, 'Password Conflict', 'Passwords must match!');
+                      context, 'Hold on!', errorMessages[0]);
+                } else if (errorMessages.length == 2) {
+                  String errorMessageBody = '';
+                  for (int i = 0; i < errorMessages.length; i++) {
+                    errorMessageBody += '- ';
+                    errorMessageBody += errorMessages[i];
+                    if (i == 0) {
+                      errorMessageBody += '\n\n';
+                    }
+                  }
+                  dialogUtil.oneButtonDialog(
+                      context, 'Hold on!', errorMessageBody);
                 }
               },
             ),
