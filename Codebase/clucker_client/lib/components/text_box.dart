@@ -22,7 +22,7 @@ class TextBox extends StatefulWidget {
       {Key? key,
       required this.textBoxProfile,
       this.controller,
-      this.focusNode,
+      required this.focusNode,
       this.onEditingComplete,
       this.onChanged})
       : super(key: key);
@@ -87,7 +87,7 @@ class _TextBoxState extends State<TextBox> {
               child: Stack(alignment: Alignment.center, children: [
                 TextFormField(
                     controller: widget.controller,
-                    focusNode: widget.focusNode ?? FocusNode(),
+                    focusNode: widget.focusNode,
                     inputFormatters: getInputFormatters(),
                     cursorColor: const Color.fromARGB(255, 100, 100, 100),
                     cursorWidth: 1.1,
@@ -150,16 +150,38 @@ class _TextBoxState extends State<TextBox> {
                               validatorError = false;
                               return null;
                             } else {
-                              if (!usernameAvailable) {
+                              if (!usernameAvailable && enteredText.length > 3) {
                                 validatorError = true;
-                                return 'Username unavailable';
+                                if (enteredText.length > 10) {
+                                  return '\'$enteredText\' is unavailable';
+                                }
+                                else {
+                                  return 'The username \'$enteredText\' is unavailable';
+                                }
                               } else {
                                 String pattern =
                                     r'^[a-zA-Z0-9-_].{2,}$';
                                 RegExp regExp = RegExp(pattern);
 
                                 if (!regExp.hasMatch(enteredText)) {
+                                  Future.delayed(Duration.zero, () {
+                                    setState(() {
+                                      validatorError = true;
+                                      validationIcon = FontAwesomeIcons.solidTimesCircle;
+                                    });
+                                  });
+                                  if (enteredText.length < 3) {
+                                    return 'Username must be at least 3 characters';
+                                  }
                                   return 'Invalid username'; }
+                                else {
+                                  Future.delayed(Duration.zero, () {
+                                    setState(() {
+                                      validatorError = false;
+                                      validationIcon = FontAwesomeIcons.solidCheckCircle;
+                                    });
+                                  });
+                                }
                               }
                             }
                             return null;
@@ -398,8 +420,9 @@ class _TextBoxState extends State<TextBox> {
     bool validPassword = false;
     bool passwordsMatch = false;
     if (isAnyValidationField()) {
-      if (isUsernameFieldSignUp()) {
+      if (isUsernameFieldSignUp() && enteredText.length > 2) {
         usernameAvailable = await widget.onEditingComplete!();
+        print('CALL WAS MADE');
       } else if (isEmailFieldSignUp() && enteredText.isNotEmpty) {
         String pattern =
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
