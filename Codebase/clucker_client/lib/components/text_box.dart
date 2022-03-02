@@ -213,11 +213,31 @@ class _TextBoxState extends State<TextBox> {
                                     } else if (value == null || value.isEmpty) {
                                       return null;
                                     } else {
+                                      bool atLeastEightChar = value.length >= 8;
+
                                       String pattern =
                                           r'^(?=.*[0-9])(?=.*[a-z])(?=.*)(?=.*[@#$%^&+=_!]).{8,}$';
                                       RegExp regExp = RegExp(pattern);
 
                                       if (!regExp.hasMatch(enteredText)) {
+                                        if (atLeastEightChar) {
+                                          regExp = RegExp(r'^(?=.*[a-z])');
+                                          if (!regExp.hasMatch(enteredText)) {
+                                            return 'Enter at least one letter (a-z)';
+                                          }
+                                          regExp = RegExp(r'^(?=.*[0-9])');
+                                          if (!regExp.hasMatch(enteredText)) {
+                                            return 'Enter at least one number (0-9)';
+                                          }
+                                          regExp = RegExp(r'^(?=.*[@#$%^&+=_!])');
+                                          if (!regExp.hasMatch(enteredText)) {
+                                            return 'At least one special character @#\$%^&+=_!';
+                                          }
+
+
+                                        } else {
+                                          return 'Enter at least 8 characters';
+                                        }
                                         return 'Invalid password';
                                       }
                                     }
@@ -257,14 +277,22 @@ class _TextBoxState extends State<TextBox> {
                                     : (value) {
                                         return null;
                                       },
-                    textInputAction: isEmailOrUsernameFieldLogin() || isEmailFieldSignUp() || isPasswordFieldSignUp() ? TextInputAction.next : TextInputAction.done,
+                    textInputAction: isEmailOrUsernameFieldLogin() ||
+                            isEmailFieldSignUp() ||
+                            isPasswordFieldSignUp()
+                        ? TextInputAction.next
+                        : TextInputAction.done,
                     onFieldSubmitted: (value) {
-                      if (isPasswordFieldLogin() || isUsernameFieldSignUp() || isConfirmPasswordFieldSignUp()) {
+                      if (isPasswordFieldLogin() ||
+                          isUsernameFieldSignUp() ||
+                          isConfirmPasswordFieldSignUp()) {
                         widget.onFieldSubmitted!();
                       }
                     },
                     onEditingComplete: () {
-                      if (isEmailOrUsernameFieldLogin() || isEmailFieldSignUp() || isPasswordFieldSignUp()) {
+                      if (isEmailOrUsernameFieldLogin() ||
+                          isEmailFieldSignUp() ||
+                          isPasswordFieldSignUp()) {
                         widget.onEditingComplete!();
                       }
                       if (isAnyValidationField()) {
