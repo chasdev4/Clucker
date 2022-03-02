@@ -34,29 +34,20 @@ class _EmailFormState extends State<EmailForm> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final emailFocusNode = FocusNode();
+  final passwordFocusNode = FocusNode();
+  final confirmPasswordFocusNode = FocusNode();
 
   String email = '';
 
   UserService userService = UserService();
   DialogUtil dialogUtil = DialogUtil();
 
-  late FocusNode focusNodeEmail;
-  late FocusNode focusNodePassword;
-  late FocusNode focusNodeConfirmPassword;
-
-  @override
-  void initState() {
-    super.initState();
-    focusNodeEmail = FocusNode();
-    focusNodePassword = FocusNode();
-    focusNodeConfirmPassword = FocusNode();
-  }
-
   @override
   dispose() {
-    focusNodeEmail.dispose();
-    focusNodePassword.dispose();
-    focusNodeConfirmPassword.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+    confirmPasswordFocusNode.dispose();
     super.dispose();
   }
 
@@ -103,12 +94,12 @@ class _EmailFormState extends State<EmailForm> {
             TextBox(
               textBoxProfile: TextBoxProfile.emailFieldSignUp,
               controller: emailController,
-              focusNode: focusNodeEmail,
+              focusNode: emailFocusNode,
             ),
             TextBox(
               textBoxProfile: TextBoxProfile.passwordFieldSignUp,
               controller: passwordController,
-              focusNode: focusNodePassword,
+              focusNode: passwordFocusNode,
               onEditingComplete: () {
                 return passwordController.text ==
                     confirmPasswordController.text;
@@ -121,7 +112,7 @@ class _EmailFormState extends State<EmailForm> {
             TextBox(
               textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,
               controller: confirmPasswordController,
-              focusNode: focusNodeConfirmPassword,
+              focusNode: confirmPasswordFocusNode,
               onEditingComplete: () {
                 return passwordController.text ==
                     confirmPasswordController.text;
