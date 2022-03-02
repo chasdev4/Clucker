@@ -153,6 +153,13 @@ class _TextBoxState extends State<TextBox> {
                               if (!usernameAvailable) {
                                 validatorError = true;
                                 return 'Username unavailable';
+                              } else {
+                                String pattern =
+                                    r'^[a-zA-Z0-9-_].{2,}$';
+                                RegExp regExp = RegExp(pattern);
+
+                                if (!regExp.hasMatch(enteredText)) {
+                                  return 'Invalid username'; }
                               }
                             }
                             return null;
@@ -200,7 +207,21 @@ class _TextBoxState extends State<TextBox> {
                                           return null;
                                         } else {
                                           if (!widget.onChanged!()) {
+                                            Future.delayed(Duration.zero, () {
+                                              setState(() {
+                                                validatorError = true;
+                                                validationIcon = FontAwesomeIcons.solidTimesCircle;
+                                              });
+                                            });
                                             return 'Passwords do not match';
+                                          }
+                                          else {
+                                            Future.delayed(Duration.zero, () {
+                                              setState(() {
+                                                validatorError = false;
+                                                validationIcon = FontAwesomeIcons.solidCheckCircle;
+                                              });
+                                            });
                                           }
                                         }
                                         return null;
@@ -215,30 +236,30 @@ class _TextBoxState extends State<TextBox> {
                     },
                     onChanged: (value) {
                       enteredText = '';
+                      if (wordCount <= 6) {
+                        enteredText = value;
+                      }
+
                       if (isAnyValidationField()) {
                         setState(() {
                           if (iconAnimation) {
                             _timer.cancel();
                           }
-                          _startTimer();
+                          startTimer();
                         });
                       }
-                      if (isConfirmPasswordFieldSignUp() &&
+                      else if (isConfirmPasswordFieldSignUp() &&
                           enteredText.isNotEmpty) {
-                        validatorError = widget.onChanged!(value);
                         iconAnimation = false;
                       }
 
-                      if (wordCount <= 6) {
-                        enteredText = value;
-                      }
                       if (value.isNotEmpty) {
                         validatorError = false;
 
                         setState(() {
                           enteredText = value;
 
-                          if (enteredText.isEmpty || timerActive == false) {
+                          if (isAnyValidationField() && (enteredText.isEmpty || timerActive == false)) {
                             iconAnimation = false;
                             validationIcon =
                                 FontAwesomeIcons.solidQuestionCircle;
@@ -246,10 +267,7 @@ class _TextBoxState extends State<TextBox> {
                             iconAnimation = true;
                           }
 
-                          if (widget.textBoxProfile ==
-                              TextBoxProfile.passwordFieldSignUp) {
-                            //TODO: Set the state of the meter based on the password field algorithm
-                          } else if (isCluckOrCommentField()) {
+                          if (isCluckOrCommentField()) {
                             wordCount = enteredText.isEmpty ? 0 : 1;
                             String temp = '';
                             if (wordCount == 5) {
@@ -364,11 +382,11 @@ class _TextBoxState extends State<TextBox> {
     );
   }
 
-  void _startTimer() {
+  void startTimer() {
     if (isAnyValidationField()) {
       setState(() {
         timerActive = true;
-        _timer = Timer(Duration(seconds: isUsernameFieldSignUp() ? 6 : 3), () {
+        _timer = Timer(Duration(seconds: isUsernameFieldSignUp() ? 6 : 1), () {
           updateValidationState();
         });
       });
@@ -441,7 +459,7 @@ class _TextBoxState extends State<TextBox> {
     // Username Selection Field
     if (isUsernameFieldSignUp()) {
       inputFormatters
-          .add(FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]")));
+          .add(FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9-_]")));
       inputFormatters.add(LengthLimitingTextInputFormatter(20));
       lengthLimitAlreadyEnforced = true;
     }
