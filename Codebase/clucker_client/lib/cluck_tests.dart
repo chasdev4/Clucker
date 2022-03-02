@@ -31,53 +31,30 @@ class CluckTests {
 
   final List<int> _eggCounts = [15,78,35,12,28,47,-25,10,9,99];
 
-  List<Cluck> getOneCluck() {
+  List<Cluck> getCluckList({int howManyClucks = 1}) {
+    List<Cluck> cluckList = [];
 
-    Cluck oneCluck = Cluck(
-      username: _usernames[0],
-      cluckText: _cluckText[0],
-      eggCount: _eggCounts[0],
-    );
+    for (int i = 0; i < howManyClucks; i++) {
+      if (i < 10) {
+        Cluck newCluck = Cluck(
+          username: _usernames[i],
+          cluckText: _cluckText[i],
+          eggCount: _eggCounts[i],
+        );
 
-    List<Cluck> smallList = [
-      oneCluck
-    ];
+        cluckList.add(newCluck);
+      } else {
+        Cluck newCluck = Cluck(
+          username: _usernames[i % 10],
+          cluckText: _cluckText[i % 10],
+          eggCount: _eggCounts[i % 10],
+        );
 
-    return smallList;
-  }
-
-  List<Cluck> getMoreClucks() {
-
-    List<Cluck> mediumList = [];
-
-    for(int i = 0; i < 5; i++) {
-      Cluck newCluck = Cluck(
-        username: _usernames[i],
-        cluckText: _cluckText[i],
-        eggCount: _eggCounts[i],
-      );
-
-      mediumList.add(newCluck);
+        cluckList.add(newCluck);
+      }
     }
 
-    return mediumList;
+    return cluckList;
   }
 
-  List<Cluck> getAllClucks() {
-
-    List<Cluck> bigList = [];
-
-    for(int i = 0; i < 10; i++) {
-      Cluck newCluck = Cluck(
-        username: _usernames[i],
-        cluckText: _cluckText[i],
-        eggCount: _eggCounts[i],
-      );
-
-      bigList.add(newCluck);
-    }
-
-    return bigList;
   }
-
-}
