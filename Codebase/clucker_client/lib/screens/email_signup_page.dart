@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/models/user_registration.dart';
 import 'package:clucker_client/services/user_service.dart';
-import 'package:clucker_client/components/palette.dart';
 import 'package:http/http.dart';
 import '../components/DialogUtil.dart';
 
@@ -34,8 +32,8 @@ class EmailForm extends StatefulWidget {
 class _EmailFormState extends State<EmailForm> {
   final _emailFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
-  final firstPasswordController = TextEditingController();
-  final secondPasswordController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   String email = '';
 
@@ -54,7 +52,8 @@ class _EmailFormState extends State<EmailForm> {
     focusNodeConfirmPassword = FocusNode();
   }
 
-  @override dispose() {
+  @override
+  dispose() {
     focusNodeEmail.dispose();
     focusNodePassword.dispose();
     focusNodeConfirmPassword.dispose();
@@ -107,40 +106,39 @@ class _EmailFormState extends State<EmailForm> {
               focusNode: focusNodeEmail,
             ),
             TextBox(
-                textBoxProfile: TextBoxProfile.passwordFieldSignUp,
-                controller: firstPasswordController,
+              textBoxProfile: TextBoxProfile.passwordFieldSignUp,
+              controller: passwordController,
               focusNode: focusNodePassword,
-               ),
-            TextBox(
-              textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,
-              controller: secondPasswordController,
-              focusNode: focusNodeConfirmPassword,
               onEditingComplete: () {
-                if (firstPasswordController.text ==
-                    secondPasswordController.text) {
-                  return true;
-                } else {
-                  return false;
-                }
+                return passwordController.text ==
+                    confirmPasswordController.text;
               },
               onChanged: () {
-                if (firstPasswordController.text ==
-                    secondPasswordController.text) {
-                  return true;
-                } else {
-                  return false;
-                }
+                return passwordController.text ==
+                    confirmPasswordController.text;
+              },
+            ),
+            TextBox(
+              textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,
+              controller: confirmPasswordController,
+              focusNode: focusNodeConfirmPassword,
+              onEditingComplete: () {
+                return passwordController.text ==
+                    confirmPasswordController.text;
+              },
+              onChanged: () {
+                return passwordController.text ==
+                    confirmPasswordController.text;
               },
             ),
             StandardButton(
               text: 'Sign-Up',
               routeName: '',
               onPress: () async {
-                if (firstPasswordController.text ==
-                    secondPasswordController.text) {
+                if (passwordController.text == confirmPasswordController.text) {
                   UserRegistration userRegistration = UserRegistration(
                       username: widget.username,
-                      password: firstPasswordController.text,
+                      password: passwordController.text,
                       email: emailController.text);
 
                   Response response =
