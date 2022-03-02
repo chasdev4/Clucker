@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 
+import '../utilities/size_config.dart';
+
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -43,6 +45,7 @@ class _LogInFormState extends State<LogInForm> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Form(
       key: _logInFormKey,
       child: Column(
@@ -50,56 +53,66 @@ class _LogInFormState extends State<LogInForm> {
         children: <Widget>[
           Column(
             children: [
-             const Image(
-                width: 256,
-                height: 256,
-                image: AssetImage(
+              Image(
+                height: SizeConfig.blockSizeVertical * 40,
+                image: const AssetImage(
                   'assets/icons/clucker-icon.png',
                 ),
               ),
-              Transform.translate(offset: const Offset(0, -15), child:
-             const  Text(
-                'Clucker',
-                style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontSize: 40,
-                  fontWeight: FontWeight.w700,
+              SizedBox(
+                width: SizeConfig.blockSizeVertical * 40 * 0.55,
+                child: Transform.translate(
+                  offset: const Offset(0, -15),
+                  child: const FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      'Clucker',
+                      style: TextStyle(
+                        fontFamily: 'OpenSans',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
                 ),
-              ),),
+              ),
             ],
           ),
-          const SizedBox(height: 15,),
-          Column(children: [
-            TextBox(
-              textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
-              controller: emailOrUsernameController,
-              focusNode: emailOrUsernameFocusNode,
-              onEditingComplete: () => FocusScope.of(context).nextFocus(),
-            ),
-            TextBox(
-              textBoxProfile: TextBoxProfile.passwordFieldLogin,
-              controller: passwordController,
-              focusNode: passwordFocusNode,
-              onFieldSubmitted: () => FocusScope.of(context).unfocus(),
-            ),
-            StandardButton(
-              text: 'Log-In',
-              routeName: '',
-              onPress: () {},
-            ),
-            StandardButton(
-              text: 'Sign-Up',
-              routeName: '',
-              onPress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const UsernamePage()),
-                );
-              },
-              isSecondary: true,
-            ),
-          ],),
-          const SizedBox(height: 50,),
+          Column(
+            children: [
+              TextBox(
+                textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
+                controller: emailOrUsernameController,
+                focusNode: emailOrUsernameFocusNode,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              ),
+              TextBox(
+                textBoxProfile: TextBoxProfile.passwordFieldLogin,
+                controller: passwordController,
+                focusNode: passwordFocusNode,
+                onFieldSubmitted: () => FocusScope.of(context).unfocus(),
+              ),
+              StandardButton(
+                text: 'Log-In',
+                routeName: '',
+                onPress: () {},
+              ),
+              StandardButton(
+                text: 'Sign-Up',
+                routeName: '',
+                onPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const UsernamePage()),
+                  );
+                },
+                isSecondary: true,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 50,
+          ),
         ],
       ),
     );
