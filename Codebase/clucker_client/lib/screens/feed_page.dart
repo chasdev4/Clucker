@@ -4,6 +4,9 @@ import 'package:clucker_client/components/user_avatar.dart';
 import 'package:clucker_client/navigation/main_navigation_bar.dart';
 import 'package:clucker_client/navigation/new_cluck_button.dart';
 import 'package:clucker_client/components/cluck.dart';
+import 'package:clucker_client/cluck_tests.dart';
+
+CluckTests cluckTest = CluckTests();
 
 class Feed extends StatelessWidget {
   const Feed({Key? key}) : super(key: key);
@@ -19,8 +22,8 @@ class Feed extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-
+      body: ListView(
+        children: cluckTest.getAllClucks(),
       ),
       bottomNavigationBar: const MainNavigationBar(),
       floatingActionButton: const NewCluckButton(),

@@ -1,12 +1,20 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 
 class Cluck extends StatefulWidget {
-  const Cluck({Key? key, required this.cluckText}) : super(key: key);
+  Cluck(
+      {Key? key,
+      required this.username,
+      required this.cluckText,
+      required this.eggCount})
+      : super(key: key);
 
   final String cluckText;
+  final String username;
+  int eggCount;
 
   @override
   _CluckState createState() => _CluckState();
@@ -16,14 +24,17 @@ class _CluckState extends State<Cluck> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const UserAvatar(
           avatarImage: 'assets/icons/chicken.jpg',
         ),
         Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Username',
+            Text(
+              widget.username,
             ),
             Text(
               widget.cluckText,
@@ -31,12 +42,13 @@ class _CluckState extends State<Cluck> {
           ],
         ),
         Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text(
+          children: [
+            const Text(
               'Time',
             ),
-            EggControls()
+            EggControls(eggCount: widget.eggCount)
           ],
         ),
       ],
@@ -44,20 +56,18 @@ class _CluckState extends State<Cluck> {
   }
 }
 
-
 class EggControls extends StatefulWidget {
-  const EggControls({Key? key, this.buttonSize = 25}) : super(key: key);
+  EggControls({Key? key, required this.eggCount, this.buttonSize = 25})
+      : super(key: key);
 
   final double buttonSize;
+  int eggCount;
 
   @override
   _EggControlsState createState() => _EggControlsState();
 }
 
 class _EggControlsState extends State<EggControls> {
-  // TODO: Update placeholder to retrieve rating count from Cluck or Comment
-  int eggCount = 123;
-
   List<bool> isSelected = [false, false];
   List<bool> previousSelection = [false, false];
   Color activeBackground = Palette.cluckerRed;
@@ -69,7 +79,7 @@ class _EggControlsState extends State<EggControls> {
   Widget build(BuildContext context) {
     return Flexible(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text('$eggCount',
+      Text(widget.eggCount.toString(),
           style: TextStyle(
               height: 0,
               fontWeight: FontWeight.w900,
@@ -92,19 +102,17 @@ class _EggControlsState extends State<EggControls> {
 
             if ((index == 0 && isSelected[index] == true) ||
                 (index == 1 && isSelected[index] == false)) {
-              eggCount++;
+              widget.eggCount++;
             } else if ((index == 0 && isSelected[index] == false) ||
                 (index == 1 && isSelected[index] == true)) {
-              eggCount--;
+              widget.eggCount--;
             }
 
-            if (index == 1 && previousSelection[0] == true){
-              eggCount--;
+            if (index == 1 && previousSelection[0] == true) {
+              widget.eggCount--;
+            } else if (index == 0 && previousSelection[1] == true) {
+              widget.eggCount++;
             }
-            else if (index == 0 && previousSelection[1] == true){
-              eggCount++;
-            }
-
           });
         },
         isSelected: isSelected,
