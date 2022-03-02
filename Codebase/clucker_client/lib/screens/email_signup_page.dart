@@ -95,12 +95,14 @@ class _EmailFormState extends State<EmailForm> {
               textBoxProfile: TextBoxProfile.emailFieldSignUp,
               controller: emailController,
               focusNode: emailFocusNode,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
             ),
             TextBox(
               textBoxProfile: TextBoxProfile.passwordFieldSignUp,
               controller: passwordController,
               focusNode: passwordFocusNode,
               onEditingComplete: () {
+                FocusScope.of(context).nextFocus();
                 return passwordController.text ==
                     confirmPasswordController.text;
               },
@@ -113,6 +115,7 @@ class _EmailFormState extends State<EmailForm> {
               textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,
               controller: confirmPasswordController,
               focusNode: confirmPasswordFocusNode,
+              onFieldSubmitted: () => FocusScope.of(context).unfocus(),
               onEditingComplete: () {
                 return passwordController.text ==
                     confirmPasswordController.text;

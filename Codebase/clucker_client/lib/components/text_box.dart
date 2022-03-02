@@ -24,13 +24,15 @@ class TextBox extends StatefulWidget {
       this.controller,
       required this.focusNode,
       this.onEditingComplete,
+      this.onFieldSubmitted,
       this.onChanged})
       : super(key: key);
 
   final TextBoxProfile textBoxProfile;
   final TextEditingController? controller;
-  final FocusNode? focusNode;
+  final FocusNode focusNode;
   final Function? onEditingComplete;
+  final Function? onFieldSubmitted;
   final Function? onChanged;
 
   @override
@@ -150,35 +152,36 @@ class _TextBoxState extends State<TextBox> {
                               validatorError = false;
                               return null;
                             } else {
-                              if (!usernameAvailable && enteredText.length > 3) {
+                              if (!usernameAvailable &&
+                                  enteredText.length > 3) {
                                 validatorError = true;
                                 if (enteredText.length > 10) {
                                   return '\'$enteredText\' is unavailable';
-                                }
-                                else {
+                                } else {
                                   return 'The username \'$enteredText\' is unavailable';
                                 }
                               } else {
-                                String pattern =
-                                    r'^[a-zA-Z0-9-_].{2,}$';
+                                String pattern = r'^[a-zA-Z0-9-_].{2,}$';
                                 RegExp regExp = RegExp(pattern);
 
                                 if (!regExp.hasMatch(enteredText)) {
                                   Future.delayed(Duration.zero, () {
                                     setState(() {
                                       validatorError = true;
-                                      validationIcon = FontAwesomeIcons.solidTimesCircle;
+                                      validationIcon =
+                                          FontAwesomeIcons.solidTimesCircle;
                                     });
                                   });
                                   if (enteredText.length < 3) {
                                     return 'Username must be at least 3 characters';
                                   }
-                                  return 'Invalid username'; }
-                                else {
+                                  return 'Invalid username';
+                                } else {
                                   Future.delayed(Duration.zero, () {
                                     setState(() {
                                       validatorError = false;
-                                      validationIcon = FontAwesomeIcons.solidCheckCircle;
+                                      validationIcon =
+                                          FontAwesomeIcons.solidCheckCircle;
                                     });
                                   });
                                 }
@@ -232,16 +235,19 @@ class _TextBoxState extends State<TextBox> {
                                             Future.delayed(Duration.zero, () {
                                               setState(() {
                                                 validatorError = true;
-                                                validationIcon = FontAwesomeIcons.solidTimesCircle;
+                                                validationIcon =
+                                                    FontAwesomeIcons
+                                                        .solidTimesCircle;
                                               });
                                             });
                                             return 'Passwords do not match';
-                                          }
-                                          else {
+                                          } else {
                                             Future.delayed(Duration.zero, () {
                                               setState(() {
                                                 validatorError = false;
-                                                validationIcon = FontAwesomeIcons.solidCheckCircle;
+                                                validationIcon =
+                                                    FontAwesomeIcons
+                                                        .solidCheckCircle;
                                               });
                                             });
                                           }
@@ -251,7 +257,16 @@ class _TextBoxState extends State<TextBox> {
                                     : (value) {
                                         return null;
                                       },
+                    textInputAction: isEmailOrUsernameFieldLogin() || isEmailFieldSignUp() || isPasswordFieldSignUp() ? TextInputAction.next : TextInputAction.done,
+                    onFieldSubmitted: (value) {
+                      if (isPasswordFieldLogin() || isUsernameFieldSignUp() || isConfirmPasswordFieldSignUp()) {
+                        widget.onFieldSubmitted!();
+                      }
+                    },
                     onEditingComplete: () {
+                      if (isEmailOrUsernameFieldLogin() || isEmailFieldSignUp() || isPasswordFieldSignUp()) {
+                        widget.onEditingComplete!();
+                      }
                       if (isAnyValidationField()) {
                         updateValidationState();
                       }
@@ -269,8 +284,7 @@ class _TextBoxState extends State<TextBox> {
                           }
                           startTimer();
                         });
-                      }
-                      else if (isConfirmPasswordFieldSignUp() &&
+                      } else if (isConfirmPasswordFieldSignUp() &&
                           enteredText.isNotEmpty) {
                         iconAnimation = false;
                       }
@@ -281,7 +295,8 @@ class _TextBoxState extends State<TextBox> {
                         setState(() {
                           enteredText = value;
 
-                          if (isAnyValidationField() && (enteredText.isEmpty || timerActive == false)) {
+                          if (isAnyValidationField() &&
+                              (enteredText.isEmpty || timerActive == false)) {
                             iconAnimation = false;
                             validationIcon =
                                 FontAwesomeIcons.solidQuestionCircle;
@@ -422,7 +437,6 @@ class _TextBoxState extends State<TextBox> {
     if (isAnyValidationField()) {
       if (isUsernameFieldSignUp() && enteredText.length > 2) {
         usernameAvailable = await widget.onEditingComplete!();
-        print('CALL WAS MADE');
       } else if (isEmailFieldSignUp() && enteredText.isNotEmpty) {
         String pattern =
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';

@@ -74,15 +74,13 @@ class _LogInFormState extends State<LogInForm> {
               textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
               controller: emailOrUsernameController,
               focusNode: emailOrUsernameFocusNode,
-              onEditingComplete: () {},
-              onChanged: () {},
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
             ),
             TextBox(
               textBoxProfile: TextBoxProfile.passwordFieldLogin,
               controller: passwordController,
               focusNode: passwordFocusNode,
-              onEditingComplete: () {},
-              onChanged: () {},
+              onFieldSubmitted: () => FocusScope.of(context).unfocus(),
             ),
             StandardButton(
               text: 'Log-In',

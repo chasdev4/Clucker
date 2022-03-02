@@ -81,6 +81,7 @@ class _UsernameFormState extends State<UsernameForm> {
                 textBoxProfile: TextBoxProfile.usernameFieldSignUp,
                 controller: usernameController,
                 focusNode: usernameFocusNode,
+                onFieldSubmitted: () => FocusScope.of(context).unfocus(),
                 onEditingComplete: () async {
                   if (_usernameFormKey.currentState!.validate()) {}
                   username = usernameController.text;
