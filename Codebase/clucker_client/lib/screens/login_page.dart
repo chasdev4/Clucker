@@ -24,16 +24,20 @@ class LogInForm extends StatefulWidget {
 
 class _LogInFormState extends State<LogInForm> {
   final _logInFormKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
+  final emailOrUsernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final emailOrUsernameFocusNode = FocusNode();
+  final passwordFocusNode = FocusNode();
 
-  String username = '';
+  String emailOrUsername = '';
   String password = '';
 
   @override
   void dispose() {
-    usernameController.dispose();
+    emailOrUsernameController.dispose();
     passwordController.dispose();
+    emailOrUsernameFocusNode.dispose();
+    passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -68,13 +72,15 @@ class _LogInFormState extends State<LogInForm> {
           Column(children: [
             TextBox(
               textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
-              controller: usernameController,
+              controller: emailOrUsernameController,
+              focusNode: emailOrUsernameFocusNode,
               onEditingComplete: () {},
               onChanged: () {},
             ),
             TextBox(
               textBoxProfile: TextBoxProfile.passwordFieldLogin,
               controller: passwordController,
+              focusNode: passwordFocusNode,
               onEditingComplete: () {},
               onChanged: () {},
             ),
