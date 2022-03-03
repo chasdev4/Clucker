@@ -530,7 +530,6 @@ class _TextBoxState extends State<TextBox> {
         validPassword = regExp.hasMatch(enteredText);
       } else if (isConfirmPasswordFieldSignUp() &&
           widget.controller!.text.isNotEmpty) {
-        print('call to parent');
         passwordsMatch = widget.onChanged!();
       }
 

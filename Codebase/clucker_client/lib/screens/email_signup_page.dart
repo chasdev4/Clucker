@@ -148,7 +148,6 @@ class _EmailFormState extends State<EmailForm> {
                         email: emailController.text);
 
                     response = await userService.registerUser(userRegistration);
-                    print('${response.statusCode}');
 
                     if (response.statusCode == 201) {
                       dialogUtil.oneButtonDialog(
@@ -156,7 +155,6 @@ class _EmailFormState extends State<EmailForm> {
                     }
 
                     if (response.statusCode == 400) {
-                      print('${response.body}');
                       emailFocusNode.requestFocus();
                       errorMessage =
                           'A Clucker account with the email \'${emailController.text}\' already exists.';
