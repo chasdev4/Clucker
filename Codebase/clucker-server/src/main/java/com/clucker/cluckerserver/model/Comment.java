@@ -44,4 +44,8 @@ public class Comment {
     @JoinColumn(name = "cluck_id", updatable = false, nullable = false)
     private Cluck cluck;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", updatable = false, nullable = false)
+    private User author;
+
 }

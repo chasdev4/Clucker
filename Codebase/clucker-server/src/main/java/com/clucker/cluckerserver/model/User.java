@@ -58,4 +58,8 @@ public class User {
     @OneToMany(mappedBy = "author")
     private List<Cluck> clucks;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
+
 }

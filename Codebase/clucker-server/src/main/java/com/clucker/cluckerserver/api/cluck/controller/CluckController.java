@@ -1,9 +1,13 @@
 package com.clucker.cluckerserver.api.cluck.controller;
 
 import com.clucker.cluckerserver.api.cluck.service.CluckService;
+import com.clucker.cluckerserver.api.cluck.service.CommentService;
 import com.clucker.cluckerserver.dto.CluckResponse;
+import com.clucker.cluckerserver.dto.CommentResponse;
 import com.clucker.cluckerserver.dto.PostCluck;
+import com.clucker.cluckerserver.dto.PostComment;
 import com.clucker.cluckerserver.model.Cluck;
+import com.clucker.cluckerserver.model.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +33,7 @@ import java.net.URI;
 public class CluckController {
 
     private final CluckService cluckService;
+    private final CommentService commentService;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -56,6 +61,22 @@ public class CluckController {
         return ResponseEntity
                 .created(uri)
                 .body(response);
+    }
+
+    @PostMapping("/{cluckId}/comments")
+    public ResponseEntity<CommentResponse> postComment(@PathVariable String cluckId, @RequestBody PostComment postComment) {
+        Comment comment = commentService.postComment(postComment);
+        CommentResponse response = commentService.
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .path("/{id}/comments/{cid}")
+                .buildAndExpand(cluckId, comment.getId())
+                .toUri();
+
+        return ResponseEntity
+                .created(uri)
+                .body(response);
+
     }
 
 
