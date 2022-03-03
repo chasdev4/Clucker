@@ -4,6 +4,7 @@ import 'package:clucker_client/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/screens/login_page.dart';
+import 'package:clucker_client/screens/feed_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Palette.cluckerRed.toMaterialColor(),
         primaryColor: Palette.cluckerRed,
       ),
-      home: const LoginPage(),
+      home: const Feed(),
     );
   }
 }

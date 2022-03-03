@@ -1,20 +1,104 @@
 import 'package:clucker_client/components/palette.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:clucker_client/components/user_avatar.dart';
+
+class Cluck extends StatefulWidget {
+  Cluck(
+      {Key? key,
+      required this.username,
+      required this.cluckText,
+      required this.eggCount})
+      : super(key: key);
+
+  final String cluckText;
+  final String username;
+  int eggCount;
+
+  @override
+  _CluckState createState() => _CluckState();
+}
+
+class _CluckState extends State<Cluck> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            const UserAvatar(
+              avatarImage: 'assets/icons/chicken.jpg',
+            ),
+            Text(
+                widget.username,
+              style: const TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+            const Spacer(),
+            const Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: Text(
+                  'Time',
+                style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontStyle: FontStyle.italic,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              width: 40,
+            ),
+            Expanded(
+              child: Text(
+                widget.cluckText,
+                maxLines: 6,
+                overflow: TextOverflow.clip,
+                style: const TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            EggControls(eggCount: widget.eggCount),
+          ],
+        ),
+        const Divider(
+          thickness: 3,
+        ),
+      ],
+    );
+  }
+}
 
 class EggControls extends StatefulWidget {
-  const EggControls({Key? key, this.buttonSize = 25}) : super(key: key);
+  EggControls({Key? key, required this.eggCount, this.buttonSize = 25})
+      : super(key: key);
 
   final double buttonSize;
+  int eggCount;
 
   @override
   _EggControlsState createState() => _EggControlsState();
 }
 
 class _EggControlsState extends State<EggControls> {
-  // TODO: Update placeholder to retrieve rating count from Cluck or Comment
-  int eggCount = 123;
-
   List<bool> isSelected = [false, false];
   List<bool> previousSelection = [false, false];
   Color activeBackground = Palette.cluckerRed;
@@ -26,7 +110,7 @@ class _EggControlsState extends State<EggControls> {
   Widget build(BuildContext context) {
     return Flexible(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text('$eggCount',
+      Text(widget.eggCount.toString(),
           style: TextStyle(
               height: 0,
               fontWeight: FontWeight.w900,
@@ -49,19 +133,17 @@ class _EggControlsState extends State<EggControls> {
 
             if ((index == 0 && isSelected[index] == true) ||
                 (index == 1 && isSelected[index] == false)) {
-              eggCount++;
+              widget.eggCount++;
             } else if ((index == 0 && isSelected[index] == false) ||
                 (index == 1 && isSelected[index] == true)) {
-              eggCount--;
+              widget.eggCount--;
             }
 
-            if (index == 1 && previousSelection[0] == true){
-              eggCount--;
+            if (index == 1 && previousSelection[0] == true) {
+              widget.eggCount--;
+            } else if (index == 0 && previousSelection[1] == true) {
+              widget.eggCount++;
             }
-            else if (index == 0 && previousSelection[1] == true){
-              eggCount++;
-            }
-
           });
         },
         isSelected: isSelected,
