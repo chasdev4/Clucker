@@ -44,6 +44,7 @@ class TextBox extends StatefulWidget {
 class _TextBoxState extends State<TextBox> {
   //#region States
   late String enteredText;
+  late String lastEmail;
   late int wordCount;
   late IconData validationIcon;
   late bool usernameAvailable;
@@ -57,6 +58,7 @@ class _TextBoxState extends State<TextBox> {
   void initState() {
     super.initState();
     enteredText = '';
+    lastEmail = '';
     wordCount = 0;
     validationIcon = FontAwesomeIcons.solidQuestionCircle;
     usernameAvailable = false;
@@ -195,6 +197,19 @@ class _TextBoxState extends State<TextBox> {
                             ? (value) {
                                 if (iconAnimation) {
                                   return null;
+                                } else if (widget.extraFunction!()) {
+                                  bool emailMatchesPrevious = value == lastEmail;
+                                  Future.delayed(Duration.zero, () {
+                                    setState(() {
+                                      validatorError = emailMatchesPrevious ? true : false;
+                                      validationIcon = emailMatchesPrevious ?
+                                          FontAwesomeIcons
+                                              .solidTimesCircle : FontAwesomeIcons.solidQuestionCircle;
+                                    });
+                                  });
+
+                                  lastEmail = value!;
+                                  return emailMatchesPrevious ?'Email already registered' : null;
                                 } else if (value == null || value.isEmpty) {
                                   Future.delayed(Duration.zero, () {
                                     setState(() {

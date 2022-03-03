@@ -43,6 +43,8 @@ class _EmailFormState extends State<EmailForm> {
   UserService userService = UserService();
   DialogUtil dialogUtil = DialogUtil();
 
+  bool emailTaken = false;
+
   @override
   void dispose() {
     emailFocusNode.dispose();
@@ -96,6 +98,10 @@ class _EmailFormState extends State<EmailForm> {
               controller: emailController,
               focusNode: emailFocusNode,
               onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              onChanged: () {emailTaken = false;},
+              extraFunction: () {
+                return emailTaken;
+              },
             ),
             TextBox(
               textBoxProfile: TextBoxProfile.passwordFieldSignUp,
@@ -154,6 +160,7 @@ class _EmailFormState extends State<EmailForm> {
                       emailFocusNode.requestFocus();
                       errorMessage =
                           'A Clucker account with the email \'${emailController.text}\' already exists.';
+                      emailTaken = true;
                       dialogUtil.oneButtonDialog(
                           context, 'Hold on!', errorMessage);
                     }
