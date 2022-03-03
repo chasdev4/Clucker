@@ -2,10 +2,8 @@ package com.clucker.cluckerserver.security.filter;
 
 import com.clucker.cluckerserver.dto.AuthenticationRequest;
 import com.clucker.cluckerserver.exception.ForbiddenException;
-import com.clucker.cluckerserver.model.UserDetailsImpl;
 import com.clucker.cluckerserver.security.util.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Key;
-import java.util.Date;
 
 @RequiredArgsConstructor
 public class JwtProviderFilter extends UsernamePasswordAuthenticationFilter {

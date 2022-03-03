@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/screens/email_signup_page.dart';
-import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/services/user_service.dart';
+import '../components/DialogUtil.dart';
 
 class UsernamePage extends StatelessWidget {
   const UsernamePage({Key? key}) : super(key: key);
@@ -38,7 +39,8 @@ class _UsernameFormState extends State<UsernameForm> {
   final _usernameFormKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
 
-  String username = '';
+  UserService userService = UserService();
+  DialogUtil dialogUtil = DialogUtil();
 
   @override
   void Dispose() {
@@ -68,14 +70,20 @@ class _UsernameFormState extends State<UsernameForm> {
           StandardButton(
             text: 'Next',
             routeName: '',
-            onPress: () {
-              username = usernameController.text;
-              print(username);
+            onPress: () async {
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EmailPage(username: username)),
-              );
+              if (await userService.usernameAvailable(usernameController.text)) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder:
+                        (context) => EmailPage(username: usernameController.text))
+                );
+              } else {
+                dialogUtil.oneButtonDialog(
+                    context,
+                    'Username Conflict',
+                    'Username is already taken!');
+              }
             },
           ),
         ],

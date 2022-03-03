@@ -3,7 +3,7 @@ package com.clucker.cluckerserver.api.user.service;
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;
 import com.clucker.cluckerserver.dto.UserUpdateRequest;
-import com.clucker.cluckerserver.model.User;
+import com.clucker.cluckerserver.repository.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

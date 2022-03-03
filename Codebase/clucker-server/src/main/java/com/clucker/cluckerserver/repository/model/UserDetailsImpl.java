@@ -1,4 +1,4 @@
-package com.clucker.cluckerserver.model;
+package com.clucker.cluckerserver.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

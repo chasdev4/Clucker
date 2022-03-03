@@ -1,6 +1,6 @@
 package com.clucker.cluckerserver.security.util;
 
-import com.clucker.cluckerserver.model.UserDetailsImpl;
+import com.clucker.cluckerserver.repository.model.UserDetailsImpl;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

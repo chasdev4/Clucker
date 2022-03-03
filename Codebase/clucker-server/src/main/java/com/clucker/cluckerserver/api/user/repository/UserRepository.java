@@ -1,6 +1,6 @@
 package com.clucker.cluckerserver.api.user.repository;
 
-import com.clucker.cluckerserver.model.User;
+import com.clucker.cluckerserver.repository.model.User;
 import com.clucker.cluckerserver.repository.JpaRepositoryWithSpecification;
 
 import java.util.Optional;

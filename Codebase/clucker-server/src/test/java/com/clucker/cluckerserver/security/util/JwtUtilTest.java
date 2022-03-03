@@ -1,7 +1,7 @@
 package com.clucker.cluckerserver.security.util;
 
 import com.clucker.cluckerserver.annotation.IntegrationTest;
-import com.clucker.cluckerserver.model.UserDetailsImpl;
+import com.clucker.cluckerserver.repository.model.UserDetailsImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
