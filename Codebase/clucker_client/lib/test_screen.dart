@@ -13,19 +13,23 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
-  late FocusNode focusNode;
+  final GlobalKey cluckGlobalKey = GlobalKey<_TestScreenState>();
+
+  late FocusNode cluckFocusNode;
+  late bool keyboardExpanded;
   late bool overlayVisible;
 
   @override
   void initState() {
     super.initState();
-    focusNode = FocusNode();
+    cluckFocusNode = FocusNode();
+    keyboardExpanded = false;
     overlayVisible = false;
   }
 
   @override
   void dispose() {
-    focusNode.dispose();
+    cluckFocusNode.dispose();
     super.dispose();
   }
 
@@ -33,9 +37,11 @@ class _TestScreenState extends State<TestScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          if (overlayVisible) {
-
-          }
+      if (MediaQuery.of(context).viewInsets.bottom == 0) {
+        keyboardExpanded = false;
+      } else {
+        true;
+      }
           return !overlayVisible;
         },
         child: Scaffold(
@@ -53,11 +59,11 @@ class _TestScreenState extends State<TestScreen> {
             ),
           ),
           bottomNavigationBar: MainNavigationBar(
-            focusNode: focusNode,
+            focusNode: cluckFocusNode,
           ),
           floatingActionButton: NewCluckButton(
-              focusNode: focusNode,
-              overlayVisible: overlayVisible,
+            key: cluckGlobalKey,
+              focusNode: cluckFocusNode,
               setOverlayState: (bool overlayState) {
                   overlayVisible = overlayState;
 
