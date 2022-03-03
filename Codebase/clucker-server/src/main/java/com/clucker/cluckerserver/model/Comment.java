@@ -6,8 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -47,5 +50,11 @@ public class Comment {
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", updatable = false, nullable = false)
     private User author;
+
+    @CreationTimestamp
+    private LocalDateTime posted;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModified;
 
 }
