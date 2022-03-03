@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,13 +65,13 @@ public class CluckController {
     }
 
     @PostMapping("/{cluckId}/comments")
-    public ResponseEntity<CommentResponse> postComment(@PathVariable String cluckId, @RequestBody PostComment postComment, Authentication authentication) {
+    public ResponseEntity<CommentResponse> postComment(@PathVariable String cluckId, @RequestBody @Valid PostComment postComment, Authentication authentication) {
         Comment comment = commentService.postComment(cluckId, postComment, authentication);
         CommentResponse response = commentService.mapToResponse(comment);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
-                .path("/{id}/comments/{cid}")
-                .buildAndExpand(cluckId, comment.getId())
+                .path("/{id}")
+                .buildAndExpand(comment.getId())
                 .toUri();
 
         return ResponseEntity

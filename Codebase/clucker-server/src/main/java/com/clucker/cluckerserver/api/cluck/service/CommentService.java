@@ -58,7 +58,9 @@ public class CommentService {
     }
 
     public CommentResponse mapToResponse(Comment comment) {
-        return mapper.map(comment, CommentResponse.class);
+        CommentResponse response = mapper.map(comment, CommentResponse.class);
+        response.setAuthor(comment.getAuthor().getUsername());
+        return response;
     }
 
 }
