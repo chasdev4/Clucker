@@ -1,15 +1,17 @@
+import 'dart:async';
+
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/text_box.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+
+late StreamSubscription<bool> keyboardSubscription;
 
 class NewCluckButton extends StatefulWidget {
-  const NewCluckButton(
-      {Key? key, required this.focusNode, required this.setOverlayState})
-      : super(key: key);
+  const NewCluckButton({Key? key, required this.focusNode, required this.overlayVisible, required this.setOverlayState}) : super(key: key);
   final FocusNode focusNode;
+  final bool overlayVisible;
   final Function setOverlayState;
 
   @override
@@ -17,10 +19,38 @@ class NewCluckButton extends StatefulWidget {
 }
 
 class _NewCluckButtonState extends State<NewCluckButton> {
-  int numNewLines = 0;
-  bool overlayVisible = false;
+  late TextEditingController cluckController;
+  late KeyboardVisibilityController keyboardVisibilityController;
 
-  final cluckController = TextEditingController();
+  late int numNewLines;
+  late bool overlayVisible;
+  double barHeight = 218;
+
+  @override
+  void initState() {
+    super.initState();
+    keyboardVisibilityController = KeyboardVisibilityController();
+    cluckController = TextEditingController();
+    numNewLines = 0;
+    overlayVisible = widget.overlayVisible;
+    widget.setOverlayState(overlayVisible);
+    keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
+      print('Keyboard visibility update. Is visible: $visible');
+      if (!keyboardVisibilityController.isVisible) {
+        print('Unfocusing');
+        widget.focusNode.unfocus();
+      }
+
+      _updateBarHeight();
+    });
+  }
+  @override
+  void dispose() {
+    keyboardSubscription.cancel();
+    cluckController.dispose();
+    super.dispose();
+  }
+
   bool getKeyboardState() {
     return ((MediaQuery.of(context).viewInsets.bottom >= 0 &&
         MediaQuery.of(context).viewInsets.bottom <
@@ -39,6 +69,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                 _showOverlay(context);
                 widget.focusNode.requestFocus();
                 widget.setOverlayState(overlayVisible);
+                _updateBarHeight(override: true);
               },
               child: Icon(
                 FontAwesomeIcons.plusCircle,
@@ -52,12 +83,12 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   }
 
   void _showOverlay(BuildContext context) async {
-    double barHeight = 218;
-
     OverlayState? overlayState = Overlay.of(context);
     late OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(builder: (context) {
-      return Column(children: <Widget>[
+      return KeyboardVisibilityBuilder(
+          builder: (context, isKeyboardVisible) {
+            return Column(children: <Widget>[
         GestureDetector(
           onTap: () {},
           child: SizedBox(
@@ -70,21 +101,18 @@ class _NewCluckButtonState extends State<NewCluckButton> {
               splashColor: Colors.transparent,
               onPressed: () {
                 setState(() {
-                  barHeight = countNewLines() <= 1
-                      ? 125
-                      : countNewLines() >= 9
-                      ? 260
-                      : (((numNewLines + 1) * 19.285) + 90);
-                  if (MediaQuery.of(context).viewInsets.bottom == 0) {
+                  _updateBarHeight();
+                  if (!keyboardVisibilityController.isVisible) {
                     overlayEntry.remove();
                     overlayVisible = false;
                     widget.setOverlayState(overlayVisible);
                     cluckController.text = '';
-                  } else {
+                  }
+                  else {
                     widget.focusNode.unfocus();
                   }
                 });
-              }
+              },
             ),
           ),
         ),
@@ -111,38 +139,27 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                     child: Column(
                       children: [
                         Container(
-                            padding: EdgeInsets.all(
-                                widget.focusNode.hasFocus ? 3 : 13),
+                            padding: EdgeInsets.all(widget.focusNode.hasFocus ? 3 : 13),
                             width: MediaQuery.of(context).size.width - 50,
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: widget.focusNode.hasFocus ? 10 : 0),
-                                  child: const Text(
-                                    'New Cluck',
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                ),
+                                Padding(padding: EdgeInsets.only(left: widget.focusNode.hasFocus ? 10 : 0), child: const Text(
+                                  'New Cluck',
+                                  style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w900),
+                                ),),
                                 const SizedBox(),
-                                widget.focusNode.hasFocus
-                                    ? IconButton(
-                                        onPressed: () {
-                                          overlayEntry.remove();
-                                          overlayVisible = false;
+                                widget.focusNode.hasFocus ?
+                                IconButton(
+                                    onPressed: () {
+                                      overlayEntry.remove();
+                                      overlayVisible = false;
                                       widget.setOverlayState(overlayVisible);
-                                              .setOverlayState(overlayVisible);
-                                        },
-                                        icon: Icon(
-                                          FontAwesomeIcons.times,
-                                          size: 26,
-                                          color: Palette.offBlack,
-                                        ))
-                                    : const SizedBox(),
+                                    },
+                                    icon: Icon(FontAwesomeIcons.times, size: 26, color: Palette.offBlack,)) : const SizedBox(),
                               ],
                             )),
                         TextBox(
@@ -160,7 +177,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
             ],
           ),
         ]),
-      ]);
+      ]);});
     });
 
     overlayVisible = true;
@@ -178,5 +195,16 @@ class _NewCluckButtonState extends State<NewCluckButton> {
       }
     }
     return numNewLines;
+  }
+
+  void _updateBarHeight({bool override = false}) {
+    if (keyboardVisibilityController.isVisible || override == true) {
+      barHeight = 218;
+      print('(visible) Bar height: $barHeight');
+    }
+    else {
+      barHeight = countNewLines() <= 1 ? 125 : countNewLines() >= 7 ? 218 : (((numNewLines + 1) * 19.285) + 90);
+      print('(invisible) Bar height: $barHeight');
+    }
   }
 }
