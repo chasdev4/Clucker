@@ -64,9 +64,9 @@ public class CluckController {
     }
 
     @PostMapping("/{cluckId}/comments")
-    public ResponseEntity<CommentResponse> postComment(@PathVariable String cluckId, @RequestBody PostComment postComment) {
-        Comment comment = commentService.postComment(postComment);
-        CommentResponse response = commentService.
+    public ResponseEntity<CommentResponse> postComment(@PathVariable String cluckId, @RequestBody PostComment postComment, Authentication authentication) {
+        Comment comment = commentService.postComment(cluckId, postComment, authentication);
+        CommentResponse response = commentService.mapToResponse(comment);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{id}/comments/{cid}")
