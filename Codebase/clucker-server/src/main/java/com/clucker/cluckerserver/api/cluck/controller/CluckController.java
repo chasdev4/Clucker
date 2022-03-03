@@ -3,7 +3,7 @@ package com.clucker.cluckerserver.api.cluck.controller;
 import com.clucker.cluckerserver.api.cluck.service.CluckService;
 import com.clucker.cluckerserver.dto.CluckResponse;
 import com.clucker.cluckerserver.dto.PostCluck;
-import com.clucker.cluckerserver.repository.model.Cluck;
+import com.clucker.cluckerserver.model.Cluck;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

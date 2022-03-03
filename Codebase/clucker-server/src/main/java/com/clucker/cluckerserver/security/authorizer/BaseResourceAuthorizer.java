@@ -1,8 +1,8 @@
 package com.clucker.cluckerserver.security.authorizer;
 
 import com.clucker.cluckerserver.exception.UnauthorizedException;
-import com.clucker.cluckerserver.repository.model.User;
-import com.clucker.cluckerserver.repository.model.UserRole;
+import com.clucker.cluckerserver.model.User;
+import com.clucker.cluckerserver.model.UserRole;
 import com.clucker.cluckerserver.api.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

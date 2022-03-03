@@ -1,6 +1,6 @@
 package com.clucker.cluckerserver.security.authorizer;
 
-import com.clucker.cluckerserver.repository.model.Cluck;
+import com.clucker.cluckerserver.model.Cluck;
 
 public class CluckAuthorizer extends BaseResourceAuthorizer<Cluck> {
     @Override
