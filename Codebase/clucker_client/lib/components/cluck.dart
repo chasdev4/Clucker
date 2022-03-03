@@ -1,4 +1,5 @@
 import 'package:clucker_client/components/palette.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -39,35 +40,47 @@ class _CluckState extends State<Cluck> {
               ),
             ),
             const Spacer(),
-            const Text(
-                'Time',
-              style: TextStyle(
-                fontFamily: 'OpenSans',
-                fontStyle: FontStyle.italic,
-                fontSize: 20,
+            const Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: Text(
+                  'Time',
+                style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontStyle: FontStyle.italic,
+                  fontSize: 20,
+                ),
               ),
             ),
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               width: 40,
             ),
-            Text(
-              widget.cluckText,
-              style: const TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 20,
+            Expanded(
+              child: Text(
+                widget.cluckText,
+                maxLines: 6,
+                overflow: TextOverflow.clip,
+                style: const TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                ),
               ),
             ),
-            const Spacer(),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
             EggControls(eggCount: widget.eggCount),
           ],
         ),
         const Divider(
-
+          thickness: 3,
         ),
       ],
     );
