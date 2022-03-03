@@ -44,7 +44,7 @@ class _EmailFormState extends State<EmailForm> {
   DialogUtil dialogUtil = DialogUtil();
 
   @override
-  dispose() {
+  void dispose() {
     emailFocusNode.dispose();
     passwordFocusNode.dispose();
     confirmPasswordFocusNode.dispose();
@@ -116,61 +116,56 @@ class _EmailFormState extends State<EmailForm> {
               controller: confirmPasswordController,
               focusNode: confirmPasswordFocusNode,
               onFieldSubmitted: () => FocusScope.of(context).unfocus(),
-              onEditingComplete: () {
-                return passwordController.text ==
-                    confirmPasswordController.text;
-              },
               onChanged: () {
                 return passwordController.text ==
                     confirmPasswordController.text;
+              },
+              extraFunction: () {
+                return passwordController.text.isEmpty &&
+                    confirmPasswordController.text.isEmpty;
               },
             ),
             StandardButton(
               text: 'Sign-Up',
               routeName: '',
               onPress: () async {
-                List<String> errorMessages = [];
-                Response response = Response('', 404);
+                String errorMessage = '';
+                Response response = Response('', 400);
                 if (passwordController.text.isNotEmpty &&
                     confirmPasswordController.text.isNotEmpty &&
                     emailController.text.isNotEmpty) {
-                  if (passwordController.text == confirmPasswordController.text) {
+                  if (passwordController.text ==
+                      confirmPasswordController.text) {
                     UserRegistration userRegistration = UserRegistration(
                         username: widget.username,
                         password: passwordController.text,
                         email: emailController.text);
 
-                    response =
-                        await userService.registerUser(userRegistration);
-                  }
+                    response = await userService.registerUser(userRegistration);
+                    print('${response.statusCode}');
 
-                  if (response.statusCode == 201 && passwordController.text == confirmPasswordController.text) {
-                    dialogUtil.oneButtonDialog(
-                        context, 'Account Created', 'Start Clucking!');
-                  } else if (response.body.contains('email')){
-                    errorMessages.add('A Clucker account with the email \'${emailController.text}\' already exists.');
-                  }
-                }
-
-                if (passwordController.text !=
-                    confirmPasswordController.text) {
-                  errorMessages
-                      .add('The passwords you provided do not match. Please re-enter your password.');
-                }
-                if (errorMessages.length == 1) {
-                  dialogUtil.oneButtonDialog(
-                      context, 'Hold on!', errorMessages[0]);
-                } else if (errorMessages.length == 2) {
-                  String errorMessageBody = '';
-                  for (int i = 0; i < errorMessages.length; i++) {
-                    errorMessageBody += '- ';
-                    errorMessageBody += errorMessages[i];
-                    if (i == 0) {
-                      errorMessageBody += '\n\n';
+                    if (response.statusCode == 201) {
+                      dialogUtil.oneButtonDialog(
+                          context, 'Account Created', 'Start Clucking!');
                     }
+
+                    if (response.statusCode == 400) {
+                      print('${response.body}');
+                      emailFocusNode.requestFocus();
+                      errorMessage =
+                          'A Clucker account with the email \'${emailController.text}\' already exists.';
+                      dialogUtil.oneButtonDialog(
+                          context, 'Hold on!', errorMessage);
+                    }
+                  } else {
+                    passwordController.text = '';
+                    confirmPasswordController.text = '';
+                    passwordFocusNode.requestFocus();
+                    errorMessage =
+                        'The passwords you provided do not match. Please try again.';
+                    dialogUtil.oneButtonDialog(
+                        context, 'Hold on!', errorMessage);
                   }
-                  dialogUtil.oneButtonDialog(
-                      context, 'Hold on!', errorMessageBody);
                 }
               },
             ),

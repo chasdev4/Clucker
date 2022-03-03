@@ -25,7 +25,8 @@ class TextBox extends StatefulWidget {
       required this.focusNode,
       this.onEditingComplete,
       this.onFieldSubmitted,
-      this.onChanged})
+      this.onChanged,
+      this.extraFunction})
       : super(key: key);
 
   final TextBoxProfile textBoxProfile;
@@ -34,6 +35,7 @@ class TextBox extends StatefulWidget {
   final Function? onEditingComplete;
   final Function? onFieldSubmitted;
   final Function? onChanged;
+  final Function? extraFunction;
 
   @override
   _TextBoxState createState() => _TextBoxState();
@@ -194,6 +196,13 @@ class _TextBoxState extends State<TextBox> {
                                 if (iconAnimation) {
                                   return null;
                                 } else if (value == null || value.isEmpty) {
+                                  Future.delayed(Duration.zero, () {
+                                    setState(() {
+                                      validatorError = false;
+                                      validationIcon =
+                                          FontAwesomeIcons.solidQuestionCircle;
+                                    });
+                                  });
                                   return null;
                                 } else {
                                   String pattern =
@@ -211,17 +220,24 @@ class _TextBoxState extends State<TextBox> {
                                     if (iconAnimation) {
                                       return null;
                                     } else if (value == null || value.isEmpty) {
+                                      Future.delayed(Duration.zero, () {
+                                        setState(() {
+                                          validatorError = false;
+                                          validationIcon = FontAwesomeIcons
+                                              .solidQuestionCircle;
+                                        });
+                                      });
                                       return null;
                                     } else {
                                       bool atLeastEightChar = value.length >= 8;
 
                                       String pattern =
-                                          r'^(?=.*[0-9])(?=.*[a-z])(?=.*)(?=.*[@#$%^&+=_!]).{8,}$';
+                                          r'^(?=.*[0-9])(?=.*[A-Za-z])(?=.*)(?=.*[@#$%^&+=_!]).{8,}$';
                                       RegExp regExp = RegExp(pattern);
 
                                       if (!regExp.hasMatch(enteredText)) {
                                         if (atLeastEightChar) {
-                                          regExp = RegExp(r'^(?=.*[a-z])');
+                                          regExp = RegExp('[A-Za-z]');
                                           if (!regExp.hasMatch(enteredText)) {
                                             return 'Enter at least one letter (a-z)';
                                           }
@@ -229,18 +245,27 @@ class _TextBoxState extends State<TextBox> {
                                           if (!regExp.hasMatch(enteredText)) {
                                             return 'Enter at least one number (0-9)';
                                           }
-                                          regExp = RegExp(r'^(?=.*[@#$%^&+=_!])');
+                                          regExp =
+                                              RegExp(r'^(?=.*[@#$%^&+=_!])');
                                           if (!regExp.hasMatch(enteredText)) {
                                             return 'At least one special character @#\$%^&+=_!';
                                           }
-
-
                                         } else {
                                           return 'Enter at least 8 characters';
                                         }
                                         return 'Invalid password';
+                                      } else {
+                                        Future.delayed(Duration.zero, () {
+                                          setState(() {
+                                            validatorError = false;
+                                            validationIcon = FontAwesomeIcons
+                                                .solidCheckCircle;
+                                          });
+                                          return null;
+                                        });
                                       }
                                     }
+
                                     return null;
                                   }
                                 : isConfirmPasswordFieldSignUp()
@@ -249,9 +274,20 @@ class _TextBoxState extends State<TextBox> {
                                           return null;
                                         } else if (value == null ||
                                             value.isEmpty) {
+                                          if (widget.extraFunction!()) {
+                                            Future.delayed(Duration.zero, () {
+                                              setState(() {
+                                                validatorError = false;
+                                                validationIcon =
+                                                    FontAwesomeIcons
+                                                        .solidQuestionCircle;
+                                              });
+                                            });
+                                            return null;
+                                          }
                                           return null;
                                         } else {
-                                          if (!widget.onChanged!()) {
+                                          if (!widget.onChanged!() && !widget.extraFunction!()) {
                                             Future.delayed(Duration.zero, () {
                                               setState(() {
                                                 validatorError = true;
@@ -293,7 +329,7 @@ class _TextBoxState extends State<TextBox> {
                       if (isEmailOrUsernameFieldLogin() ||
                           isEmailFieldSignUp() ||
                           isPasswordFieldSignUp()) {
-                        widget.onEditingComplete!();
+                        widget.onChanged!();
                       }
                       if (isAnyValidationField()) {
                         updateValidationState();
@@ -474,10 +510,12 @@ class _TextBoxState extends State<TextBox> {
       } else if (isPasswordFieldSignUp() && enteredText.isNotEmpty) {
         String pattern =
             r'^(?=.*[0-9])(?=.*[a-z])(?=.*)(?=.*[@#$%^&+=_!]).{8,}$';
-        RegExp regExp = RegExp(pattern);
 
+        RegExp regExp = RegExp(pattern);
         validPassword = regExp.hasMatch(enteredText);
-      } else if (isConfirmPasswordFieldSignUp() && enteredText.isNotEmpty) {
+      } else if (isConfirmPasswordFieldSignUp() &&
+          widget.controller!.text.isNotEmpty) {
+        print('call to parent');
         passwordsMatch = widget.onChanged!();
       }
 
