@@ -1,4 +1,4 @@
-package com.clucker.cluckerserver.repository.model;
+package com.clucker.cluckerserver.model;
 
 import com.clucker.cluckerserver.dto.validation.annotation.ValidCluck;
 import lombok.AllArgsConstructor;
@@ -24,10 +24,10 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class Cluck {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Comment {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -39,12 +39,16 @@ public class Cluck {
     @Column(columnDefinition = "CHAR(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @ValidCluck(message = "Cluck must only be 6 words.")
     @NotNull
+    @ValidCluck(message = "Comment cannot succeed 6 words.")
     private String body;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @JoinColumn(name = "cluck_id", updatable = false, nullable = false)
+    private Cluck cluck;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", updatable = false, nullable = false)
     private User author;
 
     @CreationTimestamp

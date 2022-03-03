@@ -1,4 +1,4 @@
-package com.clucker.cluckerserver.repository.model;
+package com.clucker.cluckerserver.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -57,5 +57,9 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "author")
     private List<Cluck> clucks;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
 
 }

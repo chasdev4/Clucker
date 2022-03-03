@@ -1,13 +1,18 @@
 package com.clucker.cluckerserver.api.cluck.controller;
 
 import com.clucker.cluckerserver.api.cluck.service.CluckService;
+import com.clucker.cluckerserver.api.cluck.service.CommentService;
 import com.clucker.cluckerserver.dto.CluckResponse;
+import com.clucker.cluckerserver.dto.CommentResponse;
 import com.clucker.cluckerserver.dto.PostCluck;
-import com.clucker.cluckerserver.repository.model.Cluck;
+import com.clucker.cluckerserver.dto.PostComment;
+import com.clucker.cluckerserver.model.Cluck;
+import com.clucker.cluckerserver.model.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +34,7 @@ import java.net.URI;
 public class CluckController {
 
     private final CluckService cluckService;
+    private final CommentService commentService;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -58,6 +64,21 @@ public class CluckController {
                 .body(response);
     }
 
+    @PostMapping("/{cluckId}/comments")
+    public ResponseEntity<CommentResponse> postComment(@PathVariable String cluckId, @RequestBody @Valid PostComment postComment, Authentication authentication) {
+        Comment comment = commentService.postComment(cluckId, postComment, authentication);
+        CommentResponse response = commentService.mapToResponse(comment);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(comment.getId())
+                .toUri();
+
+        return ResponseEntity
+                .created(uri)
+                .body(response);
+
+    }
 
 
 }

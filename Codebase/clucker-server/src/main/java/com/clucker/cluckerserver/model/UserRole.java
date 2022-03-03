@@ -1,4 +1,4 @@
-package com.clucker.cluckerserver.repository.model;
+package com.clucker.cluckerserver.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
