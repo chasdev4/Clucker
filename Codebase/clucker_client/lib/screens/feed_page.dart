@@ -23,7 +23,7 @@ class Feed extends StatelessWidget {
         ],
       ),
       body: ListView(
-        children: cluckTest.getCluckList(howManyClucks: 10),
+        children: cluckTest.getCluckList(howManyClucks: 20),
       ),
       bottomNavigationBar: const MainNavigationBar(),
       floatingActionButton: const NewCluckButton(),

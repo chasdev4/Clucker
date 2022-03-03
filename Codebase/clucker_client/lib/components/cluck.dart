@@ -41,7 +41,7 @@ class _CluckState extends State<Cluck> {
             ),
             const Spacer(),
             const Padding(
-              padding: EdgeInsets.only(right: 10),
+              padding: EdgeInsets.only(right: 15),
               child: Text(
                   'Time',
                 style: TextStyle(
@@ -76,7 +76,10 @@ class _CluckState extends State<Cluck> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            EggControls(eggCount: widget.eggCount),
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: EggControls(eggCount: widget.eggCount),
+            ),
           ],
         ),
         const Divider(
