@@ -160,7 +160,7 @@ class _EmailFormState extends State<EmailForm> {
                           'A Clucker account with the email \'${emailController.text}\' already exists.';
                       emailTaken = true;
                       dialogUtil.oneButtonDialog(
-                          context, 'Hold on!', errorMessage);
+                          context, 'Email Conflict', errorMessage);
                     }
                   } else {
                     passwordController.text = '';
@@ -169,7 +169,7 @@ class _EmailFormState extends State<EmailForm> {
                     errorMessage =
                         'The passwords you provided do not match. Please try again.';
                     dialogUtil.oneButtonDialog(
-                        context, 'Hold on!', errorMessage);
+                        context, 'Password Conflict', errorMessage);
                   }
                 }
               },
