@@ -1,3 +1,4 @@
+import 'package:clucker_client/screens/email_signup_page.dart';
 import 'package:clucker_client/splash.dart';
 import 'package:clucker_client/test_screen.dart';
 import 'package:flutter/material.dart';

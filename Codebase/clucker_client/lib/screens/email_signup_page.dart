@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/models/user_registration.dart';
 import 'package:clucker_client/services/user_service.dart';
-import 'package:clucker_client/components/palette.dart';
 import 'package:http/http.dart';
 import '../components/DialogUtil.dart';
 
@@ -16,16 +14,7 @@ class EmailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Sign-Up',
-          style: TextStyle(
-            fontFamily: 'OpenSans',
-            fontSize: 40,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
+      resizeToAvoidBottomInset: false,
       body: EmailForm(username: username),
     );
   }
@@ -41,85 +30,160 @@ class EmailForm extends StatefulWidget {
 }
 
 class _EmailFormState extends State<EmailForm> {
-
   final _emailFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
-  final firstPasswordController = TextEditingController();
-  final secondPasswordController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final emailFocusNode = FocusNode();
+  final passwordFocusNode = FocusNode();
+  final confirmPasswordFocusNode = FocusNode();
+
+  String email = '';
 
   UserService userService = UserService();
   DialogUtil dialogUtil = DialogUtil();
+
+  bool emailTaken = false;
+
+  @override
+  void dispose() {
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+    confirmPasswordFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _emailFormKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text(
-            'Please enter your email address',
-            style: TextStyle(
-              fontFamily: 'OpenSans',
-              fontStyle: FontStyle.italic,
-              fontSize: 20,
+      child: Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 125),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width - 50,
+                child: const Text(
+                  'Sign Up',
+                  style: TextStyle(
+                    fontFamily: 'OpenSans',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 36,
+                  ),
+                ),
+              ),
             ),
-          ),
-          TextBox(
-            textBoxProfile: TextBoxProfile.emailField,
-            controller: emailController,
-          ),
-          const Text(
-            'Please enter a password',
-            style: TextStyle(
-              fontFamily: 'OpenSans',
-              fontStyle: FontStyle.italic,
-              fontSize: 20,
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 8,
             ),
-          ),
-          TextBox(
-            textBoxProfile: TextBoxProfile.passwordFieldSignUp,
-            controller: firstPasswordController,
-          ),
-          TextBox(
-            textBoxProfile: TextBoxProfile.passwordFieldSignUp,
-            controller: secondPasswordController,
-          ),
-          StandardButton(
-            text: 'Sign-Up',
-            routeName: '',
-            onPress: () async {
-              if (firstPasswordController.text ==
-                  secondPasswordController.text) {
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 100,
+              child: const Text(
+                'Enter your email and password...',
+                style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            TextBox(
+              textBoxProfile: TextBoxProfile.emailFieldSignUp,
+              controller: emailController,
+              focusNode: emailFocusNode,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              onChanged: () {emailTaken = false;},
+              extraFunction: () {
+                return emailTaken;
+              },
+            ),
+            TextBox(
+              textBoxProfile: TextBoxProfile.passwordFieldSignUp,
+              controller: passwordController,
+              focusNode: passwordFocusNode,
+              onEditingComplete: () {
+                FocusScope.of(context).nextFocus();
+                return passwordController.text ==
+                    confirmPasswordController.text;
+              },
+              onChanged: () {
+                return passwordController.text ==
+                    confirmPasswordController.text;
+              },
+            ),
+            TextBox(
+              textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,
+              controller: confirmPasswordController,
+              focusNode: confirmPasswordFocusNode,
+              onFieldSubmitted: () => FocusScope.of(context).unfocus(),
+              onChanged: () {
+                return passwordController.text ==
+                    confirmPasswordController.text;
+              },
+              extraFunction: () {
+                return passwordController.text.isEmpty &&
+                    confirmPasswordController.text.isEmpty;
+              },
+            ),
+            StandardButton(
+              text: 'Sign-Up',
+              routeName: '',
+              onPress: () async {
+                String errorMessage = '';
+                Response response = Response('', 400);
+                if (passwordController.text.isNotEmpty &&
+                    confirmPasswordController.text.isNotEmpty &&
+                    emailController.text.isNotEmpty) {
+                  if (passwordController.text ==
+                      confirmPasswordController.text) {
+                    UserRegistration userRegistration = UserRegistration(
+                        username: widget.username,
+                        password: passwordController.text,
+                        email: emailController.text);
 
-                UserRegistration userRegistration = UserRegistration(
-                    username: widget.username,
-                    password: firstPasswordController.text,
-                    email: emailController.text);
+                    response = await userService.registerUser(userRegistration);
 
-                Response response =
-                    await userService.registerUser(userRegistration);
+                    if (response.statusCode == 201) {
+                      dialogUtil.oneButtonDialog(
+                          context, 'Account Created', 'Start Clucking!');
+                    }
 
-                if (response.statusCode == 201) {
-                  dialogUtil.oneButtonDialog(
-                      context,
-                      'Account Created',
-                      'Start Clucking!');
-                } else {
-                  dialogUtil.oneButtonDialog(
-                      context,
-                      'ERROR',
-                      response.body);
+                    if (response.statusCode == 400) {
+                      emailFocusNode.requestFocus();
+                      errorMessage =
+                          'A Clucker account with the email \'${emailController.text}\' already exists.';
+                      emailTaken = true;
+                      dialogUtil.oneButtonDialog(
+                          context, 'Email Conflict', errorMessage);
+                    }
+                  } else {
+                    passwordController.text = '';
+                    confirmPasswordController.text = '';
+                    passwordFocusNode.requestFocus();
+                    errorMessage =
+                        'The passwords you provided do not match. Please try again.';
+                    dialogUtil.oneButtonDialog(
+                        context, 'Password Conflict', errorMessage);
+                  }
                 }
-              } else {
-                dialogUtil.oneButtonDialog(
-                    context,
-                    'Password Conflict',
-                    'Passwords must match!');
-              }
-            },
-          ),
-        ],
+              },
+            ),
+            StandardButton(
+              text: 'Back',
+              routeName: '',
+              onPress: () {
+                Navigator.pop(context);
+              },
+              isSecondary: true,
+            ),
+          ],
+        ),
       ),
     );
   }

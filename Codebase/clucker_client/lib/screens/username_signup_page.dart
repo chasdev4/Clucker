@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
@@ -11,18 +10,9 @@ class UsernamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-            'Sign-Up',
-        style: TextStyle(
-          fontFamily: 'OpenSans',
-          fontSize: 40,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-      ),
-      body: const UsernameForm(),
+    return const Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: UsernameForm(),
     );
   }
 }
@@ -35,15 +25,17 @@ class UsernameForm extends StatefulWidget {
 }
 
 class _UsernameFormState extends State<UsernameForm> {
-
   final _usernameFormKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
+  final usernameFocusNode = FocusNode();
+
+  String username = '';
 
   UserService userService = UserService();
   DialogUtil dialogUtil = DialogUtil();
 
   @override
-  void Dispose() {
+  void dispose() {
     usernameController.dispose();
     super.dispose();
   }
@@ -51,43 +43,85 @@ class _UsernameFormState extends State<UsernameForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _usernameFormKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget> [
-          const Text(
-            'What would you like to be called?',
-            style: TextStyle(
-              fontFamily: 'OpenSans',
-              fontStyle: FontStyle.italic,
-              fontSize: 20,
-            ),
-          ),
-          TextBox(
-            textBoxProfile: TextBoxProfile.usernameFieldSignUp,
-            controller: usernameController,
-          ),
-          StandardButton(
-            text: 'Next',
-            routeName: '',
-            onPress: () async {
+        key: _usernameFormKey,
+        child: Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 125),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width - 50,
+                  child: const Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      fontFamily: 'OpenSans',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 36,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 5,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 100,
+                child: const Text(
+                  'What would you like to be called?',
+                  style: TextStyle(
+                    fontFamily: 'OpenSans',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              TextBox(
+                textBoxProfile: TextBoxProfile.usernameFieldSignUp,
+                controller: usernameController,
+                focusNode: usernameFocusNode,
+                onFieldSubmitted: () => FocusScope.of(context).unfocus(),
+                onEditingComplete: () async {
+                  if (_usernameFormKey.currentState!.validate()) {}
+                  username = usernameController.text;
+                  return await userService.usernameAvailable(username);
+                },
+                onChanged: () async {
+                  if (_usernameFormKey.currentState!.validate()) {}
+                  username = usernameController.text;
+                  return await userService.usernameAvailable(username);
+                },
+              ),
+              StandardButton(
+                text: 'Next',
+                routeName: '',
+                onPress: () async {
 
-              if (await userService.usernameAvailable(usernameController.text)) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder:
-                        (context) => EmailPage(username: usernameController.text))
-                );
-              } else {
-                dialogUtil.oneButtonDialog(
-                    context,
-                    'Username Conflict',
-                    'Username is already taken!');
-              }
-            },
+                  bool isGood = await userService.usernameAvailable(username);
+
+                  if (_usernameFormKey.currentState!.validate()) {}
+
+                    if (isGood && username.isNotEmpty) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  EmailPage(username: username)));
+                    }
+                },
+              ),
+              StandardButton(
+                text: 'Back',
+                routeName: '',
+                onPress: () {
+                  Navigator.pop(context);
+                },
+                isSecondary: true,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
     );
   }
 }
