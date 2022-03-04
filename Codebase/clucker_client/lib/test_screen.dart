@@ -31,11 +31,7 @@ class _TestScreenState extends State<TestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () async {
-          return !overlayVisible;
-        },
-        child: Scaffold(
+    return Scaffold(
           appBar: const CluckerAppBar(
             title: "Feed",
             actions: [
@@ -53,14 +49,9 @@ class _TestScreenState extends State<TestScreen> {
             focusNode: focusNode,
           ),
           floatingActionButton: NewCluckButton(
-              focusNode: focusNode,
-              overlayVisible: overlayVisible,
-              setOverlayState: (bool overlayState) {
-                  overlayVisible = overlayState;
-
-              }),
+              focusNode: focusNode,),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-        ));
+        );
   }
 }
