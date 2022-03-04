@@ -157,7 +157,7 @@ class _TextBoxState extends State<TextBox> {
                               return null;
                             } else {
                               if (!usernameAvailable &&
-                                  enteredText.length > 3) {
+                                  enteredText.length > 5) {
                                 validatorError = true;
                                 if (enteredText.length > 10) {
                                   return '\'$enteredText\' is unavailable';
@@ -165,7 +165,7 @@ class _TextBoxState extends State<TextBox> {
                                   return 'The username \'$enteredText\' is unavailable';
                                 }
                               } else {
-                                String pattern = r'^[a-zA-Z0-9-_].{2,}$';
+                                String pattern = r'^[a-zA-Z0-9_].{5,}$';
                                 RegExp regExp = RegExp(pattern);
 
                                 if (!regExp.hasMatch(enteredText)) {
@@ -176,8 +176,8 @@ class _TextBoxState extends State<TextBox> {
                                           FontAwesomeIcons.solidTimesCircle;
                                     });
                                   });
-                                  if (enteredText.length < 3) {
-                                    return 'Username must be at least 3 characters';
+                                  if (enteredText.length < 6) {
+                                    return 'Username must be at least 6 characters';
                                   }
                                   return 'Invalid username';
                                 } else {
