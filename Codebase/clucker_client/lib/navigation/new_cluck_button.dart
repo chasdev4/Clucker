@@ -35,9 +35,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
     overlayVisible = widget.overlayVisible;
     widget.setOverlayState(overlayVisible);
     keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
-      print('Keyboard visibility update. Is visible: $visible');
       if (!keyboardVisibilityController.isVisible) {
-        print('Unfocusing');
         widget.focusNode.unfocus();
       }
 
@@ -200,11 +198,9 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   void _updateBarHeight({bool override = false}) {
     if (keyboardVisibilityController.isVisible || override == true) {
       barHeight = 218;
-      print('(visible) Bar height: $barHeight');
     }
     else {
       barHeight = countNewLines() <= 1 ? 125 : countNewLines() >= 7 ? 218 : (((numNewLines + 1) * 19.285) + 90);
-      print('(invisible) Bar height: $barHeight');
     }
   }
 }
