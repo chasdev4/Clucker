@@ -12,14 +12,17 @@ import '../navigation/main_navigation_bar.dart';
 import '../navigation/new_cluck_button.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({Key? key,
+  required this.username}) : super(key: key);
+
+  final String username;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          const ProfileHeader(),
+          ProfileHeader(username: username),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
@@ -38,7 +41,9 @@ class ProfilePage extends StatelessWidget {
 }
 
 class ProfileHeader extends StatefulWidget {
-  const ProfileHeader({Key? key}) : super(key: key);
+  const ProfileHeader({Key? key, required this.username}) : super(key: key);
+
+  final String username;
 
   @override
   _ProfileHeaderState createState() => _ProfileHeaderState();
@@ -165,7 +170,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     ),
                   ),
                 ),
-                const TabControls(isSearchTabs: false)
+                TabControls(isSearchTabs: false, username: widget.username,)
               ],
             ),
             Positioned(

@@ -36,7 +36,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
               ),
               iconSize: 25,
               onPressed: () {
-                //Navigator.pop(context);
+                Navigator.pop(context);
               })
           : null,
       toolbarHeight: height,

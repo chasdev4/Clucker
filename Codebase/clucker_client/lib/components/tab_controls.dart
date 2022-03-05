@@ -1,16 +1,19 @@
 import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/screens/followers_page.dart';
 import 'package:flutter/material.dart';
 
 class TabControls extends StatefulWidget with PreferredSizeWidget {
   const TabControls({
     Key? key,
     required this.isSearchTabs,
+    this.username = 'Search_Tabs',
     this.height = 46,
     this.padding = 15,
   }) : super(key: key);
   @override
   Size get preferredSize => Size.fromHeight(height);
 
+  final String username;
   final bool isSearchTabs;
   final double height;
   final double padding;
@@ -51,14 +54,11 @@ class _TabControlsState extends State<TabControls> {
                 false),
           ],
         ),
-        PreferredSize(
-          preferredSize: const Size.fromHeight(2.5),
-          child: Container(
+        Container(
             color: Palette.cluckerRed,
             height: 2.5,
             width: MediaQuery.of(context).size.width - widget.padding * 2,
           ),
-        ),
       ],
     ));
   }
@@ -78,6 +78,18 @@ class _TabControlsState extends State<TabControls> {
                 isLeftTab == false &&
                 leftTabActive == true) {
               leftTabActive = false;
+            } else if (widget.isSearchTabs == false && isLeftTab == true) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          FollowersPage(username: widget.username, pageContext: PageContext.following)));
+            } else if (widget.isSearchTabs == false && isLeftTab == false) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                  builder: (context) =>
+                  FollowersPage(username: widget.username, pageContext: PageContext.followers)));
             }
           });
         },
