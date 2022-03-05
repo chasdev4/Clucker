@@ -34,18 +34,26 @@ class FollowersPage extends StatelessWidget {
       title += 's';
     }
 
+    if (username.length > 9) {
+      title += '\n';
+    }
+    else {
+      title += ' ';
+    }
+
     switch (pageContext) {
       case PageContext.followers:
-        title += '\nFollowers';
+        title += 'Followers';
         break;
       case PageContext.following:
-        title += '\nFollowing';
+        title += 'Following';
         break;
     }
 
     return Scaffold(
       appBar: CluckerAppBar(
         appBarProfile: AppBarProfile.followers,
+        usernameLength: username.length,
         title: title,
         fontSize: 24,
       ),
