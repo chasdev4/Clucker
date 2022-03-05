@@ -4,6 +4,10 @@ import 'package:clucker_client/components/user_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+enum AccountWidgetProfile {
+  follower, discover, block
+}
+
 class AccountWidget extends StatelessWidget {
   const AccountWidget({Key? key, required this.username}) : super(key: key);
   final String username;
@@ -18,13 +22,7 @@ class AccountWidget extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(
-                height: 60,
-                width: 60,
-                child: UserAvatar(
-                  avatarImage: 'assets/icons/chicken.jpg',
-                ),
-              ),
+              const UserAvatar(size: 60),
               Text(
                 username,
                 style: const TextStyle(
