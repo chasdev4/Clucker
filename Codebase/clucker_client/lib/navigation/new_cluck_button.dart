@@ -19,16 +19,17 @@ class _NewCluckButtonState extends State<NewCluckButton> {
 
   @override
   Widget build(BuildContext context) {
+    double size = 75;
     return SizedBox(
-      height: 80,
-      width: 80,
+      height: size,
+      width: size,
       child: getKeyboardState()
           ? FloatingActionButton(
               backgroundColor: Palette.white,
               onPressed: () {},
               child: Transform.scale(scale: 1.17, child:Icon(
                 FontAwesomeIcons.plusCircle,
-                size: 80,
+                size: size,
                 color: Palette.cluckerRed,
               ),),
               elevation: 0,

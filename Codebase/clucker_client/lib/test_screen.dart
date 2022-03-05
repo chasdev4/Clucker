@@ -12,12 +12,8 @@ class TestScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CluckerAppBar(
+        appBarProfile: AppBarProfile.noAvatar,
         title: "Feed",
-        actions: [
-          UserAvatar(
-            avatarImage: 'assets/icons/chicken.jpg',
-          )
-        ],
       ),
       body: Center(
         child: Column(

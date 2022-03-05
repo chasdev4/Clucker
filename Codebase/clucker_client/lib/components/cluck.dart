@@ -29,7 +29,7 @@ class _CluckState extends State<Cluck> {
         Row(
           children: [
             const UserAvatar(
-              avatarImage: 'assets/icons/chicken.jpg',
+              size: 60,
             ),
             Text(
                 widget.username,
