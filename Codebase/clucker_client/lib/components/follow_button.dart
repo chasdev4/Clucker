@@ -7,11 +7,11 @@ class FollowButton extends StatefulWidget {
   const FollowButton({
     Key? key,
     required this.buttonProfile,
-    required this.onPress,
+    this.onPressed,
   }) : super(key: key);
 
   final FollowButtonProfile buttonProfile;
-  final Function onPress;
+  final Function? onPressed;
 
   @override
   _FollowButtonState createState() => _FollowButtonState();
@@ -67,7 +67,7 @@ class _FollowButtonState extends State<FollowButton> {
             isSecondary = !isSecondary;
           });
 
-          widget.onPress();
+          widget.onPressed!();
         },
       ),
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),

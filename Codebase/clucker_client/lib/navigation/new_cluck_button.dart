@@ -26,11 +26,11 @@ class _NewCluckButtonState extends State<NewCluckButton> {
           ? FloatingActionButton(
               backgroundColor: Palette.white,
               onPressed: () {},
-              child: Icon(
+              child: Transform.scale(scale: 1.17, child:Icon(
                 FontAwesomeIcons.plusCircle,
                 size: 80,
                 color: Palette.cluckerRed,
-              ),
+              ),),
               elevation: 0,
               tooltip: 'New Cluck')
           : null,
