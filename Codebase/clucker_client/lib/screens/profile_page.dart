@@ -59,7 +59,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     return SliverAppBar(
       elevation: 0,
       backgroundColor: Palette.white,
-      snap: false,
+      snap: true,
       pinned: false,
       collapsedHeight: 70,
       stretch: false,
