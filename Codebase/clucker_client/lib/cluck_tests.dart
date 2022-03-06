@@ -82,15 +82,15 @@ class CluckTests {
   List<Widget> getCommentList() {
     final List<String> cluckText = [
       'This is a comment.',
-      'This is another comment.',
-      'Short Comment.',
-      'Is this Comment the best Comment?',
-      'Maybe this one...',
-      'I\nCan\Type\nLike\nThis\nToo!',
-      'They can all\nlook great!',
-      'What would you Comment?',
-      'Clucker can confidently collect cool Comments!',
-      'There are Comments all over Clucks!'
+      'It\'s a small world afterall...',
+      'I agree.\nLike if you agree.',
+      'I always have to debate this',
+      'Maybe next time...',
+      'Reminds me of that one lyric.',
+      'You have been\nposting alot today!',
+      'The\nworld\nwill\nnever\nknow?',
+      'Isn\'t this fun?!',
+      'Follow me,\nit\'s free!'
     ];
 
     final List<String> usernames = [
