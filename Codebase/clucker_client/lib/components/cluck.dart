@@ -1,20 +1,31 @@
 import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/screens/comments_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:clucker_client/components/user_avatar.dart';
+import 'package:intl/intl.dart';
+
+enum CluckType { cluck, comment, cluckHeader }
 
 class Cluck extends StatefulWidget {
   Cluck(
       {Key? key,
+      this.cluckType = CluckType.cluck,
       required this.username,
       required this.cluckText,
-      required this.eggCount})
+      required this.eggCount,
+      required this.postDate,
+      this.commentButtonStatic = false,
+      this.isVisible = true})
       : super(key: key);
 
-  final String cluckText;
+  final CluckType cluckType;
   final String username;
+  final String cluckText;
+  final DateTime postDate;
+  final bool commentButtonStatic;
+  final bool isVisible;
   int eggCount;
 
   @override
@@ -22,76 +33,281 @@ class Cluck extends StatefulWidget {
 }
 
 class _CluckState extends State<Cluck> {
+  final DateFormat timeStampDate = DateFormat.yMMMMd('en_US');
+  final DateFormat timeStampTime = DateFormat('h:mm a');
+
+  DateTime now = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            const UserAvatar(
-              avatarImage: 'assets/icons/chicken.jpg',
-            ),
-            Text(
-                widget.username,
-              style: const TextStyle(
-                fontFamily: 'OpenSans',
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-            const Spacer(),
-            const Padding(
-              padding: EdgeInsets.only(right: 15),
-              child: Text(
-                  'Time',
-                style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontStyle: FontStyle.italic,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              width: 40,
-            ),
-            Expanded(
-              child: Text(
-                widget.cluckText,
-                maxLines: 6,
-                overflow: TextOverflow.clip,
-                style: const TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontSize: 20,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: EggControls(eggCount: widget.eggCount),
-            ),
-          ],
-        ),
-        const Divider(
-          thickness: 3,
-        ),
-      ],
-    );
+    return Column(children: [
+      Stack(
+        children: [
+          Container(
+              width: MediaQuery.of(context).size.width,
+              color: widget.cluckType != CluckType.comment
+                  ? Palette.white
+                  : Palette.mercuryGray.toMaterialColor().shade100,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: widget.cluckType == CluckType.cluck
+                            ? 0
+                            : widget.cluckType == CluckType.comment
+                                ? 15
+                                : 30,
+                      ),
+                      const UserAvatar(
+                        avatarImage: 'assets/icons/chicken.jpg',
+                      ),
+                      Text(
+                        widget.username,
+                        style: const TextStyle(
+                          fontFamily: 'OpenSans',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      const Spacer(),
+                      Transform.translate(
+                        offset: Offset(-20, -5),
+                        child: Text(
+                          getTimeAgo(),
+                          style: TextStyle(
+                            fontFamily: 'OpenSans',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Palette.offBlack.toMaterialColor().shade400,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(
+                        bottom: 12,
+                        right: 80,
+                        left: widget.cluckType == CluckType.cluck
+                            ? 0
+                            : widget.cluckType == CluckType.comment
+                                ? 15
+                                : 30),
+                    width: MediaQuery.of(context).size.width - 60,
+                    child: Text(
+                      widget.cluckText,
+                      maxLines: 6,
+                      style: const TextStyle(
+                        fontFamily: 'OpenSans',
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    color: widget.cluckType != CluckType.cluckHeader
+                        ? Palette.lightGrey.toMaterialColor().shade400
+                        : Colors.transparent,
+                    height: 2.5,
+                    width: MediaQuery.of(context).size.width - 15 * 2,
+                  ),
+                ],
+              )),
+          Positioned(
+              bottom: 5,
+              right: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      child: widget.cluckType != CluckType.comment
+                          ? _CommentButton(
+                              isStatic: widget.commentButtonStatic,
+                              commentCount: 123,
+                              buttonSize: 25,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CommentsPage(
+                                            cluck: Cluck(
+                                                username: widget.username,
+                                                cluckText: widget.cluckText,
+                                                eggCount: widget.eggCount,
+                                                postDate: widget.postDate),
+                                          )),
+                                );
+                              },
+                            )
+                          : null),
+                  _EggControls(
+                    eggCount: widget.eggCount,
+                    buttonSize: 25,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  )
+                ],
+              )),
+          Container(
+            child: widget.cluckType == CluckType.cluckHeader
+                ? Positioned(
+                    top: 18,
+                    left: 5,
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: RawMaterialButton(
+                        child: Icon(
+                          CupertinoIcons.back,
+                          color: widget.isVisible
+                              ? Palette.offBlack
+                              : Colors.transparent,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ))
+                : Container(),
+          )
+        ],
+      ),
+      Container(
+          child: widget.cluckType == CluckType.cluckHeader
+              ? Column(
+                  children: [
+                    Container(
+                      color: widget.isVisible
+                          ? Palette.lightGrey.toMaterialColor().shade300
+                          : Colors.transparent,
+                      height: 1,
+                      width: MediaQuery.of(context).size.width,
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 30,
+                        color: widget.isVisible
+                            ? Palette.white
+                            : Palette.mercuryGray.toMaterialColor().shade100,
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 13,
+                            ),
+                            Text(
+                              'Posted on ${timeStampDate.format(now)} at ${timeStampTime.format(now)}',
+                              style: TextStyle(
+                                fontFamily: 'OpenSans',
+                                fontSize: 14.44,
+                                fontWeight: FontWeight.w500,
+                                color: widget.isVisible
+                                    ? Palette.offBlack
+                                        .toMaterialColor()
+                                        .shade400
+                                    : Colors.transparent,
+                              ),
+                            )
+                          ],
+                        )),
+                    Container(
+                      color: widget.isVisible
+                          ? Palette.lightGrey.toMaterialColor().shade300
+                          : Colors.transparent,
+                      height: 1,
+                      width: MediaQuery.of(context).size.width,
+                    )
+                  ],
+                )
+              : null)
+    ]);
+  }
+
+  String getTimeAgo() {
+    String value = '';
+    Duration timeAgo = now.difference(widget.postDate);
+
+    if (timeAgo.inDays >= 365) {
+      value = '${(timeAgo.inDays / 365).toStringAsFixed(0)}y';
+    } else if (timeAgo.inDays >= 30) {
+      value = '${(timeAgo.inDays / 30).toStringAsFixed(0)}mo';
+    } else if (timeAgo.inDays >= 7) {
+      value = '${(timeAgo.inDays / 7).toStringAsFixed(0)}w';
+    } else if (timeAgo.inDays >= 1) {
+      value = '${timeAgo.inDays}d';
+    } else if (timeAgo.inHours >= 1) {
+      value = '${timeAgo.inHours}h';
+    } else if (timeAgo.inMinutes >= 1) {
+      value = '${timeAgo.inMinutes}m';
+    } else {
+      value = '${timeAgo.inSeconds}s';
+    }
+
+    return value;
   }
 }
 
-class EggControls extends StatefulWidget {
-  EggControls({Key? key, required this.eggCount, this.buttonSize = 25})
+class _CommentButton extends StatefulWidget {
+  const _CommentButton(
+      {Key? key,
+      required this.commentCount,
+      required this.buttonSize,
+      required this.onPressed,
+      this.isStatic = false})
+      : super(key: key);
+  final int commentCount;
+  final double buttonSize;
+  final Function onPressed;
+  final bool isStatic;
+
+  @override
+  _CommentButtonState createState() => _CommentButtonState();
+}
+
+class _CommentButtonState extends State<_CommentButton> {
+  @override
+  Widget build(BuildContext context) {
+    const double padding = 7.1;
+
+    return Flexible(
+        child: Column(children: [
+      Transform.translate(
+          offset: Offset(0, -8.1),
+          child: Text(
+              widget.commentCount != 0 ? widget.commentCount.toString() : '',
+              style: TextStyle(
+                  height: 0,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 11.4,
+                  color: Palette.cluckerRed))),
+      SizedBox(
+          width: widget.buttonSize + padding + 5,
+          height: widget.buttonSize + padding,
+          child: !widget.isStatic ? RawMaterialButton(
+              onPressed: () => widget.onPressed(),
+              splashColor: widget.isStatic
+                  ? Colors.transparent
+                  : Palette.cluckerRedLight.toMaterialColor().shade800,
+              child: commentIcon()) : commentIcon())
+    ]));
+  }
+
+ Icon commentIcon() {
+    return Icon(FontAwesomeIcons.solidCommentDots,
+        color: widget.commentCount == 0
+            ? Palette.mercuryGray
+            : Palette.cluckerRed,
+        size: widget.buttonSize);
+ }
+}
+
+class _EggControls extends StatefulWidget {
+  _EggControls({Key? key, required this.eggCount, required this.buttonSize})
       : super(key: key);
 
   final double buttonSize;
@@ -101,7 +317,7 @@ class EggControls extends StatefulWidget {
   _EggControlsState createState() => _EggControlsState();
 }
 
-class _EggControlsState extends State<EggControls> {
+class _EggControlsState extends State<_EggControls> {
   List<bool> isSelected = [false, false];
   List<bool> previousSelection = [false, false];
   Color activeBackground = Palette.cluckerRed;
@@ -112,12 +328,12 @@ class _EggControlsState extends State<EggControls> {
   @override
   Widget build(BuildContext context) {
     return Flexible(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text(widget.eggCount.toString(),
+        child: Column(children: [
+      Text(widget.eggCount != 0 ? widget.eggCount.toString() : '',
           style: TextStyle(
               height: 0,
               fontWeight: FontWeight.w900,
-              fontSize: widget.buttonSize - 14,
+              fontSize: 11.4,
               color: Palette.cluckerRed)),
       ToggleButtons(
         onPressed: (int index) {
