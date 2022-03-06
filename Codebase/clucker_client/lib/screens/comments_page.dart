@@ -12,10 +12,17 @@ class CommentsPage extends StatefulWidget {
 }
 
 class _CommentsPageState extends State<CommentsPage> {
+  late List<Widget> comments;
+
+  @override
+  void initState() {
+    super.initState();
+    comments = [];
+  }
+
   @override
   Widget build(BuildContext context) {
-    CluckTests cluckTests = CluckTests(cluckType: CluckType.comment);
-    List<Widget> comments = cluckTests.getCluckList(howManyClucks: 20);
+    comments = widget.cluck.comments;
     comments.insert(
         0,
         Column(
@@ -27,7 +34,9 @@ class _CommentsPageState extends State<CommentsPage> {
                 isVisible: false,
                 cluckText: widget.cluck.cluckText,
                 username: widget.cluck.username,
-                eggCount: widget.cluck.eggCount)
+                eggCount: widget.cluck.eggCount,
+            comments: widget.cluck.comments,
+            )
           ],
         ));
     return Scaffold(
@@ -50,6 +59,7 @@ class _CommentsPageState extends State<CommentsPage> {
                         commentButtonStatic: true,
                         cluckType: CluckType.cluckHeader,
                         cluckText: widget.cluck.cluckText,
+                        comments: widget.cluck.comments,
                         username: widget.cluck.username,
                         eggCount: widget.cluck.eggCount)
                   ],

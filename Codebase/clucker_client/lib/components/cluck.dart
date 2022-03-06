@@ -14,7 +14,7 @@ class Cluck extends StatefulWidget {
       this.cluckType = CluckType.cluck,
       required this.username,
       required this.cluckText,
-      required this.eggCount,
+      required this.eggCount, this.comments = const [],
       required this.postDate,
       this.commentButtonStatic = false,
       this.isVisible = true})
@@ -27,6 +27,7 @@ class Cluck extends StatefulWidget {
   final bool commentButtonStatic;
   final bool isVisible;
   int eggCount;
+  final List<Widget> comments;
 
   @override
   _CluckState createState() => _CluckState();
@@ -60,7 +61,7 @@ class _CluckState extends State<Cluck> {
                                 : 30,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 6),
+                        padding: EdgeInsets.only(top: 6, left: 20),
                         child: const UserAvatar(
                           size: 60,
                         ),
@@ -131,7 +132,7 @@ class _CluckState extends State<Cluck> {
                       child: widget.cluckType != CluckType.comment
                           ? _CommentButton(
                               isStatic: widget.commentButtonStatic,
-                              commentCount: 123,
+                              commentCount: widget.commentButtonStatic ? widget.comments.length - 1 : widget.comments.length,
                               buttonSize: 25,
                               onPressed: () {
                                 Navigator.push(
@@ -142,6 +143,7 @@ class _CluckState extends State<Cluck> {
                                                 username: widget.username,
                                                 cluckText: widget.cluckText,
                                                 eggCount: widget.eggCount,
+                                                comments: widget.comments,
                                                 postDate: widget.postDate),
                                           )),
                                 );
