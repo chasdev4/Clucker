@@ -59,8 +59,11 @@ class _CluckState extends State<Cluck> {
                                 ? 15
                                 : 30,
                       ),
-                      const UserAvatar(
-                        avatarImage: 'assets/icons/chicken.jpg',
+                      Padding(
+                        padding: EdgeInsets.only(top: 6),
+                        child: const UserAvatar(
+                          size: 60,
+                        ),
                       ),
                       Text(
                         widget.username,
@@ -201,7 +204,7 @@ class _CluckState extends State<Cluck> {
                               width: 13,
                             ),
                             Text(
-                              'Posted on ${timeStampDate.format(now)} at ${timeStampTime.format(now)}',
+                              'Posted on ${timeStampDate.format(widget.postDate)} at ${timeStampTime.format(widget.postDate)}',
                               style: TextStyle(
                                 fontFamily: 'OpenSans',
                                 fontSize: 14.44,
@@ -288,22 +291,23 @@ class _CommentButtonState extends State<_CommentButton> {
       SizedBox(
           width: widget.buttonSize + padding + 5,
           height: widget.buttonSize + padding,
-          child: !widget.isStatic ? RawMaterialButton(
-              onPressed: () => widget.onPressed(),
-              splashColor: widget.isStatic
-                  ? Colors.transparent
-                  : Palette.cluckerRedLight.toMaterialColor().shade800,
-              child: commentIcon()) : commentIcon())
+          child: !widget.isStatic
+              ? RawMaterialButton(
+                  onPressed: () => widget.onPressed(),
+                  splashColor: widget.isStatic
+                      ? Colors.transparent
+                      : Palette.cluckerRedLight.toMaterialColor().shade800,
+                  child: commentIcon())
+              : commentIcon())
     ]));
   }
 
- Icon commentIcon() {
+  Icon commentIcon() {
     return Icon(FontAwesomeIcons.solidCommentDots,
-        color: widget.commentCount == 0
-            ? Palette.mercuryGray
-            : Palette.cluckerRed,
+        color:
+            widget.commentCount == 0 ? Palette.mercuryGray : Palette.cluckerRed,
         size: widget.buttonSize);
- }
+  }
 }
 
 class _EggControls extends StatefulWidget {
