@@ -98,7 +98,6 @@ class _TextBoxState extends State<TextBox> {
                     autofocus: widget.textBoxProfile == TextBoxProfile.cluckField ||
                         widget.textBoxProfile == TextBoxProfile.commentField ? true : false,
                     controller: widget.controller,
-                    focusNode: widget.focusNode,
                     inputFormatters: getInputFormatters(),
                     cursorColor: const Color.fromARGB(255, 100, 100, 100),
                     cursorWidth: 1.1,

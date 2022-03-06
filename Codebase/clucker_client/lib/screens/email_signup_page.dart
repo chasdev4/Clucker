@@ -75,7 +75,6 @@ class _EmailFormState extends State<EmailForm> {
                     fontSize: 36,
                   ),
                 ),
-            focusNode: focusNode,
               ),
             ),
             SizedBox(
@@ -104,7 +103,6 @@ class _EmailFormState extends State<EmailForm> {
               extraFunction: () {
                 return emailTaken;
               },
-            focusNode: focusNode,
             ),
             TextBox(
               textBoxProfile: TextBoxProfile.passwordFieldSignUp,
@@ -119,7 +117,6 @@ class _EmailFormState extends State<EmailForm> {
                 return passwordController.text ==
                     confirmPasswordController.text;
               },
-            focusNode: focusNode,
             ),
             TextBox(
               textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,

@@ -86,7 +86,6 @@ class _LogInFormState extends State<LogInForm> {
                 controller: emailOrUsernameController,
                 focusNode: emailOrUsernameFocusNode,
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
-            focusNode: focusNode,
               ),
               TextBox(
                 textBoxProfile: TextBoxProfile.passwordFieldLogin,
