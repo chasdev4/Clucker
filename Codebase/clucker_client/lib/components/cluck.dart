@@ -139,7 +139,7 @@ class _CluckState extends State<Cluck> {
                       child: widget.cluckType != CluckType.comment
                           ? _CommentButton(
                               isStatic: widget.commentButtonStatic,
-                              commentCount: widget.commentButtonStatic ? widget.comments.length - 1 : widget.comments.length,
+                              commentCount: widget.commentButtonStatic ? widget.comments.length - 2 : widget.comments.length,
                               buttonSize: 25,
                               onPressed: () {
                                 Navigator.push(
