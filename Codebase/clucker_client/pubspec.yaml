@@ -39,6 +39,7 @@ dependencies:
   # Font Awesome
   font_awesome_flutter: ^9.2.0
   intl: ^0.17.0
+  flutter_keyboard_visibility: ^5.2.0
 
 dev_dependencies:
   flutter_test:

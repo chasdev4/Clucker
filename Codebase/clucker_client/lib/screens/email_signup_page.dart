@@ -21,7 +21,7 @@ class EmailPage extends StatelessWidget {
 }
 
 class EmailForm extends StatefulWidget {
-  const EmailForm({Key? key, required this.username}) : super(key: key);
+  EmailForm({Key? key, required this.username}) : super(key: key);
 
   final String username;
 
@@ -40,6 +40,7 @@ class _EmailFormState extends State<EmailForm> {
 
   String email = '';
 
+  late FocusNode focusNode;
   UserService userService = UserService();
   DialogUtil dialogUtil = DialogUtil();
 
@@ -74,6 +75,7 @@ class _EmailFormState extends State<EmailForm> {
                     fontSize: 36,
                   ),
                 ),
+            focusNode: focusNode,
               ),
             ),
             SizedBox(
@@ -102,6 +104,7 @@ class _EmailFormState extends State<EmailForm> {
               extraFunction: () {
                 return emailTaken;
               },
+            focusNode: focusNode,
             ),
             TextBox(
               textBoxProfile: TextBoxProfile.passwordFieldSignUp,
@@ -116,6 +119,7 @@ class _EmailFormState extends State<EmailForm> {
                 return passwordController.text ==
                     confirmPasswordController.text;
               },
+            focusNode: focusNode,
             ),
             TextBox(
               textBoxProfile: TextBoxProfile.confirmPasswordFieldSignUp,

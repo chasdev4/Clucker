@@ -34,6 +34,8 @@ class _LogInFormState extends State<LogInForm> {
   String emailOrUsername = '';
   String password = '';
 
+  late FocusNode focusNode;
+
   @override
   void dispose() {
     emailOrUsernameController.dispose();
@@ -84,6 +86,7 @@ class _LogInFormState extends State<LogInForm> {
                 controller: emailOrUsernameController,
                 focusNode: emailOrUsernameFocusNode,
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
+            focusNode: focusNode,
               ),
               TextBox(
                 textBoxProfile: TextBoxProfile.passwordFieldLogin,
