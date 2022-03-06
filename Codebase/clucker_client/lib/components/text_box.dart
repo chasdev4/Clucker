@@ -95,24 +95,17 @@ class _TextBoxState extends State<TextBox> {
               child: Stack(alignment: Alignment.center, children: [
                 TextFormField(
                     focusNode: widget.focusNode,
-                    autofocus: widget.textBoxProfile == TextBoxProfile.cluckField ||
-                        widget.textBoxProfile == TextBoxProfile.commentField ? true : false,
+                    autofocus: isCluckField() ? true : false,
                     controller: widget.controller,
                     inputFormatters: getInputFormatters(),
                     cursorColor: const Color.fromARGB(255, 100, 100, 100),
                     cursorWidth: 1.1,
 
-                    keyboardType: widget.textBoxProfile ==
-                                TextBoxProfile.cluckField ||
-                            widget.textBoxProfile == TextBoxProfile.commentField
+                    keyboardType: isCluckOrCommentField()
                         ? TextInputType.multiline
                         : TextInputType.text,
-                    minLines: (widget.textBoxProfile ==
-                        TextBoxProfile.cluckField ||
-                        widget.textBoxProfile == TextBoxProfile.commentField) && widget.focusNode.hasFocus ? 7 : 1,
-                    maxLines: widget.textBoxProfile ==
-                                TextBoxProfile.cluckField ||
-                            widget.textBoxProfile == TextBoxProfile.commentField
+                    minLines: (isCluckOrCommentField()) && widget.focusNode.hasFocus ? 7 : 1,
+                    maxLines: isCluckOrCommentField()
                         ? 7
                         : 1,
                     decoration: InputDecoration(
@@ -692,5 +685,9 @@ class _TextBoxState extends State<TextBox> {
     return widget.textBoxProfile == TextBoxProfile.cluckField ||
         widget.textBoxProfile == TextBoxProfile.commentField;
   }
+
+ bool isCluckField() {
+    return widget.textBoxProfile == TextBoxProfile.cluckField;
+ }
 //#endregion
 }

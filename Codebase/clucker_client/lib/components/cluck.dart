@@ -36,8 +36,15 @@ class Cluck extends StatefulWidget {
 class _CluckState extends State<Cluck> {
   final DateFormat timeStampDate = DateFormat.yMMMMd('en_US');
   final DateFormat timeStampTime = DateFormat('h:mm a');
+  final FocusNode focusNode = FocusNode();
 
   DateTime now = DateTime.now();
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +67,9 @@ class _CluckState extends State<Cluck> {
                                 ? 15
                                 : 30,
                       ),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(top: 6, left: 20),
-                        child: const UserAvatar(
+                        child: UserAvatar(
                           size: 60,
                         ),
                       ),
@@ -78,7 +85,7 @@ class _CluckState extends State<Cluck> {
                       Transform.translate(
                         offset: Offset(-20, -5),
                         child: Text(
-                          getTimeAgo(),
+                          widget.cluckType == CluckType.cluckHeader ? '' : getTimeAgo(),
                           style: TextStyle(
                             fontFamily: 'OpenSans',
                             fontSize: 16,
@@ -138,13 +145,13 @@ class _CluckState extends State<Cluck> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => CommentsPage(
+                                      builder: (context) => CommentsPage(focusNode: focusNode,
                                             cluck: Cluck(
                                                 username: widget.username,
                                                 cluckText: widget.cluckText,
                                                 eggCount: widget.eggCount,
                                                 comments: widget.comments,
-                                                postDate: widget.postDate),
+                                                postDate: widget.postDate,),
                                           )),
                                 );
                               },
@@ -206,10 +213,10 @@ class _CluckState extends State<Cluck> {
                               width: 13,
                             ),
                             Text(
-                              'Posted on ${timeStampDate.format(widget.postDate)} at ${timeStampTime.format(widget.postDate)}',
+                              '${timeStampDate.format(widget.postDate)} at ${timeStampTime.format(widget.postDate)}',
                               style: TextStyle(
                                 fontFamily: 'OpenSans',
-                                fontSize: 14.44,
+                                fontSize: 13.44,
                                 fontWeight: FontWeight.w500,
                                 color: widget.isVisible
                                     ? Palette.offBlack
