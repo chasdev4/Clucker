@@ -80,15 +80,57 @@ class CluckTests {
   }
 
   List<Widget> getCommentList() {
+    final List<String> cluckText = [
+      'This is a comment.',
+      'This is another comment.',
+      'Short Comment.',
+      'Is this Comment the best Comment?',
+      'Maybe this one...',
+      'I\nCan\Type\nLike\nThis\nToo!',
+      'They can all\nlook great!',
+      'What would you Comment?',
+      'Clucker can confidently collect cool Comments!',
+      'There are Comments all over Clucks!'
+    ];
+
+    final List<String> usernames = [
+      '12345678901234567890',
+      'toaster',
+      'love_lock5',
+      'maniacalG',
+      'MANBAT',
+      'a_rising_sun',
+      'mandy249095',
+      'Zamos',
+      'finlandaero',
+      'jetbrains'
+    ];
+
+    final List<DateTime> postDates = [
+      DateTime.parse("2021-12-12 11:47:00"),
+      DateTime.parse("2022-01-23 12:23:00"),
+      DateTime.parse("2020-08-29 01:47:00"),
+      DateTime.parse("2019-07-05 11:45:00"),
+      DateTime.parse("2021-12-03 05:47:00"),
+      DateTime.parse("2022-02-02 11:53:00"),
+      DateTime.parse("2022-02-09 08:14:00"),
+      DateTime.parse("2022-03-04 11:54:00"),
+      DateTime.parse("2022-03-03 03:38:00"),
+      DateTime.parse("2022-03-02 11:23:00"),
+    ];
+
+    final List<int> eggCounts = [15, 78, 35, 12, 0, 47, -25, 10, 9, 99];
+
+
     _comments = [];
     int numComments = rnd.nextInt(20);
     for (int j = 0; j < numComments; j++) {
       _comments.add(Cluck(
-        postDate: _postDates[rnd.nextInt(10)],
+        postDate: postDates[rnd.nextInt(10)],
         cluckType: CluckType.comment,
-        username: _usernames[rnd.nextInt(10)],
-        cluckText: _cluckText[rnd.nextInt(10)],
-        eggCount: _eggCounts[rnd.nextInt(10)],
+        username: usernames[rnd.nextInt(10)],
+        cluckText: cluckText[rnd.nextInt(10)],
+        eggCount: eggCounts[rnd.nextInt(10)],
       ));
     }
 

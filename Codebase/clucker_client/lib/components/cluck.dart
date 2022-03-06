@@ -182,6 +182,8 @@ class _CluckState extends State<Cluck> {
                               : Colors.transparent,
                         ),
                         onPressed: () {
+                          widget.comments.removeAt(0);
+                          widget.comments.removeAt(widget.comments.length - 1);
                           Navigator.pop(context);
                         },
                       ),

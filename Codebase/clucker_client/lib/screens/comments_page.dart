@@ -78,6 +78,9 @@ class _CommentsPageState extends State<CommentsPage> {
       return WillPopScope(
           onWillPop: () async {
             //TODO: prevent pop
+            print('onWillPop');
+            comments.removeAt(0);
+            comments.removeAt(comments.length - 1);
             return true;
           },
           child: Scaffold(
@@ -91,7 +94,7 @@ class _CommentsPageState extends State<CommentsPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 60,
                         ),
                         Cluck(
