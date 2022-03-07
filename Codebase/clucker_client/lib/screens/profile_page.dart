@@ -26,7 +26,7 @@ class ProfilePage extends StatelessWidget {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return Cluck(cluckText: 'Test', eggCount: 20, username: '12345678901234567890',);
+                return Cluck(cluckText: 'Test', eggCount: 20, username: username,);
               },
               childCount: 20,
             ),
@@ -55,7 +55,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     final NumberFormat eggCountFormat = NumberFormat.decimalPattern('en_us');
     final DateFormat joinDateFormat = DateFormat('MMM dd, yyyy');
 
-    String placeholderUsername = '12345678901234567890';
     int placeholderEggCount = 12345;
     DateTime placeholderJoinDate = DateTime.now();
     String placeholderDescription =
@@ -103,7 +102,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     Padding(
                         padding: const EdgeInsets.only(left: 22),
                         child: Text(
-                          '$placeholderUsername',
+                          widget.username,
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.w700,
