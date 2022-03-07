@@ -15,13 +15,8 @@ class Feed extends StatelessWidget {
   Widget build(BuildContext context) {
     final cluckNode = FocusNode();
     return Scaffold(
-      appBar: const CluckerAppBar(
+      appBar: CluckerAppBar(
         title: 'test feed',
-        actions: [
-          UserAvatar(
-            avatarImage: 'assets/icons/chicken.jpg',
-          ),
-        ],
       ),
       body: ListView(
         children: cluckTest.getCluckList(howManyClucks: 20),

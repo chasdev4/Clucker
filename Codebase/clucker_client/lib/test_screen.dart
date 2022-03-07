@@ -31,13 +31,8 @@ class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          appBar: const CluckerAppBar(
+          appBar: CluckerAppBar(
             title: "Feed",
-            actions: [
-              UserAvatar(
-                avatarImage: 'assets/icons/chicken.jpg',
-              )
-            ],
           ),
           body: Center(
             child: Column(
