@@ -83,7 +83,6 @@ class _CommentsPageState extends State<CommentsPage> {
 
     return WillPopScope(
         onWillPop: () async {
-          print('onWillPop');
           comments.removeAt(0);
           comments.removeAt(comments.length - 1);
           return true;
