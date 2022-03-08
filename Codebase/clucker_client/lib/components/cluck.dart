@@ -76,10 +76,7 @@ class _CluckState extends State<Cluck> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: EggControls(eggCount: widget.eggCount),
-            ),
+            EggControls(eggCount: widget.eggCount),
           ],
         ),
         const Divider(
