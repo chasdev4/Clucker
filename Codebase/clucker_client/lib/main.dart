@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/screens/login_page.dart';
 import 'package:clucker_client/screens/feed_page.dart';
+import 'package:clucker_client/screens/discover_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Palette.cluckerRed.toMaterialColor(),
         primaryColor: Palette.cluckerRed,
       ),
-      home: const Feed(),
+      home: const Discover(),
     );
   }
 }
