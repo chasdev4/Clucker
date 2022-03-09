@@ -190,20 +190,44 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             Positioned(
                 top: MediaQuery.of(context).size.height * 0.066 + 1,
                 right: 0,
-                child:
-                    PopupMenuButton(itemBuilder: (BuildContext context) {
+                child: PopupMenuButton(
+                    onSelected: (String selection) {
+                      switch (selection) {
+                        case 'Block':
+                          //TODO: Block user
+                          break;
+                        case 'Edit Profile':
+                          //TODO: Go to edit profile page
+                          break;
+                        case 'Settings':
+                          //TODO: Go to Settings
+                          break;
+                        case 'Log Out':
+                          //TODO: Log user out of Clucker
+                          break;
+                      }
+                    },
+                    iconSize: 30,
+                    itemBuilder: (BuildContext context) {
                       TextStyle textStyle = const TextStyle();
                       return (widget.username != placeholderCurrentUser)
                           ? _profileOptionTexts.map((String choice) {
-                            if (choice == 'Log Out') {
-                              textStyle = TextStyle(color: Palette.cluckerRed);
-                            } else {
-                              textStyle = TextStyle(color: Palette.black);
-                            }
+                              if (choice == 'Log Out') {
+                                textStyle =
+                                    TextStyle(color: Palette.cluckerRed);
+                              } else {
+                                textStyle = TextStyle(color: Palette.black);
+                              }
 
                               return PopupMenuItem<String>(
                                 value: choice,
-                                child: Padding(padding: EdgeInsets.symmetric(horizontal: 3),child: Text(choice, style: textStyle,)),
+                                child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 3),
+                                    child: Text(
+                                      choice,
+                                      style: textStyle,
+                                    )),
                               );
                             }).toList()
                           : _blockOptionText.map((String choice) {
