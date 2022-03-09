@@ -12,8 +12,7 @@ import '../navigation/main_navigation_bar.dart';
 import '../navigation/new_cluck_button.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key,
-  required this.username}) : super(key: key);
+  const ProfilePage({Key? key, required this.username}) : super(key: key);
 
   final String username;
 
@@ -26,7 +25,11 @@ class ProfilePage extends StatelessWidget {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return Cluck(cluckText: 'Test', eggCount: 20, username: username,);
+                return Cluck(
+                  cluckText: 'Test',
+                  eggCount: 20,
+                  username: username,
+                );
               },
               childCount: 20,
             ),
@@ -52,10 +55,19 @@ class ProfileHeader extends StatefulWidget {
 class _ProfileHeaderState extends State<ProfileHeader> {
   @override
   Widget build(BuildContext context) {
+    const List<String> _profileOptionTexts = [
+      'Edit Profile',
+      'Settings',
+      'Log Out'
+    ];
+
+    const List<String> _blockOptionText = ['Block'];
+
     final NumberFormat eggCountFormat = NumberFormat.decimalPattern('en_us');
     final DateFormat joinDateFormat = DateFormat('MMM dd, yyyy');
 
-    int placeholderEggCount = 12345;
+    String placeholderCurrentUser = 'user';
+    int placeholderEggCount = 1234512345;
     DateTime placeholderJoinDate = DateTime.now();
     String placeholderDescription =
         'Save time. Live faster. Follow our profile for new job postings! Or visit our website at example.com';
@@ -169,18 +181,38 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     ),
                   ),
                 ),
-                TabControls(isSearchTabs: false, username: widget.username,)
+                TabControls(
+                  isSearchTabs: false,
+                  username: widget.username,
+                )
               ],
             ),
             Positioned(
                 top: MediaQuery.of(context).size.height * 0.066 + 1,
                 right: 0,
-                child: IconButton(
-                  icon: const Icon(FontAwesomeIcons.ellipsisV),
-                  onPressed: () {
-                    // TODO: Open the more Options Menu
-                  },
-                ))
+                child:
+                    PopupMenuButton(itemBuilder: (BuildContext context) {
+                      TextStyle textStyle = const TextStyle();
+                      return (widget.username != placeholderCurrentUser)
+                          ? _profileOptionTexts.map((String choice) {
+                            if (choice == 'Log Out') {
+                              textStyle = TextStyle(color: Palette.cluckerRed);
+                            } else {
+                              textStyle = TextStyle(color: Palette.black);
+                            }
+
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Padding(padding: EdgeInsets.symmetric(horizontal: 3),child: Text(choice, style: textStyle,)),
+                              );
+                            }).toList()
+                          : _blockOptionText.map((String choice) {
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Text(choice),
+                              );
+                            }).toList();
+                    }))
           ],
         ),
       ),
