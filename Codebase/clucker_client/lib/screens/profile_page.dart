@@ -66,7 +66,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     final NumberFormat eggCountFormat = NumberFormat.decimalPattern('en_us');
     final DateFormat joinDateFormat = DateFormat('MMM dd, yyyy');
 
-    String placeholderCurrentUser = 'user';
     int placeholderEggCount = 1234512345;
     DateTime placeholderJoinDate = DateTime.now();
     String placeholderDescription =
@@ -93,8 +92,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  children: const [
-                    SizedBox(
+                  children: [
+                    const SizedBox(
                       height: 130,
                       width: 130,
                       child: UserAvatar(
@@ -102,8 +101,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                       ),
                     ),
                     Padding(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: FollowButton(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: isUserOnOwnProfile() ? null : const FollowButton(
                           buttonProfile: FollowButtonProfile.follow,
                         ))
                   ],
@@ -210,7 +209,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     iconSize: 30,
                     itemBuilder: (BuildContext context) {
                       TextStyle textStyle = const TextStyle();
-                      return (widget.username != placeholderCurrentUser)
+                      return (isUserOnOwnProfile())
                           ? _profileOptionTexts.map((String choice) {
                               if (choice == 'Log Out') {
                                 textStyle =
@@ -241,5 +240,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         ),
       ),
     );
+  }
+
+  bool isUserOnOwnProfile() {
+    String placeholderCurrentUser = 'user';
+    return widget.username == placeholderCurrentUser;
   }
 }
