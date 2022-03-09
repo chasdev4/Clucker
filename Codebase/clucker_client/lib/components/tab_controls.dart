@@ -2,6 +2,8 @@ import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/screens/followers_page.dart';
 import 'package:flutter/material.dart';
 
+import '../utilities/count_format.dart';
+
 class TabControls extends StatefulWidget with PreferredSizeWidget {
   const TabControls({
     Key? key,
@@ -23,8 +25,8 @@ class TabControls extends StatefulWidget with PreferredSizeWidget {
 }
 
 class _TabControlsState extends State<TabControls> {
-  String followerCount = '2.3K';
-  String followingCount = '4.5M';
+  int followerCount = 43212;
+  int followingCount = 1234567;
   bool leftTabActive = true;
 
   @override
@@ -39,7 +41,7 @@ class _TabControlsState extends State<TabControls> {
             _tabButton(
               (widget.isSearchTabs == true)
                   ? 'Clucks'
-                  : '$followingCount Following',
+                  : '${countFormat(followingCount)} Following',
               true,
             ),
             Container(
@@ -50,7 +52,7 @@ class _TabControlsState extends State<TabControls> {
             _tabButton(
                 (widget.isSearchTabs == true)
                     ? 'Users'
-                    : '$followerCount Followers',
+                    : '${countFormat(followerCount)} Followers',
                 false),
           ],
         ),
