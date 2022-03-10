@@ -34,6 +34,8 @@ class _LogInFormState extends State<LogInForm> {
   String emailOrUsername = '';
   String password = '';
 
+  late FocusNode focusNode;
+
   @override
   void dispose() {
     emailOrUsernameController.dispose();

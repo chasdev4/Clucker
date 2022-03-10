@@ -13,8 +13,9 @@ class Feed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cluckNode = FocusNode();
     return Scaffold(
-      appBar: const CluckerAppBar(
+      appBar: CluckerAppBar(
         username: 'username',
         appBarProfile: AppBarProfile.avatar,
         title: 'Feed',
@@ -22,8 +23,8 @@ class Feed extends StatelessWidget {
       body: ListView(
         children: cluckTest.getCluckList(howManyClucks: 20),
       ),
-      bottomNavigationBar: const MainNavigationBar(),
-      floatingActionButton: const NewCluckButton(),
+      bottomNavigationBar:  MainNavigationBar(focusNode: cluckNode,),
+      floatingActionButton:  NewCluckButton(focusNode: cluckNode,),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

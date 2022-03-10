@@ -23,6 +23,7 @@ class TextBox extends StatefulWidget {
       required this.textBoxProfile,
       this.controller,
       required this.focusNode,
+	  this.onTap,
       this.onEditingComplete,
       this.onFieldSubmitted,
       this.onChanged,
@@ -32,6 +33,7 @@ class TextBox extends StatefulWidget {
   final TextBoxProfile textBoxProfile;
   final TextEditingController? controller;
   final FocusNode focusNode;
+  final Function? onTap;
   final Function? onEditingComplete;
   final Function? onFieldSubmitted;
   final Function? onChanged;
@@ -92,11 +94,20 @@ class _TextBoxState extends State<TextBox> {
             Flexible(
               child: Stack(alignment: Alignment.center, children: [
                 TextFormField(
-                    controller: widget.controller,
                     focusNode: widget.focusNode,
+                    autofocus: isCluckField() ? true : false,
+                    controller: widget.controller,
                     inputFormatters: getInputFormatters(),
                     cursorColor: const Color.fromARGB(255, 100, 100, 100),
                     cursorWidth: 1.1,
+
+                    keyboardType: isCluckOrCommentField()
+                        ? TextInputType.multiline
+                        : TextInputType.text,
+                    minLines: (isCluckOrCommentField()) && widget.focusNode.hasFocus ? 7 : 1,
+                    maxLines: isCluckOrCommentField()
+                        ? 7
+                        : 1,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(
                           borderRadius:
@@ -141,11 +152,9 @@ class _TextBoxState extends State<TextBox> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    keyboardType: isCluckOrCommentField()
-                        ? TextInputType.multiline
-                        : TextInputType.text,
-                    maxLines: isCluckOrCommentField() ? 9 : 1,
-                    minLines: 1,
+                    onTap: () {
+                      widget.onTap!();
+                      },
                     obscureText: isAnyPasswordField() ? true : false,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: isUsernameFieldSignUp()
@@ -676,5 +685,9 @@ class _TextBoxState extends State<TextBox> {
     return widget.textBoxProfile == TextBoxProfile.cluckField ||
         widget.textBoxProfile == TextBoxProfile.commentField;
   }
+
+ bool isCluckField() {
+    return widget.textBoxProfile == TextBoxProfile.cluckField;
+ }
 //#endregion
 }
