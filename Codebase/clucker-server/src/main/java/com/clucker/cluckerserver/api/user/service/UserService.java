@@ -23,4 +23,5 @@ public interface UserService {
     User createUser(@Valid UserRegistration registration);
     UserResponse mapToResponse(User user);
     void updateUser(int id, @Valid UserUpdateRequest updateRequest);
+    void saveUser(User user);
 }
