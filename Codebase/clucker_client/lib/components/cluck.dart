@@ -14,10 +14,12 @@ class Cluck extends StatefulWidget {
       this.cluckType = CluckType.cluck,
       required this.username,
       required this.cluckText,
-      required this.eggCount, this.comments = const [],
+      required this.eggCount,
+      this.comments = const [],
       required this.postDate,
       this.commentButtonStatic = false,
-      this.isVisible = true})
+      this.isVisible = true,
+      this.onProfile = false})
       : super(key: key);
 
   final CluckType cluckType;
@@ -26,6 +28,7 @@ class Cluck extends StatefulWidget {
   final DateTime postDate;
   final bool commentButtonStatic;
   final bool isVisible;
+  final bool onProfile;
   int eggCount;
   final List<Widget> comments;
 
@@ -50,7 +53,7 @@ class _CluckState extends State<Cluck> {
   Widget build(BuildContext context) {
     return Column(children: [
       Stack(
-      children: [
+        children: [
           Container(
               width: MediaQuery.of(context).size.width,
               color: widget.cluckType != CluckType.comment
@@ -58,45 +61,48 @@ class _CluckState extends State<Cluck> {
                   : Palette.mercuryGray.toMaterialColor().shade100,
               child: Column(
                 children: [
-        Row(
-          children: [
+                  Row(
+                    children: [
                       SizedBox(
                         width: widget.cluckType == CluckType.cluck
                             ? 0
                             : widget.cluckType == CluckType.comment
                                 ? 15
                                 : 30,
-            ),
-                       Padding(
-                        padding: const EdgeInsets.only(top: 6, left: 20),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 6, bottom: 6, left: 20, right: 2),
                         child: UserAvatar(
-                          username: widget.username,
-                          avatarSize: AvatarSize.small
+                            username: widget.username,
+                            onProfile: widget.onProfile,
+                            avatarSize: AvatarSize.small),
+                      ),
+                      Text(
+                        widget.username,
+                        style: const TextStyle(
+                          fontFamily: 'OpenSans',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
                         ),
                       ),
-            Text(
-                widget.username,
-              style: const TextStyle(
-                fontFamily: 'OpenSans',
-                fontWeight: FontWeight.bold,
-                          fontSize: 18,
-              ),
-            ),
-            const Spacer(),
+                      const Spacer(),
                       Transform.translate(
                         offset: Offset(-20, -5),
-              child: Text(
-                          widget.cluckType == CluckType.cluckHeader ? '' : getTimeAgo(),
-                style: TextStyle(
-                  fontFamily: 'OpenSans',
+                        child: Text(
+                          widget.cluckType == CluckType.cluckHeader
+                              ? ''
+                              : getTimeAgo(),
+                          style: TextStyle(
+                            fontFamily: 'OpenSans',
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: Palette.offBlack.toMaterialColor().shade400,
-                ),
-              ),
-            ),
-          ],
-        ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   Container(
                     padding: EdgeInsets.only(
                         bottom: 12,
@@ -107,15 +113,15 @@ class _CluckState extends State<Cluck> {
                                 ? 15
                                 : 30),
                     width: MediaQuery.of(context).size.width - 60,
-              child: Text(
-                widget.cluckText,
-                maxLines: 6,
-                style: const TextStyle(
-                  fontFamily: 'OpenSans',
+                    child: Text(
+                      widget.cluckText,
+                      maxLines: 6,
+                      style: const TextStyle(
+                        fontFamily: 'OpenSans',
                         fontSize: 17,
-                ),
-              ),
-            ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(
                     height: 5,
                   ),
@@ -126,33 +132,37 @@ class _CluckState extends State<Cluck> {
                     height: 2.5,
                     width: MediaQuery.of(context).size.width - 15 * 2,
                   ),
-          ],
+                ],
               )),
           Positioned(
               bottom: 5,
               right: 1,
               child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
-          children: [
+                children: [
                   Container(
                       child: widget.cluckType != CluckType.comment
                           ? _CommentButton(
                               isStatic: widget.commentButtonStatic,
-                              commentCount: widget.commentButtonStatic ? widget.comments.length - 2 : widget.comments.length,
+                              commentCount: widget.commentButtonStatic
+                                  ? widget.comments.length - 2
+                                  : widget.comments.length,
                               buttonSize: 25,
                               onPressed: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => CommentsPage(focusNode: focusNode,
+                                      builder: (context) => CommentsPage(
+                                            focusNode: focusNode,
                                             cluck: Cluck(
-                                                username: widget.username,
-                                                cluckText: widget.cluckText,
-                                                eggCount: widget.eggCount,
-                                                comments: widget.comments,
-                                                postDate: widget.postDate,),
+                                              username: widget.username,
+                                              cluckText: widget.cluckText,
+                                              eggCount: widget.eggCount,
+                                              comments: widget.comments,
+                                              postDate: widget.postDate,
+                                            ),
                                           )),
                                 );
                               },
@@ -161,11 +171,11 @@ class _CluckState extends State<Cluck> {
                   _EggControls(
                     eggCount: widget.eggCount,
                     buttonSize: 25,
-            ),
+                  ),
                   const SizedBox(
                     width: 10,
                   )
-          ],
+                ],
               )),
           Container(
             child: widget.cluckType == CluckType.cluckHeader
@@ -181,17 +191,17 @@ class _CluckState extends State<Cluck> {
                           color: widget.isVisible
                               ? Palette.offBlack
                               : Colors.transparent,
-        ),
+                        ),
                         onPressed: () {
                           widget.comments.removeAt(0);
                           widget.comments.removeAt(widget.comments.length - 1);
                           Navigator.pop(context);
                         },
-        ),
+                      ),
                     ))
                 : Container(),
           )
-      ],
+        ],
       ),
       Container(
           child: widget.cluckType == CluckType.cluckHeader
@@ -261,7 +271,7 @@ class _CluckState extends State<Cluck> {
       value = '${timeAgo.inMinutes}m';
     } else {
       value = '${timeAgo.inSeconds}s';
-}
+    }
 
     return value;
   }

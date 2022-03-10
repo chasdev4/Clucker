@@ -8,12 +8,14 @@ enum AvatarSize { small, medium, large }
 class UserAvatar extends StatefulWidget {
   final AvatarSize avatarSize;
   final String username;
+  final bool onProfile;
   final String? avatarImage;
 
   const UserAvatar(
       {Key? key,
       required this.avatarSize,
       required this.username,
+        this.onProfile = false,
       this.avatarImage})
       : super(key: key);
 
@@ -41,11 +43,13 @@ class _UserAvatarState extends State<UserAvatar> {
       height: size,
       child: RawMaterialButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ProfilePage(username: widget.username)),
-          );
+          if (!widget.onProfile) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProfilePage(username: widget.username)),
+            );
+          }
         },
         child: widget.avatarImage == null
             ? Stack(

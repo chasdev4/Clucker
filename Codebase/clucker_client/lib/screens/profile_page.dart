@@ -1,3 +1,4 @@
+import 'package:clucker_client/cluck_tests.dart';
 import 'package:clucker_client/components/cluck.dart';
 import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
@@ -25,20 +26,24 @@ class ProfilePage extends StatelessWidget {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
+                CluckTests cluckTests = CluckTests();
+
                 return Cluck(
-                  postDate: DateTime.now(),
-                  cluckText: 'Test',
-                  eggCount: 20,
+                  postDate: DateTime.parse("2020-08-29 01:47:00"),
+                  eggCount: 30,
                   username: username,
+                  cluckText: 'This is a cluck',
+                  onProfile: true,
+                  comments: [],
                 );
               },
-              childCount: 20,
+              childCount: 30,
             ),
           ),
         ],
       ),
-      bottomNavigationBar:  MainNavigationBar(focusNode: cluckNode),
-      floatingActionButton:  NewCluckButton(focusNode: cluckNode),
+      bottomNavigationBar: MainNavigationBar(focusNode: cluckNode),
+      floatingActionButton: NewCluckButton(focusNode: cluckNode),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -73,6 +78,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         'Save time. Live faster. Follow our profile for new job postings! Or visit our website at example.com';
 
     return SliverAppBar(
+      automaticallyImplyLeading: false,
       elevation: 0,
       backgroundColor: Palette.white,
       snap: true,
@@ -95,14 +101,17 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     UserAvatar(
-                        username: widget.username,
-                        avatarSize: AvatarSize.large,
+                      username: widget.username,
+                      avatarSize: AvatarSize.large,
+                      onProfile: true,
                     ),
                     Padding(
                         padding: const EdgeInsets.only(bottom: 10),
-                        child: isUserOnOwnProfile() ? null : const FollowButton(
-                          buttonProfile: FollowButtonProfile.follow,
-                        ))
+                        child: isUserOnOwnProfile()
+                            ? null
+                            : const FollowButton(
+                                buttonProfile: FollowButtonProfile.follow,
+                              ))
                   ],
                 ),
                 Row(
@@ -241,7 +250,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   }
 
   bool isUserOnOwnProfile() {
-    String placeholderCurrentUser = 'user';
+    String placeholderCurrentUser = 'TheCluckMan';
     return widget.username == placeholderCurrentUser;
   }
 }

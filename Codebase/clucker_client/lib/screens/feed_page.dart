@@ -16,7 +16,7 @@ class Feed extends StatelessWidget {
     final cluckNode = FocusNode();
     return Scaffold(
       appBar: CluckerAppBar(
-        username: 'username',
+        username: 'TheCluckMan',
         appBarProfile: AppBarProfile.avatar,
         title: 'Feed',
       ),
