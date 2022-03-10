@@ -92,12 +92,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const SizedBox(
-                      height: 130,
-                      width: 130,
-                      child: UserAvatar(
-                        avatarImage: 'assets/icons/chicken.jpg',
-                      ),
+                    UserAvatar(
+                        username: widget.username,
+                        avatarSize: AvatarSize.large,
                     ),
                     Padding(
                         padding: const EdgeInsets.only(bottom: 10),

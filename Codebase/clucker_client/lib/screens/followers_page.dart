@@ -53,7 +53,7 @@ class FollowersPage extends StatelessWidget {
     return Scaffold(
       appBar: CluckerAppBar(
         appBarProfile: AppBarProfile.followers,
-        usernameLength: username.length,
+        username: username,
         title: title,
         fontSize: 24,
       ),

@@ -28,8 +28,9 @@ class _CluckState extends State<Cluck> {
       children: [
         Row(
           children: [
-            const UserAvatar(
-              size: 60,
+             UserAvatar(
+              username: widget.username,
+              avatarSize: AvatarSize.small,
             ),
             Text(
                 widget.username,

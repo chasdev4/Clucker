@@ -22,7 +22,7 @@ class AccountWidget extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const UserAvatar(size: 60),
+               UserAvatar(avatarSize: AvatarSize.small, username: username,),
               Text(
                 username,
                 style: const TextStyle(

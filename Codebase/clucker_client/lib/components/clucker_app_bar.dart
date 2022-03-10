@@ -14,7 +14,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
       this.noDivider = false,
       this.padding = 15,
       this.fontSize = 36,
-        this.usernameLength = 0,
+      required this.username,
       this.height = 80})
       : super(key: key);
 
@@ -23,7 +23,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
   final double fontSize;
   final double padding;
   final bool? noDivider;
-  final int usernameLength;
+  final String username;
   final double height;
 
   @override
@@ -54,7 +54,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
       title: Row(mainAxisAlignment: isAvatar() ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,children: [
         Text(
           title,
-          maxLines: isFollowers() && usernameLength > 9 ? 2 : 1,
+          maxLines: isFollowers() && username.length > 9 ? 2 : 1,
           style: TextStyle(
             fontSize: fontSize,
             fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
         ),
         Container(child:
         isAvatar()
-            ? UserAvatar()
+            ? UserAvatar(username: username,avatarSize: AvatarSize.medium,)
             : null)
       ],),
     );
