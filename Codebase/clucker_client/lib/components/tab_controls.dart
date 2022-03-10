@@ -31,7 +31,8 @@ class _TabControlsState extends State<TabControls> {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
+    return Align(
+      alignment: Alignment.bottomCenter,
         child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
