@@ -95,11 +95,11 @@ class _UserAvatarState extends State<UserAvatar> {
         widget.username[index] == 'X' ||
         widget.username[index] == 'y' ||
         widget.username[index] == 'Y' ||
-        widget.username[index] == ' l' ||
+        widget.username[index] == 'l' ||
         widget.username[index] == 'L' ||
         widget.username[index] == 'k' ||
         widget.username[index] == 'K') {
-      hue = hue - 50;
+      hue = hue - 45;
     }
     Color backgroundColor =
         HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
