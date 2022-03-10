@@ -74,7 +74,7 @@ class _UserAvatarState extends State<UserAvatar> {
 
     if (widget.username.codeUnitAt(index) >= 48 &&
         widget.username.codeUnitAt(index) <= 57) {
-      hue = (110 - widget.username.codeUnitAt(3)) * 5.7;
+      hue = (58 - widget.username.codeUnitAt(3)) * 30;
     } else if (widget.username.codeUnitAt(index) >= 65 &&
         widget.username.codeUnitAt(index) <= 77) {
       hue = (78 - widget.username.codeUnitAt(index)) * 27.5;
@@ -89,7 +89,9 @@ class _UserAvatarState extends State<UserAvatar> {
       hue = (123 - widget.username.codeUnitAt(index)) * 27.5;
     }
 
-    if (widget.username[index] == 'x' ||
+    if (widget.username[index] == '7' ||
+        widget.username[index] == '8' ||
+        widget.username[index] == 'x' ||
         widget.username[index] == 'X' ||
         widget.username[index] == 'y' ||
         widget.username[index] == 'Y' ||
@@ -99,12 +101,12 @@ class _UserAvatarState extends State<UserAvatar> {
         widget.username[index] == 'K') {
       hue = hue - 50;
     }
-      Color backgroundColor =
-          HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
-              .withHue(hue)
-              .withSaturation(backgroundSaturation)
-              .withLightness(backgroundLightness)
-              .toColor();
+    Color backgroundColor =
+        HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
+            .withHue(hue)
+            .withSaturation(backgroundSaturation)
+            .withLightness(backgroundLightness)
+            .toColor();
     Color foregroundColor =
         HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
             .withHue(hue)
