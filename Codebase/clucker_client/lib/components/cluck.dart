@@ -67,10 +67,11 @@ class _CluckState extends State<Cluck> {
                                 ? 15
                                 : 30,
             ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 6, left: 20),
+                       Padding(
+                        padding: const EdgeInsets.only(top: 6, left: 20),
                         child: UserAvatar(
-                          size: 60,
+                          username: widget.username,
+                          avatarSize: AvatarSize.small
                         ),
                       ),
             Text(

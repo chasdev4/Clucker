@@ -1,3 +1,4 @@
+import 'package:clucker_client/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'circle_crop.dart';
@@ -39,7 +40,13 @@ class _UserAvatarState extends State<UserAvatar> {
       width: size,
       height: size,
       child: RawMaterialButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfilePage(username: widget.username)),
+          );
+        },
         child: widget.avatarImage == null
             ? Stack(
                 children: [

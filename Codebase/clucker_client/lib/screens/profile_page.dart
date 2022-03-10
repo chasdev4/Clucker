@@ -17,6 +17,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cluckNode = FocusNode();
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -25,6 +26,7 @@ class ProfilePage extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 return Cluck(
+                  postDate: DateTime.now(),
                   cluckText: 'Test',
                   eggCount: 20,
                   username: username,
@@ -35,8 +37,8 @@ class ProfilePage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: const MainNavigationBar(),
-      floatingActionButton: const NewCluckButton(),
+      bottomNavigationBar:  MainNavigationBar(focusNode: cluckNode),
+      floatingActionButton:  NewCluckButton(focusNode: cluckNode),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
