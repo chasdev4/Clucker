@@ -97,12 +97,14 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Padding(padding: const EdgeInsets.only(left: 10),child: UserAvatar(
-                      username: widget.username,
-                      avatarSize: AvatarSize.large,
-                      // avatarImage: 'assets/icons/chicken.jpg',
-                      onProfile: true,
-                    ),),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: UserAvatar(
+                        username: widget.username,
+                        avatarSize: AvatarSize.large,
+                        onProfile: true,
+                      ),
+                    ),
                     Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: isUserOnOwnProfile()
