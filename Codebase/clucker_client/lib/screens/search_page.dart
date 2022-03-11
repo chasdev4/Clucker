@@ -18,7 +18,9 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final pages = [
+  late bool startedSearch;
+
+  var pages = [
     const _StartSearchPage(),
     const _UserResultPage(),
     const _CluckResultPage(),
@@ -26,6 +28,7 @@ class _SearchPageState extends State<SearchPage> {
   ];
   final searchNode = FocusNode();
   final cluckNode = FocusNode();
+  final searchController = TextEditingController();
   late List<Widget> searchResults = [];
   late int pageIndex;
 
@@ -33,10 +36,13 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     super.initState();
     pageIndex = 0;
+    startedSearch = false;
   }
 
   @override
   void dispose() {
+    pageIndex = 0;
+    startedSearch = false;
     searchNode.dispose();
     cluckNode.dispose();
     super.dispose();
@@ -59,23 +65,46 @@ class _SearchPageState extends State<SearchPage> {
                   height: 12,
                 ),
                 TextBox(
-                    textBoxProfile: TextBoxProfile.searchField,
-                    focusNode: searchNode),
+                  textBoxProfile: TextBoxProfile.searchField,
+                  focusNode: searchNode,
+                  extraFunction: () {
+                    setState(() {
+                      if (searchController.text.isEmpty && !startedSearch) {
+                        pageIndex = 0;
+                      } else {
+                        startedSearch = true;
+                        if (pageIndex == 1) {
+                          //TODO: Populate Cluck Results in the method below
+                          getClucks();
+                        } else if (pageIndex == 2) {
+                          //TODO: Populate Comment Results
+                        } else {
+                          pageIndex = 1;
+                          getClucks();
+                        }
+                      }
+                    });
+                  },
+                ),
                 const SizedBox(
                   height: 12,
                 ),
               ],
             ),
             bottom: TabControls(
-              onPressedLeft: (){
-                setState(() {
-                  pageIndex = 1;
-                });
+              onPressedLeft: () {
+                if (startedSearch) {
+                  setState(() {
+                    pageIndex = 1;
+                  });
+                }
               },
-              onPressedRight: (){
-                setState(() {
-                  pageIndex = 2;
-                });
+              onPressedRight: () {
+                if (startedSearch) {
+                  setState(() {
+                    pageIndex = 2;
+                  });
+                }
               },
               isSearchTabs: true,
             ),
@@ -87,6 +116,10 @@ class _SearchPageState extends State<SearchPage> {
       floatingActionButton: NewCluckButton(focusNode: cluckNode),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  void getClucks() {
+    throw UnimplementedError('Create the method to retrieve clucks');
   }
 }
 
@@ -128,7 +161,11 @@ class _CluckResultPage extends StatefulWidget {
 class _CluckResultPageState extends State<_CluckResultPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(width: 100, height: 100, color: Colors.blue,);
+    return Container(
+      width: 100,
+      height: 100,
+      color: Colors.blue,
+    );
   }
 }
 
@@ -142,7 +179,11 @@ class _UserResultPage extends StatefulWidget {
 class _UserResultPageState extends State<_UserResultPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(width: 100, height: 100, color: Colors.green,);
+    return Container(
+      width: 100,
+      height: 100,
+      color: Colors.green,
+    );
   }
 }
 
