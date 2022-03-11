@@ -18,17 +18,21 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final pages = [
+    const _StartSearchPage(),
+    const _UserResultPage(),
+    const _CluckResultPage(),
+    const _NoResultsFoundPage()
+  ];
   final searchNode = FocusNode();
   final cluckNode = FocusNode();
   late List<Widget> searchResults = [];
+  late int pageIndex;
 
   @override
   void initState() {
     super.initState();
-    searchResults.add(const UserResult(
-        username: 'username',
-        description:
-            'This is an example of a profile d es cr ip tio n, but it does not want to fit it this box for some odd peculiar reason'));
+    pageIndex = 0;
   }
 
   @override
@@ -65,28 +69,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ],
               ))),
-      body: searchResults.isEmpty
-          ? Center(
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: Icon(FontAwesomeIcons.search,
-                      color: Palette.cluckerRed.toMaterialColor().shade400,
-                      size: MediaQuery.of(context).size.width / 2.5),
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Text('Start typing to search...',
-                        style: TextStyle(
-                          color: Palette.cluckerRed.toMaterialColor().shade600,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ))),
-              ],
-            ))
-          : ListView(children: searchResults),
+      body: pages[pageIndex],
       bottomNavigationBar: MainNavigationBar(
         focusNode: cluckNode,
       ),
@@ -96,8 +79,90 @@ class _SearchPageState extends State<SearchPage> {
   }
 }
 
-class UserResult extends StatelessWidget {
-  const UserResult(
+class _StartSearchPage extends StatelessWidget {
+  const _StartSearchPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width / 2,
+          child: Icon(FontAwesomeIcons.search,
+              color: Palette.cluckerRed.toMaterialColor().shade400,
+              size: MediaQuery.of(context).size.width / 2.5),
+        ),
+        Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Text('Start typing to search...',
+                style: TextStyle(
+                  color: Palette.cluckerRed.toMaterialColor().shade600,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ))),
+      ],
+    ));
+  }
+}
+
+class _CluckResultPage extends StatefulWidget {
+  const _CluckResultPage({Key? key}) : super(key: key);
+
+  @override
+  _CluckResultPageState createState() => _CluckResultPageState();
+}
+
+class _CluckResultPageState extends State<_CluckResultPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class _UserResultPage extends StatefulWidget {
+  const _UserResultPage({Key? key}) : super(key: key);
+
+  @override
+  _UserResultPageState createState() => _UserResultPageState();
+}
+
+class _UserResultPageState extends State<_UserResultPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class _NoResultsFoundPage extends StatelessWidget {
+  const _NoResultsFoundPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 1.5,
+              child: Opacity(opacity: 0.5, child: Image.asset('assets/icons/no_results_found_icon_512x512.png')),
+            ),
+            Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text('No results found...',
+                    style: TextStyle(
+                      color: Palette.offBlack.toMaterialColor().shade300,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                    ))),
+          ],
+        ));
+  }
+}
+
+class _UserResultWidget extends StatelessWidget {
+  const _UserResultWidget(
       {Key? key, required this.username, required this.description})
       : super(key: key);
   final String username;
