@@ -49,26 +49,27 @@ class _SearchPageState extends State<SearchPage> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(110),
           child: AppBar(
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              toolbarHeight: 150,
-              bottom: const TabControls(
-                isSearchTabs: true,
-              ),
-              backgroundColor: Palette.white,
-              title: Column(
-                children: [
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  TextBox(
-                      textBoxProfile: TextBoxProfile.searchField,
-                      focusNode: searchNode),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                ],
-              ))),
+            automaticallyImplyLeading: false,
+            elevation: 0,
+            toolbarHeight: 150,
+            backgroundColor: Palette.white,
+            title: Column(
+              children: [
+                const SizedBox(
+                  height: 12,
+                ),
+                TextBox(
+                    textBoxProfile: TextBoxProfile.searchField,
+                    focusNode: searchNode),
+                const SizedBox(
+                  height: 12,
+                ),
+              ],
+            ),
+            bottom: const TabControls(
+              isSearchTabs: true,
+            ),
+          )),
       body: pages[pageIndex],
       bottomNavigationBar: MainNavigationBar(
         focusNode: cluckNode,
@@ -142,22 +143,25 @@ class _NoResultsFoundPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 1.5,
-              child: Opacity(opacity: 0.5, child: Image.asset('assets/icons/no_results_found_icon_512x512.png')),
-            ),
-            Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text('No results found...',
-                    style: TextStyle(
-                      color: Palette.offBlack.toMaterialColor().shade300,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                    ))),
-          ],
-        ));
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width / 1.7,
+          child: Opacity(
+              opacity: 0.5,
+              child: Image.asset(
+                  'assets/icons/no_results_found_icon_512x512.png')),
+        ),
+        Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Text('No results found...',
+                style: TextStyle(
+                  color: Palette.offBlack.toMaterialColor().shade300,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ))),
+      ],
+    ));
   }
 }
 
