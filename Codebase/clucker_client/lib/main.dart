@@ -1,4 +1,3 @@
-import 'package:clucker_client/screens/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/screens/feed_page.dart';
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Palette.cluckerRed.toMaterialColor(),
         primaryColor: Palette.cluckerRed,
       ),
-      home: const SearchPage(),
+      home: const Feed(),
     );
   }
 }
