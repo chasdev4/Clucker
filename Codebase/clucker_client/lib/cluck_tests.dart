@@ -57,8 +57,54 @@ class CluckTests {
     return cluckList;
   }
 
-  void sortList(List<Cluck> _cluckList) {
+  List<Cluck> sortClucks(List<Cluck> _cluckList, bool bestClucks) {
+    int size = _cluckList.length - 1, i, j;
+    bool swapped;
 
+    if (bestClucks)
+      {
+        for (i = 0; i < size; i++)
+        {
+          swapped = false;
+          for (j = 0; j < size; j++)
+          {
+            if (_cluckList[j].eggCount < _cluckList[j + 1].eggCount)
+            {
+              Cluck temp = _cluckList[j];
+              _cluckList[j] = _cluckList[j + 1];
+              _cluckList[j + 1] = temp;
+              swapped = true;
+            }
+          }
+
+          if (!swapped)
+          {
+            break;
+          }
+        }
+      } else {
+      for (i = 0; i < size; i++)
+      {
+        swapped = false;
+        for (j = 0; j < size; j++)
+        {
+          if (_cluckList[j].eggCount > _cluckList[j + 1].eggCount)
+          {
+            Cluck temp = _cluckList[j];
+            _cluckList[j] = _cluckList[j + 1];
+            _cluckList[j + 1] = temp;
+            swapped = true;
+          }
+        }
+
+        if (!swapped)
+        {
+          break;
+        }
+      }
+    }
+
+    return _cluckList;
   }
 
   }

@@ -8,7 +8,8 @@ import 'package:clucker_client/cluck_tests.dart';
 bool cluckTabActive = true;
 bool bestTabActive = true;
 
-List<Cluck> cluckList = CluckTests().getCluckList(howManyClucks: 10);
+List<Widget> discoverList = CluckTests().sortClucks(
+    CluckTests().getCluckList(howManyClucks: 10), bestTabActive);
 
 class DiscoverTabControls extends StatefulWidget with PreferredSizeWidget {
   const DiscoverTabControls({
@@ -18,6 +19,7 @@ class DiscoverTabControls extends StatefulWidget with PreferredSizeWidget {
     this.height = 46,
     this.padding = 15,
   }) : super(key: key);
+
   @override
   Size get preferredSize => Size.fromHeight(height);
 
@@ -29,19 +31,8 @@ class DiscoverTabControls extends StatefulWidget with PreferredSizeWidget {
   @override
   _DiscoverTabControlsState createState() => _DiscoverTabControlsState();
 
-  List<Cluck> getDiscoveryList() {
-    return cluckList;
-  }
-
-  void sortBestClucks(List<Cluck> _cluckList) {
-    int size = _cluckList.length;
-
-    for (int i = 0; i < size - 1; i++) {
-      for (int j = 0; j < size - 1; j++) {
-        if (_cluckList[j].eggCount )
-      }
-    }
-
+  List<Widget> getDiscoveryList() {
+    return discoverList;
   }
 
 }
@@ -50,7 +41,7 @@ class _DiscoverTabControlsState extends State<DiscoverTabControls> {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
+    return Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -109,6 +100,8 @@ class _DiscoverTabControlsState extends State<DiscoverTabControls> {
                 isLeftTab == true &&
                 cluckTabActive == false) {
               cluckTabActive = true;
+              discoverList = CluckTests().sortClucks(
+                  CluckTests().getCluckList(), widget.bestActive);
             } else if (widget.cluckActive == true &&
                 isLeftTab == false &&
                 cluckTabActive == true) {
@@ -145,10 +138,18 @@ class _DiscoverTabControlsState extends State<DiscoverTabControls> {
                 isLeftTab == true &&
                 bestTabActive == false) {
               bestTabActive = true;
+              if (cluckTabActive) {
+                discoverList = CluckTests().sortClucks(
+                    CluckTests().getCluckList(), bestTabActive);
+              }
             } else if (widget.bestActive == true &&
                 isLeftTab == false &&
                 bestTabActive == true) {
               bestTabActive = false;
+              if (cluckTabActive) {
+                discoverList = CluckTests().sortClucks(
+                    CluckTests().getCluckList(), bestTabActive);
+              }
             }
           });
         },

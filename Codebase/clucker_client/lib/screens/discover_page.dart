@@ -10,8 +10,15 @@ DiscoverTabControls discoverTabControls = const DiscoverTabControls(
     cluckActive: true,
     bestActive: true);
 
-class Discover extends StatelessWidget {
+class Discover extends StatefulWidget {
   const Discover({Key? key}) : super(key: key);
+
+  @override
+  _DiscoverState createState() => _DiscoverState();
+
+}
+
+class _DiscoverState extends State<Discover> {
 
   @override
   Widget build(BuildContext context) {
@@ -41,3 +48,4 @@ class Discover extends StatelessWidget {
     );
   }
 }
+
