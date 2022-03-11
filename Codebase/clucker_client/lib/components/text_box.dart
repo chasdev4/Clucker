@@ -153,8 +153,10 @@ class _TextBoxState extends State<TextBox> {
                       ),
                     ),
                     onTap: () {
-                      widget.onTap!();
-                      },
+                      if (isCluckOrCommentField()) {
+                        widget.onTap!();
+                      }
+                    },
                     obscureText: isAnyPasswordField() ? true : false,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: isUsernameFieldSignUp()

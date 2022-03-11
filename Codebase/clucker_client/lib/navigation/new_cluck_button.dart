@@ -32,7 +32,8 @@ class _NewCluckButtonState extends State<NewCluckButton> {
     cluckController = TextEditingController();
     numNewLines = 0;
     overlayVisible = false;
-    keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen((bool visible) {
       if (!keyboardVisibilityController.isVisible) {
         widget.focusNode.unfocus();
       }
@@ -40,6 +41,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
       _updateBarHeight();
     });
   }
+
   @override
   void dispose() {
     keyboardSubscription.cancel();
@@ -57,7 +59,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-      if (overlayVisible) {
+          if (overlayVisible) {
             overlayEntry.remove();
             setState(() {
               overlayVisible = false;
@@ -65,123 +67,136 @@ class _NewCluckButtonState extends State<NewCluckButton> {
             return overlayVisible;
           }
           return true;
-    },
-    child: SizedBox(
-      height: 80,
-      width: 80,
-      child: getKeyboardState() && overlayVisible == false
-          ? FloatingActionButton(
-              backgroundColor: Palette.white,
-              onPressed: () {
-                _showOverlay(context);
-                widget.focusNode.requestFocus();
-                _updateBarHeight(override: true);
-              },
-              child: Icon(
-                FontAwesomeIcons.plusCircle,
-                size: 80,
-                color: Palette.cluckerRed,
-              ),
-              elevation: 0,
-              tooltip: 'New Cluck')
-          : null,
-    ));
+        },
+        child: SizedBox(
+          height: 70,
+          width: 70,
+          child: getKeyboardState() && overlayVisible == false
+              ? FloatingActionButton(
+                  backgroundColor: Palette.white,
+                  onPressed: () {
+                    _showOverlay(context);
+                    widget.focusNode.requestFocus();
+                    _updateBarHeight(override: true);
+                  },
+                  child: Transform.scale(
+                      scale: 1.17,
+                      child: Icon(
+                        FontAwesomeIcons.plusCircle,
+                        size: 70,
+                        color: Palette.cluckerRed,
+                      )),
+                  elevation: 0,
+                  tooltip: 'New Cluck')
+              : null,
+        ));
   }
 
   void _showOverlay(BuildContext context) async {
     OverlayState? overlayState = Overlay.of(context);
 
     overlayEntry = OverlayEntry(builder: (context) {
-      return KeyboardVisibilityBuilder(
-          builder: (context, isKeyboardVisible) {
-            return Column(children: <Widget>[
-        GestureDetector(
-          onTap: () {},
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height -
-                barHeight -
-                MediaQuery.of(context).viewInsets.bottom,
-            child: RawMaterialButton(
-              fillColor: Palette.black.toMaterialColor().shade300,
-              splashColor: Colors.transparent,
-              onPressed: () {
-                setState(() {
-                  _updateBarHeight();
-                  if (!keyboardVisibilityController.isVisible) {
-                    overlayEntry.remove();
-                    overlayVisible = false;
-                    cluckController.text = '';
-                  }
-                  else {
-                    widget.focusNode.unfocus();
-                  }
-                });
-              },
+      return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
+        return Column(children: <Widget>[
+          GestureDetector(
+            onTap: () {},
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height -
+                  barHeight -
+                  MediaQuery.of(context).viewInsets.bottom,
+              child: RawMaterialButton(
+                fillColor: Palette.black.toMaterialColor().shade300,
+                splashColor: Colors.transparent,
+                onPressed: () {
+                  setState(() {
+                    _updateBarHeight();
+                    if (!keyboardVisibilityController.isVisible) {
+                      overlayEntry.remove();
+                      overlayVisible = false;
+                      cluckController.text = '';
+                    } else {
+                      widget.focusNode.unfocus();
+                    }
+                  });
+                },
+              ),
             ),
           ),
-        ),
-        Stack(alignment: Alignment.bottomCenter, children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: barHeight - 1,
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                  spreadRadius: 1,
-                  offset: const Offset(0, -1.45),
-                  color: Palette.mercuryGray.toMaterialColor().shade400)
-            ]),
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: barHeight,
-                color: Palette.white,
-                child: Material(
-                    color: Colors.transparent,
-                    child: Column(
-                      children: [
-                        Container(
-                            padding: EdgeInsets.all(widget.focusNode.hasFocus ? 3 : 13),
-                            width: MediaQuery.of(context).size.width - 50,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(padding: EdgeInsets.only(left: widget.focusNode.hasFocus ? 10 : 0), child: const Text(
-                                  'New Cluck',
-                                  style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w900),
-                                ),),
-                                const SizedBox(),
-                                widget.focusNode.hasFocus ?
-                                IconButton(
-                                    onPressed: () {
-                                      overlayEntry.remove();
-                                      overlayVisible = false;
-                                    },
-                                    icon: Icon(FontAwesomeIcons.times, size: 26, color: Palette.offBlack,)) : const SizedBox(),
-                              ],
-                            )),
-                        TextBox(
-                            textBoxProfile: TextBoxProfile.cluckField,
-                            controller: cluckController,
-                            focusNode: widget.focusNode,
-                            onTap: () {
-                              setState(() {
-                                barHeight = 218;
-                              });
-                            }),
-                      ],
-                    )),
-              ),
-            ],
-          ),
-        ]),
-      ]);});
+          Stack(alignment: Alignment.bottomCenter, children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: barHeight - 1,
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(
+                    spreadRadius: 1,
+                    offset: const Offset(0, -1.45),
+                    color: Palette.mercuryGray.toMaterialColor().shade400)
+              ]),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: barHeight,
+                  color: Palette.white,
+                  child: Material(
+                      color: Colors.transparent,
+                      child: Column(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.all(
+                                  widget.focusNode.hasFocus ? 3 : 13),
+                              width: MediaQuery.of(context).size.width - 50,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            widget.focusNode.hasFocus ? 10 : 0),
+                                    child: const Text(
+                                      'New Cluck',
+                                      style: TextStyle(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.w900),
+                                    ),
+                                  ),
+                                  const SizedBox(),
+                                  widget.focusNode.hasFocus
+                                      ? IconButton(
+                                          onPressed: () {
+                                            overlayEntry.remove();
+                                            overlayVisible = false;
+                                          },
+                                          icon: Icon(
+                                            FontAwesomeIcons.times,
+                                            size: 26,
+                                            color: Palette.offBlack,
+                                          ))
+                                      : const SizedBox(),
+                                ],
+                              )),
+                          TextBox(
+                              textBoxProfile: TextBoxProfile.cluckField,
+                              controller: cluckController,
+                              focusNode: widget.focusNode,
+                              onTap: () {
+                                setState(() {
+                                  barHeight = 218;
+                                });
+                              }),
+                        ],
+                      )),
+                ),
+              ],
+            ),
+          ]),
+        ]);
+      });
     });
 
     overlayVisible = true;
@@ -203,9 +218,12 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   void _updateBarHeight({bool override = false}) {
     if (keyboardVisibilityController.isVisible || override == true) {
       barHeight = 218;
-    }
-    else {
-      barHeight = countNewLines() <= 1 ? 125 : countNewLines() >= 7 ? 218 : (((numNewLines + 1) * 19.285) + 90);
+    } else {
+      barHeight = countNewLines() <= 1
+          ? 125
+          : countNewLines() >= 7
+              ? 218
+              : (((numNewLines + 1) * 19.285) + 90);
     }
   }
 }

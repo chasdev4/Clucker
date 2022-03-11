@@ -21,7 +21,7 @@ class EmailPage extends StatelessWidget {
 }
 
 class EmailForm extends StatefulWidget {
-  EmailForm({Key? key, required this.username}) : super(key: key);
+  const EmailForm({Key? key, required this.username}) : super(key: key);
 
   final String username;
 

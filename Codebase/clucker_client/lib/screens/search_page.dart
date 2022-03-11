@@ -1,7 +1,6 @@
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../components/palette.dart';
@@ -17,11 +16,13 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final searchNode = FocusNode();
+  final cluckNode = FocusNode();
   late List<Widget> searchResults = [];
 
   @override
   void dispose() {
     searchNode.dispose();
+    cluckNode.dispose();
     super.dispose();
   }
 
@@ -32,6 +33,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(110),
           child: AppBar(
+            automaticallyImplyLeading: false,
               elevation: 0,
               toolbarHeight: 150,
               bottom: const TabControls(
@@ -51,22 +53,32 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ],
               ))),
-      body: searchResults.length == 0
-          ? Center(child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: searchResults.isEmpty
+          ? Center(
+              child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: MediaQuery.of(context).size.width / 2, child:
-                  Icon(FontAwesomeIcons.search, color: Palette.cluckerRed.toMaterialColor().shade400, size: MediaQuery.of(context).size.width / 2.5),),
-                  Padding(padding: EdgeInsets.only(top: 20), child: Text('Start typing to search...', style: TextStyle(
-                      color: Palette.cluckerRed.toMaterialColor().shade600,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                  ))),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Icon(FontAwesomeIcons.search,
+                      color: Palette.cluckerRed.toMaterialColor().shade400,
+                      size: MediaQuery.of(context).size.width / 2.5),
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text('Start typing to search...',
+                        style: TextStyle(
+                          color: Palette.cluckerRed.toMaterialColor().shade600,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                        ))),
               ],
             ))
           : ListView(children: searchResults),
-      bottomNavigationBar: const MainNavigationBar(),
-      floatingActionButton: const NewCluckButton(),
+      bottomNavigationBar: MainNavigationBar(
+        focusNode: cluckNode,
+      ),
+      floatingActionButton: NewCluckButton(focusNode: cluckNode),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

@@ -1,6 +1,5 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/user_avatar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

@@ -88,7 +88,7 @@ class _CluckState extends State<Cluck> {
                       ),
                       const Spacer(),
                       Transform.translate(
-                        offset: Offset(-20, -5),
+                        offset: const Offset(-20, -5),
                         child: Text(
                           widget.cluckType == CluckType.cluckHeader
                               ? ''
@@ -302,7 +302,7 @@ class _CommentButtonState extends State<_CommentButton> {
     return Flexible(
         child: Column(children: [
       Transform.translate(
-          offset: Offset(0, -8.1),
+          offset: const Offset(0, -8.1),
           child: Text(
               widget.commentCount != 0 ? widget.commentCount.toString() : '',
               style: TextStyle(

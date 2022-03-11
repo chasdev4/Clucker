@@ -1,7 +1,6 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:clucker_client/navigation/new_cluck_button.dart';
 
 class MainNavigationBar extends StatefulWidget {
   const MainNavigationBar({Key? key, required this.focusNode}) : super(key: key);
@@ -99,7 +98,7 @@ class _MainNavigationBar extends State<MainNavigationBar> {
           ],
         ),
       ),
-    ) : BottomAppBar();
+    ) : const BottomAppBar();
   }
 
   void updateList() {

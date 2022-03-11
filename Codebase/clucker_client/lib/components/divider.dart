@@ -5,7 +5,7 @@ class StandardDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _DividerFactory();
+    return const _DividerFactory();
   }
 }
 
@@ -14,13 +14,13 @@ class HeaderDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _DividerFactory(true);
+    return const _DividerFactory(true);
   }
 }
 
 
 class _DividerFactory extends StatelessWidget {
-   _DividerFactory([this.isHeaderStyle = false]);
+   const _DividerFactory([this.isHeaderStyle = false]);
 
   final bool isHeaderStyle;
 

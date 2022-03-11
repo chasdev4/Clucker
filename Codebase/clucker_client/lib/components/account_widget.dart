@@ -15,7 +15,7 @@ class AccountWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.center,children: [
-      SizedBox(height: 10,),
+      const SizedBox(height: 10,),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -36,7 +36,7 @@ class AccountWidget extends StatelessWidget {
           const FollowButton(buttonProfile: FollowButtonProfile.followSmall)
         ],
       ),
-      SizedBox(height: 10,),
+      const SizedBox(height: 10,),
       Container(
         color: Palette.lightGrey.toMaterialColor().shade400,
         height: 2.5,

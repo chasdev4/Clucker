@@ -1,13 +1,8 @@
-import 'package:clucker_client/cluck_tests.dart';
 import 'package:clucker_client/components/cluck.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
-import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/text_box.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 late StreamSubscription<bool> keyboardSubscription;
@@ -76,7 +71,7 @@ class _CommentsPageState extends State<CommentsPage> {
               )
             ],
           ));
-      comments.add(SizedBox(
+      comments.add(const SizedBox(
         height: 75,
       ));
     }

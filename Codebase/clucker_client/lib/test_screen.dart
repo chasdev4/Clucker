@@ -2,7 +2,6 @@ import 'package:clucker_client/navigation/main_navigation_bar.dart';
 import 'package:clucker_client/navigation/new_cluck_button.dart';
 import 'package:flutter/material.dart';
 import 'components/clucker_app_bar.dart';
-import 'components/user_avatar.dart';
 
 class TestScreen extends StatefulWidget {
   const TestScreen({Key? key}) : super(key: key);
@@ -31,7 +30,7 @@ class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          appBar: CluckerAppBar(
+          appBar: const CluckerAppBar(
         username: 'user',
         appBarProfile: AppBarProfile.noAvatar,
         title: "Feed",

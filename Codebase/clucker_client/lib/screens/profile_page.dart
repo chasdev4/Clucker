@@ -1,4 +1,3 @@
-import 'package:clucker_client/cluck_tests.dart';
 import 'package:clucker_client/components/cluck.dart';
 import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
@@ -26,15 +25,13 @@ class ProfilePage extends StatelessWidget {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                CluckTests cluckTests = CluckTests();
-
                 return Cluck(
                   postDate: DateTime.parse("2020-08-29 01:47:00"),
                   eggCount: 30,
                   username: username,
                   cluckText: 'This is a cluck',
                   onProfile: true,
-                  comments: [],
+                  comments: const [],
                 );
               },
               childCount: 30,
@@ -100,11 +97,12 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    UserAvatar(
+                    Padding(padding: const EdgeInsets.only(left: 10),child: UserAvatar(
                       username: widget.username,
                       avatarSize: AvatarSize.large,
+                      // avatarImage: 'assets/icons/chicken.jpg',
                       onProfile: true,
-                    ),
+                    ),),
                     Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: isUserOnOwnProfile()
@@ -139,7 +137,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${eggCountFormat.format(placeholderEggCount)}',
+                              eggCountFormat.format(placeholderEggCount),
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w400,
