@@ -188,6 +188,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   ),
                 ),
                 TabControls(
+                  onPressedLeft: (){},
+                  onPressedRight: (){},
                   isSearchTabs: false,
                   username: widget.username,
                 )

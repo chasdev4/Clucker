@@ -11,6 +11,8 @@ class TabControls extends StatefulWidget with PreferredSizeWidget {
     this.username = 'Search_Tabs',
     this.height = 46,
     this.padding = 15,
+    required this.onPressedLeft,
+    required this.onPressedRight
   }) : super(key: key);
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -19,6 +21,8 @@ class TabControls extends StatefulWidget with PreferredSizeWidget {
   final bool isSearchTabs;
   final double height;
   final double padding;
+  final Function onPressedLeft;
+  final Function onPressedRight;
 
   @override
   _TabControlsState createState() => _TabControlsState();

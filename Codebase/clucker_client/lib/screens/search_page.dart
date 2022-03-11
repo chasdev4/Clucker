@@ -66,7 +66,9 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ],
             ),
-            bottom: const TabControls(
+            bottom: TabControls(
+              onPressedLeft: (){},
+              onPressedRight: (){},
               isSearchTabs: true,
             ),
           )),
