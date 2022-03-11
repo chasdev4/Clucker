@@ -10,12 +10,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -56,10 +61,22 @@ public class User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "author")
-    private List<Cluck> clucks;
+    private List<Cluck> clucks = Collections.emptyList();
 
     @JsonIgnore
     @OneToMany(mappedBy = "author")
-    private List<Comment> comments;
+    private List<Comment> comments = Collections.emptyList();
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "follower_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> followers = Collections.emptyList();
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "followers")
+    private List<User> following = Collections.emptyList();
 
 }

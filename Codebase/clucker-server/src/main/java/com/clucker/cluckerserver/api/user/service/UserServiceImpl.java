@@ -87,7 +87,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse mapToResponse(User user) {
-        return mapper.map(user, UserResponse.class);
+        UserResponse userResponse = mapper.map(user, UserResponse.class);
+        userResponse.setCluckCount(user.getClucks().size());
+        userResponse.setFollowersCount(user.getFollowers().size());
+        userResponse.setFollowingCount(user.getFollowing().size());
+        return userResponse;
     }
 
     @PreAuthorize("@userResponseAuthorizer.canAccess(#id)")
@@ -104,6 +108,11 @@ public class UserServiceImpl implements UserService {
 
         repository.save(user);
 
+    }
+
+    @Override
+    public void saveUser(User user) {
+        repository.save(user);
     }
 
     @Override

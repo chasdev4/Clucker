@@ -36,6 +36,7 @@ public class CluckService {
         return cluckRepository.findById(id).orElseThrow(CluckNotFoundException::new);
     }
 
+    @PreAuthorize("permitAll()")
     public Page<Cluck> getClucksByAuthor(int id, Pageable pageable) {
         if (!userService.userExists(id))
             throw new UserNotFoundException();

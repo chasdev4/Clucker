@@ -1,5 +1,6 @@
 package com.clucker.cluckerserver.api.user.controller;
 
+import com.clucker.cluckerserver.api.user.service.FollowerService;
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;
 import com.clucker.cluckerserver.dto.UserUpdateRequest;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +34,14 @@ import java.net.URI;
 public class UserController {
 
     private final UserService userService;
+    private final FollowerService followerService;
+
+    @GetMapping("/self")
+    public UserResponse getSelf(Authentication authentication) {
+        return userService.mapToResponse(
+                userService.getUserByUsername(authentication.getName())
+        );
+    }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -79,6 +90,18 @@ public class UserController {
     public void updateUser(@PathVariable int id, @RequestBody @Valid UserUpdateRequest updateRequest) {
         log.info("Requesting to update user information for user with id {}...", id);
         userService.updateUser(id, updateRequest);
+    }
+
+    @PutMapping("/{id}/followers")
+    @ResponseStatus(HttpStatus.OK)
+    public void followUser(@PathVariable int id, Authentication authentication) {
+        followerService.followUser(id, authentication);
+    }
+
+    @DeleteMapping("/{id}/followers")
+    @ResponseStatus(HttpStatus.OK)
+    public void unfollowUser(@PathVariable int id, Authentication authentication) {
+        followerService.unfollowUser(id, authentication);
     }
 
 }
