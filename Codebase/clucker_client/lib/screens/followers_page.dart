@@ -2,23 +2,26 @@ import 'package:clucker_client/components/account_widget.dart';
 import 'package:clucker_client/components/clucker_app_bar.dart';
 import 'package:flutter/material.dart';
 
-enum PageContext {
-  followers,
-  following
-}
+enum PageContext { followers, following }
 
 class FollowersPage extends StatelessWidget {
-  const FollowersPage({Key? key, required this.username, required this.pageContext}) : super(key: key);
+  const FollowersPage(
+      {Key? key, required this.username, required this.pageContext})
+      : super(key: key);
 
   final String username;
   final PageContext pageContext;
 
   List<Widget> getFollowers() {
     List<Widget> followers = [];
-    followers.add(const AccountWidget(username: '12345678901234567890'));
+    followers.add(const AccountWidget(
+        accountWidgetProfile: AccountWidgetProfile.follower,
+        username: '12345678901234567890'));
 
     for (int i = 0; i < 20; i++) {
-      followers.add(AccountWidget(username: 'Cluckerbot_${(i + 19) * 110 + (i * 117)}'));
+      followers.add(AccountWidget(
+          accountWidgetProfile: AccountWidgetProfile.follower,
+          username: 'Cluckerbot_${(i + 19) * 110 + (i * 117)}'));
     }
 
     return followers;
@@ -34,8 +37,7 @@ class FollowersPage extends StatelessWidget {
 
     if (username.length > 9) {
       title += '\n';
-    }
-    else {
+    } else {
       title += ' ';
     }
 
@@ -55,9 +57,7 @@ class FollowersPage extends StatelessWidget {
         title: title,
         fontSize: 24,
       ),
-      body: ListView(
-        children: getFollowers()
-      ),
+      body: ListView(children: getFollowers()),
     );
   }
 }

@@ -9,7 +9,8 @@ enum AccountWidgetProfile {
 }
 
 class AccountWidget extends StatelessWidget {
-  const AccountWidget({Key? key, required this.username}) : super(key: key);
+  const AccountWidget({Key? key, required this.accountWidgetProfile, required this.username}) : super(key: key);
+  final AccountWidgetProfile accountWidgetProfile;
   final String username;
 
   @override
