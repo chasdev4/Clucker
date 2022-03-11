@@ -77,13 +77,11 @@ class _TabControlsState extends State<TabControls> {
       child: RawMaterialButton(
         onPressed: () {
           setState(() {
-            if (widget.isSearchTabs == true &&
-                isLeftTab == true &&
-                leftTabActive == false) {
+            if (isCluckTabAndInactive(isLeftTab: isLeftTab)) {
+              widget.onPressedLeft();
               leftTabActive = true;
-            } else if (widget.isSearchTabs == true &&
-                isLeftTab == false &&
-                leftTabActive == true) {
+            } else if (isUserTabAndInactive(isLeftTab: isLeftTab)) {
+              widget.onPressedRight();
               leftTabActive = false;
             } else if (widget.isSearchTabs == false && isLeftTab == true) {
               Navigator.push(
@@ -116,5 +114,17 @@ class _TabControlsState extends State<TabControls> {
         ),
       ),
     );
+  }
+
+  bool isCluckTabAndInactive({isLeftTab}) {
+    return widget.isSearchTabs == true &&
+        isLeftTab == true &&
+        leftTabActive == false;
+  }
+
+  bool isUserTabAndInactive({isLeftTab}) {
+    return widget.isSearchTabs == true &&
+        isLeftTab == false &&
+        leftTabActive == true;
   }
 }

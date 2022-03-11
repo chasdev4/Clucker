@@ -67,8 +67,16 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             bottom: TabControls(
-              onPressedLeft: (){},
-              onPressedRight: (){},
+              onPressedLeft: (){
+                setState(() {
+                  pageIndex = 1;
+                });
+              },
+              onPressedRight: (){
+                setState(() {
+                  pageIndex = 2;
+                });
+              },
               isSearchTabs: true,
             ),
           )),
@@ -120,7 +128,7 @@ class _CluckResultPage extends StatefulWidget {
 class _CluckResultPageState extends State<_CluckResultPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(width: 100, height: 100, color: Colors.blue,);
   }
 }
 
@@ -134,7 +142,7 @@ class _UserResultPage extends StatefulWidget {
 class _UserResultPageState extends State<_UserResultPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(width: 100, height: 100, color: Colors.green,);
   }
 }
 
