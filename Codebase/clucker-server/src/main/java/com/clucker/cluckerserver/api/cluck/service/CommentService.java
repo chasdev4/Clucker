@@ -57,6 +57,11 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    public Page<Comment> getAllComments(String cluckId, Pageable pageable) {
+        UUID uuid = UUID.fromString(cluckId);
+        return commentRepository.findCommentsByCluckId(uuid, pageable);
+    }
+
     public CommentResponse mapToResponse(Comment comment) {
         CommentResponse response = mapper.map(comment, CommentResponse.class);
         response.setAuthor(comment.getAuthor().getUsername());
