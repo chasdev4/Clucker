@@ -11,8 +11,8 @@ class Cluck extends StatefulWidget {
       required this.eggCount})
       : super(key: key);
 
-  final String cluckText;
   final String username;
+  final String cluckText;
   int eggCount;
 
   @override
