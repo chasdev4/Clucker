@@ -1,8 +1,11 @@
-import 'package:clucker_client/components/cluck.dart';
+import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/user_avatar.dart';
+import 'package:clucker_client/models/user.dart';
+import 'package:clucker_client/services/cluck_service.dart';
+import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -11,28 +14,22 @@ import '../navigation/main_navigation_bar.dart';
 import '../navigation/new_cluck_button.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key, required this.username}) : super(key: key);
+  const ProfilePage({Key? key, required this.user}) : super(key: key);
 
-  final String username;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
     final cluckNode = FocusNode();
+
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          ProfileHeader(username: username),
+          ProfileHeader(user: user),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return Cluck(
-                  postDate: DateTime.parse("2020-08-29 01:47:00"),
-                  eggCount: 30,
-                  username: username,
-                  cluckText: 'This is a cluck',
-                  onProfile: true,
-                  comments: const [],
-                );
+                throw Exception('Retrieve clucks logic not implemented');
               },
               childCount: 30,
             ),
@@ -47,9 +44,9 @@ class ProfilePage extends StatelessWidget {
 }
 
 class ProfileHeader extends StatefulWidget {
-  const ProfileHeader({Key? key, required this.username}) : super(key: key);
+  const ProfileHeader({Key? key, required this.user}) : super(key: key);
 
-  final String username;
+  final User user;
 
   @override
   _ProfileHeaderState createState() => _ProfileHeaderState();
@@ -100,7 +97,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: UserAvatar(
-                        username: widget.username,
+                        user: widget.user,
                         avatarSize: AvatarSize.large,
                         onProfile: true,
                       ),
@@ -120,7 +117,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     Padding(
                         padding: const EdgeInsets.only(left: 22),
                         child: Text(
-                          widget.username,
+                          widget.user.username,
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.w700,
@@ -189,7 +186,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 ),
                 TabControls(
                   isSearchTabs: false,
-                  username: widget.username,
+                  user: widget.user,
                 )
               ],
             ),
@@ -251,6 +248,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
 
   bool isUserOnOwnProfile() {
     String placeholderCurrentUser = 'TheCluckMan';
-    return widget.username == placeholderCurrentUser;
+    return widget.user == placeholderCurrentUser;
   }
 }

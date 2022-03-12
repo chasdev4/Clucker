@@ -1,4 +1,4 @@
-import 'package:clucker_client/components/cluck.dart';
+import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -11,7 +11,7 @@ class CommentsPage extends StatefulWidget {
   const CommentsPage({Key? key, required this.focusNode, required this.cluck})
       : super(key: key);
   final FocusNode focusNode;
-  final Cluck cluck;
+  final CluckWidget cluck;
 
   @override
   _CommentsPageState createState() => _CommentsPageState();
@@ -60,13 +60,10 @@ class _CommentsPageState extends State<CommentsPage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Cluck(
-                postDate: widget.cluck.postDate,
+              CluckWidget(
                 cluckType: CluckType.cluckHeader,
                 isVisible: false,
-                cluckText: widget.cluck.cluckText,
-                username: widget.cluck.username,
-                eggCount: widget.cluck.eggCount,
+                cluck: widget.cluck.cluck,
                 comments: widget.cluck.comments,
               )
             ],
@@ -96,14 +93,11 @@ class _CommentsPageState extends State<CommentsPage> {
                           const SizedBox(
                             height: 60,
                           ),
-                          Cluck(
-                              postDate: widget.cluck.postDate,
+                          CluckWidget(
                               commentButtonStatic: true,
                               cluckType: CluckType.cluckHeader,
-                              cluckText: widget.cluck.cluckText,
-                              comments: widget.cluck.comments,
-                              username: widget.cluck.username,
-                              eggCount: widget.cluck.eggCount)
+                              cluck: widget.cluck.cluck,
+                              comments: widget.cluck.comments,),
                         ],
                       ))),
               Column(children: <Widget>[

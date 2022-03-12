@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:clucker_client/models/user_model.dart';
+import 'package:clucker_client/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:clucker_client/models/user_registration.dart';
 
@@ -24,14 +24,29 @@ class UserService {
     );
   }
 
-  Future<UserModel> getUserById(int id) async {
+  Future<User> getUserById(int id) async {
     final response = await http.get(Uri.parse('${url}users/$id'));
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
-      return UserModel.fromJson(userJson);
+      return User.fromJson(userJson);
     }
 
-    throw Exception('User not found');
+    throw Exception('User with the id $id was not found');
+  }
+
+  Future<User> getSelf() async {
+    final response = await http.get(Uri.parse('${url}users/self'));
+
+    if (response.statusCode == 200) {
+      var userJson = json.decode(response.body);
+      return User.fromJson(userJson);
+    }
+
+    throw Exception('User \'self\' was not found');
+  }
+
+  void updateUserById(int id) async {
+
   }
 }

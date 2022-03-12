@@ -1,4 +1,6 @@
 import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/models/cluck.dart';
+import 'package:clucker_client/models/user.dart';
 import 'package:clucker_client/screens/comments_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,35 +10,29 @@ import 'package:intl/intl.dart';
 
 enum CluckType { cluck, comment, cluckHeader }
 
-class Cluck extends StatefulWidget {
-  Cluck(
+class CluckWidget extends StatefulWidget {
+  CluckWidget(
       {Key? key,
       this.cluckType = CluckType.cluck,
-      required this.username,
-      required this.cluckText,
-      required this.eggCount,
+      required this.cluck,
       this.comments = const [],
-      required this.postDate,
       this.commentButtonStatic = false,
       this.isVisible = true,
       this.onProfile = false})
       : super(key: key);
 
   final CluckType cluckType;
-  final String username;
-  final String cluckText;
-  final DateTime postDate;
+  final Cluck cluck;
   final bool commentButtonStatic;
   final bool isVisible;
   final bool onProfile;
-  int eggCount;
   final List<Widget> comments;
 
   @override
-  _CluckState createState() => _CluckState();
+  _CluckWidgetState createState() => _CluckWidgetState();
 }
 
-class _CluckState extends State<Cluck> {
+class _CluckWidgetState extends State<CluckWidget> {
   final DateFormat timeStampDate = DateFormat.yMMMMd('en_US');
   final DateFormat timeStampTime = DateFormat('h:mm a');
   final FocusNode focusNode = FocusNode();
@@ -74,12 +70,12 @@ class _CluckState extends State<Cluck> {
                         padding: const EdgeInsets.only(
                             top: 6, bottom: 6, left: 20, right: 2),
                         child: UserAvatar(
-                            username: widget.username,
+                          user: widget.cluck.author,
                             onProfile: widget.onProfile,
                             avatarSize: AvatarSize.small),
                       ),
                       Text(
-                        widget.username,
+                        widget.cluck.author.username,
                         style: const TextStyle(
                           fontFamily: 'OpenSans',
                           fontWeight: FontWeight.bold,
@@ -114,7 +110,7 @@ class _CluckState extends State<Cluck> {
                                 : 30),
                     width: MediaQuery.of(context).size.width - 60,
                     child: Text(
-                      widget.cluckText,
+                      widget.cluck.author.username,
                       maxLines: 6,
                       style: const TextStyle(
                         fontFamily: 'OpenSans',
@@ -156,12 +152,9 @@ class _CluckState extends State<Cluck> {
                                   MaterialPageRoute(
                                       builder: (context) => CommentsPage(
                                             focusNode: focusNode,
-                                            cluck: Cluck(
-                                              username: widget.username,
-                                              cluckText: widget.cluckText,
-                                              eggCount: widget.eggCount,
+                                            cluck: CluckWidget(
+                                              cluck: widget.cluck,
                                               comments: widget.comments,
-                                              postDate: widget.postDate,
                                             ),
                                           )),
                                 );
@@ -169,7 +162,7 @@ class _CluckState extends State<Cluck> {
                             )
                           : null),
                   _EggControls(
-                    eggCount: widget.eggCount,
+                    eggCount: widget.cluck.eggRating,
                     buttonSize: 25,
                   ),
                   const SizedBox(
@@ -226,7 +219,7 @@ class _CluckState extends State<Cluck> {
                               width: 13,
                             ),
                             Text(
-                              '${timeStampDate.format(widget.postDate)} at ${timeStampTime.format(widget.postDate)}',
+                              '${timeStampDate.format(widget.cluck.posted)} at ${timeStampTime.format(widget.cluck.posted)}',
                               style: TextStyle(
                                 fontFamily: 'OpenSans',
                                 fontSize: 13.44,
@@ -255,7 +248,7 @@ class _CluckState extends State<Cluck> {
 
   String getTimeAgo() {
     String value = '';
-    Duration timeAgo = now.difference(widget.postDate);
+    Duration timeAgo = now.difference(widget.cluck.posted);
 
     if (timeAgo.inDays >= 365) {
       value = '${(timeAgo.inDays / 365).toStringAsFixed(0)}y';

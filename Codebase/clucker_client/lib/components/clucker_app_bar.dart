@@ -1,5 +1,6 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/user_avatar.dart';
+import 'package:clucker_client/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,7 +14,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
       this.noDivider = false,
       this.padding = 15,
       this.fontSize = 36,
-      required this.username,
+      this.user,
       this.height = 80})
       : super(key: key);
 
@@ -22,7 +23,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
   final double fontSize;
   final double padding;
   final bool? noDivider;
-  final String username;
+  final User? user;
   final double height;
 
   @override
@@ -50,21 +51,29 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
             width: MediaQuery.of(context).size.width - padding * 2,
           ),
           preferredSize: const Size.fromHeight(2.5)),
-      title: Row(mainAxisAlignment: isAvatar() ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,children: [
-        Text(
-          title,
-          maxLines: isFollowers() && username.length > 9 ? 2 : 1,
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+      title: Row(
+        mainAxisAlignment: isAvatar()
+            ? MainAxisAlignment.spaceBetween
+            : MainAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            maxLines: isFollowers() && user!.username.length > 9 ? 2 : 1,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
-        ),
-        Container(child:
-        isAvatar()
-            ? UserAvatar(username: username,avatarSize: AvatarSize.medium,)
-            : null)
-      ],),
+          Container(
+              child: isAvatar()
+                  ? UserAvatar(
+                      user: user!,
+                      avatarSize: AvatarSize.medium,
+                    )
+                  : null)
+        ],
+      ),
     );
   }
 

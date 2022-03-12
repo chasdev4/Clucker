@@ -1,3 +1,4 @@
+import 'package:clucker_client/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
@@ -155,10 +156,12 @@ class _EmailFormState extends State<EmailForm> {
                       dialogUtil.oneButtonDialog(
                           context, 'Account Created', 'Start Clucking!');
 
+                      User user = await userService.getUserById(0);
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Feed()),
+                            builder: (context) => Feed()),
                       );
                     }
 

@@ -1,6 +1,7 @@
 import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/user_avatar.dart';
+import 'package:clucker_client/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +10,8 @@ enum AccountWidgetProfile {
 }
 
 class AccountWidget extends StatelessWidget {
-  const AccountWidget({Key? key, required this.username}) : super(key: key);
-  final String username;
+  const AccountWidget({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +23,9 @@ class AccountWidget extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-               UserAvatar(avatarSize: AvatarSize.small, username: username,),
+               UserAvatar(user: user, avatarSize: AvatarSize.small,),
               Text(
-                username,
+                user.username,
                 style: const TextStyle(
                   fontFamily: 'OpenSans',
                   fontWeight: FontWeight.bold,

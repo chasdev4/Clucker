@@ -30,8 +30,7 @@ class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          appBar: const CluckerAppBar(
-        username: 'user',
+          appBar: CluckerAppBar(
         appBarProfile: AppBarProfile.noAvatar,
         title: "Feed",
       ),

@@ -1,3 +1,4 @@
+import 'package:clucker_client/models/user.dart';
 import 'package:clucker_client/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,15 +7,15 @@ import 'circle_crop.dart';
 enum AvatarSize { small, medium, large }
 
 class UserAvatar extends StatefulWidget {
+  final User user;
   final AvatarSize avatarSize;
-  final String username;
   final bool onProfile;
   final String? avatarImage;
 
   const UserAvatar(
       {Key? key,
+        required this.user,
       required this.avatarSize,
-      required this.username,
         this.onProfile = false,
       this.avatarImage})
       : super(key: key);
@@ -47,7 +48,7 @@ class _UserAvatarState extends State<UserAvatar> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProfilePage(username: widget.username)),
+                  builder: (context) => ProfilePage(user: widget.user)),
             );
           }
         },
@@ -76,57 +77,19 @@ class _UserAvatarState extends State<UserAvatar> {
   }
 
   void setAvatarColor() {
-    int index = 3;
-    double hue = 0;
-    double foregroundSaturation = 0.62;
-    double foregroundLightness = 0.5;
-    double backgroundSaturation = 0.5;
-    double backgroundLightness = 0.88;
 
-    if (widget.username.codeUnitAt(index) >= 48 &&
-        widget.username.codeUnitAt(index) <= 57) {
-      hue = (58 - widget.username.codeUnitAt(3)) * 30;
-    } else if (widget.username.codeUnitAt(index) >= 65 &&
-        widget.username.codeUnitAt(index) <= 77) {
-      hue = (78 - widget.username.codeUnitAt(index)) * 27.5;
-    } else if (widget.username.codeUnitAt(index) >= 78 &&
-        widget.username.codeUnitAt(index) <= 90) {
-      hue = (91 - widget.username.codeUnitAt(index)) * 27.5;
-    } else if (widget.username.codeUnitAt(index) >= 95 &&
-        widget.username.codeUnitAt(index) <= 109) {
-      hue = (110 - widget.username.codeUnitAt(index)) * 24;
-    } else if (widget.username.codeUnitAt(index) >= 110 &&
-        widget.username.codeUnitAt(index) <= 122) {
-      hue = (123 - widget.username.codeUnitAt(index)) * 27.5;
-    }
-
-    if (widget.username[index] == '7' ||
-        widget.username[index] == '8' ||
-        widget.username[index] == 'x' ||
-        widget.username[index] == 'X' ||
-        widget.username[index] == 'y' ||
-        widget.username[index] == 'Y' ||
-        widget.username[index] == 'l' ||
-        widget.username[index] == 'L' ||
-        widget.username[index] == 'k' ||
-        widget.username[index] == 'K') {
-      hue = hue - 45;
-    }
-    Color backgroundColor =
+    avatarBackgroundColor =
         HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
-            .withHue(hue)
-            .withSaturation(backgroundSaturation)
-            .withLightness(backgroundLightness)
+            .withHue(widget.user.hue)
+            .withSaturation(0.5)
+            .withLightness(0.88)
             .toColor();
-    Color foregroundColor =
+    avatarForegroundColor =
         HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
-            .withHue(hue)
-            .withSaturation(foregroundSaturation)
-            .withLightness(foregroundLightness)
+            .withHue(widget.user.hue)
+            .withSaturation(0.62)
+            .withLightness(0.5)
             .toColor();
-
-    avatarForegroundColor = foregroundColor;
-    avatarBackgroundColor = backgroundColor;
   }
 
   void initSizes() {

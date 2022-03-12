@@ -1,5 +1,7 @@
 import 'package:clucker_client/components/account_widget.dart';
 import 'package:clucker_client/components/clucker_app_bar.dart';
+import 'package:clucker_client/models/user.dart';
+import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 enum PageContext {
@@ -8,31 +10,27 @@ enum PageContext {
 }
 
 class FollowersPage extends StatelessWidget {
-  const FollowersPage({Key? key, required this.username, required this.pageContext}) : super(key: key);
+  const FollowersPage({Key? key, required this.user, required this.pageContext}) : super(key: key);
 
-  final String username;
+  final User user;
   final PageContext pageContext;
 
   List<Widget> getFollowers() {
     List<Widget> followers = [];
-    followers.add(const AccountWidget(username: '12345678901234567890'));
-
-    for (int i = 0; i < 20; i++) {
-      followers.add(AccountWidget(username: 'Cluckerbot_${(i + 19) * 110 + (i * 117)}'));
-    }
 
     return followers;
   }
 
   @override
   Widget build(BuildContext context) {
-    String title = username + '\'';
 
-    if (username[username.length - 1] != 's') {
+    String title = user.username + '\'';
+
+    if (user.username[user.username.length - 1] != 's') {
       title += 's';
     }
 
-    if (username.length > 9) {
+    if (user.username.length > 9) {
       title += '\n';
     }
     else {
@@ -50,8 +48,8 @@ class FollowersPage extends StatelessWidget {
 
     return Scaffold(
       appBar: CluckerAppBar(
+        user: user,
         appBarProfile: AppBarProfile.followers,
-        username: username,
         title: title,
         fontSize: 24,
       ),
