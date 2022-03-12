@@ -1,11 +1,10 @@
-import 'package:clucker_client/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/models/user_registration.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:http/http.dart';
-import '../components/DialogUtil.dart';
+import '../utilities/dialog_util.dart';
 import 'feed_page.dart';
 
 class EmailPage extends StatelessWidget {
@@ -156,12 +155,11 @@ class _EmailFormState extends State<EmailForm> {
                       dialogUtil.oneButtonDialog(
                           context, 'Account Created', 'Start Clucking!');
 
-                      User user = await userService.getUserById(0);
 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Feed()),
+                            builder: (context) => const Feed()),
                       );
                     }
 

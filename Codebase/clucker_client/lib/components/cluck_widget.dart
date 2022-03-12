@@ -1,6 +1,5 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/models/cluck.dart';
-import 'package:clucker_client/models/user.dart';
 import 'package:clucker_client/screens/comments_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import 'package:intl/intl.dart';
 enum CluckType { cluck, comment, cluckHeader }
 
 class CluckWidget extends StatefulWidget {
-  CluckWidget(
+  const CluckWidget(
       {Key? key,
       this.cluckType = CluckType.cluck,
       required this.cluck,

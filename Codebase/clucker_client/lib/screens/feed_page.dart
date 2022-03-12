@@ -23,7 +23,7 @@ class _FeedState extends State<Feed> {
   }
 
   void getUser() async {
-    
+
   }
 
   @override

@@ -1,6 +1,4 @@
-import 'package:clucker_client/models/auth_request.dart';
 import 'package:clucker_client/screens/username_signup_page.dart';
-import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';

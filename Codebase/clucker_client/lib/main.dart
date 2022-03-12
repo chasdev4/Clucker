@@ -1,4 +1,3 @@
-import 'package:clucker_client/screens/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/screens/feed_page.dart';

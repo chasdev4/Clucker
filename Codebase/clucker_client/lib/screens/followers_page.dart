@@ -1,7 +1,5 @@
-import 'package:clucker_client/components/account_widget.dart';
 import 'package:clucker_client/components/clucker_app_bar.dart';
 import 'package:clucker_client/models/user.dart';
-import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 enum PageContext {

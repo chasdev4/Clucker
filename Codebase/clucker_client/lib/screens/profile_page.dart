@@ -1,11 +1,8 @@
-import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:clucker_client/models/user.dart';
-import 'package:clucker_client/services/cluck_service.dart';
-import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
