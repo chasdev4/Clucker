@@ -9,21 +9,21 @@ enum AppBarProfile { avatar, noAvatar, centered, followers }
 class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
   const CluckerAppBar(
       {Key? key,
+        required this.username,
       this.appBarProfile = AppBarProfile.avatar,
       required this.title,
       this.noDivider = false,
       this.padding = 15,
       this.fontSize = 36,
-      this.user,
       this.height = 80})
       : super(key: key);
 
+  final String username;
   final AppBarProfile appBarProfile;
   final String title;
   final double fontSize;
   final double padding;
   final bool? noDivider;
-  final User? user;
   final double height;
 
   @override
@@ -58,7 +58,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
         children: [
           Text(
             title,
-            maxLines: isFollowers() && user!.username.length > 9 ? 2 : 1,
+            maxLines: isFollowers() && username.length > 9 ? 2 : 1,
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
@@ -68,7 +68,12 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
           Container(
               child: isAvatar()
                   ? UserAvatar(
-                      user: user!,
+                //TODO: username
+                username: '',
+                //TODO: userHue
+                userHue: 0,
+                      //TODO: userId
+                userId: 0,
                       avatarSize: AvatarSize.medium,
                     )
                   : null)

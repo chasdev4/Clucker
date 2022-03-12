@@ -1,5 +1,6 @@
 import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/services/cluck_service.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:clucker_client/components/text_box.dart';
@@ -18,6 +19,7 @@ class CommentsPage extends StatefulWidget {
 }
 
 class _CommentsPageState extends State<CommentsPage> {
+  final cluckService = CluckService();
   late TextEditingController cluckController;
   late KeyboardVisibilityController keyboardVisibilityController;
   late bool pageHasBeenBuilt = false;
@@ -52,7 +54,7 @@ class _CommentsPageState extends State<CommentsPage> {
 
   @override
   Widget build(BuildContext context) {
-    comments = widget.cluck.comments;
+    comments = const [];
     if (!pageHasBeenBuilt) {
       pageHasBeenBuilt = true;
       comments.insert(
@@ -82,7 +84,7 @@ class _CommentsPageState extends State<CommentsPage> {
         child: Scaffold(
             body: Stack(children: [
               ListView(
-                children: widget.cluck.comments,
+                children: const [],
               ),
               FittedBox(
                   child: Container(

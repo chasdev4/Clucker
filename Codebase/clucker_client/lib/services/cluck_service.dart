@@ -6,14 +6,44 @@ class CluckService {
   static const String url =
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
 
-  Future<Cluck> getCluckByCluckId(int id) async {
-    final response = await http.get(Uri.parse('${url}clucks/$id'));
+  Future<List<Cluck>> getClucks () async {
+    final response = await http.get(Uri.parse('${url}clucks'));
+
+    if (response.statusCode == 200) {
+      var jsonClucks = json.decode(response.body)['content'];
+      List<Cluck> clucks = jsonClucks.map<Cluck>((json) => Cluck.fromJson(json)).toList();
+
+      return clucks;
+    }
+
+    throw Exception('An error has occurred on the method getClucks()');
+  }
+
+  Future<Cluck> getCluckByCluckId(String cluckId) async {
+    final response = await http.get(Uri.parse('${url}clucks/$cluckId'));
 
     if (response.statusCode == 200) {
       var cluckJson = json.decode(response.body);
       return Cluck.fromJson(cluckJson);
     }
 
-    throw Exception('Cluck not found');
+    throw Exception('An error has occurred on the method getCluckByCluckId()');
+  }
+
+  Future<List<Cluck>> getComments (String cluckId) async {
+    final response = await http.get(Uri.parse('${url}clucks/$cluckId/comments'));
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      var jsonClucks = json.decode(response.body)['content'];
+      List<Cluck> comments = jsonClucks.map<Cluck>((json) => Cluck.fromJson(json)).toList();
+
+      return comments;
+    } else {
+      return const [];
+    }
+
+    throw Exception('An error has occurred on the method getComments()');
   }
 }

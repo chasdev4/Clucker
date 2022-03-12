@@ -8,15 +8,17 @@ import '../utilities/count_format.dart';
 class TabControls extends StatefulWidget with PreferredSizeWidget {
   const TabControls({
     Key? key,
+    required this.userId,
     required this.isSearchTabs,
-    this.user,
+    required this.username,
     this.height = 46,
     this.padding = 15,
   }) : super(key: key);
   @override
   Size get preferredSize => Size.fromHeight(height);
 
-  final User? user;
+  final int userId;
+  final String username;
   final bool isSearchTabs;
   final double height;
   final double padding;
@@ -87,13 +89,13 @@ class _TabControlsState extends State<TabControls> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          FollowersPage(user: widget.user!, pageContext: PageContext.following)));
+                          FollowersPage(userId: widget.userId,username: widget.username, pageContext: PageContext.following)));
             } else if (widget.isSearchTabs == false && isLeftTab == false) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                   builder: (context) =>
-                  FollowersPage(user: widget.user!, pageContext: PageContext.followers)));
+                  FollowersPage(userId: widget.userId, username: widget.username, pageContext: PageContext.followers)));
             }
           });
         },

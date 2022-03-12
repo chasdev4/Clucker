@@ -7,14 +7,18 @@ import 'circle_crop.dart';
 enum AvatarSize { small, medium, large }
 
 class UserAvatar extends StatefulWidget {
-  final User user;
+  final int userHue;
+  final int userId;
+  final String username;
   final AvatarSize avatarSize;
   final bool onProfile;
   final String? avatarImage;
 
   const UserAvatar(
       {Key? key,
-        required this.user,
+        required this.userHue,
+        required this.userId,
+        required this.username,
       required this.avatarSize,
         this.onProfile = false,
       this.avatarImage})
@@ -48,7 +52,7 @@ class _UserAvatarState extends State<UserAvatar> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProfilePage(user: widget.user)),
+                  builder: (context) => ProfilePage(userId: widget.userId, username: widget.username,)),
             );
           }
         },
@@ -80,13 +84,15 @@ class _UserAvatarState extends State<UserAvatar> {
 
     avatarBackgroundColor =
         HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
-            .withHue(widget.user.hue)
+           // .withHue(widget.user.hue)
+        .withHue(0)
             .withSaturation(0.5)
             .withLightness(0.88)
             .toColor();
     avatarForegroundColor =
         HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
-            .withHue(widget.user.hue)
+        // .withHue(widget.user.hue)
+            .withHue(0)
             .withSaturation(0.62)
             .withLightness(0.5)
             .toColor();

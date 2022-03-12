@@ -25,7 +25,7 @@ class CluckWidget extends StatefulWidget {
   final bool commentButtonStatic;
   final bool isVisible;
   final bool onProfile;
-  final List<Widget> comments;
+  final List<Cluck> comments;
 
   @override
   _CluckWidgetState createState() => _CluckWidgetState();
@@ -69,12 +69,17 @@ class _CluckWidgetState extends State<CluckWidget> {
                         padding: const EdgeInsets.only(
                             top: 6, bottom: 6, left: 20, right: 2),
                         child: UserAvatar(
-                          user: widget.cluck.author,
+                          //TODO: username
+                          username: '',
+                          //TODO: userHue
+                          userHue: 0,
+                            //TODO: userId
+                            userId: 0,
                             onProfile: widget.onProfile,
                             avatarSize: AvatarSize.small),
                       ),
                       Text(
-                        widget.cluck.author.username,
+                        widget.cluck.username,
                         style: const TextStyle(
                           fontFamily: 'OpenSans',
                           fontWeight: FontWeight.bold,
@@ -109,7 +114,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                                 : 30),
                     width: MediaQuery.of(context).size.width - 60,
                     child: Text(
-                      widget.cluck.author.username,
+                      widget.cluck.body,
                       maxLines: 6,
                       style: const TextStyle(
                         fontFamily: 'OpenSans',

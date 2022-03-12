@@ -8,9 +8,10 @@ enum PageContext {
 }
 
 class FollowersPage extends StatelessWidget {
-  const FollowersPage({Key? key, required this.user, required this.pageContext}) : super(key: key);
+  const FollowersPage({Key? key, required this.userId, required this.username, required this.pageContext}) : super(key: key);
 
-  final User user;
+  final int userId;
+  final String username;
   final PageContext pageContext;
 
   List<Widget> getFollowers() {
@@ -22,13 +23,13 @@ class FollowersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    String title = user.username + '\'';
+    String title = username + '\'';
 
-    if (user.username[user.username.length - 1] != 's') {
+    if (username[username.length - 1] != 's') {
       title += 's';
     }
 
-    if (user.username.length > 9) {
+    if (username.length > 9) {
       title += '\n';
     }
     else {
@@ -46,7 +47,7 @@ class FollowersPage extends StatelessWidget {
 
     return Scaffold(
       appBar: CluckerAppBar(
-        user: user,
+        username: username,
         appBarProfile: AppBarProfile.followers,
         title: title,
         fontSize: 24,
