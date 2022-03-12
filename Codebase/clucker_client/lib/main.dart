@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Palette.cluckerRed.toMaterialColor(),
         primaryColor: Palette.cluckerRed,
       ),
-      home: const Feed(),
+      home: const LoginPage(),
     );
   }
 }
