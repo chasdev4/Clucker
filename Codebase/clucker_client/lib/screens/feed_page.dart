@@ -1,6 +1,6 @@
 import 'package:clucker_client/components/cluck_widget.dart';
-import 'package:clucker_client/models/cluck.dart';
-import 'package:clucker_client/models/user.dart';
+import 'package:clucker_client/models/cluck_model.dart';
+import 'package:clucker_client/models/user_model.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> {
   final userService = UserService();
   final cluckService = CluckService();
-  late User user;
+  late UserModel user;
   late List<CluckWidget> cluckWidgets;
 
   @override
@@ -34,7 +34,7 @@ class _FeedState extends State<Feed> {
   }
 
   void getUser() {
-    user = User(9, 'username', 'email@email.org', 'bio', DateTime.now(), 0, 0, 0, 0);
+    user = UserModel(9, 'username', 'email@email.org', 'bio', DateTime.now(), 0, 0, 0);
   }
 
   @override
@@ -86,7 +86,7 @@ class _FeedState extends State<Feed> {
   }
 
   Future<Object?> getFeed() async {
-    List<Cluck> clucks = await cluckService.getClucks();
+    List<CluckModel> clucks = await cluckService.getClucks();
     cluckWidgets.clear();
 
     for (int i = 0; i < clucks.length; i++) {

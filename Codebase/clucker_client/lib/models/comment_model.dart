@@ -1,16 +1,15 @@
-class Cluck {
-  Cluck(this.id, this.body, this.username, this.posted, this.eggRating);
+class CommentModel {
+  CommentModel(this.commentId, this.body, this.username, this.posted, this.eggRating);
 
-  late String id;
+  late String commentId;
   late String body;
   late String username;
   int userId = 0;
   late DateTime posted;
-  int commentCount = 0;
   late int eggRating = 0;
 
-  Cluck.fromJson(Map<dynamic, dynamic> json) {
-    id = json['id'];
+  CommentModel.fromJson(Map<dynamic, dynamic> json) {
+    commentId = json['id'];
     body = json['body'];
     username = json['author'];
     // userId: json['authorId'];

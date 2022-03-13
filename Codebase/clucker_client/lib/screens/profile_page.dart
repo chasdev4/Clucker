@@ -3,14 +3,15 @@ import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/user_avatar.dart';
-import 'package:clucker_client/models/user.dart';
+import 'package:clucker_client/models/user_model.dart';
+import 'package:clucker_client/models/user_profile_model.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
-import '../models/cluck.dart';
+import '../models/cluck_model.dart';
 import '../navigation/main_navigation_bar.dart';
 import '../navigation/new_cluck_button.dart';
 
@@ -95,16 +96,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<Object?> getProfileDetails() async {
     final UserService userService = UserService();
-    User user = await userService.getUserById(widget.userId);
+    UserProfileModel userProfileModel = await userService.getUserProfileById(widget.userId);
 
     setState(() {
       profileData = ProfileData(
-          userId: user.id,
-          username: user.username,
-          bio: user.bio,
-          hue: user.hue,
-          eggRating: user.eggRating,
-          joined: user.joined);
+          userId: userProfileModel.id,
+          username: userProfileModel.username,
+          bio: userProfileModel.bio,
+          hue: userProfileModel.hue,
+          eggRating: userProfileModel.eggRating,
+          joined: userProfileModel.joined);
     });
 
     return Future.delayed(const Duration(seconds: 2), () {
@@ -116,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
     cluckWidgets.clear();
 
     final CluckService cluckService = CluckService();
-    List<Cluck> clucks = await cluckService.getProfileClucksById(widget.userId);
+    List<CluckModel> clucks = await cluckService.getProfileClucksById(widget.userId);
 
     for (int i = 0; i < clucks.length; i++) {
       cluckWidgets.add(CluckWidget(

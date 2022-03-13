@@ -1,6 +1,6 @@
 import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/components/palette.dart';
-import 'package:clucker_client/models/cluck.dart';
+import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -215,8 +215,8 @@ class _CommentsPageState extends State<CommentsPage> {
         height: 75,
       ));
     }
-    List<Cluck> commentData =
-        await cluckService.getCommentsByCluckId(widget.cluck.cluck.id);
+    List<CluckModel> commentData =
+        await cluckService.getCommentsByCluckId(widget.cluck.cluck.cluckId);
 
     if (commentData.isNotEmpty) {
       for (int i = 0; i < commentData.length; i++) {

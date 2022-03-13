@@ -1,5 +1,8 @@
 import 'dart:convert';
-import 'package:clucker_client/models/user.dart';
+import 'package:clucker_client/models/user_account_model.dart';
+import 'package:clucker_client/models/user_model.dart';
+import 'package:clucker_client/models/user_profile_model.dart';
+import 'package:clucker_client/models/user_result_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:clucker_client/models/user_registration.dart';
 
@@ -24,29 +27,68 @@ class UserService {
     );
   }
 
-  Future<User> getUserById(int id) async {
+  Future<UserAccountModel> getUserAccountById(int id) async {
     final response = await http.get(Uri.parse('${url}users/$id'));
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
-      return User.fromJson(userJson);
+      return UserAccountModel.fromJson(userJson);
     }
 
-    throw Exception('User with the id $id was not found');
+    throw Exception('${response.statusCode} Error: User Account not found.');
   }
 
-  Future<User> getSelf() async {
+  Future<UserProfileModel> getUserProfileById(int id) async {
+    final response = await http.get(Uri.parse('${url}users/$id'));
+
+    if (response.statusCode == 200) {
+      var userJson = json.decode(response.body);
+      return UserProfileModel.fromJson(userJson);
+    }
+
+    throw Exception('${response.statusCode} Error: User Profile not found.');
+  }
+
+  Future<UserResultModel> getUserResultById(int id) async {
+    final response = await http.get(Uri.parse('${url}users/$id'));
+
+    if (response.statusCode == 200) {
+      var userJson = json.decode(response.body);
+      return UserResultModel.fromJson(userJson);
+    }
+    throw Exception('${response.statusCode} Error: User Result not found.');
+  }
+
+  // Future<UserModel> getUserById(int id) async {
+  //   final response = await http.get(Uri.parse('${url}users/$id'));
+  //
+  //   if (response.statusCode == 200) {
+  //     var userJson = json.decode(response.body);
+  //     return UserModel.fromJson(userJson);
+  //   } else if (response.statusCode == 403) {
+  //     throw Exception('${response.statusCode} Error: User id not found.');
+  //   }
+  //   throw Exception('${response.statusCode} Error: .');
+  // }
+
+  Future<UserModel> getSelf() async {
     final response = await http.get(Uri.parse('${url}users/self'));
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
-      return User.fromJson(userJson);
+      return UserModel.fromJson(userJson);
     }
 
     throw Exception('User \'self\' was not found');
   }
 
-  void updateUserById(int id) async {
+  Future<bool> followUser(int id) async {
+    final response = await http.put(Uri.parse('${url}users/$id/followers'));
 
+    if (response.statusCode == 200) {
+      return true;
+    }
+
+    throw Exception(response.reasonPhrase);
   }
 }

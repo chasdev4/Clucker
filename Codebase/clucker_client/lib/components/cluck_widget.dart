@@ -1,6 +1,6 @@
 import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/palette.dart';
-import 'package:clucker_client/models/cluck.dart';
+import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/screens/comments_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,12 +16,12 @@ class CluckWidget extends StatefulWidget {
       required this.cluck,
       this.commentButtonStatic = false,
       this.isVisible = true,
-        this.commentCount = 0,
+      this.commentCount = 0,
       this.onProfile = false})
       : super(key: key);
 
   final CluckType cluckType;
-  final Cluck cluck;
+  final CluckModel cluck;
   final bool commentButtonStatic;
   final int commentCount;
   final bool isVisible;
@@ -69,7 +69,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                         padding: const EdgeInsets.only(
                             top: 6, bottom: 6, left: 20, right: 2),
                         child: UserAvatar(
-                          username: widget.cluck.username,
+                            username: widget.cluck.username,
                             userId: widget.cluck.userId,
                             //TODO: userHue
                             userHue: 0,
@@ -140,7 +140,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                               isStatic: widget.commentButtonStatic,
                               commentCount: widget.commentButtonStatic
                                   ? widget.commentCount - 2
-                                 : widget.commentCount,
+                                  : widget.commentCount,
                               buttonSize: 25,
                               onPressed: () {
                                 Navigator.push(
