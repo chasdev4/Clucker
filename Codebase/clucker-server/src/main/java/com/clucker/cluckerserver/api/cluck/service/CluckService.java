@@ -80,6 +80,12 @@ public class CluckService {
         Cluck cluck = getCluckById(cluckId);
         User user = userService.getUserByUsername(getUsername(authentication));
 
+        if (cluck.getLikeUsers().remove(user) &&
+                user.getLikedClucks().remove(cluck)) {
+            userService.saveUser(user);
+            return saveCluck(cluck);
+        }
+
         if (cluck.getDislikeUsers() != null)
             cluck.getDislikeUsers().remove(user);
 
@@ -102,6 +108,12 @@ public class CluckService {
     public Cluck removeEggFromCluck(String cluckId, Authentication authentication) {
         Cluck cluck = getCluckById(cluckId);
         User user = userService.getUserByUsername(getUsername(authentication));
+
+        if (cluck.getDislikeUsers().remove(user) &&
+                user.getDislikedClucks().remove(cluck)) {
+            userService.saveUser(user);
+            return saveCluck(cluck);
+        }
 
         if (cluck.getLikeUsers() != null)
             cluck.getLikeUsers().remove(user);
@@ -130,7 +142,7 @@ public class CluckService {
         return response;
     }
 
-    public int getCluckEggRating(Cluck cluck) {
+    private int getCluckEggRating(Cluck cluck) {
         int positiveEggs = cluck.getLikeUsers().size();
         int negativeEggs = cluck.getDislikeUsers().size();
         return positiveEggs - negativeEggs;

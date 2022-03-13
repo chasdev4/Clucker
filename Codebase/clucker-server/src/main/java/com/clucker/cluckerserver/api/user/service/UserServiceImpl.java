@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         userResponse.setFollowersCount(user.getFollowers().size());
         userResponse.setFollowingCount(user.getFollowing().size());
         int eggRating = user.getClucks().stream()
-                .mapToInt(cluck -> cluck.getLikeUsers().size() - cluck.getDislikeUsers().size())
+                .mapToInt(this::getCluckEggRating)
                 .sum();
         userResponse.setEggRating(eggRating);
         return userResponse;
@@ -129,5 +129,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean userExists(int id) {
         return repository.existsById(id);
+    }
+
+    private int getCluckEggRating(Cluck cluck) {
+        int positiveEggs = cluck.getLikeUsers().size();
+        int negativeEggs = cluck.getDislikeUsers().size();
+        return positiveEggs - negativeEggs;
     }
 }
