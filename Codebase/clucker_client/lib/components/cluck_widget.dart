@@ -123,7 +123,10 @@ class _CluckWidgetState extends State<CluckWidget> {
                   const SizedBox(
                     height: 5,
                   ),
-                  const Div(),
+                  Container(
+                      child: widget.cluckType != CluckType.cluckHeader
+                          ? const Div()
+                          : null),
                 ],
               )),
           Positioned(
@@ -138,7 +141,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                       child: widget.cluckType != CluckType.comment
                           ? _CommentButton(
                               isStatic: widget.commentButtonStatic,
-                              commentCount: widget.commentButtonStatic
+                              commentCount: widget.commentButtonStatic && widget.commentCount > 0
                                   ? widget.commentCount - 2
                                   : widget.commentCount,
                               buttonSize: 25,
@@ -158,7 +161,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                             )
                           : null),
                   _EggControls(
-                    eggCount: widget.cluck.eggRating,
+                    eggRating: widget.cluck.eggRating,
                     buttonSize: 25,
                   ),
                   const SizedBox(
@@ -298,11 +301,11 @@ class _CommentButtonState extends State<_CommentButton> {
 }
 
 class _EggControls extends StatefulWidget {
-  _EggControls({Key? key, required this.eggCount, required this.buttonSize})
+  const _EggControls({Key? key, required this.eggRating, required this.buttonSize})
       : super(key: key);
 
   final double buttonSize;
-  int eggCount;
+  final int eggRating;
 
   @override
   _EggControlsState createState() => _EggControlsState();
@@ -316,12 +319,13 @@ class _EggControlsState extends State<_EggControls> {
 
   late List<bool> isSelected = [false, false];
   late List<bool> previousSelection = [false, false];
+  late int eggCount = widget.eggRating;
 
   @override
   Widget build(BuildContext context) {
     return Flexible(
         child: Column(children: [
-      Text(widget.eggCount != 0 ? widget.eggCount.toString() : '',
+      Text(widget.eggRating != 0 ? widget.eggRating.toString() : '',
           style: TextStyle(
               height: 0,
               fontWeight: FontWeight.w900,
@@ -344,16 +348,16 @@ class _EggControlsState extends State<_EggControls> {
 
             if ((index == 0 && isSelected[index] == true) ||
                 (index == 1 && isSelected[index] == false)) {
-              widget.eggCount++;
+              eggCount++;
             } else if ((index == 0 && isSelected[index] == false) ||
                 (index == 1 && isSelected[index] == true)) {
-              widget.eggCount--;
+              eggCount--;
             }
 
             if (index == 1 && previousSelection[0] == true) {
-              widget.eggCount--;
+              eggCount--;
             } else if (index == 0 && previousSelection[1] == true) {
-              widget.eggCount++;
+              eggCount++;
             }
           });
         },

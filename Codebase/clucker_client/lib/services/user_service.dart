@@ -35,7 +35,7 @@ class UserService {
       return UserAccountModel.fromJson(userJson);
     }
 
-    throw Exception('${response.statusCode} Error: User Account not found.');
+    throw Exception('${response.statusCode} Error - User Account not found.');
   }
 
   Future<UserProfileModel> getUserProfileById(int id) async {
@@ -46,7 +46,7 @@ class UserService {
       return UserProfileModel.fromJson(userJson);
     }
 
-    throw Exception('${response.statusCode} Error: User Profile not found.');
+    throw Exception('${response.statusCode} Error - User Profile not found.');
   }
 
   Future<UserResultModel> getUserResultById(int id) async {
@@ -56,20 +56,8 @@ class UserService {
       var userJson = json.decode(response.body);
       return UserResultModel.fromJson(userJson);
     }
-    throw Exception('${response.statusCode} Error: User Result not found.');
+    throw Exception('${response.statusCode} Error - User Result not found.');
   }
-
-  // Future<UserModel> getUserById(int id) async {
-  //   final response = await http.get(Uri.parse('${url}users/$id'));
-  //
-  //   if (response.statusCode == 200) {
-  //     var userJson = json.decode(response.body);
-  //     return UserModel.fromJson(userJson);
-  //   } else if (response.statusCode == 403) {
-  //     throw Exception('${response.statusCode} Error: User id not found.');
-  //   }
-  //   throw Exception('${response.statusCode} Error: .');
-  // }
 
   Future<UserModel> getSelf() async {
     final response = await http.get(Uri.parse('${url}users/self'));
@@ -79,7 +67,7 @@ class UserService {
       return UserModel.fromJson(userJson);
     }
 
-    throw Exception('User \'self\' was not found');
+    throw Exception('${response.statusCode} Error - User \'self\' not found.');
   }
 
   Future<bool> followUser(int id) async {

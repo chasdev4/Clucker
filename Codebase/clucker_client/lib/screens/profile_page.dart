@@ -3,7 +3,6 @@ import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/user_avatar.dart';
-import 'package:clucker_client/models/user_model.dart';
 import 'package:clucker_client/models/user_profile_model.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:clucker_client/services/user_service.dart';
@@ -42,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       if (snapshot.hasError) {
                         return Center(
                           child: Text(
-                            '${snapshot.error} occurred',
+                            '${snapshot.error}',
                             style: const TextStyle(fontSize: 18),
                           ),
                         );

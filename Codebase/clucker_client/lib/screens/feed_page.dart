@@ -18,6 +18,7 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> {
   final userService = UserService();
   final cluckService = CluckService();
+  final cluckNode = FocusNode();
   late UserModel user;
   late List<CluckWidget> cluckWidgets;
 
@@ -39,7 +40,6 @@ class _FeedState extends State<Feed> {
 
   @override
   Widget build(BuildContext context) {
-    final cluckNode = FocusNode();
     return Scaffold(
       appBar: CluckerAppBar(
         username: user.username,
@@ -54,7 +54,7 @@ class _FeedState extends State<Feed> {
               if (snapshot.hasError) {
                 return Center(
                   child: Text(
-                    '${snapshot.error} occurred',
+                    '${snapshot.error}',
                     style: const TextStyle(fontSize: 18),
                   ),
                 );
