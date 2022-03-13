@@ -19,8 +19,10 @@ app:
     - "/users/*/clucks"
     - "/clucks/**"
     - "/users/**"
+    - "/version"
   allow-all-post:
     - "/users"
 
   security:
     jwt-secret-key: ${JWT_SECRET_KEY}
+  version: '0.0.1.1'
