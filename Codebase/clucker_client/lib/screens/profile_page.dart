@@ -1,36 +1,90 @@
+import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/user_avatar.dart';
+import 'package:clucker_client/models/user.dart';
+import 'package:clucker_client/services/cluck_service.dart';
+import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../models/cluck.dart';
 import '../navigation/main_navigation_bar.dart';
 import '../navigation/new_cluck_button.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key, required this.userId, required this.username}) : super(key: key);
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key, required this.userId}) : super(key: key);
 
   final int userId;
-  final String username;
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late List<Widget> cluckWidgets;
+  late ProfileData profileData;
+  late SliverList cluckList;
 
   @override
   Widget build(BuildContext context) {
     final cluckNode = FocusNode();
-
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          ProfileHeader(username: username, userId: userId,),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                throw Exception('Retrieve clucks logic not implemented');
-              },
-              childCount: 30,
-            ),
-          ),
+          SliverToBoxAdapter(
+              child: FutureBuilder(
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            '${snapshot.error} occurred',
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        );
+                      } else if (snapshot.hasData) {
+                        return ProfileHeader(
+                          profileData: profileData,
+                        );
+                      }
+                    }
+
+                    return const Center(
+                      child: CircularProgressIndicator(strokeWidth: 5),
+                    );
+                  },
+                  future: getProfileDetails())),
+          SliverToBoxAdapter(
+              child: FutureBuilder(
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            '${snapshot.error} occurred',
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        );
+                      } else if (snapshot.hasData) {
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return cluckWidgets[index];
+                            },
+                            childCount: cluckWidgets.length,
+                          ),
+                        );
+                      }
+                    }
+
+                    return const Center(
+                      child: CircularProgressIndicator(strokeWidth: 5),
+                    );
+                  },
+                  future: getClucks())),
         ],
       ),
       bottomNavigationBar: MainNavigationBar(focusNode: cluckNode),
@@ -38,13 +92,66 @@ class ProfilePage extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+
+  Future<Object?> getProfileDetails() async {
+    final UserService userService = UserService();
+    User user = await userService.getUserById(widget.userId);
+
+    setState(() {
+      profileData = ProfileData(
+          userId: user.id,
+          username: user.username,
+          bio: user.bio,
+          hue: user.hue,
+          eggRating: user.eggRating,
+          joined: user.joined);
+    });
+
+    return Future.delayed(const Duration(seconds: 2), () {
+      return profileData;
+    });
+  }
+
+  Future<Object?> getClucks() async {
+    cluckWidgets.clear();
+
+    final CluckService cluckService = CluckService();
+    List<Cluck> clucks = await cluckService.getProfileClucksById(widget.userId);
+
+    for (int i = 0; i < clucks.length; i++) {
+      cluckWidgets.add(CluckWidget(
+          cluck: clucks[i],
+          //TODO: commentCount
+          commentCount: 0));
+    }
+
+    return Future.delayed(const Duration(seconds: 2), () {
+      return cluckWidgets;
+    });
+  }
 }
 
-class ProfileHeader extends StatefulWidget {
-  const ProfileHeader({Key? key, required this.userId, required this.username}) : super(key: key);
+class ProfileData {
+  const ProfileData(
+      {required this.userId,
+      required this.username,
+      required this.bio,
+      required this.hue,
+      required this.eggRating,
+      required this.joined});
 
   final int userId;
   final String username;
+  final String bio;
+  final double hue;
+  final int eggRating;
+  final DateTime joined;
+}
+
+class ProfileHeader extends StatefulWidget {
+  const ProfileHeader({Key? key, required this.profileData}) : super(key: key);
+
+  final ProfileData profileData;
 
   @override
   _ProfileHeaderState createState() => _ProfileHeaderState();
@@ -63,11 +170,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
 
     final NumberFormat eggCountFormat = NumberFormat.decimalPattern('en_us');
     final DateFormat joinDateFormat = DateFormat('MMM dd, yyyy');
-
-    int placeholderEggCount = 1234512345;
-    DateTime placeholderJoinDate = DateTime.now();
-    String placeholderDescription =
-        'Save time. Live faster. Follow our profile for new job postings! Or visit our website at example.com';
 
     return SliverAppBar(
       automaticallyImplyLeading: false,
@@ -95,8 +197,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: UserAvatar(
-                        //TODO: username
-                        username: '',
+                        username: widget.profileData.username,
                         //TODO: userHue
                         userHue: 0,
                         //TODO: userId
@@ -120,7 +221,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     Padding(
                         padding: const EdgeInsets.only(left: 22),
                         child: Text(
-                          widget.username,
+                          widget.profileData.username,
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.w700,
@@ -139,7 +240,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              eggCountFormat.format(placeholderEggCount),
+                              eggCountFormat
+                                  .format(widget.profileData.eggRating),
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w400,
@@ -163,7 +265,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             )
                           ]),
                       Text(
-                        'Joined ${joinDateFormat.format(placeholderJoinDate)}',
+                        'Joined ${joinDateFormat.format(widget.profileData.joined)}',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -178,7 +280,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width - 50,
                     child: Text(
-                      placeholderDescription,
+                      widget.profileData.bio,
                       maxLines: 3,
                       style: TextStyle(
                         fontSize: 16,
@@ -189,8 +291,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 ),
                 TabControls(
                   isSearchTabs: false,
-                  userId: widget.userId,
-                  username: widget.username,
+                  userId: widget.profileData.userId,
+                  username: widget.profileData.username,
                 )
               ],
             ),
@@ -252,6 +354,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
 
   bool isUserOnOwnProfile() {
     String placeholderCurrentUser = 'TheCluckMan';
-    return widget.username == placeholderCurrentUser;
+    return widget.profileData.username == placeholderCurrentUser;
   }
 }

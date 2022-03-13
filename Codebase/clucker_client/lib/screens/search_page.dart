@@ -36,11 +36,7 @@ class _SearchPageState extends State<SearchPage> {
             automaticallyImplyLeading: false,
               elevation: 0,
               toolbarHeight: 150,
-              bottom: TabControls(
-                //TODO: TabControls username
-                username: '',
-                //TODO: TabControls userId
-                userId: 0,
+              bottom: const TabControls(
                 isSearchTabs: true,
               ),
               backgroundColor: Palette.white,

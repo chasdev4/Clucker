@@ -1,6 +1,5 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/user_avatar.dart';
-import 'package:clucker_client/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,6 +9,8 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
   const CluckerAppBar(
       {Key? key,
         required this.username,
+        required this.userId,
+        this.userHue = 0,
       this.appBarProfile = AppBarProfile.avatar,
       required this.title,
       this.noDivider = false,
@@ -19,6 +20,8 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
       : super(key: key);
 
   final String username;
+  final int userId;
+  final double userHue;
   final AppBarProfile appBarProfile;
   final String title;
   final double fontSize;
@@ -68,12 +71,11 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
           Container(
               child: isAvatar()
                   ? UserAvatar(
-                //TODO: username
-                username: '',
+                username: username,
                 //TODO: userHue
                 userHue: 0,
                       //TODO: userId
-                userId: 0,
+                userId: userId,
                       avatarSize: AvatarSize.medium,
                     )
                   : null)

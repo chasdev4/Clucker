@@ -1,5 +1,4 @@
 import 'package:clucker_client/components/palette.dart';
-import 'package:clucker_client/models/user.dart';
 import 'package:clucker_client/screens/followers_page.dart';
 import 'package:flutter/material.dart';
 
@@ -8,9 +7,9 @@ import '../utilities/count_format.dart';
 class TabControls extends StatefulWidget with PreferredSizeWidget {
   const TabControls({
     Key? key,
-    required this.userId,
+    this.userId = 0,
     required this.isSearchTabs,
-    required this.username,
+    this.username = '',
     this.height = 46,
     this.padding = 15,
   }) : super(key: key);

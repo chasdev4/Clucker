@@ -1,4 +1,3 @@
-import 'package:clucker_client/models/user.dart';
 import 'package:clucker_client/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,7 +6,7 @@ import 'circle_crop.dart';
 enum AvatarSize { small, medium, large }
 
 class UserAvatar extends StatefulWidget {
-  final int userHue;
+  final double userHue;
   final int userId;
   final String username;
   final AvatarSize avatarSize;
@@ -52,7 +51,7 @@ class _UserAvatarState extends State<UserAvatar> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProfilePage(userId: widget.userId, username: widget.username,)),
+                  builder: (context) => ProfilePage(userId: widget.userId)),
             );
           }
         },

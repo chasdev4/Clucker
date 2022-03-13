@@ -1,7 +1,6 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/models/cluck.dart';
 import 'package:clucker_client/screens/comments_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:clucker_client/components/user_avatar.dart';
@@ -69,12 +68,10 @@ class _CluckWidgetState extends State<CluckWidget> {
                         padding: const EdgeInsets.only(
                             top: 6, bottom: 6, left: 20, right: 2),
                         child: UserAvatar(
-                          //TODO: username
-                          username: '',
-                          //TODO: userHue
-                          userHue: 0,
-                            //TODO: userId
-                            userId: 0,
+                          username: widget.cluck.username,
+                            userId: widget.cluck.userId,
+                            //TODO: userHue
+                            userHue: 0,
                             onProfile: widget.onProfile,
                             avatarSize: AvatarSize.small),
                       ),
@@ -147,10 +144,8 @@ class _CluckWidgetState extends State<CluckWidget> {
                           ? _CommentButton(
                               isStatic: widget.commentButtonStatic,
                               commentCount: widget.commentButtonStatic
-                        ? 0 : 0,
-                        //TODO: commentCount
-                                  //? widget.commentCount - 2
-                                 // : widget.commentCount,
+                                  ? widget.commentCount - 2
+                                 : widget.commentCount,
                               buttonSize: 25,
                               onPressed: () {
                                 Navigator.push(

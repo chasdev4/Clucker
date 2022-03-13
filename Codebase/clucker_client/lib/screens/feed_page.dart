@@ -34,7 +34,7 @@ class _FeedState extends State<Feed> {
   }
 
   void getUser() {
-    user = User(100, 'usernamer', 'usernamer@gmail.com', DateTime.now(), 1, 1, 1);
+    user = User(1, 'username', 'email@email.org', 'bio', DateTime.now(), 0, 0, 0, 0);
   }
 
   @override
@@ -43,6 +43,8 @@ class _FeedState extends State<Feed> {
     return Scaffold(
       appBar: CluckerAppBar(
         username: user.username,
+        userId: user.id,
+        userHue: user.hue,
         appBarProfile: AppBarProfile.avatar,
         title: 'Feed',
       ),

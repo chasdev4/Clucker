@@ -3,10 +3,10 @@ class User {
       this.id,
       this.username,
       this.email,
-     // this.bio,
+     this.bio,
       this.joined,
       this.cluckCount,
-      //this.comments,
+      this.commentCount,
       this.followersCount,
       this.followingCount,
       //this.eggRating,
@@ -15,13 +15,14 @@ class User {
   late int id;
   late String username;
   late String email;
- // late String bio;
+  String bio = 'Not Implemented';
   late DateTime joined;
   late int cluckCount;
+  int commentCount = 0;
   late int followersCount;
   late int followingCount;
-  //late int eggRating;
-  //late double hue;
+  int eggRating = 1010101;
+  double hue = 0;
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -23,13 +23,10 @@ class AccountWidget extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-               const UserAvatar(
-                 //TODO: username
-                 username: '',
-               //TODO: userHue
-                 userHue: 0,
-                 //TODO: userId
-                 userId: 0,
+                UserAvatar(
+                 username: user.username,
+                 userHue: user.hue,
+                 userId: user.id,
                  avatarSize: AvatarSize.small,),
               Text(
                 user.username,

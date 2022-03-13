@@ -1,5 +1,4 @@
 import 'package:clucker_client/components/clucker_app_bar.dart';
-import 'package:clucker_client/models/user.dart';
 import 'package:flutter/material.dart';
 
 enum PageContext {
@@ -48,6 +47,7 @@ class FollowersPage extends StatelessWidget {
     return Scaffold(
       appBar: CluckerAppBar(
         username: username,
+        userId: userId,
         appBarProfile: AppBarProfile.followers,
         title: title,
         fontSize: 24,

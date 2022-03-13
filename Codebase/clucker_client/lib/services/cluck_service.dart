@@ -30,17 +30,29 @@ class CluckService {
     throw Exception('An error has occurred on the method getCluckByCluckId()');
   }
 
-  Future<List<Cluck>> getComments (String cluckId) async {
+  Future<List<Cluck>> getCommentsByCluckId (String cluckId) async {
     final response = await http.get(Uri.parse('${url}clucks/$cluckId/comments'));
-    List<Cluck> comments = [];
-
-    print(response.body);
 
     if (response.statusCode == 200) {
       var jsonClucks = json.decode(response.body)['content'];
-      comments = jsonClucks.map<Cluck>((json) => Cluck.fromJson(json)).toList();
+      List<Cluck> comments = jsonClucks.map<Cluck>((json) => Cluck.fromJson(json)).toList();
 
       return comments;
+    } else if (response.statusCode == 404) {
+      return [];
+    }
+
+    throw Exception('An error has occurred on the method getComments()');
+  }
+
+  Future<List<Cluck>> getProfileClucksById (int userId) async {
+    final response = await http.get(Uri.parse('${url}users/$userId/clucks'));
+
+    if (response.statusCode == 200) {
+      var jsonClucks = json.decode(response.body)['content'];
+      List<Cluck> clucks = jsonClucks.map<Cluck>((json) => Cluck.fromJson(json)).toList();
+
+      return clucks;
     } else if (response.statusCode == 404) {
       return [];
     }

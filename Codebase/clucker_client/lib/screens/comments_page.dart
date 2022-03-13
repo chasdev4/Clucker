@@ -100,8 +100,7 @@ class _CommentsPageState extends State<CommentsPage> {
                       ),
                     ],
                   ))),
-              Container(
-                child: Positioned(
+              Positioned(
                     top: 75,
                     left: 5,
                     child: SizedBox(
@@ -116,7 +115,7 @@ class _CommentsPageState extends State<CommentsPage> {
                           Navigator.pop(context);
                         },
                       ),
-                    )),
+                    ),
               ),
           Column(children: <Widget>[
             SizedBox(
@@ -217,7 +216,7 @@ class _CommentsPageState extends State<CommentsPage> {
       ));
     }
     List<Cluck> commentData =
-        await cluckService.getComments(widget.cluck.cluck.id);
+        await cluckService.getCommentsByCluckId(widget.cluck.cluck.id);
 
     if (commentData.isNotEmpty) {
       for (int i = 0; i < commentData.length; i++) {
