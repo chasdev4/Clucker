@@ -18,6 +18,8 @@ app:
     - "/users/available-usernames"
     - "/users/*/clucks"
     - "/clucks/**"
+    - "/users"
+    - "/clucks"
     - "/users/**"
     - "/version"
   allow-all-post:
@@ -25,4 +27,4 @@ app:
 
   security:
     jwt-secret-key: ${JWT_SECRET_KEY}
-  version: '0.0.1.1'
+  version: '0.0.1.2'
