@@ -142,7 +142,7 @@ class _TextBoxState extends State<TextBox> {
                                     size: 22,
                                   ),
                                   onPressed: () {
-                                    // do something
+                                    widget.extraFunction!();
                                   },
                                 )
                               : null,

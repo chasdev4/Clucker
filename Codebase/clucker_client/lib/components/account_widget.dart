@@ -10,8 +10,9 @@ enum AccountWidgetProfile {
 }
 
 class AccountWidget extends StatelessWidget {
-  const AccountWidget({Key? key, required this.userAccountModel}) : super(key: key);
+  const AccountWidget({Key? key, required this.accountWidgetProfile, required this.userAccountModel}) : super(key: key);
   final UserAccountModel userAccountModel;
+  final AccountWidgetProfile accountWidgetProfile;
 
   @override
   Widget build(BuildContext context) {

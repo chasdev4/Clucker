@@ -1,10 +1,7 @@
 import 'package:clucker_client/components/clucker_app_bar.dart';
 import 'package:flutter/material.dart';
 
-enum PageContext {
-  followers,
-  following
-}
+enum PageContext { followers, following }
 
 class FollowersPage extends StatelessWidget {
   const FollowersPage({Key? key, required this.userId, required this.username, required this.pageContext}) : super(key: key);
@@ -30,8 +27,7 @@ class FollowersPage extends StatelessWidget {
 
     if (username.length > 9) {
       title += '\n';
-    }
-    else {
+    } else {
       title += ' ';
     }
 
@@ -52,9 +48,7 @@ class FollowersPage extends StatelessWidget {
         title: title,
         fontSize: 24,
       ),
-      body: ListView(
-        children: getFollowers()
-      ),
+      body: ListView(children: getFollowers()),
     );
   }
 }

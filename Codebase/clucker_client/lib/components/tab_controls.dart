@@ -13,6 +13,8 @@ class TabControls extends StatefulWidget with PreferredSizeWidget {
     this.username = '',
     this.height = 46,
     this.padding = 15,
+    required this.onPressedLeft,
+    required this.onPressedRight
   }) : super(key: key);
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -22,6 +24,8 @@ class TabControls extends StatefulWidget with PreferredSizeWidget {
   final bool isSearchTabs;
   final double height;
   final double padding;
+  final Function onPressedLeft;
+  final Function onPressedRight;
 
   @override
   _TabControlsState createState() => _TabControlsState();
@@ -72,13 +76,11 @@ class _TabControlsState extends State<TabControls> {
       child: RawMaterialButton(
         onPressed: () {
           setState(() {
-            if (widget.isSearchTabs == true &&
-                isLeftTab == true &&
-                leftTabActive == false) {
+            if (isCluckTabAndInactive(isLeftTab: isLeftTab)) {
+              widget.onPressedLeft();
               leftTabActive = true;
-            } else if (widget.isSearchTabs == true &&
-                isLeftTab == false &&
-                leftTabActive == true) {
+            } else if (isUserTabAndInactive(isLeftTab: isLeftTab)) {
+              widget.onPressedRight();
               leftTabActive = false;
             } else if (widget.isSearchTabs == false && isLeftTab == true) {
               Navigator.push(
@@ -111,5 +113,17 @@ class _TabControlsState extends State<TabControls> {
         ),
       ),
     );
+  }
+
+  bool isCluckTabAndInactive({isLeftTab}) {
+    return widget.isSearchTabs == true &&
+        isLeftTab == true &&
+        leftTabActive == false;
+  }
+
+  bool isUserTabAndInactive({isLeftTab}) {
+    return widget.isSearchTabs == true &&
+        isLeftTab == false &&
+        leftTabActive == true;
   }
 }
