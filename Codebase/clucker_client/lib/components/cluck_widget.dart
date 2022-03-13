@@ -14,18 +14,18 @@ class CluckWidget extends StatefulWidget {
       {Key? key,
       this.cluckType = CluckType.cluck,
       required this.cluck,
-      this.comments = const [],
       this.commentButtonStatic = false,
       this.isVisible = true,
+        this.commentCount = 0,
       this.onProfile = false})
       : super(key: key);
 
   final CluckType cluckType;
   final Cluck cluck;
   final bool commentButtonStatic;
+  final int commentCount;
   final bool isVisible;
   final bool onProfile;
-  final List<Cluck> comments;
 
   @override
   _CluckWidgetState createState() => _CluckWidgetState();
@@ -147,8 +147,10 @@ class _CluckWidgetState extends State<CluckWidget> {
                           ? _CommentButton(
                               isStatic: widget.commentButtonStatic,
                               commentCount: widget.commentButtonStatic
-                                  ? widget.comments.length - 2
-                                  : widget.comments.length,
+                        ? 0 : 0,
+                        //TODO: commentCount
+                                  //? widget.commentCount - 2
+                                 // : widget.commentCount,
                               buttonSize: 25,
                               onPressed: () {
                                 Navigator.push(
@@ -158,7 +160,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                                             focusNode: focusNode,
                                             cluck: CluckWidget(
                                               cluck: widget.cluck,
-                                              comments: widget.comments,
+                                              commentCount: widget.commentCount,
                                             ),
                                           )),
                                 );
@@ -174,30 +176,6 @@ class _CluckWidgetState extends State<CluckWidget> {
                   )
                 ],
               )),
-          Container(
-            child: widget.cluckType == CluckType.cluckHeader
-                ? Positioned(
-                    top: 18,
-                    left: 5,
-                    child: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: RawMaterialButton(
-                        child: Icon(
-                          CupertinoIcons.back,
-                          color: widget.isVisible
-                              ? Palette.offBlack
-                              : Colors.transparent,
-                        ),
-                        onPressed: () {
-                          widget.comments.removeAt(0);
-                          widget.comments.removeAt(widget.comments.length - 1);
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ))
-                : Container(),
-          )
         ],
       ),
       Container(

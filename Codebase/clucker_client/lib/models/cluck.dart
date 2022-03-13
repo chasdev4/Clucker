@@ -10,7 +10,6 @@ class Cluck {
   //late int userId:
   late DateTime posted;
   late int eggRating = 0;
-  final UserService userService = UserService();
 
   Cluck.fromJson(Map<dynamic, dynamic> json) {
     id = json['id'];

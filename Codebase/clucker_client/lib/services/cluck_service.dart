@@ -32,16 +32,17 @@ class CluckService {
 
   Future<List<Cluck>> getComments (String cluckId) async {
     final response = await http.get(Uri.parse('${url}clucks/$cluckId/comments'));
+    List<Cluck> comments = [];
 
     print(response.body);
 
     if (response.statusCode == 200) {
       var jsonClucks = json.decode(response.body)['content'];
-      List<Cluck> comments = jsonClucks.map<Cluck>((json) => Cluck.fromJson(json)).toList();
+      comments = jsonClucks.map<Cluck>((json) => Cluck.fromJson(json)).toList();
 
       return comments;
-    } else {
-      return const [];
+    } else if (response.statusCode == 404) {
+      return [];
     }
 
     throw Exception('An error has occurred on the method getComments()');

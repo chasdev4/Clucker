@@ -88,10 +88,11 @@ class _FeedState extends State<Feed> {
     cluckWidgets.clear();
 
     for (int i = 0; i < clucks.length; i++) {
-      cluckWidgets.add(CluckWidget(cluck: clucks[i], comments: await cluckService.getComments(clucks[i].id)));
+      cluckWidgets.add(CluckWidget(
+          cluck: clucks[i],
+          //TODO: commentCount
+          commentCount: 0));
     }
-
-    print('Data len: ${clucks.length}, Widget len: ${cluckWidgets.length}');
 
     return Future.delayed(const Duration(seconds: 2), () {
       return clucks;
