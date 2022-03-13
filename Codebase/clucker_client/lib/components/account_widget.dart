@@ -1,5 +1,5 @@
+import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/follow_button.dart';
-import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:clucker_client/models/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,11 +42,7 @@ class AccountWidget extends StatelessWidget {
         ],
       ),
       const SizedBox(height: 10,),
-      Container(
-        color: Palette.lightGrey.toMaterialColor().shade400,
-        height: 2.5,
-        width: MediaQuery.of(context).size.width - 15 * 2,
-      ),
+      const Div()
     ]);
   }
 }

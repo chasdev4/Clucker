@@ -6,6 +6,7 @@ class Cluck {
   late String username;
   int userId = 0;
   late DateTime posted;
+  int commentCount = 0;
   late int eggRating = 0;
 
   Cluck.fromJson(Map<dynamic, dynamic> json) {

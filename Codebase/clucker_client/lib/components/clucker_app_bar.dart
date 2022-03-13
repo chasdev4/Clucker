@@ -1,3 +1,4 @@
+import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,6 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
       this.appBarProfile = AppBarProfile.avatar,
       required this.title,
       this.noDivider = false,
-      this.padding = 15,
       this.fontSize = 36,
       this.height = 80})
       : super(key: key);
@@ -25,7 +25,6 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
   final AppBarProfile appBarProfile;
   final String title;
   final double fontSize;
-  final double padding;
   final bool? noDivider;
   final double height;
 
@@ -47,13 +46,9 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
       toolbarHeight: height,
       elevation: 0,
       bottomOpacity: noDivider == true ? 0 : 1,
-      bottom: PreferredSize(
-          child: Container(
-            color: Palette.cluckerRed,
-            height: 2.5,
-            width: MediaQuery.of(context).size.width - padding * 2,
-          ),
-          preferredSize: const Size.fromHeight(2.5)),
+      bottom: const PreferredSize(
+          child: Div(isHeader: true),
+          preferredSize: Size.fromHeight(2.5)),
       title: Row(
         mainAxisAlignment: isAvatar()
             ? MainAxisAlignment.spaceBetween

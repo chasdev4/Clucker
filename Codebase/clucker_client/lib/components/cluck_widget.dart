@@ -1,3 +1,4 @@
+import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/models/cluck.dart';
 import 'package:clucker_client/screens/comments_page.dart';
@@ -122,13 +123,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                   const SizedBox(
                     height: 5,
                   ),
-                  Container(
-                    color: widget.cluckType != CluckType.cluckHeader
-                        ? Palette.lightGrey.toMaterialColor().shade400
-                        : Colors.transparent,
-                    height: 2.5,
-                    width: MediaQuery.of(context).size.width - 15 * 2,
-                  ),
+                  const Div(),
                 ],
               )),
           Positioned(

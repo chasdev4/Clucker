@@ -34,7 +34,7 @@ class _FeedState extends State<Feed> {
   }
 
   void getUser() {
-    user = User(1, 'username', 'email@email.org', 'bio', DateTime.now(), 0, 0, 0, 0);
+    user = User(9, 'username', 'email@email.org', 'bio', DateTime.now(), 0, 0, 0, 0);
   }
 
   @override
@@ -93,7 +93,7 @@ class _FeedState extends State<Feed> {
       cluckWidgets.add(CluckWidget(
           cluck: clucks[i],
           //TODO: commentCount
-          commentCount: 0));
+          commentCount: clucks[i].commentCount));
     }
 
     return Future.delayed(const Duration(seconds: 2), () {

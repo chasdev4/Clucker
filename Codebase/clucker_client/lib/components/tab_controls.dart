@@ -1,3 +1,4 @@
+import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/screens/followers_page.dart';
 import 'package:flutter/material.dart';
@@ -59,11 +60,7 @@ class _TabControlsState extends State<TabControls> {
                 false),
           ],
         ),
-        Container(
-            color: Palette.cluckerRed,
-            height: 2.5,
-            width: MediaQuery.of(context).size.width - widget.padding * 2,
-          ),
+        const Div(isHeader: true,)
       ],
     ));
   }
