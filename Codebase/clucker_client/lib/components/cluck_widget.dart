@@ -309,12 +309,13 @@ class _EggControls extends StatefulWidget {
 }
 
 class _EggControlsState extends State<_EggControls> {
-  List<bool> isSelected = [false, false];
-  List<bool> previousSelection = [false, false];
-  Color activeBackground = Palette.cluckerRed;
-  Color activeForeground = Palette.cluckerRedLight;
-  Color inactiveBackground = Palette.mercuryGray;
-  Color inactiveForeground = Palette.lightGrey;
+  final Color activeBackground = Palette.cluckerRed;
+  final Color activeForeground = Palette.cluckerRedLight;
+  final Color inactiveBackground = Palette.mercuryGray;
+  final Color inactiveForeground = Palette.lightGrey;
+
+  late List<bool> isSelected = [false, false];
+  late List<bool> previousSelection = [false, false];
 
   @override
   Widget build(BuildContext context) {

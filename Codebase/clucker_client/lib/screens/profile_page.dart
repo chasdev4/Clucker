@@ -210,8 +210,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: isUserOnOwnProfile()
                             ? null
-                            : const FollowButton(
+                            : FollowButton(
                                 buttonProfile: FollowButtonProfile.follow,
+                          userId: widget.profileData.userId,
                               ))
                   ],
                 ),

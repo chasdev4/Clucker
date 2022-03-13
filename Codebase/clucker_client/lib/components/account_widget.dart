@@ -38,7 +38,7 @@ class AccountWidget extends StatelessWidget {
               ),
             ],
           ),
-          const FollowButton(buttonProfile: FollowButtonProfile.followSmall)
+          FollowButton(buttonProfile: FollowButtonProfile.followSmall, userId: user.id,)
         ],
       ),
       const SizedBox(height: 10,),

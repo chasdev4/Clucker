@@ -9,7 +9,7 @@ class Div extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: isHeader
+      color: !isHeader
           ? Palette.lightGrey.toMaterialColor().shade400
           : Palette.cluckerRed,
       height: 2.5,

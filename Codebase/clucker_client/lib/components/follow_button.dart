@@ -7,10 +7,12 @@ class FollowButton extends StatefulWidget {
   const FollowButton({
     Key? key,
     required this.buttonProfile,
+    required this.userId,
     this.onPressed,
   }) : super(key: key);
 
   final FollowButtonProfile buttonProfile;
+  final int userId;
   final Function? onPressed;
 
   @override
@@ -32,21 +34,13 @@ class _FollowButtonState extends State<FollowButton> {
     return Padding(
       child: ElevatedButton(
         child: Text(
-          ((widget.buttonProfile == FollowButtonProfile.follow ||
-                      widget.buttonProfile ==
-                          FollowButtonProfile.followSmall) &&
-                  isSecondary == false)
+          isNotFollowed()
               ? 'Follow'
-              : ((widget.buttonProfile == FollowButtonProfile.follow ||
-                          widget.buttonProfile ==
-                              FollowButtonProfile.followSmall) &&
-                      isSecondary == true)
+              : isFollowed()
                   ? 'Unfollow'
-                  : widget.buttonProfile == FollowButtonProfile.block &&
-                          isSecondary == false
+                  : isNotBlocked()
                       ? 'Block'
-                      : widget.buttonProfile == FollowButtonProfile.block &&
-                              isSecondary == true
+                      : isBlocked()
                           ? 'Unblock'
                           : 'Text...',
           style: TextStyle(
@@ -65,6 +59,13 @@ class _FollowButtonState extends State<FollowButton> {
         onPressed: () {
           setState(() {
             isSecondary = !isSecondary;
+
+            if (isFollowButton()) {
+              // TODO: Follow / Unfollow
+            } else if (isBlockButton()) {
+              //TODO: Block / Unblock
+            }
+
           });
 
           widget.onPressed!();
@@ -72,5 +73,31 @@ class _FollowButtonState extends State<FollowButton> {
       ),
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
     );
+  }
+
+  bool isFollowButton() {
+    return widget.buttonProfile == FollowButtonProfile.follow ||
+        widget.buttonProfile ==
+            FollowButtonProfile.followSmall;
+  }
+
+  bool isBlockButton() {
+    return widget.buttonProfile == FollowButtonProfile.block;
+  }
+
+  bool isFollowed() {
+    return isFollowButton() && isSecondary;
+  }
+
+  bool isNotFollowed() {
+    return isFollowButton() && !isSecondary;
+  }
+
+  bool isBlocked() {
+    return isBlockButton() && isSecondary;
+  }
+
+  bool isNotBlocked() {
+    return isBlockButton() && !isSecondary;
   }
 }
