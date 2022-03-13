@@ -4,7 +4,7 @@ class CluckModel {
   late String cluckId;
   late String body;
   late String username;
-  int userId = 0;
+  late int userId;
   late DateTime posted;
   int commentCount = 0;
   late int eggRating = 0;
@@ -13,7 +13,7 @@ class CluckModel {
     cluckId = json['id'];
     body = json['body'];
     username = json['author'];
-    // userId: json['authorId'];
+    userId: json['authorId'];
     posted = DateTime.parse(json['posted']);
     if(json['eggRating'] == null) {
       eggRating = 0;

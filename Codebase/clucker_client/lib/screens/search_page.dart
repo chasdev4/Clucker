@@ -236,6 +236,7 @@ class _UserResultWidget extends StatelessWidget {
                   const EdgeInsets.only(top: 6, bottom: 6, left: 20, right: 2),
               child: UserAvatar(
                   username: username,
+                  userId: ,
                   onProfile: false,
                   avatarSize: AvatarSize.small),
             ),
