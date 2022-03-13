@@ -18,6 +18,7 @@ app:
     - "/users/available-usernames"
     - "/users/*/clucks"
     - "/clucks/**"
+    - "/users/**"
   allow-all-post:
     - "/users"
 

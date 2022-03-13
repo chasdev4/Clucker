@@ -1,5 +1,6 @@
 package com.clucker.cluckerserver.model;
 
+import com.clucker.cluckerserver.dto.validation.annotation.ValidCluck;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,9 +20,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -48,6 +51,12 @@ public class User {
     @JsonIgnore
     @NotNull
     private String password;
+
+    @ValidCluck
+    private String bio;
+
+    @Size(max = 360)
+    private int avatarHue;
 
     @CreationTimestamp
     private LocalDateTime joined;
@@ -78,5 +87,21 @@ public class User {
     @JsonIgnore
     @ManyToMany(mappedBy = "followers")
     private List<User> following = Collections.emptyList();
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "cluck_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<Cluck> likedClucks = Collections.emptySet();
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "cluck_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<Cluck> dislikedClucks = Collections.emptySet();
 
 }

@@ -6,6 +6,7 @@ import com.clucker.cluckerserver.dto.UserResponse;
 import com.clucker.cluckerserver.dto.UserUpdateRequest;
 import com.clucker.cluckerserver.exception.UserExistsException;
 import com.clucker.cluckerserver.exception.UserNotFoundException;
+import com.clucker.cluckerserver.model.Cluck;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.model.UserRole;
 import com.clucker.cluckerserver.search.SimpleSearchSpecification;
@@ -91,6 +92,10 @@ public class UserServiceImpl implements UserService {
         userResponse.setCluckCount(user.getClucks().size());
         userResponse.setFollowersCount(user.getFollowers().size());
         userResponse.setFollowingCount(user.getFollowing().size());
+        int eggRating = user.getClucks().stream()
+                .mapToInt(cluck -> cluck.getLikeUsers().size() - cluck.getDislikeUsers().size())
+                .sum();
+        userResponse.setEggRating(eggRating);
         return userResponse;
     }
 
