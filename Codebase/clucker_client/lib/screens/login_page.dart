@@ -96,8 +96,10 @@ class _LogInFormState extends State<LogInForm> {
               StandardButton(
                 text: 'Log-In',
                 routeName: '',
-                onPress: () {
-
+                onPress: () async {
+                  AuthRequest authRequest = AuthRequest(
+                      username: emailOrUsernameController.text,
+                      password: passwordController.text);
                 },
               ),
               StandardButton(
