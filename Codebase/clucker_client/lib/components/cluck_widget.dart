@@ -166,6 +166,8 @@ class _CluckWidgetState extends State<CluckWidget> {
                   _EggControls(
                     eggRating: widget.cluck.eggRating,
                     buttonSize: 25,
+                    //TODO: Pass the current rating from the logged in user
+                    currentRating: 0,
                   ),
                   const SizedBox(
                     width: 10,
@@ -304,11 +306,12 @@ class _CommentButtonState extends State<_CommentButton> {
 }
 
 class _EggControls extends StatefulWidget {
-  const _EggControls({Key? key, required this.eggRating, required this.buttonSize})
+  const _EggControls({Key? key, required this.eggRating, required this.buttonSize, required this.currentRating})
       : super(key: key);
 
   final double buttonSize;
   final int eggRating;
+  final int currentRating;
 
   @override
   _EggControlsState createState() => _EggControlsState();
@@ -320,9 +323,28 @@ class _EggControlsState extends State<_EggControls> {
   final Color inactiveBackground = Palette.mercuryGray;
   final Color inactiveForeground = Palette.lightGrey;
 
-  late List<bool> isSelected = [false, false];
-  late List<bool> previousSelection = [false, false];
+  late List<bool> isSelected;
+  late List<bool> previousSelection;
   late int eggCount = widget.eggRating;
+
+  @override
+  void initState() {
+    super.initState();
+    switch (widget.currentRating) {
+      case -1:
+        isSelected = [true, false];
+        previousSelection = [true, false];
+        break;
+      case 0:
+        isSelected = [false, false];
+        previousSelection = [false, false];
+        break;
+      case 1:
+        isSelected = [false, true];
+        previousSelection = [false, true];
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
