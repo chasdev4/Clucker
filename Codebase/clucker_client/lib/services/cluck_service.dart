@@ -1,10 +1,22 @@
 import 'dart:convert';
 import 'package:clucker_client/models/cluck_model.dart';
+import 'package:clucker_client/models/cluck_post_request.dart';
+import 'package:clucker_client/utilities/dialog_util.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class CluckService {
+  final dialogUtil = DialogUtil();
+
   static const String url =
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
+
+  Future<http.Response> postCluck(CluckPostRequest postRequest) async {
+    return await http.post(Uri.parse('${url}clucks',), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+      body: jsonEncode(postRequest.toJSON()),);
+  }
 
   Future<List<CluckModel>> getClucks () async {
     final response = await http.get(Uri.parse('${url}feed/personal'));
@@ -16,7 +28,7 @@ class CluckService {
       return clucks;
     }
 
-    throw Exception('An error has occurred on the method getClucks(). Status: ${response.statusCode}');
+    throw Exception('An error has occurred on the method getClucks(). Status Code: ${response.statusCode}');
   }
 
   Future<CluckModel> getCluckByCluckId(String cluckId) async {
@@ -42,7 +54,7 @@ class CluckService {
       return [];
     }
 
-    throw Exception('An error has occurred on the method getComments()');
+    throw Exception('An error has occurred on the method getCommentsByCluckId()');
   }
 
   Future<List<CluckModel>> getProfileClucksById (int userId) async {

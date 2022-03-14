@@ -2,9 +2,13 @@ import 'dart:async';
 
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/text_box.dart';
+import 'package:clucker_client/models/cluck_model.dart';
+import 'package:clucker_client/models/cluck_post_request.dart';
+import 'package:clucker_client/services/cluck_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:http/http.dart';
 
 late StreamSubscription<bool> keyboardSubscription;
 
@@ -93,6 +97,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   }
 
   void _showOverlay(BuildContext context) async {
+    final cluckService = CluckService();
     OverlayState? overlayState = Overlay.of(context);
 
     overlayEntry = OverlayEntry(builder: (context) {
@@ -184,6 +189,14 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                               textBoxProfile: TextBoxProfile.cluckField,
                               controller: cluckController,
                               focusNode: widget.focusNode,
+                              extraFunction: () async {
+                                Response postStatus = await cluckService.postCluck(
+                                    CluckPostRequest(
+                                        cluckController.text,
+                                        //TODO: Add signed in User's name and Id
+                                        'username', 1,
+                                        DateTime.now(), 0, 0));
+                              },
                               onTap: () {
                                 setState(() {
                                   barHeight = 218;

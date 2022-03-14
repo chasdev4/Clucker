@@ -1,4 +1,5 @@
 import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 enum FollowButtonProfile { follow, followSmall, block }
@@ -20,6 +21,7 @@ class FollowButton extends StatefulWidget {
 }
 
 class _FollowButtonState extends State<FollowButton> {
+  final userService = UserService();
   bool isSecondary = false;
 
   @override
@@ -62,6 +64,7 @@ class _FollowButtonState extends State<FollowButton> {
 
             if (isFollowButton()) {
               // TODO: Follow / Unfollow
+              userService.followUser(widget.userId);
             } else if (isBlockButton()) {
               //TODO: Block / Unblock
             }

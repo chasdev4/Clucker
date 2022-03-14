@@ -88,8 +88,7 @@ class _CommentsPageState extends State<CommentsPage> {
                           cluckType: CluckType.cluckHeader,
                           isVisible: false,
                           cluck: widget.cluck.cluck,
-                          //TODO: commentCount
-                          commentCount: 0,
+                          commentCount: widget.cluck.commentCount,
                         ),
                         Column(
                             mainAxisSize: MainAxisSize.min,
@@ -138,8 +137,7 @@ class _CommentsPageState extends State<CommentsPage> {
                     commentButtonStatic: true,
                     cluckType: CluckType.cluckHeader,
                     cluck: widget.cluck.cluck,
-                    //TODO: commentCount
-                    commentCount: 0,
+                    commentCount: widget.cluck.commentCount,
                     hue: widget.cluck.hue,
                     avatarImage: widget.cluck.avatarImage,
                   ),
@@ -259,8 +257,7 @@ class _CommentsPageState extends State<CommentsPage> {
                   cluckType: CluckType.cluckHeader,
                   isVisible: false,
                   cluck: widget.cluck.cluck,
-                  //TODO: commentCount
-                  commentCount: 0,
+                  commentCount: widget.cluck.commentCount,
                   hue: widget.cluck.hue,
                   avatarImage: widget.cluck.avatarImage,
                 )
