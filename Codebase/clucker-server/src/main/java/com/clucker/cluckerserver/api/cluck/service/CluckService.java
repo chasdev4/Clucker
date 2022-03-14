@@ -19,6 +19,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -73,11 +75,85 @@ public class CluckService {
 
     }
 
+    @PreAuthorize("hasRole('CLUCKER')")
+    public Cluck addEggToCluck(String cluckId, Authentication authentication) {
+        Cluck cluck = getCluckById(cluckId);
+        User user = userService.getUserByUsername(getUsername(authentication));
+
+        if (cluck.getLikeUsers().remove(user) &&
+                user.getLikedClucks().remove(cluck)) {
+            userService.saveUser(user);
+            return saveCluck(cluck);
+        }
+
+        if (cluck.getDislikeUsers() != null)
+            cluck.getDislikeUsers().remove(user);
+
+        if (cluck.getLikeUsers() == null)
+            cluck.setLikeUsers(new HashSet<>());
+
+        if (user.getDislikedClucks() != null)
+            user.getDislikedClucks().remove(cluck);
+
+        if (user.getLikedClucks() == null)
+            user.setLikedClucks(new HashSet<>());
+
+        cluck.getLikeUsers().add(user);
+        user.getLikedClucks().add(cluck);
+        userService.saveUser(user);
+        return saveCluck(cluck);
+    }
+
+    @PreAuthorize("hasRole('CLUCKER')")
+    public Cluck removeEggFromCluck(String cluckId, Authentication authentication) {
+        Cluck cluck = getCluckById(cluckId);
+        User user = userService.getUserByUsername(getUsername(authentication));
+
+        if (cluck.getDislikeUsers().remove(user) &&
+                user.getDislikedClucks().remove(cluck)) {
+            userService.saveUser(user);
+            return saveCluck(cluck);
+        }
+
+        if (cluck.getLikeUsers() != null)
+            cluck.getLikeUsers().remove(user);
+
+        if (cluck.getDislikeUsers() == null)
+            cluck.setDislikeUsers(new HashSet<>());
+
+        if (user.getLikedClucks() != null)
+            user.getLikedClucks().remove(cluck);
+
+        if (user.getDislikedClucks() == null)
+            user.setDislikedClucks(new HashSet<>());
+
+        cluck.getDislikeUsers().add(user);
+        user.getDislikedClucks().add(cluck);
+        userService.saveUser(user);
+        return saveCluck(cluck);
+    }
+
     public CluckResponse mapToResponse(Cluck cluck) {
         CluckResponse response = modelMapper.map(cluck, CluckResponse.class);
         response.setId(cluck.getId().toString());
         response.setAuthor(cluck.getAuthor().getUsername());
+        int eggRating = getCluckEggRating(cluck);
+        response.setEggRating(eggRating);
         return response;
+    }
+
+    private int getCluckEggRating(Cluck cluck) {
+        int positiveEggs = cluck.getLikeUsers().size();
+        int negativeEggs = cluck.getDislikeUsers().size();
+        return positiveEggs - negativeEggs;
+    }
+
+    public Cluck saveCluck(Cluck cluck) {
+        return cluckRepository.save(cluck);
+    }
+
+    private String getUsername(Authentication authentication) {
+        return Optional.of(authentication.getName()).orElseThrow(UserNotFoundException::new);
     }
 
 }

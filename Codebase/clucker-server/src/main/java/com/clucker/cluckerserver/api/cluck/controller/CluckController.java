@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -83,6 +84,20 @@ public class CluckController {
     @GetMapping("/{cluckId}/comments")
     public Page<CommentResponse> getComments(@PathVariable String cluckId, Pageable pageable) {
         return commentService.getAllComments(cluckId, pageable).map(commentService::mapToResponse);
+    }
+
+    @PostMapping("/{cluckId}/rating")
+    public CluckResponse addEggToCluck(@PathVariable String cluckId, Authentication authentication) {
+        return cluckService.mapToResponse(
+                cluckService.addEggToCluck(cluckId, authentication)
+        );
+    }
+
+    @DeleteMapping("/{cluckId}/rating")
+    public CluckResponse removeEggFromCluck(@PathVariable String cluckId, Authentication authentication) {
+        return cluckService.mapToResponse(
+                cluckService.removeEggFromCluck(cluckId, authentication)
+        );
     }
 
 
