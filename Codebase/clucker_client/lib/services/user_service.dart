@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:clucker_client/models/user_account_model.dart';
+import 'package:clucker_client/models/user_avatar_model.dart';
 import 'package:clucker_client/models/user_model.dart';
 import 'package:clucker_client/models/user_profile_model.dart';
 import 'package:clucker_client/models/user_result_model.dart';
@@ -57,6 +58,16 @@ class UserService {
       return UserResultModel.fromJson(userJson);
     }
     throw Exception('${response.statusCode} Error - User Result not found.');
+  }
+
+  Future<UserAvatarModel> getUserAvatarById(int id) async {
+    final response = await http.get(Uri.parse('${url}users/$id'));
+
+    if (response.statusCode == 200) {
+      var userJson = json.decode(response.body);
+      return UserAvatarModel.fromJson(userJson);
+    }
+    throw Exception('${response.statusCode} Error - User Avatar not found.');
   }
 
   Future<UserModel> getSelf() async {

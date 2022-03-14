@@ -7,7 +7,7 @@ class CluckService {
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
 
   Future<List<CluckModel>> getClucks () async {
-    final response = await http.get(Uri.parse('${url}clucks'));
+    final response = await http.get(Uri.parse('${url}feed/personal'));
 
     if (response.statusCode == 200) {
       var jsonClucks = json.decode(response.body)['content'];
@@ -16,7 +16,7 @@ class CluckService {
       return clucks;
     }
 
-    throw Exception('An error has occurred on the method getClucks()');
+    throw Exception('An error has occurred on the method getClucks(). Status: ${response.statusCode}');
   }
 
   Future<CluckModel> getCluckByCluckId(String cluckId) async {

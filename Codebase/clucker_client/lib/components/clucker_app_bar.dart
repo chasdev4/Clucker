@@ -11,22 +11,24 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
       {Key? key,
         required this.username,
         required this.userId,
-        this.userHue = 0,
       this.appBarProfile = AppBarProfile.avatar,
       required this.title,
       this.noDivider = false,
       this.fontSize = 36,
-      this.height = 80})
+      this.height = 80,
+        this.hue = 0,
+       this.avatarImage})
       : super(key: key);
 
   final String username;
   final int userId;
-  final double userHue;
   final AppBarProfile appBarProfile;
   final String title;
   final double fontSize;
   final bool? noDivider;
   final double height;
+  final double hue;
+  final String? avatarImage;
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +68,9 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
           Container(
               child: isAvatar()
                   ? UserAvatar(
-                username: username,
-                //TODO: userHue
-                userHue: 0,
-                      //TODO: userId
                 userId: userId,
+                      username: username,
+                      hue: hue,
                       avatarSize: AvatarSize.medium,
                     )
                   : null)

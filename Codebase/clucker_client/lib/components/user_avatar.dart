@@ -5,57 +5,70 @@ import 'circle_crop.dart';
 
 enum AvatarSize { small, medium, large }
 
-class UserAvatar extends StatefulWidget {
-  final double userHue;
+class UserAvatar extends StatelessWidget {
+  const UserAvatar(
+      {Key? key,
+        required this.hue,
+        required this.userId,
+        required this.username,
+        required this.avatarSize,
+        this.onProfile = false,
+        this.avatarImage})
+      : super(key: key);
+
+  final double hue;
   final int userId;
   final String username;
   final AvatarSize avatarSize;
   final bool onProfile;
   final String? avatarImage;
 
-  const UserAvatar(
-      {Key? key,
-        required this.userHue,
-        required this.userId,
-        required this.username,
-      required this.avatarSize,
-        this.onProfile = false,
-      this.avatarImage})
-      : super(key: key);
-
-  @override
-  State<UserAvatar> createState() => _UserAvatarState();
-}
-
-class _UserAvatarState extends State<UserAvatar> {
-  late double size;
-  late Color avatarForegroundColor;
-  late Color avatarBackgroundColor;
-
-  @override
-  void initState() {
-    super.initState();
-    initSizes();
-    setAvatarColor();
-  }
-
   @override
   Widget build(BuildContext context) {
+    late double size;
+    late Color avatarForegroundColor;
+    late Color avatarBackgroundColor;
+
+    switch (avatarSize) {
+      case AvatarSize.large:
+        size = 130;
+        break;
+      case AvatarSize.medium:
+        size = 75;
+        break;
+      case AvatarSize.small:
+        size = 60;
+        break;
+    }
+
+    avatarBackgroundColor =
+        HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
+            .withHue(hue)
+            .withSaturation(0.5)
+            .withLightness(0.88)
+            .toColor();
+    avatarForegroundColor =
+        HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
+            .withHue(hue)
+            .withSaturation(0.62)
+            .withLightness(0.5)
+            .toColor();
+
     return Container(
       padding: const EdgeInsets.all(5),
       width: size,
       height: size,
       child: RawMaterialButton(
         onPressed: () {
-          if (!widget.onProfile) {
+          if (!onProfile) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProfilePage(userId: widget.userId)),
+                  builder: (context) => ProfilePage(userId: userId, hue: hue, avatarImage: avatarImage,)),
             );
           }
         },
-        child: widget.avatarImage == null
+        child: avatarImage == null
             ? Stack(
                 children: [
                   Positioned(
@@ -74,40 +87,8 @@ class _UserAvatarState extends State<UserAvatar> {
                       )),
                 ],
               )
-            : ImageCircleCrop(image: widget.avatarImage!),
+            : ImageCircleCrop(image: avatarImage!),
       ),
     );
-  }
-
-  void setAvatarColor() {
-
-    avatarBackgroundColor =
-        HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
-           // .withHue(widget.user.hue)
-        .withHue(0)
-            .withSaturation(0.5)
-            .withLightness(0.88)
-            .toColor();
-    avatarForegroundColor =
-        HSLColor.fromColor(const Color.fromARGB(255, 210, 210, 210))
-        // .withHue(widget.user.hue)
-            .withHue(0)
-            .withSaturation(0.62)
-            .withLightness(0.5)
-            .toColor();
-  }
-
-  void initSizes() {
-    switch (widget.avatarSize) {
-      case AvatarSize.large:
-        size = 130;
-        break;
-      case AvatarSize.medium:
-        size = 75;
-        break;
-      case AvatarSize.small:
-        size = 60;
-        break;
-    }
   }
 }

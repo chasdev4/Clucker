@@ -17,7 +17,9 @@ class CluckWidget extends StatefulWidget {
       this.commentButtonStatic = false,
       this.isVisible = true,
       this.commentCount = 0,
-      this.onProfile = false})
+      this.onProfile = false,
+      required this.hue,
+     required this.avatarImage})
       : super(key: key);
 
   final CluckType cluckType;
@@ -26,6 +28,8 @@ class CluckWidget extends StatefulWidget {
   final int commentCount;
   final bool isVisible;
   final bool onProfile;
+  final double hue;
+  final String? avatarImage;
 
   @override
   _CluckWidgetState createState() => _CluckWidgetState();
@@ -69,11 +73,9 @@ class _CluckWidgetState extends State<CluckWidget> {
                         padding: const EdgeInsets.only(
                             top: 6, bottom: 6, left: 20, right: 2),
                         child: UserAvatar(
-                            username: widget.cluck.username,
+                          username: widget.cluck.username,
                             userId: widget.cluck.userId,
-                            //TODO: userHue
-                            userHue: 0,
-                            onProfile: widget.onProfile,
+                            hue: widget.hue,
                             avatarSize: AvatarSize.small),
                       ),
                       Text(
@@ -154,6 +156,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                                             cluck: CluckWidget(
                                               cluck: widget.cluck,
                                               commentCount: widget.commentCount,
+                                              hue: widget.hue, avatarImage: widget.avatarImage!,
                                             ),
                                           )),
                                 );

@@ -26,7 +26,7 @@ class AccountWidget extends StatelessWidget {
             children: [
                 UserAvatar(
                  username: userAccountModel.username,
-                 userHue: userAccountModel.hue,
+                 hue: userAccountModel.hue,
                  userId: userAccountModel.id,
                  avatarSize: AvatarSize.small,),
               Text(

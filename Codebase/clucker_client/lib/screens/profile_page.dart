@@ -15,9 +15,11 @@ import '../navigation/main_navigation_bar.dart';
 import '../navigation/new_cluck_button.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key, required this.userId}) : super(key: key);
+  const ProfilePage({Key? key, required this.userId, required this.avatarImage, required this.hue}) : super(key: key);
 
   final int userId;
+  final String? avatarImage;
+  final double hue;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -48,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       } else if (snapshot.hasData) {
                         return ProfileHeader(
                           profileData: profileData,
+                          avatarImage: widget.avatarImage,
                         );
                       }
                     }
@@ -120,9 +123,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
     for (int i = 0; i < clucks.length; i++) {
       cluckWidgets.add(CluckWidget(
+        avatarImage: widget.avatarImage,
+          hue: widget.hue,
           cluck: clucks[i],
-          //TODO: commentCount
-          commentCount: 0));
+          commentCount: clucks[i].commentCount));
     }
 
     return Future.delayed(const Duration(seconds: 2), () {
@@ -138,7 +142,8 @@ class ProfileData {
       required this.bio,
       required this.hue,
       required this.eggRating,
-      required this.joined});
+      required this.joined,
+      requi});
 
   final int userId;
   final String username;
@@ -149,9 +154,10 @@ class ProfileData {
 }
 
 class ProfileHeader extends StatefulWidget {
-  const ProfileHeader({Key? key, required this.profileData}) : super(key: key);
+  const ProfileHeader({Key? key, required this.profileData, required this.avatarImage}) : super(key: key);
 
   final ProfileData profileData;
+  final String? avatarImage;
 
   @override
   _ProfileHeaderState createState() => _ProfileHeaderState();
@@ -197,11 +203,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: UserAvatar(
+                        hue: widget.profileData.hue,
+                        avatarImage: widget.avatarImage!,
                         username: widget.profileData.username,
-                        //TODO: userHue
-                        userHue: 0,
-                        //TODO: userId
-                        userId: 0,
+                        userId: widget.profileData.userId,
                         avatarSize: AvatarSize.large,
                         onProfile: true,
                       ),

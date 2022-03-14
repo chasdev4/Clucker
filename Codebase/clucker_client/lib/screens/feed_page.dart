@@ -1,5 +1,6 @@
 import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/models/cluck_model.dart';
+import 'package:clucker_client/models/user_avatar_model.dart';
 import 'package:clucker_client/models/user_model.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:clucker_client/services/user_service.dart';
@@ -35,7 +36,8 @@ class _FeedState extends State<Feed> {
   }
 
   void getUser() {
-    user = UserModel(9, 'username', 'email@email.org', 'bio', DateTime.now(), 0, 0, 0);
+    user = UserModel(
+        9, 'username', 'email@email.org', 'bio', DateTime.now(), 0, 0, 0);
   }
 
   @override
@@ -44,7 +46,7 @@ class _FeedState extends State<Feed> {
       appBar: CluckerAppBar(
         username: user.username,
         userId: user.id,
-        userHue: user.hue,
+        hue: user.hue,
         appBarProfile: AppBarProfile.avatar,
         title: 'Feed',
       ),
@@ -58,7 +60,6 @@ class _FeedState extends State<Feed> {
                     style: const TextStyle(fontSize: 18),
                   ),
                 );
-
               } else if (snapshot.hasData) {
                 return ListView.builder(
                     itemCount: cluckWidgets.length,
@@ -73,7 +74,6 @@ class _FeedState extends State<Feed> {
               child: CircularProgressIndicator(strokeWidth: 5),
             );
           },
-
           future: getFeed()),
       bottomNavigationBar: MainNavigationBar(
         focusNode: cluckNode,
@@ -87,13 +87,19 @@ class _FeedState extends State<Feed> {
 
   Future<Object?> getFeed() async {
     List<CluckModel> clucks = await cluckService.getClucks();
+    UserService userService = UserService();
     cluckWidgets.clear();
 
     for (int i = 0; i < clucks.length; i++) {
+      UserAvatarModel userAvatar =
+          await userService.getUserAvatarById(clucks[i].userId);
+
       cluckWidgets.add(CluckWidget(
-          cluck: clucks[i],
-          //TODO: commentCount
-          commentCount: clucks[i].commentCount));
+        hue: userAvatar.hue,
+        avatarImage: userAvatar.image!,
+        cluck: clucks[i],
+        commentCount: clucks[i].commentCount,
+      ));
     }
 
     return Future.delayed(const Duration(seconds: 2), () {

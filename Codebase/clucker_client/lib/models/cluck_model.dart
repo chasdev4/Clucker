@@ -1,21 +1,22 @@
 class CluckModel {
-  CluckModel(this.cluckId, this.body, this.username, this.posted, this.eggRating);
+  CluckModel(this.cluckId, this.body, this.username, this.userId, this.posted,
+      this.commentCount, this.eggRating);
 
   late String cluckId;
   late String body;
   late String username;
   late int userId;
   late DateTime posted;
-  int commentCount = 0;
-  late int eggRating = 0;
+  late int commentCount;
+  late int eggRating;
 
   CluckModel.fromJson(Map<dynamic, dynamic> json) {
     cluckId = json['id'];
     body = json['body'];
     username = json['author'];
-    userId: json['authorId'];
+    userId = json['authorId'];
     posted = DateTime.parse(json['posted']);
-    if(json['eggRating'] == null) {
+    if (json['eggRating'] == null) {
       eggRating = 0;
     } else {
       eggRating = json['eggRating'];

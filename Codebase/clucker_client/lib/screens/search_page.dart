@@ -2,6 +2,7 @@ import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/user_avatar.dart';
+import 'package:clucker_client/models/user_result_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -218,12 +219,9 @@ class _NoResultsFoundPage extends StatelessWidget {
 
 class _UserResultWidget extends StatelessWidget {
   const _UserResultWidget(
-      {Key? key, required this.username, required this.description})
+      {Key? key, required this.userResult,})
       : super(key: key);
-  final String username;
-  final String description;
-  final int placeholderFollowerCount = 12345;
-  final int placeholderEggCount = 6789;
+  final UserResultModel userResult;
 
   @override
   Widget build(BuildContext context) {
@@ -235,13 +233,14 @@ class _UserResultWidget extends StatelessWidget {
               padding:
                   const EdgeInsets.only(top: 6, bottom: 6, left: 20, right: 2),
               child: UserAvatar(
-                  username: username,
-                  userId: ,
+                  userId: userResult.id,
                   onProfile: false,
+                  username: userResult.username,
+                  hue: userResult.hue,
                   avatarSize: AvatarSize.small),
             ),
             Text(
-              username,
+              userResult.username,
               style: const TextStyle(
                 fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
@@ -249,18 +248,18 @@ class _UserResultWidget extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            FollowButton(buttonProfile: FollowButtonProfile.followSmall)
+            FollowButton(buttonProfile: FollowButtonProfile.followSmall, userId: userResult.id,)
           ],
         ),
         Transform.translate(
-            offset: Offset(0, -4),
-            child: Container(
+            offset: const Offset(0, -4),
+            child: SizedBox(
               width: MediaQuery.of(context).size.width - 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    '${countFormat(placeholderFollowerCount)} Followers',
+                    '${countFormat(userResult.followersCount)} Followers',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
@@ -289,7 +288,7 @@ class _UserResultWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        countFormat(placeholderEggCount),
+                        countFormat(userResult.eggRating),
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -307,7 +306,7 @@ class _UserResultWidget extends StatelessWidget {
           ),
           width: MediaQuery.of(context).size.width - 60,
           child: Text(
-            description,
+            userResult.bio,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(

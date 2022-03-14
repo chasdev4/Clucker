@@ -73,8 +73,6 @@ class _CommentsPageState extends State<CommentsPage> {
                     itemCount: comments.length,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (BuildContext context, int index) {
-                      print(
-                          'comments.length = ${comments.length}, ${comments[index].toString()}');
                       return comments[index];
                     });
               } else if (comments.isEmpty) {
@@ -85,6 +83,8 @@ class _CommentsPageState extends State<CommentsPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CluckWidget(
+                          hue: widget.cluck.hue,
+                          avatarImage: widget.cluck.avatarImage,
                           cluckType: CluckType.cluckHeader,
                           isVisible: false,
                           cluck: widget.cluck.cluck,
@@ -140,6 +140,8 @@ class _CommentsPageState extends State<CommentsPage> {
                     cluck: widget.cluck.cluck,
                     //TODO: commentCount
                     commentCount: 0,
+                    hue: widget.cluck.hue,
+                    avatarImage: widget.cluck.avatarImage,
                   ),
                 ],
               ))),
@@ -243,7 +245,7 @@ class _CommentsPageState extends State<CommentsPage> {
     if (commentData.isNotEmpty) {
       for (int i = 0; i < commentData.length; i++) {
         comments.add(
-            CluckWidget(cluck: commentData[i], cluckType: CluckType.comment));
+            CluckWidget(cluck: commentData[i], cluckType: CluckType.comment, avatarImage: widget.cluck.avatarImage, hue: widget.cluck.hue));
       }
 
       if (!pageHasBeenBuilt) {
@@ -259,6 +261,8 @@ class _CommentsPageState extends State<CommentsPage> {
                   cluck: widget.cluck.cluck,
                   //TODO: commentCount
                   commentCount: 0,
+                  hue: widget.cluck.hue,
+                  avatarImage: widget.cluck.avatarImage,
                 )
               ],
             ));
