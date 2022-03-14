@@ -13,6 +13,6 @@ public class CluckValidator implements ConstraintValidator<ValidCluck, String> {
     }
 
     private boolean isValidCluck(String value) {
-        return value.split("[\\s\\n\\r]").length <= 6;
+        return value.split("[\\s\\n\\r]").length <= 6 && value.length() <= 120;
     }
 }

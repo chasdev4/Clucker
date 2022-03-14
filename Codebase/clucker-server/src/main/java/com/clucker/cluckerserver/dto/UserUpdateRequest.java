@@ -10,10 +10,9 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 public class UserUpdateRequest {
-
     @ValidUsername
     private String username;
-
     @Email
     private String email;
+    private String bio;
 }

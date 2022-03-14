@@ -6,6 +6,7 @@ import com.clucker.cluckerserver.dto.UserResponse;
 import com.clucker.cluckerserver.dto.UserUpdateRequest;
 import com.clucker.cluckerserver.exception.UserExistsException;
 import com.clucker.cluckerserver.exception.UserNotFoundException;
+import com.clucker.cluckerserver.model.Cluck;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.model.UserRole;
 import com.clucker.cluckerserver.search.SimpleSearchSpecification;
@@ -91,6 +92,10 @@ public class UserServiceImpl implements UserService {
         userResponse.setCluckCount(user.getClucks().size());
         userResponse.setFollowersCount(user.getFollowers().size());
         userResponse.setFollowingCount(user.getFollowing().size());
+        int eggRating = user.getClucks().stream()
+                .mapToInt(this::getCluckEggRating)
+                .sum();
+        userResponse.setEggRating(eggRating);
         return userResponse;
     }
 
@@ -124,5 +129,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean userExists(int id) {
         return repository.existsById(id);
+    }
+
+    private int getCluckEggRating(Cluck cluck) {
+        int positiveEggs = cluck.getLikeUsers().size();
+        int negativeEggs = cluck.getDislikeUsers().size();
+        return positiveEggs - negativeEggs;
     }
 }
