@@ -86,7 +86,7 @@ class _FeedState extends State<Feed> {
   }
 
   Future<Object?> getFeed() async {
-    List<CluckModel> clucks = await cluckService.getClucks();
+    List<CluckModel> clucks = await cluckService.getFeed();
     UserService userService = UserService();
     cluckWidgets.clear();
 

@@ -2,12 +2,9 @@ import 'dart:convert';
 import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/cluck_post_request.dart';
 import 'package:clucker_client/models/comment_post_request.dart';
-import 'package:clucker_client/utilities/dialog_util.dart';
 import 'package:http/http.dart' as http;
 
 class CluckService {
-  final dialogUtil = DialogUtil();
-
   static const String url =
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
 
@@ -25,7 +22,7 @@ class CluckService {
       body: jsonEncode(postRequest.toJSON()),);
   }
 
-  Future<List<CluckModel>> getClucks () async {
+  Future<List<CluckModel>> getFeed () async {
     final response = await http.get(Uri.parse('${url}feed/personal'));
 
     if (response.statusCode == 200) {
@@ -76,6 +73,6 @@ class CluckService {
       return [];
     }
 
-    throw Exception('An error has occurred on the method getComments()');
+    throw Exception('An error has occurred on the method getProfileClucksById()');
   }
 }
