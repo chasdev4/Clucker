@@ -36,7 +36,7 @@ class UserService {
       return UserAccountModel.fromJson(userJson);
     }
 
-    throw Exception('${response.statusCode} Error - User Account not found.');
+    throw Exception('An error has occurred on the method getUserAccountById(). Status Code: ${response.statusCode}');
   }
 
   Future<UserProfileModel> getUserProfileById(int id) async {
@@ -47,7 +47,7 @@ class UserService {
       return UserProfileModel.fromJson(userJson);
     }
 
-    throw Exception('${response.statusCode} Error - User Profile not found.');
+    throw Exception('An error has occurred on the method getUserProfileById(). Status Code: ${response.statusCode}');
   }
 
   Future<UserResultModel> getUserResultById(int id) async {
@@ -57,7 +57,7 @@ class UserService {
       var userJson = json.decode(response.body);
       return UserResultModel.fromJson(userJson);
     }
-    throw Exception('${response.statusCode} Error - User Result not found.');
+    throw Exception('An error has occurred on the method getUserResultById(). Status Code: ${response.statusCode}');
   }
 
   Future<UserAvatarModel> getUserAvatarById(int id) async {
@@ -67,7 +67,7 @@ class UserService {
       var userJson = json.decode(response.body);
       return UserAvatarModel.fromJson(userJson);
     }
-    throw Exception('${response.statusCode} Error - User Avatar not found.');
+    throw Exception('An error has occurred on the method getUserAvatarById(). Status Code: ${response.statusCode}');
   }
 
   Future<TempUserModel> getSelf() async {
@@ -78,7 +78,7 @@ class UserService {
       return TempUserModel.fromJson(userJson);
     }
 
-    throw Exception('${response.statusCode} Error - User \'self\' not found.');
+    throw Exception('An error has occurred on the method getSelf(). Status Code: ${response.statusCode}');
   }
 
   Future<bool> followUser(int id) async {
@@ -88,6 +88,21 @@ class UserService {
       return true;
     }
 
-    throw Exception(response.reasonPhrase);
+    throw Exception('An error has occurred on the method followUser(). Status Code: ${response.statusCode}');
+  }
+
+  Future<List<UserAccountModel>> getFollowers(int id) async {
+    final response = await http.get(Uri.parse('${url}users/$id/followers'));
+
+    if (response.statusCode == 200) {
+      var jsonFollowers = json.decode(response.body)['content'];
+      List<UserAccountModel> userAccounts = jsonFollowers
+          .map<UserAccountModel>((json) => UserAccountModel.fromJson(json))
+          .toList();
+
+      return userAccounts;
+    }
+
+    throw Exception('An error has occurred on the method getFollowers(). Status Code: ${response.statusCode}');
   }
 }

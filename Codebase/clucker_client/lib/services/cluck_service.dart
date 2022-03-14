@@ -43,7 +43,7 @@ class CluckService {
       return CluckModel.fromJson(cluckJson);
     }
 
-    throw Exception('An error has occurred on the method getCluckByCluckId()');
+    throw Exception('An error has occurred on the method getCluckByCluckId(). Status Code: ${response.statusCode}');
   }
 
   Future<List<CluckModel>> getCommentsByCluckId (String cluckId) async {
@@ -58,7 +58,7 @@ class CluckService {
       return [];
     }
 
-    throw Exception('An error has occurred on the method getCommentsByCluckId()');
+    throw Exception('An error has occurred on the method getCommentsByCluckId(). Status Code: ${response.statusCode}');
   }
 
   Future<List<CluckModel>> getProfileClucksById (int userId) async {
@@ -73,6 +73,6 @@ class CluckService {
       return [];
     }
 
-    throw Exception('An error has occurred on the method getProfileClucksById()');
+    throw Exception('An error has occurred on the method getProfileClucksById(). Status Code: ${response.statusCode}');
   }
 }
