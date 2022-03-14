@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:clucker_client/models/user_account_model.dart';
 import 'package:clucker_client/models/user_avatar_model.dart';
-import 'package:clucker_client/models/user_model.dart';
+import 'package:clucker_client/models/temp_user_model.dart';
 import 'package:clucker_client/models/user_profile_model.dart';
 import 'package:clucker_client/models/user_result_model.dart';
 import 'package:http/http.dart' as http;
@@ -70,12 +70,12 @@ class UserService {
     throw Exception('${response.statusCode} Error - User Avatar not found.');
   }
 
-  Future<UserModel> getSelf() async {
+  Future<TempUserModel> getSelf() async {
     final response = await http.get(Uri.parse('${url}users/self'));
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
-      return UserModel.fromJson(userJson);
+      return TempUserModel.fromJson(userJson);
     }
 
     throw Exception('${response.statusCode} Error - User \'self\' not found.');

@@ -1,7 +1,7 @@
 import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/user_avatar_model.dart';
-import 'package:clucker_client/models/user_model.dart';
+import 'package:clucker_client/models/temp_user_model.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class _FeedState extends State<Feed> {
   final userService = UserService();
   final cluckService = CluckService();
   final cluckNode = FocusNode();
-  late UserModel user;
+  late TempUserModel user;
   late List<CluckWidget> cluckWidgets;
 
   @override
@@ -36,7 +36,7 @@ class _FeedState extends State<Feed> {
   }
 
   void getUser() {
-    user = UserModel(
+    user = TempUserModel(
         9, 'username', 'email@email.org', 'bio', DateTime.now(), 0, 0, 0);
   }
 
@@ -61,12 +61,20 @@ class _FeedState extends State<Feed> {
                   ),
                 );
               } else if (snapshot.hasData) {
-                return ListView.builder(
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    getFeed();
+                  },
+                  child: ListView.builder(
                     itemCount: cluckWidgets.length,
                     scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemExtent: 50,
                     itemBuilder: (BuildContext context, int index) {
                       return cluckWidgets[index];
-                    });
+                    },
+                  ),
+                );
               }
             }
 

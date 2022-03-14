@@ -1,5 +1,5 @@
-class UserModel {
-  UserModel(
+class TempUserModel {
+  TempUserModel(
       this.id,
       this.username,
       this.email,
@@ -20,7 +20,7 @@ class UserModel {
   int eggRating = 1010101;
   double hue = 0;
 
-  UserModel.fromJson(Map<String, dynamic> json) {
+  TempUserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     username = json['username'];
     email = json['email'];
