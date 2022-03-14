@@ -1,13 +1,18 @@
 class CluckPostRequest {
-  CluckPostRequest(this.body, this.username, this.userId, this.posted,
-      this.commentCount, this.eggRating);
+  const CluckPostRequest(
+      {required this.body,
+      required this.username,
+      required this.userId,
+      required this.posted,
+      required this.commentCount,
+      required this.eggRating});
 
-  late String body;
-  late String username;
-  late int userId;
-  late DateTime posted;
-  late int commentCount;
-  late int eggRating;
+  final String body;
+  final String username;
+  final int userId;
+  final DateTime posted;
+  final int commentCount;
+  final int eggRating;
 
   Map<String, dynamic> toJSON() => {
     'body': body,
@@ -18,5 +23,3 @@ class CluckPostRequest {
     'eggRating' : eggRating
   };
 }
-
-

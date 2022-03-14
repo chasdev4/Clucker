@@ -1,6 +1,7 @@
 import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/models/cluck_model.dart';
+import 'package:clucker_client/models/comment_post_request.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'dart:async';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
 
 late StreamSubscription<bool> keyboardSubscription;
 
@@ -105,7 +107,9 @@ class _CommentsPageState extends State<CommentsPage> {
                                     'Be the first to post a\ncomment on this cluck',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Palette.offBlack.toMaterialColor().shade100,
+                                        color: Palette.offBlack
+                                            .toMaterialColor()
+                                            .shade100,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 20),
                                     maxLines: 2,
@@ -208,6 +212,26 @@ class _CommentsPageState extends State<CommentsPage> {
                                 textBoxProfile: TextBoxProfile.commentField,
                                 controller: cluckController,
                                 focusNode: widget.focusNode,
+                                extraFunction: () async {
+                                  Response response =
+                                      await cluckService.postComment(
+                                          CommentPostRequest(
+                                              cluckId:
+                                                  widget.cluck.cluck.cluckId,
+                                              body: cluckController.text,
+                                              //TODO: Add signed in user's name
+                                              username: 'username',
+                                              //TODO: Add signed in user's id
+                                              userId: 0,
+                                              posted: DateTime.now(),
+                                              eggRating: 0));
+                                  if (response.statusCode == 200) {
+                                    setState(() {
+                                      cluckController.text = '';
+                                      widget.focusNode.unfocus();
+                                    });
+                                  }
+                                },
                                 onTap: () {
                                   setState(() {
                                     barHeight = 168;
@@ -242,8 +266,11 @@ class _CommentsPageState extends State<CommentsPage> {
 
     if (commentData.isNotEmpty) {
       for (int i = 0; i < commentData.length; i++) {
-        comments.add(
-            CluckWidget(cluck: commentData[i], cluckType: CluckType.comment, avatarImage: widget.cluck.avatarImage, hue: widget.cluck.hue));
+        comments.add(CluckWidget(
+            cluck: commentData[i],
+            cluckType: CluckType.comment,
+            avatarImage: widget.cluck.avatarImage,
+            hue: widget.cluck.hue));
       }
 
       if (!pageHasBeenBuilt) {

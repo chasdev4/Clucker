@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/text_box.dart';
-import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/cluck_post_request.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:flutter/material.dart';
@@ -190,12 +189,23 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                               controller: cluckController,
                               focusNode: widget.focusNode,
                               extraFunction: () async {
-                                Response postStatus = await cluckService.postCluck(
-                                    CluckPostRequest(
-                                        cluckController.text,
-                                        //TODO: Add signed in User's name and Id
-                                        'username', 1,
-                                        DateTime.now(), 0, 0));
+                                Response response = await cluckService
+                                    .postCluck(CluckPostRequest(
+                                        body: cluckController.text,
+                                    //TODO: Add signed in user's name
+                                        username: 'username',
+                                    //TODO: Add signed in user's id
+                                        userId: 0,
+                                        posted: DateTime.now(),
+                                        commentCount: 0,
+                                        eggRating: 0));
+                                if (response.statusCode == 200) {
+                                  setState(() {
+                                    overlayEntry.remove();
+                                    overlayVisible = false;
+                                    cluckController.text = '';
+                                  });
+                                }
                               },
                               onTap: () {
                                 setState(() {

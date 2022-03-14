@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/cluck_post_request.dart';
+import 'package:clucker_client/models/comment_post_request.dart';
 import 'package:clucker_client/utilities/dialog_util.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class CluckService {
@@ -13,6 +13,13 @@ class CluckService {
 
   Future<http.Response> postCluck(CluckPostRequest postRequest) async {
     return await http.post(Uri.parse('${url}clucks',), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+      body: jsonEncode(postRequest.toJSON()),);
+  }
+
+  Future<http.Response> postComment(CommentPostRequest postRequest) async {
+    return await http.post(Uri.parse('${url}clucks/${postRequest.cluckId}/comments',), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
       body: jsonEncode(postRequest.toJSON()),);
