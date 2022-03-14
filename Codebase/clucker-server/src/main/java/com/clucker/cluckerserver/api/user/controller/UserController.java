@@ -1,11 +1,11 @@
 package com.clucker.cluckerserver.api.user.controller;
 
 import com.clucker.cluckerserver.api.user.service.FollowerService;
+import com.clucker.cluckerserver.api.user.service.UserService;
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserResponse;
 import com.clucker.cluckerserver.dto.UserUpdateRequest;
 import com.clucker.cluckerserver.model.User;
-import com.clucker.cluckerserver.api.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

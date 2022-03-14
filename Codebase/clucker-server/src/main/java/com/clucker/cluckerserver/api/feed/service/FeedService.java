@@ -1,6 +1,7 @@
 package com.clucker.cluckerserver.api.feed.service;
 
 import com.clucker.cluckerserver.api.cluck.repository.CluckRepository;
+import com.clucker.cluckerserver.api.feed.specification.AuthorSpecification;
 import com.clucker.cluckerserver.api.user.service.UserService;
 import com.clucker.cluckerserver.exception.UnauthorizedException;
 import com.clucker.cluckerserver.model.Cluck;
@@ -8,7 +9,6 @@ import com.clucker.cluckerserver.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -33,10 +33,13 @@ public class FeedService {
                 .orElseThrow(() -> new UnauthorizedException("User is not authorized to perform this action."));
 
         User user = userService.getUserByUsername(username);
-        List<User> following = new ArrayList<>(user.getFollowing());
-        following.add(user);
+        List<User> authors = new ArrayList<>(user.getFollowing());
+        authors.add(user);
 
-        return cluckRepository.getClucksByAuthorIn(following, pageable);
+        AuthorSpecification spec = new AuthorSpecification(authors);
+
+        return cluckRepository.findAll(spec, pageable);
+
     }
 
 }
