@@ -17,6 +17,8 @@ public class CluckResponse {
     private String body;
     private LocalDateTime posted;
     private LocalDateTime lastModified;
+    private int authorId;
     private String author;
+    private int eggRating;
 
 }
