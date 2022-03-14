@@ -2,12 +2,9 @@ import 'dart:convert';
 import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/cluck_post_request.dart';
 import 'package:clucker_client/models/comment_post_request.dart';
-import 'package:clucker_client/utilities/dialog_util.dart';
 import 'package:http/http.dart' as http;
 
 class CluckService {
-  final dialogUtil = DialogUtil();
-
   static const String url =
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
 
@@ -15,17 +12,17 @@ class CluckService {
     return await http.post(Uri.parse('${url}clucks',), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-      body: jsonEncode(postRequest.toJSON()),);
+      body: jsonEncode(postRequest.toJSON()));
   }
 
   Future<http.Response> postComment(CommentPostRequest postRequest) async {
     return await http.post(Uri.parse('${url}clucks/${postRequest.cluckId}/comments',), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-      body: jsonEncode(postRequest.toJSON()),);
+      body: jsonEncode(postRequest.toJSON()));
   }
 
-  Future<List<CluckModel>> getClucks () async {
+  Future<List<CluckModel>> getFeed() async {
     final response = await http.get(Uri.parse('${url}feed/personal'));
 
     if (response.statusCode == 200) {
@@ -35,7 +32,7 @@ class CluckService {
       return clucks;
     }
 
-    throw Exception('An error has occurred on the method getClucks(). Status Code: ${response.statusCode}');
+    throw Exception('An error has occurred on the method getFeed(). Status Code: ${response.statusCode}');
   }
 
   Future<CluckModel> getCluckByCluckId(String cluckId) async {
@@ -46,7 +43,7 @@ class CluckService {
       return CluckModel.fromJson(cluckJson);
     }
 
-    throw Exception('An error has occurred on the method getCluckByCluckId()');
+    throw Exception('An error has occurred on the method getCluckByCluckId(). Status Code: ${response.statusCode}');
   }
 
   Future<List<CluckModel>> getCommentsByCluckId (String cluckId) async {
@@ -61,7 +58,7 @@ class CluckService {
       return [];
     }
 
-    throw Exception('An error has occurred on the method getCommentsByCluckId()');
+    throw Exception('An error has occurred on the method getCommentsByCluckId(). Status Code: ${response.statusCode}');
   }
 
   Future<List<CluckModel>> getProfileClucksById (int userId) async {
@@ -76,6 +73,6 @@ class CluckService {
       return [];
     }
 
-    throw Exception('An error has occurred on the method getComments()');
+    throw Exception('An error has occurred on the method getProfileClucksById(). Status Code: ${response.statusCode}');
   }
 }

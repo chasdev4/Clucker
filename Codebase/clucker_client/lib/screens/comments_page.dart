@@ -217,7 +217,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                       await cluckService.postComment(
                                           CommentPostRequest(
                                               cluckId:
-                                                  widget.cluck.cluck.cluckId,
+                                                  widget.cluck.cluck.id,
                                               body: cluckController.text,
                                               //TODO: Add signed in user's name
                                               username: 'username',
@@ -262,7 +262,7 @@ class _CommentsPageState extends State<CommentsPage> {
   Future<Object?> getComments() async {
     comments = [];
     List<CluckModel> commentData =
-        await cluckService.getCommentsByCluckId(widget.cluck.cluck.cluckId);
+        await cluckService.getCommentsByCluckId(widget.cluck.cluck.id);
 
     if (commentData.isNotEmpty) {
       for (int i = 0; i < commentData.length; i++) {
