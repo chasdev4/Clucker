@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 
 @Service
@@ -17,6 +18,7 @@ public class FollowerService {
 
     private final UserService userService;
 
+    @Transactional
     public void followUser(int id, Authentication authentication) {
 
         assertAuthenticated(authentication);
@@ -45,6 +47,7 @@ public class FollowerService {
         log.info("{} successfully followed {}", principal, username);
     }
 
+    @Transactional
     public void unfollowUser(int id, Authentication authentication) {
         assertAuthenticated(authentication);
 

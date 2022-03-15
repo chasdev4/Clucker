@@ -59,12 +59,15 @@ public class Cluck {
     private LocalDateTime lastModified;
 
     @OneToMany(mappedBy = "cluck")
+    @Builder.Default
     private List<Comment> comments = Collections.emptyList();
 
     @ManyToMany(mappedBy = "likedClucks")
+    @Builder.Default
     private Set<User> likeUsers = Collections.emptySet();
 
     @ManyToMany(mappedBy = "dislikedClucks")
+    @Builder.Default
     private Set<User> dislikeUsers = Collections.emptySet();
 
 }

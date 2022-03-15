@@ -1,6 +1,7 @@
 package com.clucker.cluckerserver.api.cluck.service;
 
 import com.clucker.cluckerserver.api.cluck.repository.CluckRepository;
+import com.clucker.cluckerserver.api.user.service.UserService;
 import com.clucker.cluckerserver.dto.CluckResponse;
 import com.clucker.cluckerserver.dto.PostCluck;
 import com.clucker.cluckerserver.exception.CluckNotFoundException;
@@ -8,7 +9,6 @@ import com.clucker.cluckerserver.exception.UnauthorizedException;
 import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.Cluck;
 import com.clucker.cluckerserver.model.User;
-import com.clucker.cluckerserver.api.user.service.UserService;
 import com.clucker.cluckerserver.search.SimpleSearchSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
@@ -75,6 +76,7 @@ public class CluckService {
 
     }
 
+    @Transactional
     @PreAuthorize("hasRole('CLUCKER')")
     public Cluck addEggToCluck(String cluckId, Authentication authentication) {
         Cluck cluck = getCluckById(cluckId);
@@ -104,6 +106,7 @@ public class CluckService {
         return saveCluck(cluck);
     }
 
+    @Transactional
     @PreAuthorize("hasRole('CLUCKER')")
     public Cluck removeEggFromCluck(String cluckId, Authentication authentication) {
         Cluck cluck = getCluckById(cluckId);

@@ -1,8 +1,8 @@
 package com.clucker.cluckerserver.security.service;
 
+import com.clucker.cluckerserver.api.user.repository.UserRepository;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.model.UserDetailsImpl;
-import com.clucker.cluckerserver.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
