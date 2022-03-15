@@ -20,5 +20,6 @@ public class CluckResponse {
     private int authorId;
     private String author;
     private int eggRating;
+    private int commentCount;
 
 }

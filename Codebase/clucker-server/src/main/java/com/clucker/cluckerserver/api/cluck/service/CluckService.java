@@ -142,6 +142,7 @@ public class CluckService {
         response.setAuthor(cluck.getAuthor().getUsername());
         int eggRating = getCluckEggRating(cluck);
         response.setEggRating(eggRating);
+        response.setCommentCount(cluck.getComments().size());
         return response;
     }
 
