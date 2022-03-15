@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       if (snapshot.hasError) {
                         return Center(
                           child: Text(
-                            '${snapshot.error} occurred',
+                            '${snapshot.error}',
                             style: const TextStyle(fontSize: 18),
                           ),
                         );

@@ -13,6 +13,7 @@ class UserResultModel {
   late int followersCount;
   late int eggRating;
   late double hue;
+  late String avatarImage;
 
   UserResultModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -21,5 +22,6 @@ class UserResultModel {
     followersCount = json['followerCount'];
     eggRating = json['eggRating'];
     hue = json['hue'];
+    avatarImage = json['avatarImage'];
   }
 }

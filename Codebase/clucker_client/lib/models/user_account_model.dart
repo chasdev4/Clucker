@@ -1,15 +1,14 @@
 class UserAccountModel {
-  UserAccountModel(
-      this.id,
-      this.username,
-      );
+  UserAccountModel(this.id, this.username, this.hue, this.avatarImage);
   late int id;
   late String username;
-  double hue = 0;
+  late double hue;
+  late String? avatarImage;
 
   UserAccountModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     username = json['username'];
     hue = json['hue'];
+    avatarImage = json['avatarImage'];
   }
 }
