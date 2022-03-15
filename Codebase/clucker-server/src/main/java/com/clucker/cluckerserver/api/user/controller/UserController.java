@@ -111,4 +111,9 @@ public class UserController {
         followerService.unfollowUser(id, authentication);
     }
 
+    @GetMapping("/{id}/followers")
+    public Page<User> getFollowers(@PathVariable int id, Pageable pageable) {
+        return followerService.getFollowersByUserId(id, pageable);
+    }
+
 }
