@@ -1,10 +1,10 @@
 package com.clucker.cluckerserver.controller;
 
 import com.clucker.cluckerserver.annotation.IntegrationTest;
+import com.clucker.cluckerserver.api.user.service.UserService;
 import com.clucker.cluckerserver.dto.UserRegistration;
 import com.clucker.cluckerserver.dto.UserUpdateRequest;
 import com.clucker.cluckerserver.model.User;
-import com.clucker.cluckerserver.api.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,6 @@ package com.clucker.cluckerserver.security.filter;
 
 import com.clucker.cluckerserver.security.service.UserDetailsServiceImpl;
 import com.clucker.cluckerserver.security.util.JwtUtils;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Key;
 
 @Component
 @RequiredArgsConstructor
