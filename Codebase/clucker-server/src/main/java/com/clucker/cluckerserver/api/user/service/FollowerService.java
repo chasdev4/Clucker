@@ -1,6 +1,5 @@
 package com.clucker.cluckerserver.api.user.service;
 
-import com.clucker.cluckerserver.api.user.repository.UserRepository;
 import com.clucker.cluckerserver.exception.UnauthorizedException;
 import com.clucker.cluckerserver.model.User;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.List;
 @Slf4j
 public class FollowerService {
 
-    private final UserRepository userRepository;
     private final UserService userService;
 
     @Transactional
@@ -89,6 +87,14 @@ public class FollowerService {
         final int start = (int) pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), followers.size());
         return new PageImpl<>(followers.subList(start, end), pageable, followers.size());
+    }
+
+    public Page<User> getFollowingByUserId(int userId, Pageable pageable) {
+        User user = userService.getUserById(userId);
+        List<User> following = user.getFollowing();
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), following.size());
+        return new PageImpl<>(following.subList(start, end), pageable, following.size());
     }
 
 }

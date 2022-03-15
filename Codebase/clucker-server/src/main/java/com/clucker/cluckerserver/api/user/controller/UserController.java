@@ -116,4 +116,9 @@ public class UserController {
         return followerService.getFollowersByUserId(id, pageable);
     }
 
+    @GetMapping("/{id}/following")
+    public Page<User> getFollowing(@PathVariable int id, Pageable pageable) {
+        return followerService.getFollowingByUserId(id, pageable);
+    }
+
 }
