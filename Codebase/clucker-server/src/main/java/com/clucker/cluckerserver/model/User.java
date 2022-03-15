@@ -61,7 +61,7 @@ public class User {
     private String avatarImage;
 
     @Max(360)
-    private int avatarHue;
+    private double avatarHue;
 
     @CreationTimestamp
     private LocalDateTime joined;
