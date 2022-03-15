@@ -1,8 +1,10 @@
 import 'package:clucker_client/models/auth_request.dart';
 import 'package:clucker_client/screens/username_signup_page.dart';
+import 'package:clucker_client/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
+import 'package:http/http.dart';
 
 import '../utilities/size_config.dart';
 
@@ -13,19 +15,19 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       resizeToAvoidBottomInset: false,
-      body: LogInForm(),
+      body: _LogInForm(),
     );
   }
 }
 
-class LogInForm extends StatefulWidget {
-  const LogInForm({Key? key}) : super(key: key);
+class _LogInForm extends StatefulWidget {
+  const _LogInForm({Key? key}) : super(key: key);
 
   @override
   _LogInFormState createState() => _LogInFormState();
 }
 
-class _LogInFormState extends State<LogInForm> {
+class _LogInFormState extends State<_LogInForm> {
   final _logInFormKey = GlobalKey<FormState>();
   final emailOrUsernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -34,8 +36,6 @@ class _LogInFormState extends State<LogInForm> {
 
   String emailOrUsername = '';
   String password = '';
-
-  late FocusNode focusNode;
 
   @override
   void dispose() {
@@ -101,6 +101,13 @@ class _LogInFormState extends State<LogInForm> {
                   AuthRequest authRequest = AuthRequest(
                       username: emailOrUsernameController.text,
                       password: passwordController.text);
+                  AuthService authService = AuthService();
+
+                  Response response = await authService.login(authRequest);
+
+
+                    print('${response.statusCode}, ${response.body}, ${response.headers}');
+
                 },
               ),
               StandardButton(
