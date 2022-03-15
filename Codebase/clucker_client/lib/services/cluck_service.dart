@@ -22,17 +22,17 @@ class CluckService {
       body: jsonEncode(postRequest.toJSON()),);
   }
 
-  Future<List<CluckModel>> getFeed () async {
-    final response = await http.get(Uri.parse('${url}feed/personal'));
+  Future<List<CluckModel>> getFeed (String _token) async {
+    final response = await http.get(Uri.parse('${url}feed/personal/'),
+    headers: {'authorization': _token});
 
     if (response.statusCode == 200) {
       var jsonClucks = json.decode(response.body)['content'];
-      List<CluckModel> clucks = jsonClucks.map<CluckModel>((json) => CluckModel.fromJson(json)).toList();
 
-      return clucks;
+      return jsonClucks.map<CluckModel>((json) => CluckModel.fromJson(json)).toList();
     }
 
-    throw Exception('An error has occurred on the method getClucks(). Status Code: ${response.statusCode}');
+    throw Exception('An error has occurred on the method getFeed(). Status Code: ${response.statusCode}');
   }
 
   Future<CluckModel> getCluckByCluckId(String cluckId) async {

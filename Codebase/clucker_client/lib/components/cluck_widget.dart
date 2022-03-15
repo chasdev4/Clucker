@@ -50,7 +50,7 @@ class _CluckWidgetState extends State<CluckWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(mainAxisSize: MainAxisSize.min, children: [
       Stack(
         children: [
           Container(
@@ -59,6 +59,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                   ? Palette.white
                   : Palette.mercuryGray.toMaterialColor().shade100,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [

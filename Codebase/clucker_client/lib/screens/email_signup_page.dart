@@ -5,7 +5,6 @@ import 'package:clucker_client/models/user_registration.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:http/http.dart';
 import '../utilities/dialog_util.dart';
-import 'feed_page.dart';
 
 class EmailPage extends StatelessWidget {
   const EmailPage({Key? key, required this.username}) : super(key: key);
@@ -156,11 +155,11 @@ class _EmailFormState extends State<EmailForm> {
                           context, 'Account Created', 'Start Clucking!');
 
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Feed()),
-                      );
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const FeedPage()),
+                    //   );
                     }
 
                     if (response.statusCode == 400) {

@@ -33,6 +33,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       leading: isFollowers()
           ? IconButton(

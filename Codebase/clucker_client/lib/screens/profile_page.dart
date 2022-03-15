@@ -126,7 +126,8 @@ class _ProfilePageState extends State<ProfilePage> {
         avatarImage: widget.avatarImage,
           hue: widget.hue,
           cluck: clucks[i],
-          commentCount: clucks[i].commentCount));
+          commentCount: 0));
+          //commentCount: clucks[i].commentCount));
     }
 
     return Future.delayed(const Duration(seconds: 2), () {
@@ -142,8 +143,7 @@ class ProfileData {
       required this.bio,
       required this.hue,
       required this.eggRating,
-      required this.joined,
-      requi});
+      required this.joined});
 
   final int userId;
   final String username;

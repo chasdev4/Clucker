@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:clucker_client/models/user_account_model.dart';
 import 'package:clucker_client/models/user_avatar_model.dart';
-import 'package:clucker_client/models/temp_user_model.dart';
+import 'package:clucker_client/models/user_self_model.dart';
 import 'package:clucker_client/models/user_profile_model.dart';
 import 'package:clucker_client/models/user_result_model.dart';
 import 'package:http/http.dart' as http;
@@ -70,12 +70,13 @@ class UserService {
     throw Exception('An error has occurred on the method getUserAvatarById(). Status Code: ${response.statusCode}');
   }
 
-  Future<TempUserModel> getSelf() async {
-    final response = await http.get(Uri.parse('${url}users/self'));
+  Future<UserSelfModel> getSelf(String _token) async {
+    final response = await http.get(Uri.parse('${url}users/self'),
+        headers: {'authorization': _token});
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
-      return TempUserModel.fromJson(userJson);
+      return UserSelfModel.fromJson(userJson);
     }
 
     throw Exception('An error has occurred on the method getSelf(). Status Code: ${response.statusCode}');

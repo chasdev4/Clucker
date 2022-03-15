@@ -1,9 +1,11 @@
 import 'package:clucker_client/models/auth_request.dart';
+import 'package:clucker_client/navigation/home.dart';
 import 'package:clucker_client/screens/username_signup_page.dart';
 import 'package:clucker_client/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 
 import '../utilities/size_config.dart';
@@ -28,6 +30,7 @@ class _LogInForm extends StatefulWidget {
 }
 
 class _LogInFormState extends State<_LogInForm> {
+  final storage = const FlutterSecureStorage();
   final _logInFormKey = GlobalKey<FormState>();
   final emailOrUsernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -105,8 +108,20 @@ class _LogInFormState extends State<_LogInForm> {
 
                   Response response = await authService.login(authRequest);
 
+                  if (response.statusCode == 200) {
+                    response.headers.forEach((key, value) {
+                      if (key == 'authorization') {
+                        storage.write(key: key, value: value);
+                      }
 
-                    print('${response.statusCode}, ${response.body}, ${response.headers}');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Home()),
+                      );
+
+                    });
+                  }
 
                 },
               ),
