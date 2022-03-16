@@ -1,3 +1,4 @@
+import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:flutter/material.dart';
@@ -8,26 +9,31 @@ enum AppBarProfile { avatar, noAvatar, centered, followers }
 class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
   const CluckerAppBar(
       {Key? key,
+        required this.username,
+        required this.userId,
       this.appBarProfile = AppBarProfile.avatar,
       required this.title,
       this.noDivider = false,
-      this.padding = 15,
       this.fontSize = 36,
-      required this.username,
-      this.height = 80})
+      this.height = 80,
+        this.hue = 0,
+       this.avatarImage = ''})
       : super(key: key);
 
+  final String username;
+  final int userId;
   final AppBarProfile appBarProfile;
   final String title;
   final double fontSize;
-  final double padding;
   final bool? noDivider;
-  final String username;
   final double height;
+  final double hue;
+  final String avatarImage;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       leading: isFollowers()
           ? IconButton(
@@ -43,28 +49,35 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
       toolbarHeight: height,
       elevation: 0,
       bottomOpacity: noDivider == true ? 0 : 1,
-      bottom: PreferredSize(
-          child: Container(
-            color: Palette.cluckerRed,
-            height: 2.5,
-            width: MediaQuery.of(context).size.width - padding * 2,
+      bottom: const PreferredSize(
+          child: Div(isHeader: true),
+          preferredSize: Size.fromHeight(2.5)),
+      title: Row(
+        mainAxisAlignment: isAvatar()
+            ? MainAxisAlignment.spaceBetween
+            : MainAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            maxLines: isFollowers() && username.length > 9 ? 2 : 1,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
-          preferredSize: const Size.fromHeight(2.5)),
-      title: Row(mainAxisAlignment: isAvatar() ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,children: [
-        Text(
-          title,
-          maxLines: isFollowers() && username.length > 9 ? 2 : 1,
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        Container(child:
-        isAvatar()
-            ? UserAvatar(username: username,avatarSize: AvatarSize.medium,)
-            : null)
-      ],),
+          Container(
+              child: isAvatar()
+                  ? UserAvatar(
+                userId: userId,
+                      username: username,
+                      hue: hue,
+                      avatarImage: '',
+                      avatarSize: AvatarSize.medium,
+                    )
+                  : null)
+        ],
+      ),
     );
   }
 

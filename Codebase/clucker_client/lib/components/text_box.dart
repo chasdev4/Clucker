@@ -142,7 +142,7 @@ class _TextBoxState extends State<TextBox> {
                                     size: 22,
                                   ),
                                   onPressed: () {
-                                    // do something
+                                    widget.extraFunction!();
                                   },
                                 )
                               : null,
@@ -470,7 +470,8 @@ class _TextBoxState extends State<TextBox> {
                       padding: const EdgeInsets.only(
                           left: 10, top: 5, bottom: 20, right: 10),
                       onPressed: () {
-                        // do something
+                        // Post cluck or comment
+                        widget.extraFunction!();
                       },
                     )
                   : (isAnyValidationField() && iconAnimation == false)

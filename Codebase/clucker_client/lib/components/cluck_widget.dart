@@ -1,6 +1,7 @@
+import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/screens/comments_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:clucker_client/components/user_avatar.dart';
@@ -8,35 +9,33 @@ import 'package:intl/intl.dart';
 
 enum CluckType { cluck, comment, cluckHeader }
 
-class Cluck extends StatefulWidget {
-  Cluck(
+class CluckWidget extends StatefulWidget {
+  const CluckWidget(
       {Key? key,
       this.cluckType = CluckType.cluck,
-      required this.username,
-      required this.cluckText,
-      required this.eggCount,
-      this.comments = const [],
-      required this.postDate,
+      required this.cluck,
       this.commentButtonStatic = false,
       this.isVisible = true,
-      this.onProfile = false})
+      this.commentCount = 0,
+      this.onProfile = false,
+      required this.hue,
+     required this.avatarImage})
       : super(key: key);
 
   final CluckType cluckType;
-  final String username;
-  final String cluckText;
-  final DateTime postDate;
+  final CluckModel cluck;
   final bool commentButtonStatic;
+  final int commentCount;
   final bool isVisible;
   final bool onProfile;
-  int eggCount;
-  final List<Widget> comments;
+  final double hue;
+  final String? avatarImage;
 
   @override
-  _CluckState createState() => _CluckState();
+  _CluckWidgetState createState() => _CluckWidgetState();
 }
 
-class _CluckState extends State<Cluck> {
+class _CluckWidgetState extends State<CluckWidget> {
   final DateFormat timeStampDate = DateFormat.yMMMMd('en_US');
   final DateFormat timeStampTime = DateFormat('h:mm a');
   final FocusNode focusNode = FocusNode();
@@ -51,7 +50,7 @@ class _CluckState extends State<Cluck> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(mainAxisSize: MainAxisSize.min, children: [
       Stack(
         children: [
           Container(
@@ -60,6 +59,7 @@ class _CluckState extends State<Cluck> {
                   ? Palette.white
                   : Palette.mercuryGray.toMaterialColor().shade100,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
@@ -74,12 +74,14 @@ class _CluckState extends State<Cluck> {
                         padding: const EdgeInsets.only(
                             top: 6, bottom: 6, left: 20, right: 2),
                         child: UserAvatar(
-                            username: widget.username,
-                            onProfile: widget.onProfile,
+                          username: widget.cluck.username,
+                            userId: widget.cluck.userId,
+                            hue: widget.hue,
+                            avatarImage: '',
                             avatarSize: AvatarSize.small),
                       ),
                       Text(
-                        widget.username,
+                        widget.cluck.username,
                         style: const TextStyle(
                           fontFamily: 'OpenSans',
                           fontWeight: FontWeight.bold,
@@ -114,7 +116,7 @@ class _CluckState extends State<Cluck> {
                                 : 30),
                     width: MediaQuery.of(context).size.width - 60,
                     child: Text(
-                      widget.cluckText,
+                      widget.cluck.body,
                       maxLines: 6,
                       style: const TextStyle(
                         fontFamily: 'OpenSans',
@@ -126,12 +128,9 @@ class _CluckState extends State<Cluck> {
                     height: 5,
                   ),
                   Container(
-                    color: widget.cluckType != CluckType.cluckHeader
-                        ? Palette.lightGrey.toMaterialColor().shade400
-                        : Colors.transparent,
-                    height: 2.5,
-                    width: MediaQuery.of(context).size.width - 15 * 2,
-                  ),
+                      child: widget.cluckType != CluckType.cluckHeader
+                          ? const Div()
+                          : null),
                 ],
               )),
           Positioned(
@@ -146,9 +145,9 @@ class _CluckState extends State<Cluck> {
                       child: widget.cluckType != CluckType.comment
                           ? _CommentButton(
                               isStatic: widget.commentButtonStatic,
-                              commentCount: widget.commentButtonStatic
-                                  ? widget.comments.length - 2
-                                  : widget.comments.length,
+                              commentCount: widget.commentButtonStatic && widget.commentCount > 0
+                                  ? widget.commentCount - 2
+                                  : widget.commentCount,
                               buttonSize: 25,
                               onPressed: () {
                                 Navigator.push(
@@ -156,12 +155,10 @@ class _CluckState extends State<Cluck> {
                                   MaterialPageRoute(
                                       builder: (context) => CommentsPage(
                                             focusNode: focusNode,
-                                            cluck: Cluck(
-                                              username: widget.username,
-                                              cluckText: widget.cluckText,
-                                              eggCount: widget.eggCount,
-                                              comments: widget.comments,
-                                              postDate: widget.postDate,
+                                            cluck: CluckWidget(
+                                              cluck: widget.cluck,
+                                              commentCount: widget.commentCount,
+                                              hue: widget.hue, avatarImage: widget.avatarImage!,
                                             ),
                                           )),
                                 );
@@ -169,38 +166,16 @@ class _CluckState extends State<Cluck> {
                             )
                           : null),
                   _EggControls(
-                    eggCount: widget.eggCount,
+                    eggRating: widget.cluck.eggRating,
                     buttonSize: 25,
+                    //TODO: Pass the current rating from the logged in user
+                    currentRating: 0,
                   ),
                   const SizedBox(
                     width: 10,
                   )
                 ],
               )),
-          Container(
-            child: widget.cluckType == CluckType.cluckHeader
-                ? Positioned(
-                    top: 18,
-                    left: 5,
-                    child: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: RawMaterialButton(
-                        child: Icon(
-                          CupertinoIcons.back,
-                          color: widget.isVisible
-                              ? Palette.offBlack
-                              : Colors.transparent,
-                        ),
-                        onPressed: () {
-                          widget.comments.removeAt(0);
-                          widget.comments.removeAt(widget.comments.length - 1);
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ))
-                : Container(),
-          )
         ],
       ),
       Container(
@@ -226,7 +201,7 @@ class _CluckState extends State<Cluck> {
                               width: 13,
                             ),
                             Text(
-                              '${timeStampDate.format(widget.postDate)} at ${timeStampTime.format(widget.postDate)}',
+                              '${timeStampDate.format(widget.cluck.posted)} at ${timeStampTime.format(widget.cluck.posted)}',
                               style: TextStyle(
                                 fontFamily: 'OpenSans',
                                 fontSize: 13.44,
@@ -255,7 +230,7 @@ class _CluckState extends State<Cluck> {
 
   String getTimeAgo() {
     String value = '';
-    Duration timeAgo = now.difference(widget.postDate);
+    Duration timeAgo = now.difference(widget.cluck.posted);
 
     if (timeAgo.inDays >= 365) {
       value = '${(timeAgo.inDays / 365).toStringAsFixed(0)}y';
@@ -333,29 +308,51 @@ class _CommentButtonState extends State<_CommentButton> {
 }
 
 class _EggControls extends StatefulWidget {
-  _EggControls({Key? key, required this.eggCount, required this.buttonSize})
+  const _EggControls({Key? key, required this.eggRating, required this.buttonSize, required this.currentRating})
       : super(key: key);
 
   final double buttonSize;
-  int eggCount;
+  final int eggRating;
+  final int currentRating;
 
   @override
   _EggControlsState createState() => _EggControlsState();
 }
 
 class _EggControlsState extends State<_EggControls> {
-  List<bool> isSelected = [false, false];
-  List<bool> previousSelection = [false, false];
-  Color activeBackground = Palette.cluckerRed;
-  Color activeForeground = Palette.cluckerRedLight;
-  Color inactiveBackground = Palette.mercuryGray;
-  Color inactiveForeground = Palette.lightGrey;
+  final Color activeBackground = Palette.cluckerRed;
+  final Color activeForeground = Palette.cluckerRedLight;
+  final Color inactiveBackground = Palette.mercuryGray;
+  final Color inactiveForeground = Palette.lightGrey;
+
+  late List<bool> isSelected;
+  late List<bool> previousSelection;
+  late int eggCount = widget.eggRating;
+
+  @override
+  void initState() {
+    super.initState();
+    switch (widget.currentRating) {
+      case -1:
+        isSelected = [true, false];
+        previousSelection = [true, false];
+        break;
+      case 0:
+        isSelected = [false, false];
+        previousSelection = [false, false];
+        break;
+      case 1:
+        isSelected = [false, true];
+        previousSelection = [false, true];
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Flexible(
         child: Column(children: [
-      Text(widget.eggCount != 0 ? widget.eggCount.toString() : '',
+      Text(widget.eggRating != 0 ? widget.eggRating.toString() : '',
           style: TextStyle(
               height: 0,
               fontWeight: FontWeight.w900,
@@ -378,16 +375,16 @@ class _EggControlsState extends State<_EggControls> {
 
             if ((index == 0 && isSelected[index] == true) ||
                 (index == 1 && isSelected[index] == false)) {
-              widget.eggCount++;
+              eggCount++;
             } else if ((index == 0 && isSelected[index] == false) ||
                 (index == 1 && isSelected[index] == true)) {
-              widget.eggCount--;
+              eggCount--;
             }
 
             if (index == 1 && previousSelection[0] == true) {
-              widget.eggCount--;
+              eggCount--;
             } else if (index == 0 && previousSelection[1] == true) {
-              widget.eggCount++;
+              eggCount++;
             }
           });
         },

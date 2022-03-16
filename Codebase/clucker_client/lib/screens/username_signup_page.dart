@@ -3,7 +3,7 @@ import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
 import 'package:clucker_client/screens/email_signup_page.dart';
 import 'package:clucker_client/services/user_service.dart';
-import '../components/DialogUtil.dart';
+import '../utilities/dialog_util.dart';
 
 class UsernamePage extends StatelessWidget {
   const UsernamePage({Key? key}) : super(key: key);

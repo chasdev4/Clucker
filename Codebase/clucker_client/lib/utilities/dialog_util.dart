@@ -17,8 +17,4 @@ class DialogUtil {
         )
     );
   }
-
-  void twoButtonDialog() {
-
-  }
 }
