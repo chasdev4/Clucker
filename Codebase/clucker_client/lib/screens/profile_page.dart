@@ -7,6 +7,7 @@ import 'package:clucker_client/models/user_profile_model.dart';
 import 'package:clucker_client/screens/login_page.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:clucker_client/services/user_service.dart';
+import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -127,11 +128,11 @@ class _ProfilePageState extends State<ProfilePage> {
     profileData = ProfileData(
         userId: userProfileModel.id,
         username: userProfileModel.username,
-        //bio: userProfileModel.bio,
-        bio:
-            '',
+         bio: userProfileModel.bio,
         hue: 0,
         // hue: userProfileModel.hue,
+        followersCount: userProfileModel.followersCount,
+        followingCount: userProfileModel.followingCount,
         eggRating: userProfileModel.eggRating,
         joined: userProfileModel.joined,
         cluckWidgets: cluckWidgets,
@@ -149,6 +150,8 @@ class ProfileData {
       required this.username,
       required this.bio,
       required this.hue,
+      required this.followersCount,
+      required this.followingCount,
       required this.eggRating,
       required this.joined,
       required this.cluckWidgets,
@@ -158,6 +161,8 @@ class ProfileData {
   final String username;
   final String bio;
   final double hue;
+  final int followersCount;
+  final int followingCount;
   final int eggRating;
   final String joined;
   final List<Widget> cluckWidgets;
@@ -187,6 +192,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     const List<String> _profileOptionTexts = [
       'Edit Profile',
       'Settings',
@@ -206,30 +212,33 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       pinned: false,
       collapsedHeight: 70,
       stretch: false,
-      expandedHeight: MediaQuery.of(context).size.height * 0.3725 -
-          ((bioLength() == 0)
-              ? 57
-              : bioLength() <= 40
-                  ? 38
-                  : bioLength() <= 80
-                      ? 19
-                      : 0),
+      expandedHeight: SizeConfig.blockSizeHorizontal * 25 +
+          (body.isEmpty || bioLength() == 0
+              ? SizeConfig.blockSizeHorizontal * 39
+              : body.length == 1
+                  ? SizeConfig.blockSizeHorizontal * 47
+                  : body.length == 2
+                      ? SizeConfig.blockSizeHorizontal * 51
+                      : body.length == 3
+                          ? SizeConfig.blockSizeHorizontal * 55
+                          : 0),
       floating: true,
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Stack(
           children: [
             Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.066,
+                  height: SizeConfig.blockSizeVertical * (5),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 10),
+                      padding: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 1),
                       child: UserAvatar(
                         hue: widget.profileData.hue,
                         avatarImage: widget.avatarImage!,
@@ -239,8 +248,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         onProfile: true,
                       ),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                    Transform.translate(
+                        offset: Offset(0, SizeConfig.blockSizeHorizontal * 5),
                         child: widget.profileData.isUserOnOwnProfile
                             ? null
                             : FollowButton(
@@ -257,7 +266,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         child: Text(
                           widget.profileData.username,
                           style: TextStyle(
-                            fontSize: 28,
+                            fontSize: SizeConfig.blockSizeHorizontal * 7,
                             fontWeight: FontWeight.w700,
                             color: Palette.black,
                           ),
@@ -277,7 +286,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                               eggCountFormat
                                   .format(widget.profileData.eggRating),
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: SizeConfig.blockSizeHorizontal * 3.9,
                                 fontWeight: FontWeight.w400,
                                 color: Palette.cluckerRed,
                               ),
@@ -287,7 +296,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                               child: Stack(
                                 children: [
                                   Icon(FontAwesomeIcons.egg,
-                                      color: Palette.cluckerRed, size: 16),
+                                      color: Palette.cluckerRed,
+                                      size:
+                                          SizeConfig.blockSizeHorizontal * 3.9),
                                   Positioned(
                                       bottom: 0.0001,
                                       right: 0.0001,
@@ -301,7 +312,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                       Text(
                         'Joined ${joinDateFormat.format(DateTime.parse(widget.profileData.joined))}',
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: SizeConfig.blockSizeHorizontal * 4,
                           fontWeight: FontWeight.w400,
                           color: Palette.offBlack.toMaterialColor().shade400,
                         ),
@@ -313,13 +324,15 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   padding: const EdgeInsets.only(bottom: 5),
                   child: SizedBox(
                       width: MediaQuery.of(context).size.width - 50,
-                      height: bioLength() == 0
+                      height: body.isEmpty || bioLength() == 0
                           ? 0
-                          : bioLength() <= 40
-                              ? 19
-                              : bioLength() <= 80
-                                  ? 38
-                                  : 57,
+                          : body.length == 1
+                              ? SizeConfig.blockSizeHorizontal * 8
+                              : body.length == 2
+                                  ? SizeConfig.blockSizeHorizontal * 12
+                                  : body.length == 3
+                                      ? SizeConfig.blockSizeHorizontal * 16
+                                      : 0,
                       child: Column(
                         children: body,
                       )),
@@ -327,6 +340,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 TabControls(
                   onPressedLeft: () {},
                   onPressedRight: () {},
+                  height: SizeConfig.blockSizeHorizontal * 13,
+                  followerCount: widget.profileData.followersCount,
+                  followingCount: widget.profileData.followingCount,
                   isSearchTabs: false,
                   userId: widget.profileData.userId,
                   username: widget.profileData.username,
@@ -421,6 +437,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         bioLineLength = 0;
       }
     }
+
+    print('${body.length}');
   }
 
   Widget lineBuilder(String str) {
@@ -429,7 +447,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         str,
         maxLines: 1,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: SizeConfig.blockSizeHorizontal * 4.4,
           color: Palette.black,
         ),
       )

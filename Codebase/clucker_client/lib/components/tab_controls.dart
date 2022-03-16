@@ -1,6 +1,7 @@
 import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/screens/followers_page.dart';
+import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 
 import '../utilities/count_format.dart';
@@ -10,8 +11,10 @@ class TabControls extends StatefulWidget with PreferredSizeWidget {
     Key? key,
     this.userId = 0,
     required this.isSearchTabs,
+    this.followerCount = 0,
+    this.followingCount = 0,
     this.username = '',
-    this.height = 46,
+    required this.height,
     this.padding = 15,
     required this.onPressedLeft,
     required this.onPressedRight
@@ -22,6 +25,8 @@ class TabControls extends StatefulWidget with PreferredSizeWidget {
   final int userId;
   final String username;
   final bool isSearchTabs;
+  final int followerCount;
+  final int followingCount;
   final double height;
   final double padding;
   final Function onPressedLeft;
@@ -32,12 +37,11 @@ class TabControls extends StatefulWidget with PreferredSizeWidget {
 }
 
 class _TabControlsState extends State<TabControls> {
-  int followerCount = 43212;
-  int followingCount = 1234567;
   bool leftTabActive = true;
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Align(
       alignment: Alignment.bottomCenter,
         child: Column(
@@ -49,7 +53,7 @@ class _TabControlsState extends State<TabControls> {
             _tabButton(
               (widget.isSearchTabs == true)
                   ? 'Clucks'
-                  : '${countFormat(followingCount)} Following',
+                  : '${countFormat(widget.followingCount)} Following',
               true,
             ),
             Container(
@@ -60,7 +64,7 @@ class _TabControlsState extends State<TabControls> {
             _tabButton(
                 (widget.isSearchTabs == true)
                     ? 'Users'
-                    : '${countFormat(followerCount)} Followers',
+                    : '${countFormat(widget.followerCount)} Followers',
                 false),
           ],
         ),
@@ -109,7 +113,7 @@ class _TabControlsState extends State<TabControls> {
                           isLeftTab == false))
                   ? Palette.cluckerRed
                   : Palette.black,
-              fontSize: 20),
+              fontSize: SizeConfig.blockSizeHorizontal * 5),
         ),
       ),
     );

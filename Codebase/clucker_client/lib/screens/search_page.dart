@@ -93,6 +93,8 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             bottom: TabControls(
+              //TODO: Configure height with SizeConfig
+              height: 0,
               onPressedLeft: () {
                 if (startedSearch) {
                   setState(() {

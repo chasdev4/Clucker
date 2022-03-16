@@ -40,6 +40,8 @@ class _LogInFormState extends State<_LogInForm> {
   String emailOrUsername = '';
   String password = '';
 
+  final double offsetScale = -2;
+
   @override
   void dispose() {
     emailOrUsernameController.dispose();
@@ -59,16 +61,20 @@ class _LogInFormState extends State<_LogInForm> {
         children: <Widget>[
           Column(
             children: [
-              Image(
-                height: SizeConfig.blockSizeVertical * 40,
-                image: const AssetImage(
-                  'assets/icons/clucker-icon.png',
-                ),
-              ),
+              Transform.translate(
+                  offset: Offset(
+                      0, (MediaQuery.of(context).viewInsets.bottom * offsetScale * 0.3)),
+                  child: Image(
+                    height: SizeConfig.blockSizeVertical * 40,
+                    image: const AssetImage(
+                      'assets/icons/clucker-icon.png',
+                    ),
+                  )),
               SizedBox(
                 width: SizeConfig.blockSizeVertical * 40 * 0.55,
                 child: Transform.translate(
-                  offset: const Offset(0, -15),
+                  offset: Offset(
+                      0, -15 - (MediaQuery.of(context).viewInsets.bottom) * -1 * offsetScale * 0.3),
                   child: const FittedBox(
                     fit: BoxFit.fitWidth,
                     child: Text(
@@ -85,19 +91,29 @@ class _LogInFormState extends State<_LogInForm> {
           ),
           Column(
             children: [
-              TextBox(
+              Transform.translate(
+                offset: Offset(
+                    0, (MediaQuery.of(context).viewInsets.bottom * offsetScale) * 0.30),
+                child: TextBox(
                 textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
                 controller: emailOrUsernameController,
                 focusNode: emailOrUsernameFocusNode,
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
-              ),
-              TextBox(
+              ),),
+    Transform.translate(
+    offset: Offset(
+    0, (MediaQuery.of(context).viewInsets.bottom * offsetScale) * 0.30),
+    child:
+    TextBox(
                 textBoxProfile: TextBoxProfile.passwordFieldLogin,
                 controller: passwordController,
                 focusNode: passwordFocusNode,
                 onFieldSubmitted: () => FocusScope.of(context).unfocus(),
-              ),
-              StandardButton(
+    )),
+    Transform.translate(
+    offset: Offset(
+    0, (MediaQuery.of(context).viewInsets.bottom * offsetScale) * 0.30),
+    child:    StandardButton(
                 text: 'Log-In',
                 routeName: '',
                 onPress: () async {
@@ -116,16 +132,17 @@ class _LogInFormState extends State<_LogInForm> {
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const Home()),
+                        MaterialPageRoute(builder: (context) => const Home()),
                       );
-
                     });
                   }
-
                 },
-              ),
-              StandardButton(
+    )  ),
+    Transform.translate(
+    offset: Offset(
+    0, (MediaQuery.of(context).viewInsets.bottom * offsetScale) * 0.30),
+    child:
+    StandardButton(
                 text: 'Sign-Up',
                 routeName: '',
                 onPress: () {
@@ -136,7 +153,7 @@ class _LogInFormState extends State<_LogInForm> {
                   );
                 },
                 isSecondary: true,
-              ),
+    )   ),
             ],
           ),
           const SizedBox(

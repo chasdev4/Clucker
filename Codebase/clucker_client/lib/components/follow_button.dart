@@ -1,5 +1,6 @@
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/services/user_service.dart';
+import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 
 enum FollowButtonProfile { follow, followSmall, block }
@@ -26,12 +27,13 @@ class _FollowButtonState extends State<FollowButton> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     Color textColor =
         (isSecondary == true) ? Palette.cluckerRed : Palette.white;
     Color buttonColor =
         (isSecondary == false) ? Palette.cluckerRed : Palette.white;
 
-    const Size buttonSize = Size(100, 42);
+    Size buttonSize = Size(SizeConfig.blockSizeHorizontal * 25, SizeConfig.blockSizeHorizontal * 11.5);
 
     return Padding(
       child: ElevatedButton(
@@ -46,7 +48,7 @@ class _FollowButtonState extends State<FollowButton> {
                           ? 'Unblock'
                           : 'Text...',
           style: TextStyle(
-              color: textColor, fontSize: 15, fontWeight: FontWeight.w500),
+              color: textColor, fontSize: SizeConfig.blockSizeHorizontal * 3.6, fontWeight: FontWeight.w500),
         ),
         style: ElevatedButton.styleFrom(
           fixedSize: widget.buttonProfile == FollowButtonProfile.follow

@@ -1,4 +1,5 @@
 import 'package:clucker_client/screens/profile_page.dart';
+import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'circle_crop.dart';
@@ -25,19 +26,20 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     late double size;
     late Color avatarForegroundColor;
     late Color avatarBackgroundColor;
 
     switch (avatarSize) {
       case AvatarSize.large:
-        size = 130;
+        size = SizeConfig.blockSizeHorizontal * 30.6;
         break;
       case AvatarSize.medium:
-        size = 75;
+        size = SizeConfig.blockSizeHorizontal * 18.6;
         break;
       case AvatarSize.small:
-        size = 60;
+        size = SizeConfig.blockSizeHorizontal * 14.6;
         break;
     }
 

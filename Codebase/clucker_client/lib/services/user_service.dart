@@ -7,7 +7,6 @@ import 'package:clucker_client/models/user_result_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:clucker_client/models/user_registration.dart';
-import 'package:http/http.dart';
 
 class UserService {
   final storage = const FlutterSecureStorage();
@@ -53,8 +52,6 @@ class UserService {
     String? token = await getToken();
     final response = await http.get(Uri.parse('${url}users/$id'),
         headers: {'authorization': token!});
-
-    print('${response.statusCode}, ${response.body}');
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
