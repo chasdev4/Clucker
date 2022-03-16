@@ -77,6 +77,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                           username: widget.cluck.username,
                             userId: widget.cluck.userId,
                             hue: widget.hue,
+                            avatarImage: '',
                             avatarSize: AvatarSize.small),
                       ),
                       Text(

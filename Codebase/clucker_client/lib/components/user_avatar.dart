@@ -64,11 +64,11 @@ class UserAvatar extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProfilePage(userId: userId, hue: hue, avatarImage: avatarImage,)),
+                  builder: (context) => ProfilePage(userId: userId, hue: hue, avatarImage: avatarImage!,)),
             );
           }
         },
-        child: avatarImage == null
+        child: avatarImage! == ''
             ? Stack(
                 children: [
                   Positioned(

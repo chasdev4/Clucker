@@ -4,10 +4,17 @@ import 'package:clucker_client/models/user_avatar_model.dart';
 import 'package:clucker_client/models/user_self_model.dart';
 import 'package:clucker_client/models/user_profile_model.dart';
 import 'package:clucker_client/models/user_result_model.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:clucker_client/models/user_registration.dart';
+import 'package:http/http.dart';
 
 class UserService {
+  final storage = const FlutterSecureStorage();
+
+  Future<String?> getToken() async {
+    return await storage.read(key: 'authorization');
+  }
   static const String url =
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
 
@@ -29,7 +36,10 @@ class UserService {
   }
 
   Future<UserAccountModel> getUserAccountById(int id) async {
-    final response = await http.get(Uri.parse('${url}users/$id'));
+    String? token = await getToken();
+    final response = await http.get(Uri.parse('${url}users/$id'),
+        headers: {'authorization': token!}
+    );
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
@@ -40,7 +50,11 @@ class UserService {
   }
 
   Future<UserProfileModel> getUserProfileById(int id) async {
-    final response = await http.get(Uri.parse('${url}users/$id'));
+    String? token = await getToken();
+    final response = await http.get(Uri.parse('${url}users/$id'),
+        headers: {'authorization': token!});
+
+    print('${response.statusCode}, ${response.body}');
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
@@ -51,7 +65,9 @@ class UserService {
   }
 
   Future<UserResultModel> getUserResultById(int id) async {
-    final response = await http.get(Uri.parse('${url}users/$id'));
+    String? token = await getToken();
+    final response = await http.get(Uri.parse('${url}users/$id'),
+        headers: {'authorization': token!});
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
@@ -61,7 +77,9 @@ class UserService {
   }
 
   Future<UserAvatarModel> getUserAvatarById(int id) async {
-    final response = await http.get(Uri.parse('${url}users/$id'));
+    String? token = await getToken();
+    final response = await http.get(Uri.parse('${url}users/$id'),
+        headers: {'authorization': token!});
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
@@ -70,9 +88,10 @@ class UserService {
     throw Exception('An error has occurred on the method getUserAvatarById(). Status Code: ${response.statusCode}');
   }
 
-  Future<UserSelfModel> getSelf(String _token) async {
+  Future<UserSelfModel> getSelf() async {
+    String? token = await getToken();
     final response = await http.get(Uri.parse('${url}users/self'),
-        headers: {'authorization': _token});
+        headers: {'authorization': token!});
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
@@ -83,7 +102,9 @@ class UserService {
   }
 
   Future<bool> followUser(int id) async {
-    final response = await http.put(Uri.parse('${url}users/$id/followers'));
+    String? token = await getToken();
+    final response = await http.put(Uri.parse('${url}users/$id/followers'),
+        headers: {'authorization': token!});
 
     if (response.statusCode == 200) {
       return true;
@@ -93,7 +114,9 @@ class UserService {
   }
 
   Future<List<UserAccountModel>> getFollowers(int id) async {
-    final response = await http.get(Uri.parse('${url}users/$id/followers'));
+    String? token = await getToken();
+    final response = await http.get(Uri.parse('${url}users/$id/followers'),
+        headers: {'authorization': token!});
 
     if (response.statusCode == 200) {
       var jsonFollowers = json.decode(response.body)['content'];

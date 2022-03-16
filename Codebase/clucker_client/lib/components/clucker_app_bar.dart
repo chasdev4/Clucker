@@ -17,7 +17,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
       this.fontSize = 36,
       this.height = 80,
         this.hue = 0,
-       this.avatarImage})
+       this.avatarImage = ''})
       : super(key: key);
 
   final String username;
@@ -28,7 +28,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool? noDivider;
   final double height;
   final double hue;
-  final String? avatarImage;
+  final String avatarImage;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +72,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
                 userId: userId,
                       username: username,
                       hue: hue,
+                      avatarImage: '',
                       avatarSize: AvatarSize.medium,
                     )
                   : null)

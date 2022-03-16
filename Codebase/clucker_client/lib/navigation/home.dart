@@ -55,6 +55,8 @@ class _HomeState extends State<Home> {
                     userId: currentUser.id,
                     //hue: user.hue,
                     hue: 0,
+                   // avatarImage: currentUser.avatarImage,
+                    avatarImage: '',
                     appBarProfile: AppBarProfile.avatar,
                     title: 'Feed',
                   ),
@@ -76,9 +78,10 @@ class _HomeState extends State<Home> {
   }
 
   Future<Object?> getCurrentUser() async {
-    String? token = await storage.read(key: 'authorization');
     UserService userService = UserService();
-    currentUser = await userService.getSelf(token!);
+    currentUser = await userService.getSelf();
+
+    storage.write(key: 'id', value: currentUser.id.toString());
 
     return currentUser;
   }
