@@ -16,6 +16,7 @@ public class CommentResponse {
     private String cluckId;
     private String body;
     private String author;
+    private int authorId;
     private LocalDateTime posted;
     private LocalDateTime lastModified;
 }

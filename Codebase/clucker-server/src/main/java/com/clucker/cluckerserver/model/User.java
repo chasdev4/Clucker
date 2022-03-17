@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,8 +57,11 @@ public class User {
     @ValidCluck
     private String bio;
 
+    @URL
+    private String avatarImage;
+
     @Max(360)
-    private int avatarHue;
+    private double avatarHue;
 
     @CreationTimestamp
     private LocalDateTime joined;

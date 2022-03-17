@@ -21,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -77,6 +79,10 @@ public class UserService {
 
         user.setEnabled(true); // Set to enabled for now
 
+        double avatarHue = generateDefaultAvatarHue(user.getUsername());
+        log.info("Generated default avatar hue: {}", avatarHue);
+        user.setAvatarHue(avatarHue);
+
         return repository.save(user);
     }
 
@@ -124,5 +130,41 @@ public class UserService {
         int positiveEggs = cluck.getLikeUsers().size();
         int negativeEggs = cluck.getDislikeUsers().size();
         return positiveEggs - negativeEggs;
+    }
+
+    private double generateDefaultAvatarHue(String username) {
+
+        int seed = username.charAt(getRandomNumber(0, username.length()));
+        double hue = 0;
+
+        if (inRange(48, 57, seed)) {
+            hue = (58 - seed) * 30;
+        } else if (inRange(65, 77, seed)) {
+            hue = (78 - seed) * 27.5;
+        } else if (inRange(78, 90, seed)) {
+            hue = (91 - seed) * 27.5;
+        } else if (inRange(95, 109, seed)) {
+            hue = (110 - seed) * 24;
+        } else if (inRange(110, 122, seed)) {
+            hue = (123 - seed) * 27.5;
+        }
+
+        String uglyChars = "78xXyYlLkK";
+
+        if (uglyChars.contains(String.valueOf((char) seed))) {
+            hue -= 45;
+        }
+
+        return hue;
+
+    }
+
+    private boolean inRange(int min, int max, int n) {
+        return n >= min && n <= max;
+    }
+
+    private int getRandomNumber(int min, int max) {
+        Random random = new Random(LocalDateTime.now().getNano());
+        return random.nextInt(max - min) + min;
     }
 }

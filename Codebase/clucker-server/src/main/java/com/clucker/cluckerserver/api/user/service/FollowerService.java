@@ -5,11 +5,15 @@ import com.clucker.cluckerserver.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -75,6 +79,22 @@ public class FollowerService {
         if (StringUtils.isBlank(principal)) {
             throw new UnauthorizedException("User is unauthorized to perform this action.");
         }
+    }
+
+    public Page<User> getFollowersByUserId(int userId, Pageable pageable) {
+        User user = userService.getUserById(userId);
+        List<User> followers = user.getFollowers();
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), followers.size());
+        return new PageImpl<>(followers.subList(start, end), pageable, followers.size());
+    }
+
+    public Page<User> getFollowingByUserId(int userId, Pageable pageable) {
+        User user = userService.getUserById(userId);
+        List<User> following = user.getFollowing();
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), following.size());
+        return new PageImpl<>(following.subList(start, end), pageable, following.size());
     }
 
 }
