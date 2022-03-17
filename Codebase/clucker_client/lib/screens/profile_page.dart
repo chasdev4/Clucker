@@ -84,7 +84,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   )
                 ]),
                 bottomNavigationBar: MainNavigationBar(focusNode: cluckNode),
-                floatingActionButton: NewCluckButton(userId: widget.userId, username: profileData.username, focusNode: cluckNode),
+                floatingActionButton: NewCluckButton(
+                    userId: widget.userId,
+                    username: profileData.username,
+                    focusNode: cluckNode),
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerDocked,
               );
@@ -107,14 +110,42 @@ class _ProfilePageState extends State<ProfilePage> {
         await cluckService.getProfileClucksById(widget.userId);
 
     for (int i = 0; i < clucks.length; i++) {
-        cluckWidgets.add(CluckWidget(
-            avatarImage: widget.avatarImage,
-            hue: widget.hue,
-            cluck: clucks[i],
-            onProfile: true,
-            //TODO: update commentCount
-            commentCount: 0));
+      cluckWidgets.add(CluckWidget(
+          avatarImage: widget.avatarImage,
+          hue: widget.hue,
+          cluck: clucks[i],
+          onProfile: true,
+          //TODO: update commentCount
+          commentCount: 0));
       //commentCount: clucks[i].commentCount));
+    }
+
+    if (cluckWidgets.length > 2) {
+      cluckWidgets.add(Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 3,
+        child: Center(
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(FontAwesomeIcons.egg,
+                    size: 100,
+                    color: Palette.cluckerRed.toMaterialColor().shade200),
+                Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'You\'ve reached the end!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Palette.offBlack.toMaterialColor().shade100,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20),
+                      maxLines: 2,
+                    )),
+              ]),
+        ),
+      ));
     }
 
     final UserService userService = UserService();
@@ -128,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
     profileData = ProfileData(
         userId: userProfileModel.id,
         username: userProfileModel.username,
-         bio: userProfileModel.bio,
+        bio: userProfileModel.bio,
         hue: 0,
         // hue: userProfileModel.hue,
         followersCount: userProfileModel.followersCount,
@@ -195,8 +226,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     SizeConfig().init(context);
 
     late List<String> profileOptions = [
-      widget.profileData.isUserOnOwnProfile ?
-      'Edit Profile' : 'Block',
+      widget.profileData.isUserOnOwnProfile ? 'Edit Profile' : 'Block',
       'Settings',
       'Log Out'
     ];
@@ -238,7 +268,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 1),
+                      padding: EdgeInsets.only(
+                          left: SizeConfig.blockSizeHorizontal * 1),
                       child: UserAvatar(
                         hue: widget.profileData.hue,
                         avatarImage: widget.avatarImage!,
@@ -375,7 +406,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           //TODO: Go to edit profile page
                           break;
                         case 'Block':
-                        //TODO: Block user
+                          //TODO: Block user
                           break;
                         case 'Settings':
                           //TODO: Go to Settings
@@ -399,24 +430,23 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     itemBuilder: (BuildContext context) {
                       TextStyle textStyle = const TextStyle();
                       return profileOptions.map((String choice) {
-                              if (choice == 'Log Out') {
-                                textStyle =
-                                    TextStyle(color: Palette.cluckerRed);
-                              } else {
-                                textStyle = TextStyle(color: Palette.black);
-                              }
+                        if (choice == 'Log Out') {
+                          textStyle = TextStyle(color: Palette.cluckerRed);
+                        } else {
+                          textStyle = TextStyle(color: Palette.black);
+                        }
 
-                              return PopupMenuItem<String>(
-                                value: choice,
-                                child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 3),
-                                    child: Text(
-                                      choice,
-                                      style: textStyle,
-                                    )),
-                              );
-                            }).toList();
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 3),
+                              child: Text(
+                                choice,
+                                style: textStyle,
+                              )),
+                        );
+                      }).toList();
                     }))
           ],
         ),
