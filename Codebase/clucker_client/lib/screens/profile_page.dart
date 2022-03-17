@@ -110,6 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
             avatarImage: widget.avatarImage,
             hue: widget.hue,
             cluck: clucks[i],
+            onProfile: true,
             //TODO: update commentCount
             commentCount: 0));
       //commentCount: clucks[i].commentCount));
