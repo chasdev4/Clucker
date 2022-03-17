@@ -159,7 +159,8 @@ class _ProfilePageState extends State<ProfilePage> {
     profileData = ProfileData(
         userId: userProfileModel.id,
         username: userProfileModel.username,
-        bio: userProfileModel.bio,
+        //bio: userProfileModel.bio,
+        bio: 'If for whatever reason you need your a really long bio, Clucker supports up to 120 characters or 3 lines of text.',
         hue: 0,
         // hue: userProfileModel.hue,
         followersCount: userProfileModel.followersCount,
@@ -462,14 +463,28 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     List<String> bio = widget.profileData.bio.split(' ');
     String bioLine = '';
     int bioLineLength = 0;
+    bool forceNewLine = false;
+    String tempLastWord = '';
 
     for (int i = 0; i < bio.length; i++) {
-      bioLine += bio[i];
-      if (i != bio.length - 1) {
-        bioLine += ' ';
+      if (forceNewLine) {
+        forceNewLine = false;
+        bioLine += tempLastWord + ' ';
       }
-      bioLineLength = bioLine.length;
-      if (bioLineLength > 39 || i == bio.length - 1) {
+      if (bioLineLength + bio[i].length < 40) {
+        bioLine += bio[i];
+        if (i != bio.length - 1) {
+          bioLine += ' ';
+        }
+        bioLineLength = bioLine.length;
+      }
+      else {
+        forceNewLine = true;
+      }
+      if (bioLineLength > 39 || i == bio.length - 1 || forceNewLine) {
+        if (forceNewLine) {
+          tempLastWord = bio[i];
+        }
         body.add(lineBuilder(bioLine));
         bioLine = '';
         bioLineLength = 0;
