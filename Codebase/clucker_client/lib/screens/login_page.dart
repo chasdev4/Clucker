@@ -40,8 +40,7 @@ class _LogInFormState extends State<_LogInForm> {
   String emailOrUsername = '';
   String password = '';
 
-  final double offsetScale = -2;
-
+  final double offsetScale = -1.9;
   @override
   void dispose() {
     emailOrUsernameController.dispose();

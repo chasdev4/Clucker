@@ -50,7 +50,7 @@ class _EmailFormState extends State<EmailForm> {
   DialogUtil dialogUtil = DialogUtil();
 
   bool emailTaken = false;
-  double offsetScale = -2;
+  double offsetScale = -1.3;
 
   @override
   void dispose() {
