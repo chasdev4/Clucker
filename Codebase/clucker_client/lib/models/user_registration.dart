@@ -9,6 +9,6 @@ class UserRegistration {
   Map<String, String> toJSON() => {
     'username': username,
     'password': password,
-    'email': email
+    'email': email,
   };
 }

@@ -1,5 +1,7 @@
+import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/screens/followers_page.dart';
+import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 
 import '../utilities/count_format.dart';
@@ -7,30 +9,39 @@ import '../utilities/count_format.dart';
 class TabControls extends StatefulWidget with PreferredSizeWidget {
   const TabControls({
     Key? key,
+    this.userId = 0,
     required this.isSearchTabs,
-    this.username = 'Search_Tabs',
-    this.height = 46,
+    this.followerCount = 0,
+    this.followingCount = 0,
+    this.username = '',
+    required this.height,
     this.padding = 15,
+    required this.onPressedLeft,
+    required this.onPressedRight
   }) : super(key: key);
   @override
   Size get preferredSize => Size.fromHeight(height);
 
+  final int userId;
   final String username;
   final bool isSearchTabs;
+  final int followerCount;
+  final int followingCount;
   final double height;
   final double padding;
+  final Function onPressedLeft;
+  final Function onPressedRight;
 
   @override
   _TabControlsState createState() => _TabControlsState();
 }
 
 class _TabControlsState extends State<TabControls> {
-  int followerCount = 43212;
-  int followingCount = 1234567;
   bool leftTabActive = true;
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Align(
       alignment: Alignment.bottomCenter,
         child: Column(
@@ -42,7 +53,7 @@ class _TabControlsState extends State<TabControls> {
             _tabButton(
               (widget.isSearchTabs == true)
                   ? 'Clucks'
-                  : '${countFormat(followingCount)} Following',
+                  : '${countFormat(widget.followingCount)} Following',
               true,
             ),
             Container(
@@ -53,15 +64,11 @@ class _TabControlsState extends State<TabControls> {
             _tabButton(
                 (widget.isSearchTabs == true)
                     ? 'Users'
-                    : '${countFormat(followerCount)} Followers',
+                    : '${countFormat(widget.followerCount)} Followers',
                 false),
           ],
         ),
-        Container(
-            color: Palette.cluckerRed,
-            height: 2.5,
-            width: MediaQuery.of(context).size.width - widget.padding * 2,
-          ),
+        const Div(isHeader: true,)
       ],
     ));
   }
@@ -73,26 +80,24 @@ class _TabControlsState extends State<TabControls> {
       child: RawMaterialButton(
         onPressed: () {
           setState(() {
-            if (widget.isSearchTabs == true &&
-                isLeftTab == true &&
-                leftTabActive == false) {
+            if (isCluckTabAndInactive(isLeftTab: isLeftTab)) {
+              widget.onPressedLeft();
               leftTabActive = true;
-            } else if (widget.isSearchTabs == true &&
-                isLeftTab == false &&
-                leftTabActive == true) {
+            } else if (isUserTabAndInactive(isLeftTab: isLeftTab)) {
+              widget.onPressedRight();
               leftTabActive = false;
             } else if (widget.isSearchTabs == false && isLeftTab == true) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          FollowersPage(username: widget.username, pageContext: PageContext.following)));
+                          FollowersPage(userId: widget.userId,username: widget.username, pageContext: PageContext.following)));
             } else if (widget.isSearchTabs == false && isLeftTab == false) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                   builder: (context) =>
-                  FollowersPage(username: widget.username, pageContext: PageContext.followers)));
+                  FollowersPage(userId: widget.userId, username: widget.username, pageContext: PageContext.followers)));
             }
           });
         },
@@ -108,9 +113,21 @@ class _TabControlsState extends State<TabControls> {
                           isLeftTab == false))
                   ? Palette.cluckerRed
                   : Palette.black,
-              fontSize: 20),
+              fontSize: SizeConfig.blockSizeHorizontal * 5),
         ),
       ),
     );
+  }
+
+  bool isCluckTabAndInactive({isLeftTab}) {
+    return widget.isSearchTabs == true &&
+        isLeftTab == true &&
+        leftTabActive == false;
+  }
+
+  bool isUserTabAndInactive({isLeftTab}) {
+    return widget.isSearchTabs == true &&
+        isLeftTab == false &&
+        leftTabActive == true;
   }
 }

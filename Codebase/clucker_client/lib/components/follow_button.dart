@@ -1,4 +1,6 @@
 import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/services/user_service.dart';
+import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 
 enum FollowButtonProfile { follow, followSmall, block }
@@ -7,10 +9,12 @@ class FollowButton extends StatefulWidget {
   const FollowButton({
     Key? key,
     required this.buttonProfile,
+    required this.userId,
     this.onPressed,
   }) : super(key: key);
 
   final FollowButtonProfile buttonProfile;
+  final int userId;
   final Function? onPressed;
 
   @override
@@ -18,39 +22,33 @@ class FollowButton extends StatefulWidget {
 }
 
 class _FollowButtonState extends State<FollowButton> {
+  final userService = UserService();
   bool isSecondary = false;
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     Color textColor =
         (isSecondary == true) ? Palette.cluckerRed : Palette.white;
     Color buttonColor =
         (isSecondary == false) ? Palette.cluckerRed : Palette.white;
 
-    const Size buttonSize = Size(100, 42);
+    Size buttonSize = Size(SizeConfig.blockSizeHorizontal * 25, SizeConfig.blockSizeHorizontal * 11.5);
 
     return Padding(
       child: ElevatedButton(
         child: Text(
-          ((widget.buttonProfile == FollowButtonProfile.follow ||
-                      widget.buttonProfile ==
-                          FollowButtonProfile.followSmall) &&
-                  isSecondary == false)
+          isNotFollowed()
               ? 'Follow'
-              : ((widget.buttonProfile == FollowButtonProfile.follow ||
-                          widget.buttonProfile ==
-                              FollowButtonProfile.followSmall) &&
-                      isSecondary == true)
+              : isFollowed()
                   ? 'Unfollow'
-                  : widget.buttonProfile == FollowButtonProfile.block &&
-                          isSecondary == false
+                  : isNotBlocked()
                       ? 'Block'
-                      : widget.buttonProfile == FollowButtonProfile.block &&
-                              isSecondary == true
+                      : isBlocked()
                           ? 'Unblock'
                           : 'Text...',
           style: TextStyle(
-              color: textColor, fontSize: 15, fontWeight: FontWeight.w500),
+              color: textColor, fontSize: SizeConfig.blockSizeHorizontal * 3.6, fontWeight: FontWeight.w500),
         ),
         style: ElevatedButton.styleFrom(
           fixedSize: widget.buttonProfile == FollowButtonProfile.follow
@@ -65,6 +63,14 @@ class _FollowButtonState extends State<FollowButton> {
         onPressed: () {
           setState(() {
             isSecondary = !isSecondary;
+
+            if (isFollowButton()) {
+              // TODO: Follow / Unfollow
+              userService.followUser(widget.userId);
+            } else if (isBlockButton()) {
+              //TODO: Block / Unblock
+            }
+
           });
 
           widget.onPressed!();
@@ -72,5 +78,31 @@ class _FollowButtonState extends State<FollowButton> {
       ),
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
     );
+  }
+
+  bool isFollowButton() {
+    return widget.buttonProfile == FollowButtonProfile.follow ||
+        widget.buttonProfile ==
+            FollowButtonProfile.followSmall;
+  }
+
+  bool isBlockButton() {
+    return widget.buttonProfile == FollowButtonProfile.block;
+  }
+
+  bool isFollowed() {
+    return isFollowButton() && isSecondary;
+  }
+
+  bool isNotFollowed() {
+    return isFollowButton() && !isSecondary;
+  }
+
+  bool isBlocked() {
+    return isBlockButton() && isSecondary;
+  }
+
+  bool isNotBlocked() {
+    return isBlockButton() && !isSecondary;
   }
 }

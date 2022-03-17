@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/text_box.dart';
+import 'package:clucker_client/models/cluck_post_request.dart';
+import 'package:clucker_client/services/cluck_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:http/http.dart';
 
 late StreamSubscription<bool> keyboardSubscription;
 
@@ -93,6 +96,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   }
 
   void _showOverlay(BuildContext context) async {
+    final cluckService = CluckService();
     OverlayState? overlayState = Overlay.of(context);
 
     overlayEntry = OverlayEntry(builder: (context) {
@@ -184,6 +188,25 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                               textBoxProfile: TextBoxProfile.cluckField,
                               controller: cluckController,
                               focusNode: widget.focusNode,
+                              extraFunction: () async {
+                                Response response = await cluckService
+                                    .postCluck(CluckPostRequest(
+                                        body: cluckController.text,
+                                    //TODO: Add signed in user's name
+                                        username: 'username',
+                                    //TODO: Add signed in user's id
+                                        userId: 0,
+                                        posted: DateTime.now(),
+                                        commentCount: 0,
+                                        eggRating: 0));
+                                if (response.statusCode == 200) {
+                                  setState(() {
+                                    overlayEntry.remove();
+                                    overlayVisible = false;
+                                    cluckController.text = '';
+                                  });
+                                }
+                              },
                               onTap: () {
                                 setState(() {
                                   barHeight = 218;
