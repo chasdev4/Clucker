@@ -4,6 +4,7 @@ import 'package:clucker_client/models/user_avatar_model.dart';
 import 'package:clucker_client/models/user_self_model.dart';
 import 'package:clucker_client/models/user_profile_model.dart';
 import 'package:clucker_client/models/user_result_model.dart';
+import 'package:clucker_client/screens/followers_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:clucker_client/models/user_registration.dart';
@@ -110,9 +111,10 @@ class UserService {
     throw Exception('An error has occurred on the method followUser(). Status Code: ${response.statusCode}');
   }
 
-  Future<List<UserAccountModel>> getFollowers(int id) async {
+  Future<List<UserAccountModel>> getFollowers(
+      {required int id, required PageContext pageContext}) async {
     String? token = await getToken();
-    final response = await http.get(Uri.parse('${url}users/$id/followers'),
+    final response = await http.get(Uri.parse('${url}users/$id/${pageContext == PageContext.followers ? 'followers' : 'following'}'),
         headers: {'authorization': token!});
 
     if (response.statusCode == 200) {

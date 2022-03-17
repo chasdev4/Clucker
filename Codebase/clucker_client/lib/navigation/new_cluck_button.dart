@@ -12,7 +12,14 @@ import 'package:http/http.dart';
 late StreamSubscription<bool> keyboardSubscription;
 
 class NewCluckButton extends StatefulWidget {
-  const NewCluckButton({Key? key, required this.focusNode}) : super(key: key);
+  const NewCluckButton(
+      {Key? key,
+      required this.userId,
+      required this.username,
+      required this.focusNode})
+      : super(key: key);
+  final int userId;
+  final String username;
   final FocusNode focusNode;
 
   @override
@@ -185,33 +192,32 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                 ],
                               )),
                           TextBox(
-                              textBoxProfile: TextBoxProfile.cluckField,
-                              controller: cluckController,
-                              focusNode: widget.focusNode,
-                              extraFunction: () async {
-                                Response response = await cluckService
-                                    .postCluck(CluckPostRequest(
-                                        body: cluckController.text,
-                                    //TODO: Add signed in user's name
-                                        username: 'username',
-                                    //TODO: Add signed in user's id
-                                        userId: 0,
-                                        posted: DateTime.now(),
-                                        commentCount: 0,
-                                        eggRating: 0));
-                                if (response.statusCode == 200) {
-                                  setState(() {
-                                    overlayEntry.remove();
-                                    overlayVisible = false;
-                                    cluckController.text = '';
-                                  });
-                                }
-                              },
-                              onTap: () {
+                            textBoxProfile: TextBoxProfile.cluckField,
+                            controller: cluckController,
+                            focusNode: widget.focusNode,
+                            extraFunction: () async {
+                              Response response = await cluckService.postCluck(
+                                  CluckPostRequest(
+                                      body: cluckController.text,
+                                      username: widget.username,
+                                      userId: widget.userId.toString(),
+                                      posted: DateTime.now().toString(),
+                                      commentCount: '0',
+                                      eggRating: '0'));
+                              if (response.statusCode == 200) {
                                 setState(() {
-                                  barHeight = 218;
+                                  overlayEntry.remove();
+                                  overlayVisible = false;
+                                  cluckController.text = '';
                                 });
-                              }),
+                              }
+                            },
+                            onTap: () {
+                              setState(() {
+                                barHeight = 218;
+                              });
+                            },
+                          ),
                         ],
                       )),
                 ),

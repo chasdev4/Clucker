@@ -65,6 +65,8 @@ class _HomeState extends State<Home> {
                   focusNode: cluckNode,
                 ),
                 floatingActionButton: NewCluckButton(
+                  userId: currentUser.id,
+                  username: currentUser.username,
                   focusNode: cluckNode,
                 ),
                 floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -82,6 +84,7 @@ class _HomeState extends State<Home> {
     currentUser = await userService.getSelf();
 
     storage.write(key: 'id', value: currentUser.id.toString());
+    storage.write(key: 'username', value: currentUser.username);
 
     return currentUser;
   }

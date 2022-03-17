@@ -53,8 +53,8 @@ class _FollowersPageState extends State<FollowersPage> {
   }
 
   Future<Object?> getFollowers() async {
-    List<UserAccountModel> userAccounts =
-        await userService.getFollowers(widget.userId);
+    List<UserAccountModel> userAccounts = await userService.getFollowers(
+        id: widget.userId, pageContext: widget.pageContext);
 
     for (int i = 0; i < userAccounts.length; i++) {
       followers.add(AccountWidget(
@@ -67,17 +67,9 @@ class _FollowersPageState extends State<FollowersPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
-    return Scaffold(
-        appBar: CluckerAppBar(
-          username: widget.username,
-          userId: widget.userId,
-          appBarProfile: AppBarProfile.followers,
-          title: title,
-          fontSize: 24,
-        ),
-        body: FutureBuilder(builder: (context, snapshot) {
+    return FutureBuilder(
+        future: getFollowers(),
+        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
               return Center(
@@ -87,26 +79,34 @@ class _FollowersPageState extends State<FollowersPage> {
                 ),
               );
             } else if (snapshot.hasData) {
-              return RefreshIndicator(
-                onRefresh: () async {
-                  getFollowers();
-                },
-                child: ListView.builder(
-                  itemCount: followers.length,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemExtent: 50,
-                  itemBuilder: (BuildContext context, int index) {
-                    return followers[index];
-                  },
-                ),
-              );
+              return Scaffold(
+                  appBar: CluckerAppBar(
+                    username: widget.username,
+                    userId: widget.userId,
+                    appBarProfile: AppBarProfile.followers,
+                    title: title,
+                    fontSize: 24,
+                  ),
+                  body: RefreshIndicator(
+                    onRefresh: () async {
+                      getFollowers();
+                    },
+                    child: ListView.builder(
+                      itemCount: followers.length,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemExtent: 50,
+                      itemBuilder: (BuildContext context, int index) {
+                        return followers[index];
+                      },
+                    ),
+                  ));
             }
           }
 
-          return const Center(
-            child: CircularProgressIndicator(strokeWidth: 5),
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator(strokeWidth: 5)),
           );
-        }));
+        });
   }
 }

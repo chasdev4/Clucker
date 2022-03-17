@@ -4,6 +4,7 @@ import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:clucker_client/models/user_profile_model.dart';
+import 'package:clucker_client/screens/followers_page.dart';
 import 'package:clucker_client/screens/login_page.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:clucker_client/services/user_service.dart';
@@ -83,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   )
                 ]),
                 bottomNavigationBar: MainNavigationBar(focusNode: cluckNode),
-                floatingActionButton: NewCluckButton(focusNode: cluckNode),
+                floatingActionButton: NewCluckButton(userId: widget.userId, username: profileData.username, focusNode: cluckNode),
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerDocked,
               );
@@ -192,13 +193,13 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    const List<String> _profileOptionTexts = [
-      'Edit Profile',
+
+    late List<String> profileOptions = [
+      widget.profileData.isUserOnOwnProfile ?
+      'Edit Profile' : 'Block',
       'Settings',
       'Log Out'
     ];
-
-    const List<String> _blockOptionText = ['Block'];
 
     final NumberFormat eggCountFormat = NumberFormat.decimalPattern('en_us');
     final DateFormat joinDateFormat = DateFormat('MMM dd, yyyy');
@@ -337,8 +338,24 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                       )),
                 ),
                 TabControls(
-                  onPressedLeft: () {},
-                  onPressedRight: () {},
+                  onPressedLeft: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FollowersPage(
+                                userId: widget.profileData.userId,
+                                username: widget.profileData.username,
+                                pageContext: PageContext.following)));
+                  },
+                  onPressedRight: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FollowersPage(
+                                userId: widget.profileData.userId,
+                                username: widget.profileData.username,
+                                pageContext: PageContext.following)));
+                  },
                   height: SizeConfig.blockSizeHorizontal * 13,
                   followerCount: widget.profileData.followersCount,
                   followingCount: widget.profileData.followingCount,
@@ -354,17 +371,16 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 child: PopupMenuButton(
                     onSelected: (String selection) {
                       switch (selection) {
-                        case 'Block':
-                          //TODO: Block user
-                          break;
                         case 'Edit Profile':
                           //TODO: Go to edit profile page
+                          break;
+                        case 'Block':
+                        //TODO: Block user
                           break;
                         case 'Settings':
                           //TODO: Go to Settings
                           break;
                         case 'Log Out':
-                          //TODO: Test log out
                           const storage = FlutterSecureStorage();
                           storage.delete(key: 'authentication');
                           while (Navigator.canPop(context)) {
@@ -382,8 +398,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     iconSize: 30,
                     itemBuilder: (BuildContext context) {
                       TextStyle textStyle = const TextStyle();
-                      return widget.profileData.isUserOnOwnProfile
-                          ? _profileOptionTexts.map((String choice) {
+                      return profileOptions.map((String choice) {
                               if (choice == 'Log Out') {
                                 textStyle =
                                     TextStyle(color: Palette.cluckerRed);
@@ -400,12 +415,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                       choice,
                                       style: textStyle,
                                     )),
-                              );
-                            }).toList()
-                          : _blockOptionText.map((String choice) {
-                              return PopupMenuItem<String>(
-                                value: choice,
-                                child: Text(choice),
                               );
                             }).toList();
                     }))
@@ -436,8 +445,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         bioLineLength = 0;
       }
     }
-
-    print('${body.length}');
   }
 
   Widget lineBuilder(String str) {

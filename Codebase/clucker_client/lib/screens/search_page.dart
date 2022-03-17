@@ -12,7 +12,10 @@ import '../navigation/new_cluck_button.dart';
 import '../utilities/count_format.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  const SearchPage({Key? key, required this.userId, required this.username}) : super(key: key);
+
+  final int userId;
+  final String username;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -116,7 +119,7 @@ class _SearchPageState extends State<SearchPage> {
       bottomNavigationBar: MainNavigationBar(
         focusNode: cluckNode,
       ),
-      floatingActionButton: NewCluckButton(focusNode: cluckNode),
+      floatingActionButton: NewCluckButton(userId: widget.userId, username: widget.username, focusNode: cluckNode),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

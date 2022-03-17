@@ -9,12 +9,12 @@ class CluckPostRequest {
 
   final String body;
   final String username;
-  final int userId;
-  final DateTime posted;
-  final int commentCount;
-  final int eggRating;
+  final String userId;
+  final String posted;
+  final String commentCount;
+  final String eggRating;
 
-  Map<String, dynamic> toJSON() => {
+  Map<String, String> toJSON() => {
     'body': body,
     'username': username,
     'authorId': userId,

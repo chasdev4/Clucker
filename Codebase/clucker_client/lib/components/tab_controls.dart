@@ -1,24 +1,23 @@
 import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/palette.dart';
-import 'package:clucker_client/screens/followers_page.dart';
 import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 
 import '../utilities/count_format.dart';
 
 class TabControls extends StatefulWidget with PreferredSizeWidget {
-  const TabControls({
-    Key? key,
-    this.userId = 0,
-    required this.isSearchTabs,
-    this.followerCount = 0,
-    this.followingCount = 0,
-    this.username = '',
-    required this.height,
-    this.padding = 15,
-    required this.onPressedLeft,
-    required this.onPressedRight
-  }) : super(key: key);
+  const TabControls(
+      {Key? key,
+      this.userId = 0,
+      required this.isSearchTabs,
+      this.followerCount = 0,
+      this.followingCount = 0,
+      this.username = '',
+      required this.height,
+      this.padding = 15,
+      required this.onPressedLeft,
+      required this.onPressedRight})
+      : super(key: key);
   @override
   Size get preferredSize => Size.fromHeight(height);
 
@@ -43,34 +42,36 @@ class _TabControlsState extends State<TabControls> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Align(
-      alignment: Alignment.bottomCenter,
+        alignment: Alignment.bottomCenter,
         child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _tabButton(
-              (widget.isSearchTabs == true)
-                  ? 'Clucks'
-                  : '${countFormat(widget.followingCount)} Following',
-              true,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _tabButton(
+                  (widget.isSearchTabs == true)
+                      ? 'Clucks'
+                      : '${countFormat(widget.followingCount)} Following',
+                  true,
+                ),
+                Container(
+                  width: 3,
+                  height: widget.height,
+                  color: Palette.lightGrey,
+                ),
+                _tabButton(
+                    (widget.isSearchTabs == true)
+                        ? 'Users'
+                        : '${countFormat(widget.followerCount)} Followers',
+                    false),
+              ],
             ),
-            Container(
-              width: 3,
-              height: widget.height,
-              color: Palette.lightGrey,
-            ),
-            _tabButton(
-                (widget.isSearchTabs == true)
-                    ? 'Users'
-                    : '${countFormat(widget.followerCount)} Followers',
-                false),
+            const Div(
+              isHeader: true,
+            )
           ],
-        ),
-        const Div(isHeader: true,)
-      ],
-    ));
+        ));
   }
 
   SizedBox _tabButton(String text, bool isLeftTab) {
@@ -87,17 +88,9 @@ class _TabControlsState extends State<TabControls> {
               widget.onPressedRight();
               leftTabActive = false;
             } else if (widget.isSearchTabs == false && isLeftTab == true) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          FollowersPage(userId: widget.userId,username: widget.username, pageContext: PageContext.following)));
+             widget.onPressedLeft();
             } else if (widget.isSearchTabs == false && isLeftTab == false) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                  builder: (context) =>
-                  FollowersPage(userId: widget.userId, username: widget.username, pageContext: PageContext.followers)));
+             widget.onPressedRight();
             }
           });
         },
