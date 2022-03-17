@@ -106,14 +106,12 @@ class _ProfilePageState extends State<ProfilePage> {
         await cluckService.getProfileClucksById(widget.userId);
 
     for (int i = 0; i < clucks.length; i++) {
-      for (int j = 0; j < 15; j++) {
         cluckWidgets.add(CluckWidget(
             avatarImage: widget.avatarImage,
             hue: widget.hue,
             cluck: clucks[i],
+            //TODO: update commentCount
             commentCount: 0));
-      }
-      //TODO: update commentCount
       //commentCount: clucks[i].commentCount));
     }
 
