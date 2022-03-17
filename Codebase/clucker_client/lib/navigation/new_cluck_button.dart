@@ -56,6 +56,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   void dispose() {
     keyboardSubscription.cancel();
     cluckController.dispose();
+    overlayEntry.remove();
     super.dispose();
   }
 
@@ -204,7 +205,8 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                       posted: DateTime.now().toString(),
                                       commentCount: '0',
                                       eggRating: '0'));
-                              if (response.statusCode == 200) {
+                              print(response.statusCode);
+                              if (response.statusCode == 201) {
                                 setState(() {
                                   overlayEntry.remove();
                                   overlayVisible = false;

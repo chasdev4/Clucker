@@ -2,15 +2,24 @@ import 'dart:convert';
 import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/cluck_post_request.dart';
 import 'package:clucker_client/models/comment_post_request.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class CluckService {
+  final storage = const FlutterSecureStorage();
+
+Future<String?> getToken() async {
+    return await storage.read(key: 'authorization');
+  }
   static const String url =
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
 
   Future<http.Response> postCluck(CluckPostRequest postRequest) async {
+    String? token = await getToken();
+    print(postRequest.posted);
     return await http.post(Uri.parse('${url}clucks',), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      'authorization': token!
     },
       body: jsonEncode(postRequest.toJSON()),);
   }

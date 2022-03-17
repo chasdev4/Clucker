@@ -45,8 +45,11 @@ class _FeedPageState extends State<FeedPage> {
               } else if (snapshot.hasData) {
                 return
                   RefreshIndicator(
+                    triggerMode: RefreshIndicatorTriggerMode.anywhere,
                   onRefresh: () async {
-                    getFeed();
+                      setState(() {
+                        getFeed();
+                      });
                   },
                   child: ListView(children: cluckWidgets)
 
@@ -71,6 +74,7 @@ class _FeedPageState extends State<FeedPage> {
       // UserAvatarModel userAvatar =
       //     await userService.getUserAvatarById(clucks[i].userId);
 
+      print('${clucks[i].posted}');
         cluckWidgets.add(CluckWidget(
           //TODO: update hue
           // hue: userAvatar.hue,
