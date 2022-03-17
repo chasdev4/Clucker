@@ -470,7 +470,6 @@ class _TextBoxState extends State<TextBox> {
                       padding: const EdgeInsets.only(
                           left: 10, top: 5, bottom: 20, right: 10),
                       onPressed: () {
-                        print('send');
                         widget.extraFunction!();
                       },
                     )

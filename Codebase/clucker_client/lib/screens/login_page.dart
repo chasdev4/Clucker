@@ -63,7 +63,10 @@ class _LogInFormState extends State<_LogInForm> {
             children: [
               Transform.translate(
                   offset: Offset(
-                      0, (MediaQuery.of(context).viewInsets.bottom * offsetScale * 0.3)),
+                      0,
+                      (MediaQuery.of(context).viewInsets.bottom *
+                          offsetScale *
+                          0.3)),
                   child: Image(
                     height: SizeConfig.blockSizeVertical * 40,
                     image: const AssetImage(
@@ -74,7 +77,12 @@ class _LogInFormState extends State<_LogInForm> {
                 width: SizeConfig.blockSizeVertical * 40 * 0.55,
                 child: Transform.translate(
                   offset: Offset(
-                      0, -15 - (MediaQuery.of(context).viewInsets.bottom) * -1 * offsetScale * 0.3),
+                      0,
+                      -15 -
+                          (MediaQuery.of(context).viewInsets.bottom) *
+                              -1 *
+                              offsetScale *
+                              0.3),
                   child: const FittedBox(
                     fit: BoxFit.fitWidth,
                     child: Text(
@@ -93,67 +101,75 @@ class _LogInFormState extends State<_LogInForm> {
             children: [
               Transform.translate(
                 offset: Offset(
-                    0, (MediaQuery.of(context).viewInsets.bottom * offsetScale) * 0.30),
+                    0,
+                    (MediaQuery.of(context).viewInsets.bottom * offsetScale) *
+                        0.30),
                 child: TextBox(
-                textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
-                controller: emailOrUsernameController,
-                focusNode: emailOrUsernameFocusNode,
-                onEditingComplete: () => FocusScope.of(context).nextFocus(),
-              ),),
-    Transform.translate(
-    offset: Offset(
-    0, (MediaQuery.of(context).viewInsets.bottom * offsetScale) * 0.30),
-    child:
-    TextBox(
-                textBoxProfile: TextBoxProfile.passwordFieldLogin,
-                controller: passwordController,
-                focusNode: passwordFocusNode,
-                onFieldSubmitted: () => FocusScope.of(context).unfocus(),
-    )),
-    Transform.translate(
-    offset: Offset(
-    0, (MediaQuery.of(context).viewInsets.bottom * offsetScale) * 0.30),
-    child:    StandardButton(
-                text: 'Log-In',
-                routeName: '',
-                onPress: () async {
-                  AuthRequest authRequest = AuthRequest(
-                      username: emailOrUsernameController.text,
-                      password: passwordController.text);
-                  AuthService authService = AuthService();
+                  textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
+                  controller: emailOrUsernameController,
+                  focusNode: emailOrUsernameFocusNode,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                ),
+              ),
+              Transform.translate(
+                  offset: Offset(
+                      0,
+                      (MediaQuery.of(context).viewInsets.bottom * offsetScale) *
+                          0.30),
+                  child: TextBox(
+                    textBoxProfile: TextBoxProfile.passwordFieldLogin,
+                    controller: passwordController,
+                    focusNode: passwordFocusNode,
+                    onFieldSubmitted: () => FocusScope.of(context).unfocus(),
+                  )),
+              Transform.translate(
+                  offset: Offset(
+                      0,
+                      (MediaQuery.of(context).viewInsets.bottom * offsetScale) *
+                          0.30),
+                  child: StandardButton(
+                    text: 'Log-In',
+                    routeName: '',
+                    onPress: () async {
+                      AuthRequest authRequest = AuthRequest(
+                          username: emailOrUsernameController.text,
+                          password: passwordController.text);
+                      AuthService authService = AuthService();
 
-                  Response response = await authService.login(authRequest);
+                      Response response = await authService.login(authRequest);
 
-                  if (response.statusCode == 200) {
-                    response.headers.forEach((key, value) {
-                      if (key == 'authorization') {
-                        storage.write(key: key, value: value);
+                      if (response.statusCode == 200) {
+                        response.headers.forEach((key, value) {
+                          if (key == 'authorization') {
+                            storage.write(key: key, value: value);
+                          }
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Home()),
+                          );
+                        });
                       }
-
+                    },
+                  )),
+              Transform.translate(
+                  offset: Offset(
+                      0,
+                      (MediaQuery.of(context).viewInsets.bottom * offsetScale) *
+                          0.30),
+                  child: StandardButton(
+                    text: 'Sign-Up',
+                    routeName: '',
+                    onPress: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Home()),
+                        MaterialPageRoute(
+                            builder: (context) => const UsernamePage()),
                       );
-                    });
-                  }
-                },
-    )  ),
-    Transform.translate(
-    offset: Offset(
-    0, (MediaQuery.of(context).viewInsets.bottom * offsetScale) * 0.30),
-    child:
-    StandardButton(
-                text: 'Sign-Up',
-                routeName: '',
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const UsernamePage()),
-                  );
-                },
-                isSecondary: true,
-    )   ),
+                    },
+                    isSecondary: true,
+                  )),
             ],
           ),
           const SizedBox(
