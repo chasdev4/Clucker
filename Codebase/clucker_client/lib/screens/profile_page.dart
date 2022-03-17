@@ -159,8 +159,8 @@ class _ProfilePageState extends State<ProfilePage> {
     profileData = ProfileData(
         userId: userProfileModel.id,
         username: userProfileModel.username,
-        //bio: userProfileModel.bio,
-        bio: 'If for whatever reason you need your a really long bio, Clucker supports up to 120 characters or 3 lines of text.',
+        bio: userProfileModel.bio,
+        //bio: 'If for whatever reason you need your a really long bio, Clucker supports up to 120 characters or 3 lines of text.',
         hue: 0,
         // hue: userProfileModel.hue,
         followersCount: userProfileModel.followersCount,
