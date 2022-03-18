@@ -166,7 +166,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                             )
                           : null),
                   _EggControls(
-                    eggRating: widget.cluck.eggRating,
+                    eggRating: widget.cluck.eggRating!,
                     buttonSize: 25,
                     //TODO: Pass the current rating from the logged in user
                     currentRating: 0,

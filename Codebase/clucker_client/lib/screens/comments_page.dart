@@ -60,12 +60,7 @@ class _CommentsPageState extends State<CommentsPage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error}',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                );
+                throw Exception('${snapshot.error}: ${snapshot.stackTrace}');
               } else if (snapshot.hasData && comments.isNotEmpty) {
                 return RefreshIndicator(
                     triggerMode: RefreshIndicatorTriggerMode.onEdge,

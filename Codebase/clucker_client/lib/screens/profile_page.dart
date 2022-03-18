@@ -117,9 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
           hue: widget.hue,
           cluck: clucks[i],
           onProfile: true,
-          //TODO: update commentCount
-          commentCount: 0));
-      //commentCount: clucks[i].commentCount));
+      commentCount: clucks[i].commentCount!));
     }
 
     if (cluckWidgets.length > 2) {

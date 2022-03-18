@@ -1,6 +1,7 @@
 import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/models/cluck_model.dart';
+import 'package:clucker_client/models/user_avatar_model.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -38,12 +39,7 @@ class _FeedPageState extends State<FeedPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error}. ${snapshot.stackTrace}',
-                  style: const TextStyle(fontSize: 18),
-                ),
-              );
+              throw Exception('${snapshot.error}: ${snapshot.stackTrace}');
             } else if (snapshot.hasData) {
               return RefreshIndicator(
                   triggerMode: RefreshIndicatorTriggerMode.anywhere,
@@ -66,23 +62,17 @@ class _FeedPageState extends State<FeedPage> {
   Future<Object?> getFeed() async {
     String? token = await storage.read(key: 'authorization');
     List<CluckModel> clucks = await cluckService.getFeed(token!);
-    //UserService userService = UserService();
+    UserService userService = UserService();
     cluckWidgets.clear();
 
     for (int i = 0; i < clucks.length; i++) {
-      // UserAvatarModel userAvatar =
-      //     await userService.getUserAvatarById(clucks[i].userId);
+       UserAvatarModel userAvatar =
+           await userService.getUserAvatarById(clucks[i].userId);
       cluckWidgets.add(CluckWidget(
-        //TODO: update hue
-        // hue: userAvatar.hue,
-        hue: 0,
-        //TODO: update avatarImage
-        // avatarImage: userAvatar.image!,
-        avatarImage: '',
+         hue: userAvatar.hue,
+        avatarImage: userAvatar.image ?? '',
         cluck: clucks[i],
-        commentCount: 0,
-        //TODO: update commentCount
-        //commentCount: clucks[i].commentCount,
+        commentCount: clucks[i].commentCount!,
       ));
     }
 

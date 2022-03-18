@@ -79,7 +79,7 @@ class _SearchPageState extends State<SearchPage> {
                           //TODO: Populate Cluck Results in the method below
                           getClucks();
                         } else if (searchPageIndex == 2) {
-                          //TODO: Populate Comment Results
+                          //TODO: Populate User Results
                         } else {
                           searchPageIndex = 1;
                           getClucks();
@@ -94,7 +94,6 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             bottom: TabControls(
-              //TODO: Configure height with SizeConfig
               height: SizeConfig.blockSizeHorizontal * 13,
               onPressedLeft: () {
                 if (startedSearch) {

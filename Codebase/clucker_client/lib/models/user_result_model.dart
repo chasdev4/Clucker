@@ -5,7 +5,8 @@ class UserResultModel {
       this.bio,
       this.followersCount,
       this.eggRating,
-      this.hue
+      this.hue,
+      this.avatarImage
       );
   late int id;
   late String username;
