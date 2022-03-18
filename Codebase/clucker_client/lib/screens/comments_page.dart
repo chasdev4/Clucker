@@ -127,7 +127,6 @@ class _CommentsPageState extends State<CommentsPage> {
                     ));
               }
             }
-            print('${MediaQuery.of(context).size.aspectRatio}');
 
             return const Center(
               child: CircularProgressIndicator(strokeWidth: 5),

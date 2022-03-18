@@ -123,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     if (cluckWidgets.length > 2) {
-      cluckWidgets.add(Container(
+      cluckWidgets.add(SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height / 3,
         child: Center(

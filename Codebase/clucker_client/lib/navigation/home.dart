@@ -1,4 +1,5 @@
 import 'package:clucker_client/models/user_self_model.dart';
+import 'package:clucker_client/screens/discover_page.dart';
 import 'package:clucker_client/screens/feed_page.dart';
 import 'package:clucker_client/screens/search_page.dart';
 import 'package:clucker_client/services/user_service.dart';
@@ -141,16 +142,6 @@ class HomePageDetails {
   final UserSelfModel currentUser;
   final List<Widget> pages;
 }
-
-class DiscoverPage extends StatelessWidget {
-  const DiscoverPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Discover!', style: TextStyle(fontSize: 30),));
-  }
-}
-
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({Key? key}) : super(key: key);

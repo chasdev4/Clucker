@@ -92,8 +92,14 @@ class _FeedPageState extends State<FeedPage> {
      */
     if (cluckWidgets.length > 2) {
       cluckWidgets.add(SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 3,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height / 3,
         child: Center(
           child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -101,14 +107,18 @@ class _FeedPageState extends State<FeedPage> {
               children: [
                 Icon(FontAwesomeIcons.egg,
                     size: 100,
-                    color: Palette.cluckerRed.toMaterialColor().shade200),
+                    color: Palette.cluckerRed
+                        .toMaterialColor()
+                        .shade200),
                 Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
                       'You\'ve reached the end!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Palette.offBlack.toMaterialColor().shade100,
+                          color: Palette.offBlack
+                              .toMaterialColor()
+                              .shade100,
                           fontWeight: FontWeight.w500,
                           fontSize: 20),
                       maxLines: 2,
@@ -116,10 +126,9 @@ class _FeedPageState extends State<FeedPage> {
               ]),
         ),
       ));
-
+    }
       return Future.delayed(const Duration(seconds: 2), () {
         return clucks;
       });
     }
-  }
 }
