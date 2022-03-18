@@ -37,14 +37,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 ),
               );
             } else if (snapshot.hasData) {
-              return RefreshIndicator(
-                  triggerMode: RefreshIndicatorTriggerMode.anywhere,
-                  onRefresh: () async {
-                    setState(() {
-                      getDiscover();
-                    });
-                  },
-                  child: Stack(
+              return Stack(
                     children: [
                       ListView(children: widgets[discoverPageIndex]),
                       Row(
@@ -68,7 +61,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       ],)
 
                     ],
-                  ));
+                  );
             }
           }
 
