@@ -1,6 +1,11 @@
 class CommentPostRequest {
-  CommentPostRequest({required this.cluckId, required this.body, required this.username, required this.userId,
-    required this.posted, required this.eggRating});
+  CommentPostRequest(
+      {required this.cluckId,
+      required this.body,
+      required this.username,
+      required this.userId,
+      required this.posted,
+      required this.eggRating});
 
   final String cluckId;
   final String body;
@@ -9,12 +14,12 @@ class CommentPostRequest {
   final DateTime posted;
   final int eggRating;
 
-  Map<String, dynamic> toJSON() => {
+  Map<String, String> toJSON() => {
         'cluckId': cluckId,
         'body': body,
         'username': username,
-        'authorId': userId,
-        'posted': posted,
-        'eggRating': eggRating
+        'authorId': userId.toString(),
+        'posted': posted.toString(),
+        'eggRating': eggRating.toString()
       };
 }

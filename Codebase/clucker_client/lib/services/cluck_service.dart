@@ -16,7 +16,6 @@ Future<String?> getToken() async {
 
   Future<http.Response> postCluck(CluckPostRequest postRequest) async {
     String? token = await getToken();
-    print(postRequest.posted);
     return await http.post(Uri.parse('${url}clucks',), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'authorization': token!
@@ -25,8 +24,10 @@ Future<String?> getToken() async {
   }
 
   Future<http.Response> postComment(CommentPostRequest postRequest) async {
+    String? token = await getToken();
     return await http.post(Uri.parse('${url}clucks/${postRequest.cluckId}/comments',), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      'authorization': token!
     },
       body: jsonEncode(postRequest.toJSON()),);
   }

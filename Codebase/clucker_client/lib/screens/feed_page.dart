@@ -72,8 +72,6 @@ class _FeedPageState extends State<FeedPage> {
     for (int i = 0; i < clucks.length; i++) {
       // UserAvatarModel userAvatar =
       //     await userService.getUserAvatarById(clucks[i].userId);
-
-      print('${clucks[i].posted}');
       cluckWidgets.add(CluckWidget(
         //TODO: update hue
         // hue: userAvatar.hue,

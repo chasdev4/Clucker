@@ -3,11 +3,13 @@ import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/comment_post_request.dart';
 import 'package:clucker_client/services/cluck_service.dart';
+import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 
@@ -24,6 +26,7 @@ class CommentsPage extends StatefulWidget {
 }
 
 class _CommentsPageState extends State<CommentsPage> {
+  final storage = const FlutterSecureStorage();
   final cluckService = CluckService();
   late TextEditingController cluckController;
   late KeyboardVisibilityController keyboardVisibilityController;
@@ -39,6 +42,7 @@ class _CommentsPageState extends State<CommentsPage> {
     keyboardVisibilityController = KeyboardVisibilityController();
     cluckController = TextEditingController();
     numNewLines = 0;
+    comments = [];
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
       if (!keyboardVisibilityController.isVisible) {
@@ -46,14 +50,6 @@ class _CommentsPageState extends State<CommentsPage> {
       }
       _updateBarHeight();
     });
-  }
-
-  @override
-  void dispose() {
-    keyboardSubscription.cancel();
-    cluckController.dispose();
-    pageHasBeenBuilt = false;
-    super.dispose();
   }
 
   @override
@@ -71,11 +67,20 @@ class _CommentsPageState extends State<CommentsPage> {
                   ),
                 );
               } else if (snapshot.hasData && comments.isNotEmpty) {
-                return ListView.builder(
-                    itemCount: comments.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (BuildContext context, int index) {
-                      return comments[index];
+                return RefreshIndicator(
+                    triggerMode: RefreshIndicatorTriggerMode.onEdge,
+                    edgeOffset: SizeConfig.blockSizeHorizontal * 35,
+                    displacement: SizeConfig.blockSizeHorizontal * 30,
+                    child: ListView.builder(
+                        itemCount: comments.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (BuildContext context, int index) {
+                          return comments[index];
+                        }),
+                    onRefresh: () async {
+                      setState(() {
+                        getComments();
+                      });
                     });
               } else if (comments.isEmpty) {
                 return SizedBox(
@@ -213,22 +218,22 @@ class _CommentsPageState extends State<CommentsPage> {
                                 controller: cluckController,
                                 focusNode: widget.focusNode,
                                 extraFunction: () async {
-                                  Response response =
-                                      await cluckService.postComment(
-                                          CommentPostRequest(
-                                              cluckId:
-                                                  widget.cluck.cluck.id,
-                                              body: cluckController.text,
-                                              //TODO: Add signed in user's name
-                                              username: 'username',
-                                              //TODO: Add signed in user's id
-                                              userId: 0,
-                                              posted: DateTime.now(),
-                                              eggRating: 0));
-                                  if (response.statusCode == 200) {
+                                  String? username =
+                                      await storage.read(key: 'username');
+                                  String? id = await storage.read(key: 'id');
+                                  Response response = await cluckService
+                                      .postComment(CommentPostRequest(
+                                          cluckId: widget.cluck.cluck.id,
+                                          body: cluckController.text,
+                                          username: username!,
+                                          userId: int.parse(id!),
+                                          posted: DateTime.now(),
+                                          eggRating: 0));
+                                  if (response.statusCode == 201) {
                                     setState(() {
                                       cluckController.text = '';
                                       widget.focusNode.unfocus();
+                                      getComments();
                                     });
                                   }
                                 },
@@ -260,22 +265,23 @@ class _CommentsPageState extends State<CommentsPage> {
   }
 
   Future<Object?> getComments() async {
-    comments = [];
+    List<Widget> commentWidgets = [];
+
     List<CluckModel> commentData =
         await cluckService.getCommentsByCluckId(widget.cluck.cluck.id);
 
     if (commentData.isNotEmpty) {
       for (int i = 0; i < commentData.length; i++) {
-        comments.add(CluckWidget(
+        commentWidgets.add(CluckWidget(
             cluck: commentData[i],
             cluckType: CluckType.comment,
             avatarImage: widget.cluck.avatarImage,
             hue: widget.cluck.hue));
       }
 
-      if (!pageHasBeenBuilt) {
+
         pageHasBeenBuilt = true;
-        comments.insert(
+        commentWidgets.insert(
             0,
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -290,11 +296,15 @@ class _CommentsPageState extends State<CommentsPage> {
                 )
               ],
             ));
-        comments.add(const SizedBox(
+        commentWidgets.add(const SizedBox(
           height: 75,
         ));
       }
-    }
+
+
+    comments = commentWidgets;
+
+   // commentWidgets.clear();
 
     return comments;
   }

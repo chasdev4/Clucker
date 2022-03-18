@@ -205,7 +205,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                       posted: DateTime.now().toString(),
                                       commentCount: '0',
                                       eggRating: '0'));
-                              print(response.statusCode);
+
                               if (response.statusCode == 201) {
                                 setState(() {
                                   overlayEntry.remove();

@@ -3,7 +3,10 @@ import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/user_avatar.dart';
+import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/user_profile_model.dart';
+import 'package:clucker_client/navigation/main_navigation_bar.dart';
+import 'package:clucker_client/navigation/new_cluck_button.dart';
 import 'package:clucker_client/screens/followers_page.dart';
 import 'package:clucker_client/screens/login_page.dart';
 import 'package:clucker_client/services/cluck_service.dart';
@@ -13,10 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-
-import '../models/cluck_model.dart';
-import '../navigation/main_navigation_bar.dart';
-import '../navigation/new_cluck_button.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage(
@@ -159,8 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
     profileData = ProfileData(
         userId: userProfileModel.id,
         username: userProfileModel.username,
-        bio: userProfileModel.bio,
-        //bio: 'If for whatever reason you need your a really long bio, Clucker supports up to 120 characters or 3 lines of text.',
+       bio: userProfileModel.bio,
         hue: 0,
         // hue: userProfileModel.hue,
         followersCount: userProfileModel.followersCount,
