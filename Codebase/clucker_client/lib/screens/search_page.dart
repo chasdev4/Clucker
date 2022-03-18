@@ -1,16 +1,13 @@
 import 'package:clucker_client/components/follow_button.dart';
+import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:clucker_client/models/user_result_model.dart';
+import 'package:clucker_client/utilities/count_format.dart';
 import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../components/palette.dart';
-import '../navigation/main_navigation_bar.dart';
-import '../navigation/new_cluck_button.dart';
-import '../utilities/count_format.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, required this.userId, required this.username})

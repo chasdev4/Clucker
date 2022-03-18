@@ -127,6 +127,7 @@ class _CommentsPageState extends State<CommentsPage> {
                     ));
               }
             }
+            print('${MediaQuery.of(context).size.aspectRatio}');
 
             return const Center(
               child: CircularProgressIndicator(strokeWidth: 5),
@@ -139,8 +140,8 @@ class _CommentsPageState extends State<CommentsPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 60,
+                   SizedBox(
+                    height: MediaQuery.of(context).size.height * .05 + (MediaQuery.of(context).size.aspectRatio < (9/16) ? MediaQuery.of(context).size.height * .02 : 0),
                   ),
                   CluckWidget(
                     commentButtonStatic: true,
