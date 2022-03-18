@@ -154,7 +154,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
     const storage = FlutterSecureStorage();
     String? currentUserId = await storage.read(key: 'id');
-    bool isUserOnOwnProfile = userProfileModel.id.toString() == currentUserId;
 
     profileData = ProfileData(
         userId: userProfileModel.id,
@@ -167,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
         eggRating: userProfileModel.eggRating,
         joined: userProfileModel.joined,
         cluckWidgets: cluckWidgets,
-        isUserOnOwnProfile: isUserOnOwnProfile);
+        isUserOnOwnProfile: userProfileModel.id.toString() == currentUserId);
 
     return Future.delayed(const Duration(seconds: 2), () {
       return profileData;
@@ -286,6 +285,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             : FollowButton(
                                 buttonProfile: FollowButtonProfile.follow,
                                 userId: widget.profileData.userId,
+                          onPressed: () {
+
+                          },
                               ))
                   ],
                 ),

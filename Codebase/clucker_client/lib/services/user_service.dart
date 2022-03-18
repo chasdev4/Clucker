@@ -111,6 +111,18 @@ class UserService {
     throw Exception('An error has occurred on the method followUser(). Status Code: ${response.statusCode}');
   }
 
+  Future<bool> unfollowUser(int id) async {
+    String? token = await getToken();
+    final response = await http.delete(Uri.parse('${url}users/$id/followers'),
+        headers: {'authorization': token!});
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+
+    throw Exception('An error has occurred on the method followUser(). Status Code: ${response.statusCode}');
+  }
+
   Future<List<UserAccountModel>> getFollowers(
       {required int id, required PageContext pageContext}) async {
     String? token = await getToken();

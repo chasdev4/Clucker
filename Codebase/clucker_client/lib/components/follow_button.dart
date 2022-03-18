@@ -72,8 +72,6 @@ class _FollowButtonState extends State<FollowButton> {
             }
 
           });
-
-          widget.onPressed!();
         },
       ),
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
