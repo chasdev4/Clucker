@@ -1,10 +1,12 @@
 import 'package:clucker_client/models/auth_request.dart';
+import 'package:clucker_client/services/user_service.dart';
 import 'package:clucker_client/navigation/home.dart';
 import 'package:clucker_client/screens/username_signup_page.dart';
 import 'package:clucker_client/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/standard_button.dart';
+import 'package:clucker_client/utilities/dialog_util.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 
@@ -36,6 +38,9 @@ class _LogInFormState extends State<_LogInForm> {
   final passwordController = TextEditingController();
   final emailOrUsernameFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
+
+  UserService userService = UserService();
+  DialogUtil dialogUtil = DialogUtil();
 
   String emailOrUsername = '';
   String password = '';
@@ -149,6 +154,13 @@ class _LogInFormState extends State<_LogInForm> {
                                 builder: (context) => const Home()),
                           );
                         });
+                      } else {
+                        passwordController.text = '';
+                        emailOrUsernameController.text = '';
+                        String title = 'Log-In Error';
+                        String message = 'There was an issue with your password or username.'
+                            '\nPlease try again.';
+                        dialogUtil.oneButtonDialog(context, title, message);
                       }
                     },
                   )),
