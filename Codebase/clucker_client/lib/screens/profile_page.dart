@@ -85,8 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 bottomNavigationBar: MainNavigationBar(focusNode: cluckNode),
                 floatingActionButton: NewCluckButton(
                     userId: widget.userId,
-                    username: profileData.username,
-                    focusNode: cluckNode),
+                    username: profileData.username,),
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerDocked,
               );

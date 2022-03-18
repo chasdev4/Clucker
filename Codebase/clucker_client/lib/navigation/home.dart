@@ -67,7 +67,6 @@ class _HomeState extends State<Home> {
                 floatingActionButton: NewCluckButton(
                   userId: currentUser.id,
                   username: currentUser.username,
-                  focusNode: cluckNode,
                 ),
                 floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
               );

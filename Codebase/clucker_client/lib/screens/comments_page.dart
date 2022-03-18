@@ -16,9 +16,8 @@ import 'package:http/http.dart';
 late StreamSubscription<bool> keyboardSubscription;
 
 class CommentsPage extends StatefulWidget {
-  const CommentsPage({Key? key, required this.focusNode, required this.cluck})
+  const CommentsPage({Key? key, required this.cluck})
       : super(key: key);
-  final FocusNode focusNode;
   final CluckWidget cluck;
 
   @override
@@ -27,6 +26,7 @@ class CommentsPage extends StatefulWidget {
 
 class _CommentsPageState extends State<CommentsPage> {
   final storage = const FlutterSecureStorage();
+  final cluckNode = FocusNode();
   final cluckService = CluckService();
   late TextEditingController cluckController;
   late KeyboardVisibilityController keyboardVisibilityController;
@@ -46,7 +46,7 @@ class _CommentsPageState extends State<CommentsPage> {
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
       if (!keyboardVisibilityController.isVisible) {
-        widget.focusNode.unfocus();
+        cluckNode.unfocus();
       }
       _updateBarHeight();
     });
@@ -175,13 +175,13 @@ class _CommentsPageState extends State<CommentsPage> {
           height: MediaQuery.of(context).size.height -
               barHeight -
               MediaQuery.of(context).viewInsets.bottom,
-          child: widget.focusNode.hasFocus
+          child: cluckNode.hasFocus
               ? GestureDetector(
                   onTap: () {
                     setState(() {
                       _updateBarHeight();
                       if (keyboardVisibilityController.isVisible) {
-                        widget.focusNode.unfocus();
+                        cluckNode.unfocus();
                       }
                     });
                   },
@@ -212,11 +212,11 @@ class _CommentsPageState extends State<CommentsPage> {
                       children: [
                         Padding(
                             padding: EdgeInsets.only(
-                                top: widget.focusNode.hasFocus ? 5 : 7.5),
+                                top: cluckNode.hasFocus ? 5 : 7.5),
                             child: TextBox(
                                 textBoxProfile: TextBoxProfile.commentField,
                                 controller: cluckController,
-                                focusNode: widget.focusNode,
+                                focusNode: cluckNode,
                                 extraFunction: () async {
                                   String? username =
                                       await storage.read(key: 'username');
@@ -232,7 +232,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                   if (response.statusCode == 201) {
                                     setState(() {
                                       cluckController.text = '';
-                                      widget.focusNode.unfocus();
+                                      cluckNode.unfocus();
                                       getComments();
                                     });
                                   }

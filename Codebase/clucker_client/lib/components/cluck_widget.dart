@@ -155,7 +155,6 @@ class _CluckWidgetState extends State<CluckWidget> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => CommentsPage(
-                                            focusNode: focusNode,
                                             cluck: CluckWidget(
                                               cluck: widget.cluck,
                                               commentCount: widget.commentCount,

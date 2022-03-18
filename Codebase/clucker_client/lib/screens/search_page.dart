@@ -119,7 +119,7 @@ class _SearchPageState extends State<SearchPage> {
       bottomNavigationBar: MainNavigationBar(
         focusNode: cluckNode,
       ),
-      floatingActionButton: NewCluckButton(userId: widget.userId, username: widget.username, focusNode: cluckNode),
+      floatingActionButton: NewCluckButton(userId: widget.userId, username: widget.username),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

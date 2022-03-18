@@ -15,18 +15,17 @@ class NewCluckButton extends StatefulWidget {
   const NewCluckButton(
       {Key? key,
       required this.userId,
-      required this.username,
-      required this.focusNode})
+      required this.username})
       : super(key: key);
   final int userId;
   final String username;
-  final FocusNode focusNode;
 
   @override
   _NewCluckButtonState createState() => _NewCluckButtonState();
 }
 
 class _NewCluckButtonState extends State<NewCluckButton> {
+  final cluckNode = FocusNode();
   late TextEditingController cluckController;
   late KeyboardVisibilityController keyboardVisibilityController;
 
@@ -45,7 +44,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
       if (!keyboardVisibilityController.isVisible) {
-        widget.focusNode.unfocus();
+        cluckNode.unfocus();
       }
 
       _updateBarHeight();
@@ -87,7 +86,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                   backgroundColor: Palette.white,
                   onPressed: () {
                     _showOverlay(context);
-                    widget.focusNode.requestFocus();
+                    cluckNode.requestFocus();
                     _updateBarHeight(override: true);
                   },
                   child: Transform.scale(
@@ -128,7 +127,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                       overlayVisible = false;
                       cluckController.text = '';
                     } else {
-                      widget.focusNode.unfocus();
+                      cluckNode.unfocus();
                     }
                   });
                 },
@@ -159,7 +158,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                         children: [
                           Container(
                               padding: EdgeInsets.all(
-                                  widget.focusNode.hasFocus ? 3 : 13),
+                                  cluckNode.hasFocus ? 3 : 13),
                               width: MediaQuery.of(context).size.width - 50,
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -169,7 +168,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                   Padding(
                                     padding: EdgeInsets.only(
                                         left:
-                                            widget.focusNode.hasFocus ? 10 : 0),
+                                        cluckNode.hasFocus ? 10 : 0),
                                     child: const Text(
                                       'New Cluck',
                                       style: TextStyle(
@@ -178,7 +177,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                     ),
                                   ),
                                   const SizedBox(),
-                                  widget.focusNode.hasFocus
+                                  cluckNode.hasFocus
                                       ? IconButton(
                                           onPressed: () {
                                             overlayEntry.remove();
@@ -195,7 +194,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                           TextBox(
                             textBoxProfile: TextBoxProfile.cluckField,
                             controller: cluckController,
-                            focusNode: widget.focusNode,
+                            focusNode: cluckNode,
                             extraFunction: () async {
                               Response response = await cluckService.postCluck(
                                   CluckPostRequest(
