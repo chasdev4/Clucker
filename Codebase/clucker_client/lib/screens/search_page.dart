@@ -3,6 +3,7 @@ import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:clucker_client/models/user_result_model.dart';
+import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -12,7 +13,8 @@ import '../navigation/new_cluck_button.dart';
 import '../utilities/count_format.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key, required this.userId, required this.username}) : super(key: key);
+  const SearchPage({Key? key, required this.userId, required this.username})
+      : super(key: key);
 
   final int userId;
   final String username;
@@ -24,7 +26,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   late bool startedSearch;
 
-  var pages = [
+  var searchPages = [
     const _StartSearchPage(),
     const _UserResultPage(),
     const _CluckResultPage(),
@@ -34,18 +36,18 @@ class _SearchPageState extends State<SearchPage> {
   final cluckNode = FocusNode();
   final searchController = TextEditingController();
   late List<Widget> searchResults = [];
-  late int pageIndex;
+  late int searchPageIndex;
 
   @override
   void initState() {
     super.initState();
-    pageIndex = 0;
+    searchPageIndex = 0;
     startedSearch = false;
   }
 
   @override
   void dispose() {
-    pageIndex = 0;
+    searchPageIndex = 0;
     startedSearch = false;
     searchNode.dispose();
     cluckNode.dispose();
@@ -55,7 +57,6 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(110),
           child: AppBar(
@@ -74,16 +75,16 @@ class _SearchPageState extends State<SearchPage> {
                   extraFunction: () {
                     setState(() {
                       if (searchController.text.isEmpty && !startedSearch) {
-                        pageIndex = 0;
+                        searchPageIndex = 0;
                       } else {
                         startedSearch = true;
-                        if (pageIndex == 1) {
+                        if (searchPageIndex == 1) {
                           //TODO: Populate Cluck Results in the method below
                           getClucks();
-                        } else if (pageIndex == 2) {
+                        } else if (searchPageIndex == 2) {
                           //TODO: Populate Comment Results
                         } else {
-                          pageIndex = 1;
+                          searchPageIndex = 1;
                           getClucks();
                         }
                       }
@@ -97,30 +98,25 @@ class _SearchPageState extends State<SearchPage> {
             ),
             bottom: TabControls(
               //TODO: Configure height with SizeConfig
-              height: 0,
+              height: SizeConfig.blockSizeHorizontal * 13,
               onPressedLeft: () {
                 if (startedSearch) {
                   setState(() {
-                    pageIndex = 1;
+                    searchPageIndex = 1;
                   });
                 }
               },
               onPressedRight: () {
                 if (startedSearch) {
                   setState(() {
-                    pageIndex = 2;
+                    searchPageIndex = 2;
                   });
                 }
               },
               isSearchTabs: true,
             ),
           )),
-      body: pages[pageIndex],
-      bottomNavigationBar: MainNavigationBar(
-        focusNode: cluckNode,
-      ),
-      floatingActionButton: NewCluckButton(userId: widget.userId, username: widget.username),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: searchPages[searchPageIndex],
     );
   }
 
@@ -223,9 +219,10 @@ class _NoResultsFoundPage extends StatelessWidget {
 }
 
 class _UserResultWidget extends StatelessWidget {
-  const _UserResultWidget(
-      {Key? key, required this.userResult,})
-      : super(key: key);
+  const _UserResultWidget({
+    Key? key,
+    required this.userResult,
+  }) : super(key: key);
   final UserResultModel userResult;
 
   @override
@@ -253,7 +250,10 @@ class _UserResultWidget extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            FollowButton(buttonProfile: FollowButtonProfile.followSmall, userId: userResult.id,)
+            FollowButton(
+              buttonProfile: FollowButtonProfile.followSmall,
+              userId: userResult.id,
+            )
           ],
         ),
         Transform.translate(

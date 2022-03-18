@@ -82,7 +82,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   )
                 ]),
-                bottomNavigationBar: MainNavigationBar(focusNode: cluckNode),
+                bottomNavigationBar: MainNavigationBar(focusNode: cluckNode, sendIndex: (value) {
+                  Navigator.pop(context);
+
+
+                },),
                 floatingActionButton: NewCluckButton(
                     userId: widget.userId,
                     username: profileData.username,),

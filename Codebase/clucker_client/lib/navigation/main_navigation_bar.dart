@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainNavigationBar extends StatefulWidget {
-  const MainNavigationBar({Key? key, required this.focusNode}) : super(key: key);
+  const MainNavigationBar({Key? key, required this.focusNode, required this.sendIndex}) : super(key: key);
 
   final FocusNode focusNode;
+  final Function sendIndex;
 
   @override
   State<StatefulWidget> createState() {
@@ -42,6 +43,7 @@ class _MainNavigationBar extends State<MainNavigationBar> {
                         setState(() {
                           index = 0;
                           updateList();
+                          widget.sendIndex(index);
                         });
                       },
                       icon: const Icon(FontAwesomeIcons.home),
@@ -53,6 +55,7 @@ class _MainNavigationBar extends State<MainNavigationBar> {
                         setState(() {
                           index = 1;
                           updateList();
+                          widget.sendIndex(index);
                         });
                       },
                       icon: const Icon(FontAwesomeIcons.solidCompass),
@@ -75,6 +78,7 @@ class _MainNavigationBar extends State<MainNavigationBar> {
                       setState(() {
                         index = 2;
                         updateList();
+                        widget.sendIndex(index);
                       });
                     },
                     icon: const Icon(FontAwesomeIcons.search),
@@ -86,6 +90,7 @@ class _MainNavigationBar extends State<MainNavigationBar> {
                       setState(() {
                         index = 3;
                         updateList();
+                        widget.sendIndex(index);
                       });
                     },
                     icon: const Icon(FontAwesomeIcons.solidBell),
