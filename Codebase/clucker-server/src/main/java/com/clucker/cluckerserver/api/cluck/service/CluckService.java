@@ -8,6 +8,7 @@ import com.clucker.cluckerserver.exception.CluckNotFoundException;
 import com.clucker.cluckerserver.exception.UnauthorizedException;
 import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.Cluck;
+import com.clucker.cluckerserver.model.Comment;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.search.SimpleSearchSpecification;
 import com.clucker.cluckerserver.security.service.SecurityService;
@@ -24,6 +25,7 @@ import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -157,6 +159,12 @@ public class CluckService {
             } else {
                 response.setLiked(0);
             }
+            boolean commented = user.getComments().stream()
+                    .map(Comment::getCluck)
+                    .distinct()
+                    .collect(Collectors.toList())
+                    .contains(cluck);
+            response.setCommented(commented);
         }
 
         return response;

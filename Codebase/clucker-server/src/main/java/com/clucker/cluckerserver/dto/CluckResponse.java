@@ -27,5 +27,6 @@ public class CluckResponse {
      *  1 - Liked
      */
     private int liked;
+    private boolean commented;
 
 }
