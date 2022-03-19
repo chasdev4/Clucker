@@ -25,6 +25,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -66,12 +67,12 @@ public class User {
     private double avatarHue;
 
     @CreationTimestamp
-    private LocalDateTime joined;
+    private OffsetDateTime joined;
 
     @UpdateTimestamp
-    private LocalDateTime lastModified;
+    private OffsetDateTime lastModified;
 
-    private LocalDateTime lastLogin;
+    private OffsetDateTime lastLogin;
 
     private boolean enabled;
 
