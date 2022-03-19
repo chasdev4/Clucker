@@ -1,5 +1,9 @@
 class UserAccountModel {
-  UserAccountModel(this.id, this.username, this.hue, this.avatarImage);
+  UserAccountModel(
+      {required this.id,
+      required this.username,
+      required this.hue,
+      required this.avatarImage});
   late int id;
   late String username;
   late double hue;
