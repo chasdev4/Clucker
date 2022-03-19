@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
@@ -52,9 +53,9 @@ public class Comment {
     private User author;
 
     @CreationTimestamp
-    private LocalDateTime posted;
+    private OffsetDateTime posted;
 
     @UpdateTimestamp
-    private LocalDateTime lastModified;
+    private OffsetDateTime lastModified;
 
 }

@@ -3,6 +3,7 @@ package com.clucker.cluckerserver.dto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class UserResponse {
@@ -17,8 +18,8 @@ public class UserResponse {
     private int followingCount;
     private int followersCount;
     private int eggRating;
-    private LocalDateTime joined;
-    private LocalDateTime lastModified;
-    private LocalDateTime lastLogin;
+    private OffsetDateTime joined;
+    private OffsetDateTime lastModified;
+    private OffsetDateTime lastLogin;
     private boolean currentlyFollowingUser;
 }

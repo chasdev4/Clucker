@@ -22,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -54,10 +55,10 @@ public class Cluck {
     private User author;
 
     @CreationTimestamp
-    private LocalDateTime posted;
+    private OffsetDateTime posted;
 
     @UpdateTimestamp
-    private LocalDateTime lastModified;
+    private OffsetDateTime lastModified;
 
     @OneToMany(mappedBy = "cluck")
     @Builder.Default
