@@ -1,0 +1,16 @@
+deploy:
+  artifact: Codebase/clucker-server/build/libs/clucker-server-0.0.2.jar
+global:
+  application_name: clucker-api
+  branch: main
+  default_ec2_keyname: null
+  default_platform: Corretto 11 running on 64bit Amazon Linux 2
+  default_region: us-east-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  repository: y
+  sc: git
+  workspace_type: Application
