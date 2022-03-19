@@ -5,6 +5,7 @@ import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/screens/comments_page.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:intl/intl.dart';
@@ -21,7 +22,8 @@ class CluckWidget extends StatefulWidget {
       this.commentCount = 0,
       this.onProfile = false,
       required this.hue,
-      required this.avatarImage})
+      required this.avatarImage,
+      required this.timezone})
       : super(key: key);
 
   final CluckType cluckType;
@@ -32,15 +34,18 @@ class CluckWidget extends StatefulWidget {
   final bool onProfile;
   final double hue;
   final String? avatarImage;
+  final String? timezone;
 
   @override
   _CluckWidgetState createState() => _CluckWidgetState();
 }
 
 class _CluckWidgetState extends State<CluckWidget> {
+  final storage = const FlutterSecureStorage();
   final DateFormat timeStampDate = DateFormat.yMMMMd('en_US');
   final DateFormat timeStampTime = DateFormat('h:mm a');
   final FocusNode focusNode = FocusNode();
+  var dateTimeToZone;
 
   DateTime now = DateTime.now();
 
@@ -163,6 +168,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                                               commentCount: widget.commentCount,
                                               hue: widget.hue,
                                               avatarImage: widget.avatarImage!,
+                                              timezone: widget.timezone,
                                             ),
                                           )),
                                 );
@@ -205,7 +211,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                               width: 13,
                             ),
                             Text(
-                              timeStampDate.format(widget.cluck.posted) +
+                              timeStampDate.format(dateTimeToZone(zone: DateTime.now().timeZoneName, datetime: widget.cluck.posted)) +
                                   ' at ' +
                                   timeStampTime.format(widget.cluck.posted),
                               style: TextStyle(

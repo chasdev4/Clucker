@@ -53,8 +53,6 @@ class _MyAppState extends State<MyApp> {
     if (token != null && token!.startsWith('Bearer')) {
       loggedIn = true;
     }
-
-
       return loggedIn;
 
   }

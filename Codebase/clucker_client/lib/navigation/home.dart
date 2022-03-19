@@ -47,6 +47,7 @@ class _HomeState extends State<Home> {
 
   Future<Object?> getHomePageDetails() async {
     UserService userService = UserService();
+
     UserSelfModel currentUser = await userService.getSelf();
 
     storage.write(key: 'id', value: currentUser.id.toString());

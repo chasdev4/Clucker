@@ -91,6 +91,7 @@ class _CommentsPageState extends State<CommentsPage> {
                           isVisible: false,
                           cluck: widget.cluck.cluck,
                           commentCount: widget.cluck.commentCount,
+                          timezone: widget.cluck.timezone,
                         ),
                         Column(
                             mainAxisSize: MainAxisSize.min,
@@ -144,6 +145,7 @@ class _CommentsPageState extends State<CommentsPage> {
                     commentCount: widget.cluck.commentCount,
                     hue: widget.cluck.hue,
                     avatarImage: widget.cluck.avatarImage,
+                    timezone: widget.cluck.timezone,
                   ),
                 ],
               ))),
@@ -267,6 +269,7 @@ class _CommentsPageState extends State<CommentsPage> {
     if (commentData.isNotEmpty) {
       for (int i = 0; i < commentData.length; i++) {
         commentWidgets.add(CluckWidget(
+          timezone: widget.cluck.timezone,
             cluck: commentData[i],
             cluckType: CluckType.comment,
             avatarImage: widget.cluck.avatarImage,
@@ -287,6 +290,7 @@ class _CommentsPageState extends State<CommentsPage> {
                   commentCount: widget.cluck.commentCount,
                   hue: widget.cluck.hue,
                   avatarImage: widget.cluck.avatarImage,
+                  timezone: widget.cluck.timezone,
                 )
               ],
             ));

@@ -112,8 +112,13 @@ class _ProfilePageState extends State<ProfilePage> {
     List<CluckModel> clucks =
         await cluckService.getProfileClucksById(widget.userId);
 
+    const storage = FlutterSecureStorage();
+
+    String? timezone = await storage.read(key: 'timezone');
+
     for (int i = 0; i < clucks.length; i++) {
       cluckWidgets.add(CluckWidget(
+        timezone: timezone,
           avatarImage: widget.avatarImage,
           hue: widget.hue,
           cluck: clucks[i],
@@ -153,7 +158,6 @@ class _ProfilePageState extends State<ProfilePage> {
     UserProfileModel userProfileModel =
         await userService.getUserProfileById(widget.userId);
 
-    const storage = FlutterSecureStorage();
     String? currentUserId = await storage.read(key: 'id');
 
     profileData = ProfileData(

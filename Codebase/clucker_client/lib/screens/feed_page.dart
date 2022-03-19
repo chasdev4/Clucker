@@ -53,6 +53,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   Future<Object?> getFeed() async {
+    String? timezone = await storage.read(key: 'timezone');
     if (!fetchingFeed) {
       cluckModels.clear();
       cluckModels = await cluckService.getFeed();
@@ -67,6 +68,7 @@ class _FeedPageState extends State<FeedPage> {
           avatarImage: userAvatar.image ?? '',
           cluck: cluckModels[i],
           commentCount: cluckModels[i].commentCount!,
+          timezone: timezone,
         ));
       }
 

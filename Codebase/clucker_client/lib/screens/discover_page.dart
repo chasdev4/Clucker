@@ -7,6 +7,7 @@ import 'package:clucker_client/services/user_service.dart';
 import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({Key? key}) : super(key: key);
@@ -101,12 +102,18 @@ class _DiscoverPageState extends State<DiscoverPage> {
       UserAvatarModel userAvatar =
       await userService.getUserAvatarById(positiveCluckModels[i].userId);
 
-      positiveClucks.add(CluckWidget(cluck: positiveCluckModels[i], hue: userAvatar.hue, avatarImage: userAvatar.image));
+      const storage = FlutterSecureStorage();
+
+      String? timezone = await storage.read(key: 'timezone');
+
+      positiveClucks.add(CluckWidget(timezone: timezone,cluck: positiveCluckModels[i], hue: userAvatar.hue, avatarImage: userAvatar.image));
 
       userAvatar =
       await userService.getUserAvatarById(negativeCluckModels[i].userId);
 
-      negativeClucks.add(CluckWidget(cluck: negativeCluckModels[i], hue: userAvatar.hue, avatarImage: userAvatar.image));
+
+
+      negativeClucks.add(CluckWidget(timezone: timezone,cluck: negativeCluckModels[i], hue: userAvatar.hue, avatarImage: userAvatar.image));
     }
 
     widgets = [positiveClucks, negativeClucks, positiveUsers, negativeUsers];

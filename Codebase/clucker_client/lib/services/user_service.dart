@@ -94,6 +94,8 @@ class UserService {
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
       return UserSelfModel.fromJson(userJson);
+    } else if (response.statusCode == 500) {
+
     }
 
     throw Exception('An error has occurred on the method getSelf(). Status Code: ${response.statusCode}');
