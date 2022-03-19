@@ -20,5 +20,5 @@ public class UserResponse {
     private LocalDateTime joined;
     private LocalDateTime lastModified;
     private LocalDateTime lastLogin;
-    private boolean following;
+    private boolean currentlyFollowingUser;
 }

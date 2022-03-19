@@ -10,6 +10,7 @@ import com.clucker.cluckerserver.model.Cluck;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.model.UserRole;
 import com.clucker.cluckerserver.search.SimpleSearchSpecification;
+import com.clucker.cluckerserver.security.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +33,7 @@ public class UserService {
     private final UserRepository repository;
     private final PasswordEncoder encoder;
     private final ModelMapper mapper;
+    private final SecurityService securityService;
 
     public User getUserById(Integer id) {
         log.info("Attempting to find user with id: {}", id);
@@ -92,6 +94,13 @@ public class UserService {
         userResponse.setFollowersCount(user.getFollowers().size());
         userResponse.setFollowingCount(user.getFollowing().size());
         userResponse.setEggRating(user.getEggRating());
+
+        if (securityService.userIsAuthenticated()) {
+            User authenticatedUser = securityService.getUser();
+            boolean following = authenticatedUser.getFollowing().contains(user);
+            userResponse.setCurrentlyFollowingUser(following);
+        }
+
         return userResponse;
     }
 
