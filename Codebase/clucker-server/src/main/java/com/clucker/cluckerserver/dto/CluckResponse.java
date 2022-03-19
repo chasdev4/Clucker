@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @Builder
@@ -15,8 +16,8 @@ public class CluckResponse {
 
     private String id;
     private String body;
-    private LocalDateTime posted;
-    private LocalDateTime lastModified;
+    private OffsetDateTime posted;
+    private OffsetDateTime lastModified;
     private int authorId;
     private String author;
     private int eggRating;
