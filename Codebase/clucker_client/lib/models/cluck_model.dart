@@ -15,6 +15,7 @@ class CluckModel {
   late String username;
   late int? commentCount;
   late int? eggRating;
+  late int currentRating;
 
   CluckModel.fromJson(Map<dynamic, dynamic> json) {
     id = json['id'];
@@ -24,5 +25,6 @@ class CluckModel {
     username = json['author'];
     eggRating = json['eggRating'] ?? 0;
     commentCount = json['commentCount'] ?? 0;
+    currentRating = json['liked'] ?? 0;
   }
 }

@@ -50,8 +50,6 @@ class _MyAppState extends State<MyApp> {
   Future<Object?> getLoginStatus() async {
     token = await storage.read(key: 'authorization');
 
-    print(token);
-
     if (token != null && token!.startsWith('Bearer')) {
       loggedIn = true;
     }
