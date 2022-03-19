@@ -45,7 +45,7 @@ public class CluckController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<CluckResponse> getClucks(Pageable pageable, @RequestParam(required = false) String search) {
+    public Page<CluckResponse> getClucks(Pageable pageable, @RequestParam(required = false) String search, Authentication authentication) {
         Page<Cluck> cluckPage = cluckService.getClucks(pageable, search);
         return cluckPage.map(cluckService::mapToResponse);
     }

@@ -1,5 +1,6 @@
 package com.clucker.cluckerserver.api.user.service;
 
+import com.clucker.cluckerserver.exception.BadRequestException;
 import com.clucker.cluckerserver.exception.UnauthorizedException;
 import com.clucker.cluckerserver.model.User;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,9 @@ public class FollowerService {
 
         User user = userService.getUserByUsername(principal);
         User userToFollow = userService.getUserById(id);
+
+        if (user.equals(userToFollow))
+            throw new BadRequestException("Sorry. You cannot follow yourself.");
 
         String username = userToFollow.getUsername();
 

@@ -2,6 +2,7 @@ package com.clucker.cluckerserver.api.feed.service;
 
 import com.clucker.cluckerserver.api.cluck.repository.CluckRepository;
 import com.clucker.cluckerserver.api.feed.specification.AuthorSpecification;
+import com.clucker.cluckerserver.api.user.repository.UserRepository;
 import com.clucker.cluckerserver.api.user.service.UserService;
 import com.clucker.cluckerserver.exception.UnauthorizedException;
 import com.clucker.cluckerserver.model.Cluck;
@@ -15,8 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -24,6 +27,7 @@ import java.util.Optional;
 public class FeedService {
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final CluckRepository cluckRepository;
 
     @PreAuthorize("hasRole('CLUCKER')")
@@ -40,6 +44,29 @@ public class FeedService {
 
         return cluckRepository.findAll(spec, pageable);
 
+    }
+
+    public Page<Cluck> getDiscoverFeed(Pageable pageable) {
+        int minUserSize = (int) Math.min(userRepository.count(), 10L);
+        List<User> topTenCluckersEggRating = getTopCluckersByEggRating(minUserSize);
+        List<User> topTenCluckersFollowers = getTopCluckersByFollowers(minUserSize);
+        List<User> topCluckers = new ArrayList<>(topTenCluckersEggRating);
+        topCluckers.addAll(topTenCluckersFollowers);
+        AuthorSpecification authorSpecification = new AuthorSpecification(topCluckers);
+
+        return null;
+    }
+
+    private List<User> getTopCluckersByFollowers(int size) {
+        return userRepository.findAll().stream()
+                .sorted(Comparator.comparingInt(user -> user.getFollowers().size()))
+                .limit(size).collect(Collectors.toList());
+    }
+
+    private List<User> getTopCluckersByEggRating(int size) {
+        return userRepository.findAll().stream()
+                .sorted(Comparator.comparingInt(User::getEggRating))
+                .limit(size).collect(Collectors.toList());
     }
 
 }
