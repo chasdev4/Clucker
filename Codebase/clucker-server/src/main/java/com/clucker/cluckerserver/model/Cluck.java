@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -70,4 +71,8 @@ public class Cluck {
     @Builder.Default
     private Set<User> dislikeUsers = Collections.emptySet();
 
+    @Transient
+    public int getEggRating() {
+        return getLikeUsers().size() - getDislikeUsers().size();
+    }
 }

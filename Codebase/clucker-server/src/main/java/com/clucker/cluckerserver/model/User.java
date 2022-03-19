@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
@@ -108,5 +109,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<Cluck> dislikedClucks = Collections.emptySet();
+
+    @Transient
+    public int getEggRating() {
+        return getClucks().stream()
+                .mapToInt(Cluck::getEggRating)
+                .sum();
+    }
 
 }

@@ -91,10 +91,7 @@ public class UserService {
         userResponse.setCluckCount(user.getClucks().size());
         userResponse.setFollowersCount(user.getFollowers().size());
         userResponse.setFollowingCount(user.getFollowing().size());
-        int eggRating = user.getClucks().stream()
-                .mapToInt(this::getCluckEggRating)
-                .sum();
-        userResponse.setEggRating(eggRating);
+        userResponse.setEggRating(user.getEggRating());
         return userResponse;
     }
 
@@ -124,12 +121,6 @@ public class UserService {
 
     public boolean userExists(int id) {
         return repository.existsById(id);
-    }
-
-    private int getCluckEggRating(Cluck cluck) {
-        int positiveEggs = cluck.getLikeUsers().size();
-        int negativeEggs = cluck.getDislikeUsers().size();
-        return positiveEggs - negativeEggs;
     }
 
     private double generateDefaultAvatarHue(String username) {
