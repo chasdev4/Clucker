@@ -54,9 +54,8 @@ class _FeedPageState extends State<FeedPage> {
 
   Future<Object?> getFeed() async {
     if (!fetchingFeed) {
-      String? token = await storage.read(key: 'authorization');
       cluckModels.clear();
-      cluckModels = await cluckService.getFeed(token!);
+      cluckModels = await cluckService.getFeed();
       UserService userService = UserService();
       cluckWidgets.clear();
 
@@ -78,7 +77,7 @@ class _FeedPageState extends State<FeedPage> {
       if (cluckWidgets.length > 2) {
         cluckWidgets.add(SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height / 3,
+          height: MediaQuery.of(context).size.width - MediaQuery.of(context).size.width / 5,
           child: Center(
             child: Column(
                 mainAxisSize: MainAxisSize.min,

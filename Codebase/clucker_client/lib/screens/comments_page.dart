@@ -222,7 +222,6 @@ class _CommentsPageState extends State<CommentsPage> {
                                           body: cluckController.text,
                                           username: username!,
                                           userId: int.parse(id!),
-                                          posted: DateTime.now(),
                                           eggRating: 0));
                                   if (response.statusCode == 201) {
                                     setState(() {

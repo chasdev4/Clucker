@@ -201,7 +201,6 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                       body: cluckController.text,
                                       username: widget.username,
                                       userId: widget.userId.toString(),
-                                      posted: DateTime.now().toString(),
                                       commentCount: '0',
                                       eggRating: '0'));
 
