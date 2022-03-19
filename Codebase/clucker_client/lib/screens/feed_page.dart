@@ -36,10 +36,8 @@ class _FeedPageState extends State<FeedPage> {
                   triggerMode: RefreshIndicatorTriggerMode.anywhere,
                   onRefresh: () async {
                     fetchingFeed = true;
-                    setState(() {
                       getFeed();
                       fetchingFeed = false;
-                    });
                   },
                   child: ListView(children: cluckWidgets));
             }
@@ -103,9 +101,9 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ));
       }
-      return Future.delayed(const Duration(seconds: 2), () {
+
         return cluckModels;
-      });
+
     }
     return null;
   }

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:clucker_client/components/user_avatar.dart';
+import 'package:instant/instant.dart';
 import 'package:intl/intl.dart';
 
 enum CluckType { cluck, comment, cluckHeader }
@@ -45,7 +46,6 @@ class _CluckWidgetState extends State<CluckWidget> {
   final DateFormat timeStampDate = DateFormat.yMMMMd('en_US');
   final DateFormat timeStampTime = DateFormat('h:mm a');
   final FocusNode focusNode = FocusNode();
-  var dateTimeToZone;
 
   DateTime now = DateTime.now();
 
@@ -213,7 +213,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                             Text(
                               timeStampDate.format(dateTimeToZone(zone: DateTime.now().timeZoneName, datetime: widget.cluck.posted)) +
                                   ' at ' +
-                                  timeStampTime.format(widget.cluck.posted),
+                                  timeStampTime.format(dateTimeToZone(zone: DateTime.now().timeZoneName, datetime: widget.cluck.posted)),
                               style: TextStyle(
                                 fontFamily: 'OpenSans',
                                 fontSize: 13.44,

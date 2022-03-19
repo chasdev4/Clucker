@@ -83,7 +83,7 @@ class CluckService {
 
   Future<List<CluckModel>> getFeed() async {
     String? token = await getToken();
-    final response = await http.get(Uri.parse('${url}feed/personal/'),
+    final response = await http.get(Uri.parse('${url}feed/personal'),
         headers: {'authorization': token!});
 
     if (response.statusCode == 200) {
