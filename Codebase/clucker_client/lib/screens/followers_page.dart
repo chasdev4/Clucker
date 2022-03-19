@@ -91,15 +91,7 @@ class _FollowersPageState extends State<FollowersPage> {
                     onRefresh: () async {
                       getFollowers();
                     },
-                    child: ListView.builder(
-                      itemCount: followers.length,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemExtent: 50,
-                      itemBuilder: (BuildContext context, int index) {
-                        return followers[index];
-                      },
-                    ),
+                    child: ListView(children: followers),
                   ));
             }
           }

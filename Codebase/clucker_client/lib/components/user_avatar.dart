@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'circle_crop.dart';
 
-enum AvatarSize { small, medium, large }
+enum AvatarSize { small, smallMedium, medium, large }
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar(
@@ -37,6 +37,9 @@ class UserAvatar extends StatelessWidget {
         break;
       case AvatarSize.medium:
         size = SizeConfig.blockSizeHorizontal * 18.6;
+        break;
+      case AvatarSize.smallMedium:
+        size = SizeConfig.blockSizeHorizontal * 16.8;
         break;
       case AvatarSize.small:
         size = SizeConfig.blockSizeHorizontal * 14.6;

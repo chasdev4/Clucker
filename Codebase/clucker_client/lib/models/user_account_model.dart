@@ -13,6 +13,6 @@ class UserAccountModel {
     id = json['id'];
     username = json['username'];
     hue = json['avatarHue'];
-    avatarImage = json['avatarImage'];
+    avatarImage = json['avatarImage'] ?? '';
   }
 }

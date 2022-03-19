@@ -73,6 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         return RefreshIndicator(
+                          edgeOffset: -10,
                             onRefresh: () async {
                               getProfileDetails();
                             },
@@ -386,7 +387,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             builder: (context) => FollowersPage(
                                 userId: widget.profileData.userId,
                                 username: widget.profileData.username,
-                                pageContext: PageContext.following)));
+                                pageContext: PageContext.followers)));
                   },
                   height: SizeConfig.blockSizeHorizontal * 13,
                   followerCount: widget.profileData.followersCount,

@@ -2,6 +2,7 @@ import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:clucker_client/models/user_account_model.dart';
+import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,42 +19,49 @@ class AccountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      const SizedBox(
-        height: 10,
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    SizeConfig().init(context);
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const SizedBox(
+            height: 10,
+          ),
           Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              UserAvatar(
-                username: userAccountModel.username,
-                hue: userAccountModel.hue,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(width: SizeConfig.blockSizeHorizontal * 2,),
+                  UserAvatar(
+                    username: userAccountModel.username,
+                    hue: userAccountModel.hue,
+                    avatarImage: userAccountModel.avatarImage,
+                    userId: userAccountModel.id,
+                    avatarSize: AvatarSize.smallMedium,
+                  ),
+                  Text(
+                    userAccountModel.username,
+                    style: const TextStyle(
+                      fontFamily: 'OpenSans',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.7,
+                    ),
+                  ),
+                ],
+              ),
+              FollowButton(
+                buttonProfile: FollowButtonProfile.followSmall,
                 userId: userAccountModel.id,
-                avatarSize: AvatarSize.small,
-              ),
-              Text(
-                userAccountModel.username,
-                style: const TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.7,
-                ),
-              ),
+              )
             ],
           ),
-          FollowButton(
-            buttonProfile: FollowButtonProfile.followSmall,
-            userId: userAccountModel.id,
-          )
-        ],
-      ),
-      const SizedBox(
-        height: 10,
-      ),
-      const Div()
-    ]);
+          const SizedBox(
+            height: 10,
+          ),
+          const Div()
+        ]);
   }
 }

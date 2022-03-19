@@ -81,9 +81,10 @@ class CluckService {
     return response;
   }
 
-  Future<List<CluckModel>> getFeed(String _token) async {
+  Future<List<CluckModel>> getFeed() async {
+    String? token = await getToken();
     final response = await http.get(Uri.parse('${url}feed/personal/'),
-        headers: {'authorization': _token});
+        headers: {'authorization': token!});
 
     if (response.statusCode == 200) {
       var jsonClucks = json.decode(response.body)['content'];
@@ -129,7 +130,9 @@ class CluckService {
   }
 
   Future<List<CluckModel>> getProfileClucksById(int userId) async {
-    final response = await http.get(Uri.parse('${url}users/$userId/clucks'));
+    String? token = await getToken();
+    final response = await http.get(Uri.parse('${url}users/$userId/clucks'),
+        headers: {'authorization': token!});
 
     if (response.statusCode == 200) {
       var jsonClucks = json.decode(response.body)['content'];
