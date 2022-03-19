@@ -10,6 +10,7 @@ import com.clucker.cluckerserver.exception.UserNotFoundException;
 import com.clucker.cluckerserver.model.Cluck;
 import com.clucker.cluckerserver.model.User;
 import com.clucker.cluckerserver.search.SimpleSearchSpecification;
+import com.clucker.cluckerserver.security.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,7 @@ public class CluckService {
     private final CluckRepository cluckRepository;
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final SecurityService securityService;
 
     @PreAuthorize("permitAll()")
     public Cluck getCluckById(String uuid) {
@@ -132,7 +134,9 @@ public class CluckService {
 
         cluck.getDislikeUsers().add(user);
         user.getDislikedClucks().add(cluck);
+
         userService.saveUser(user);
+
         return saveCluck(cluck);
     }
 
@@ -143,6 +147,18 @@ public class CluckService {
         int eggRating = getCluckEggRating(cluck);
         response.setEggRating(eggRating);
         response.setCommentCount(cluck.getComments().size());
+
+        if (securityService.userIsAuthenticated()) {
+            User user = securityService.getUser();
+            if (user.getLikedClucks().contains(cluck)) {
+                response.setLiked(1);
+            } else if (user.getDislikedClucks().contains(cluck)) {
+                response.setLiked(-1);
+            } else {
+                response.setLiked(0);
+            }
+        }
+
         return response;
     }
 

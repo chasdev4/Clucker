@@ -21,5 +21,11 @@ public class CluckResponse {
     private String author;
     private int eggRating;
     private int commentCount;
+    /**
+     * -1 - Disliked
+     *  0 - N/A
+     *  1 - Liked
+     */
+    private int liked;
 
 }
