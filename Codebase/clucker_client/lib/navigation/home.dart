@@ -97,10 +97,8 @@ class _HubState extends State<_Hub> {
       appBar: pageIndex != 2 ? CluckerAppBar(
         username: widget.details.currentUser.username,
         userId: widget.details.currentUser.id,
-        //hue: user.hue,
-        hue: 0,
-        // avatarImage: currentUser.avatarImage,
-        avatarImage: '',
+        hue: widget.details.currentUser.hue,
+        avatarImage: widget.details.currentUser.avatarImage,
         appBarProfile: AppBarProfile.avatar,
         title: title,
       ) : null,

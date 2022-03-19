@@ -12,7 +12,7 @@ class UserAccountModel {
   UserAccountModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     username = json['username'];
-    hue = json['hue'];
+    hue = json['avatarHue'];
     avatarImage = json['avatarImage'];
   }
 }

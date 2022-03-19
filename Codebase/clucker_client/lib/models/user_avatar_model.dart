@@ -10,11 +10,7 @@ class UserAvatarModel {
   UserAvatarModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     username = json['username'];
-    image = json['image'];
-    if (json['hue'] == null) {
-      hue = 0;
-    } else {
-      hue = json['hue'];
-    }
+    image = json['avatarImage'];
+    hue = json['avatarHue'];
   }
 }

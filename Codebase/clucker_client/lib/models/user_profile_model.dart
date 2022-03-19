@@ -8,8 +8,8 @@ class UserProfileModel {
       this.followersCount,
       this.followingCount,
       this.eggRating,
-    //  this.hue,
-   //   this.avatarImage
+      this.hue,
+      this.avatarImage
       );
   late int id;
   late String username;
@@ -19,8 +19,8 @@ class UserProfileModel {
   late int followingCount;
   late int eggRating;
   late String joined;
- // late double hue;
-//  late String avatarImage;
+  late double hue;
+  late String avatarImage;
 
   UserProfileModel.fromJson(Map<dynamic, dynamic> json) {
     id = json['id'];
@@ -31,7 +31,7 @@ class UserProfileModel {
     followingCount = json['followingCount'];
     eggRating = json['eggRating'];
     joined = json['joined'].toString();
-    //hue = json['hue'];
-  //  avatarImage = json['avatarImage'];
+    hue = json['avatarHue'];
+    avatarImage = json['avatarImage'] ?? '';
   }
 }

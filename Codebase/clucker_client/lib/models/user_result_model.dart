@@ -22,7 +22,7 @@ class UserResultModel {
     bio = json['bio'];
     followersCount = json['followerCount'];
     eggRating = json['eggRating'];
-    hue = json['hue'];
+    hue = json['avatarHue'];
     avatarImage = json['avatarImage'];
   }
 }
