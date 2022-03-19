@@ -31,4 +31,4 @@ app:
 
   security:
     jwt-secret-key: ${JWT_SECRET_KEY}
-  version: '0.1.1'
+  version: '0.1.2'
