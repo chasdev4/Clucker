@@ -20,14 +20,12 @@ class CluckWidget extends StatefulWidget {
       required this.cluck,
       this.commentButtonStatic = false,
       this.isVisible = true,
-      this.commentCount = 0,
       this.onProfile = false,})
       : super(key: key);
 
   final CluckType cluckType;
   final CluckModel cluck;
   final bool commentButtonStatic;
-  final int commentCount;
   final bool isVisible;
   final bool onProfile;
 
@@ -147,10 +145,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                       child: widget.cluckType != CluckType.comment
                           ? _CommentButton(
                               isStatic: widget.commentButtonStatic,
-                              commentCount: widget.commentButtonStatic &&
-                                      widget.commentCount > 0
-                                  ? widget.commentCount - 2
-                                  : widget.commentCount,
+                              commentCount: widget.cluck.commentCount!,
                               buttonSize: 25,
                               onPressed: () {
                                 Navigator.push(
@@ -159,7 +154,6 @@ class _CluckWidgetState extends State<CluckWidget> {
                                       builder: (context) => CommentsPage(
                                             cluck: CluckWidget(
                                               cluck: widget.cluck,
-                                              commentCount: widget.commentCount,
                                             ),
                                           )),
                                 );

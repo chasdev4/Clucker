@@ -103,9 +103,7 @@ class _ProfileBodyState extends State<ProfileBody> {
       }
 
       final isLastPage = cluckModels.length < pageSize;
-print(cluckModels.length);
-print(pageSize);
-print(isLastPage);
+
       if (isLastPage) {
         _pagingController.appendLastPage(cluckModels);
       } else {

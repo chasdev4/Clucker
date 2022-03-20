@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EndCard extends StatelessWidget {
-  const EndCard({Key? key}) : super(key: key);
+  const EndCard({Key? key, this.commentsPage = false}) : super(key: key);
+
+  final bool commentsPage;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class EndCard extends StatelessWidget {
                         fontSize: 20),
                     maxLines: 2,
                   )),
+           SizedBox(height: commentsPage ? 75 : 0,)
             ]),
       ),
     );

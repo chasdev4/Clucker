@@ -126,7 +126,7 @@ class CluckService {
         'An error has occurred on the method getCluckByCluckId(). Status Code: ${response.statusCode}');
   }
 
-  Future<List<CluckModel>> getCommentsByCluckId(String cluckId) async {
+  Future<List<CluckModel>> getCommentsByCluckId(String cluckId, int size, int page) async {
     final response =
         await http.get(Uri.parse('${url}clucks/$cluckId/comments'));
 

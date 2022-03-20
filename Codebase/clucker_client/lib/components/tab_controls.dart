@@ -80,7 +80,6 @@ class _TabControlsState extends State<TabControls> {
       height: widget.height,
       child: RawMaterialButton(
         onPressed: () {
-          print('tab press');
           setState(() {
             if (isCluckTabAndInactive(isLeftTab: isLeftTab)) {
               widget.onPressedLeft();

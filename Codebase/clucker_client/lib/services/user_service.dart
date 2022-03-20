@@ -27,8 +27,6 @@ class UserService {
 
     var jsonUsers = json.decode(response)['content'];
 
-    print(jsonUsers);
-
     return jsonUsers
         .map<UserResultModel>((json) => UserResultModel.fromJson(json))
         .toList();

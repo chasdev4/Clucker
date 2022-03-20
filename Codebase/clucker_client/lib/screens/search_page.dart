@@ -193,7 +193,6 @@ class _SearchResultPageState extends State<_SearchResultPage> {
 
         final isLastPage = userResultModels.length < pageSize;
 
-        print(isLastPage);
         if (isLastPage) {
           _pagingUserController.appendLastPage(userResultModels);
         } else {
