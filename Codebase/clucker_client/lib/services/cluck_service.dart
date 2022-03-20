@@ -44,7 +44,8 @@ class CluckService {
     );
   }
 
-  Future<http.Response> addEggToCluck({required CluckLikeRequest request}) async {
+  Future<http.Response> addEggToCluck(
+      {required CluckLikeRequest request}) async {
     String? token = await getToken();
     http.Response response = await http.put(
       Uri.parse(
@@ -57,7 +58,8 @@ class CluckService {
       body: jsonEncode(request.toJSON()),
     );
     if (response.statusCode != 200) {
-      throw Exception('An error has occurred on the method addEggToCluck(). Status Code ${response.statusCode}');
+      throw Exception(
+          'An error has occurred on the method addEggToCluck(). Status Code ${response.statusCode}');
     }
 
     return response;
@@ -75,15 +77,17 @@ class CluckService {
       },
     );
     if (response.statusCode != 200) {
-      throw Exception('An error has occurred on the method removeEggToCluck(). Status Code ${response.statusCode}');
+      throw Exception(
+          'An error has occurred on the method removeEggToCluck(). Status Code ${response.statusCode}');
     }
 
     return response;
   }
 
-  Future<List<CluckModel>> getFeed() async {
+  Future<List<CluckModel>> getFeed({int size = 20, int page = 0}) async {
     String? token = await getToken();
-    final response = await http.get(Uri.parse('${url}feed/personal'),
+    final response = await http.get(
+        Uri.parse('${url}feed/personal?sort=posted,desc&size=$size&page=$page'),
         headers: {'authorization': token!});
 
     if (response.statusCode == 200) {
@@ -131,7 +135,7 @@ class CluckService {
 
   Future<List<CluckModel>> getProfileClucksById(int userId) async {
     String? token = await getToken();
-    final response = await http.get(Uri.parse('${url}users/$userId/clucks'),
+    final response = await http.get(Uri.parse('${url}users/$userId/clucks?sort=posted,desc'),
         headers: {'authorization': token!});
 
     if (response.statusCode == 200) {

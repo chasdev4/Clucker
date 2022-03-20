@@ -85,13 +85,10 @@ class _CommentsPageState extends State<CommentsPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CluckWidget(
-                          hue: widget.cluck.hue,
-                          avatarImage: widget.cluck.avatarImage,
                           cluckType: CluckType.cluckHeader,
                           isVisible: false,
                           cluck: widget.cluck.cluck,
                           commentCount: widget.cluck.commentCount,
-                          timezone: widget.cluck.timezone,
                         ),
                         Column(
                             mainAxisSize: MainAxisSize.min,
@@ -143,9 +140,6 @@ class _CommentsPageState extends State<CommentsPage> {
                     cluckType: CluckType.cluckHeader,
                     cluck: widget.cluck.cluck,
                     commentCount: widget.cluck.commentCount,
-                    hue: widget.cluck.hue,
-                    avatarImage: widget.cluck.avatarImage,
-                    timezone: widget.cluck.timezone,
                   ),
                 ],
               ))),
@@ -269,11 +263,8 @@ class _CommentsPageState extends State<CommentsPage> {
     if (commentData.isNotEmpty) {
       for (int i = 0; i < commentData.length; i++) {
         commentWidgets.add(CluckWidget(
-          timezone: widget.cluck.timezone,
             cluck: commentData[i],
-            cluckType: CluckType.comment,
-            avatarImage: widget.cluck.avatarImage,
-            hue: widget.cluck.hue));
+            cluckType: CluckType.comment));
       }
 
 
@@ -288,9 +279,6 @@ class _CommentsPageState extends State<CommentsPage> {
                   isVisible: false,
                   cluck: widget.cluck.cluck,
                   commentCount: widget.cluck.commentCount,
-                  hue: widget.cluck.hue,
-                  avatarImage: widget.cluck.avatarImage,
-                  timezone: widget.cluck.timezone,
                 )
               ],
             ));

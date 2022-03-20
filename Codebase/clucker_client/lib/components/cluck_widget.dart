@@ -21,10 +21,7 @@ class CluckWidget extends StatefulWidget {
       this.commentButtonStatic = false,
       this.isVisible = true,
       this.commentCount = 0,
-      this.onProfile = false,
-      required this.hue,
-      required this.avatarImage,
-      required this.timezone})
+      this.onProfile = false,})
       : super(key: key);
 
   final CluckType cluckType;
@@ -33,9 +30,6 @@ class CluckWidget extends StatefulWidget {
   final int commentCount;
   final bool isVisible;
   final bool onProfile;
-  final double hue;
-  final String? avatarImage;
-  final String? timezone;
 
   @override
   _CluckWidgetState createState() => _CluckWidgetState();
@@ -83,7 +77,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                         child: UserAvatar(
                             username: widget.cluck.username,
                             userId: widget.cluck.userId,
-                            hue: widget.hue,
+                            hue: widget.cluck.hue,
                             onProfile: widget.onProfile,
                             avatarImage: '',
                             avatarSize: AvatarSize.small),
@@ -166,9 +160,6 @@ class _CluckWidgetState extends State<CluckWidget> {
                                             cluck: CluckWidget(
                                               cluck: widget.cluck,
                                               commentCount: widget.commentCount,
-                                              hue: widget.hue,
-                                              avatarImage: widget.avatarImage!,
-                                              timezone: widget.timezone,
                                             ),
                                           )),
                                 );

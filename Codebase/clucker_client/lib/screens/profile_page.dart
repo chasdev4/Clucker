@@ -114,13 +114,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
     const storage = FlutterSecureStorage();
 
-    String? timezone = await storage.read(key: 'timezone');
-
     for (int i = 0; i < clucks.length; i++) {
       cluckWidgets.add(CluckWidget(
-        timezone: timezone,
-          avatarImage: widget.avatarImage,
-          hue: widget.hue,
           cluck: clucks[i],
           onProfile: true,
       commentCount: clucks[i].commentCount!));

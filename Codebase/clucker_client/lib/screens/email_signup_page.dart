@@ -171,8 +171,6 @@ class _EmailFormState extends State<EmailForm> {
 
                          Response response = await authService.login(AuthRequest(username: widget.username, password: passwordController.text));
 
-                         print('${response.statusCode}: ${response.body}');
-
                           if (response.statusCode == 200) {
                             response.headers.forEach((key, value) {
                               if (key == 'authorization') {
