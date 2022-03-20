@@ -207,7 +207,6 @@ class _SearchResultPageState extends State<_SearchResultPage> {
         _pagingUserController.error = error;
       }
 
-
     }
   }
 

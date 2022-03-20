@@ -145,9 +145,9 @@ class CluckService {
         'An error has occurred on the method getCommentsByCluckId(). Status Code: ${response.statusCode}');
   }
 
-  Future<List<CluckModel>> getProfileClucksById(int userId) async {
+  Future<List<CluckModel>> getProfileClucksById(int userId, int size, int page) async {
     String? token = await getToken();
-    final response = await http.get(Uri.parse('${url}users/$userId/clucks?sort=posted,desc'),
+    final response = await http.get(Uri.parse('${url}users/$userId/clucks?sort=posted,desc&size=$size&page=$page'),
         headers: {'authorization': token!});
 
     if (response.statusCode == 200) {

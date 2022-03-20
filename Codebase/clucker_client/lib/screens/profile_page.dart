@@ -16,198 +16,133 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:clucker_client/components/end_card.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage(
       {Key? key,
-      required this.userId,
-      this.avatarImage = '',
-      required this.hue})
+      required this.profileData})
       : super(key: key);
 
-  final int userId;
-  final String? avatarImage;
-  final double hue;
+  final ProfileData profileData;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late List<Widget> cluckWidgets;
-  late ProfileData profileData;
-  late SliverList cluckList;
 
   @override
   void initState() {
     super.initState();
-    cluckWidgets = [];
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final cluckNode = FocusNode();
-    return FutureBuilder(
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error}',
-                  style: const TextStyle(fontSize: 18),
-                ),
-              );
-            } else if (snapshot.hasData) {
-              return Scaffold(
-                body: CustomScrollView(slivers: <Widget>[
-                  ProfileHeader(
-                    profileData: profileData,
-                    avatarImage: widget.avatarImage ?? '',
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return RefreshIndicator(
-                          edgeOffset: -10,
-                            onRefresh: () async {
-                              getProfileDetails();
-                            },
-                            child: cluckWidgets[index]);
-                      },
-                      childCount: cluckWidgets.length,
-                    ),
-                  )
-                ]),
-                bottomNavigationBar: MainNavigationBar(focusNode: cluckNode, sendIndex: (value) {
-                  Navigator.pop(context);
-
-
-                },),
-                floatingActionButton: NewCluckButton(
-                    userId: widget.userId,
-                    username: profileData.username,),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerDocked,
-              );
-            }
-          }
-
-          return const Scaffold(
-              body: Center(
-            child: CircularProgressIndicator(strokeWidth: 5),
-          ));
-        },
-        future: getProfileDetails());
-  }
-
-  Future<Object?> getProfileDetails() async {
-    cluckWidgets.clear();
-
-    final CluckService cluckService = CluckService();
-    List<CluckModel> clucks =
-        await cluckService.getProfileClucksById(widget.userId);
-
-    const storage = FlutterSecureStorage();
-
-    for (int i = 0; i < clucks.length; i++) {
-      cluckWidgets.add(CluckWidget(
-          cluck: clucks[i],
-          onProfile: true,
-      commentCount: clucks[i].commentCount!));
-    }
-
-    if (cluckWidgets.length > 2) {
-      cluckWidgets.add(SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 3,
-        child: Center(
-          child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(FontAwesomeIcons.egg,
-                    size: 100,
-                    color: Palette.cluckerRed.toMaterialColor().shade200),
-                Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      'You\'ve reached the end!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Palette.offBlack.toMaterialColor().shade100,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20),
-                      maxLines: 2,
-                    )),
-              ]),
+    return Scaffold(
+      body: CustomScrollView(slivers: <Widget>[
+        ProfileHeader(
+          profileData: widget.profileData,
         ),
-      ));
-    }
-
-    final UserService userService = UserService();
-    UserProfileModel userProfileModel =
-        await userService.getUserProfileById(widget.userId);
-
-    String? currentUserId = await storage.read(key: 'id');
-
-    profileData = ProfileData(
-        userId: userProfileModel.id,
-        username: userProfileModel.username,
-       bio: userProfileModel.bio,
-         hue: userProfileModel.hue,
-        followersCount: userProfileModel.followersCount,
-        followingCount: userProfileModel.followingCount,
-        eggRating: userProfileModel.eggRating,
-        joined: userProfileModel.joined,
-        cluckWidgets: cluckWidgets,
-        isFollowed: userProfileModel.isFollowed,
-        isUserOnOwnProfile: userProfileModel.id.toString() == currentUserId);
-
-    return Future.delayed(const Duration(seconds: 2), () {
-      return profileData;
-    });
+        ProfileBody(userId: widget.profileData.userId),
+      ]),
+      bottomNavigationBar: MainNavigationBar(
+        focusNode: cluckNode,
+        sendIndex: (value) {
+          Navigator.pop(context);
+        },
+      ),
+      floatingActionButton: NewCluckButton(
+        userId: widget.profileData.userId,
+        username: widget.profileData.username,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
   }
 }
 
-class ProfileData {
-  const ProfileData(
-      {required this.userId,
-      required this.username,
-      required this.bio,
-      required this.hue,
-      required this.followersCount,
-      required this.followingCount,
-      required this.eggRating,
-      required this.joined,
-      required this.cluckWidgets,
-      required this.isUserOnOwnProfile,
-      required this.isFollowed});
+class ProfileBody extends StatefulWidget {
+  const ProfileBody({Key? key, required this.userId}) : super(key: key);
 
   final int userId;
-  final String username;
-  final String bio;
-  final double hue;
-  final int followersCount;
-  final int followingCount;
-  final int eggRating;
-  final String joined;
-  final List<Widget> cluckWidgets;
-  final bool isUserOnOwnProfile;
-  final bool isFollowed;
+
+  @override
+  _ProfileBodyState createState() => _ProfileBodyState();
+}
+
+class _ProfileBodyState extends State<ProfileBody> {
+  final cluckService = CluckService();
+  static const pageSize = 15;
+
+  final PagingController<int, CluckModel> _pagingController = PagingController(
+    firstPageKey: 0,
+  );
+
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+    super.initState();
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final userService = UserService();
+      UserProfileModel userProfileModel =
+      await userService.getUserProfileById(widget.userId);
+
+      final cluckModels =
+      await cluckService.getProfileClucksById(widget.userId, pageSize, pageKey);
+
+      for (int i = 0; i < cluckModels.length; i++) {
+        cluckModels[i]
+            .update(userProfileModel.hue, userProfileModel.avatarImage);
+      }
+
+      final isLastPage = cluckModels.length < pageSize;
+print(cluckModels.length);
+print(pageSize);
+print(isLastPage);
+      if (isLastPage) {
+        _pagingController.appendLastPage(cluckModels);
+      } else {
+        _pagingController.appendPage(cluckModels, ++pageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => PagedSliverList<int, CluckModel>(
+        pagingController: _pagingController,
+        builderDelegate: PagedChildBuilderDelegate<CluckModel>(
+          noMoreItemsIndicatorBuilder: (context) {
+            return const EndCard();
+          },
+          animateTransitions: true,
+          itemBuilder: (context, item, index) => CluckWidget(
+            cluck: item,
+          ),)
+
+  );
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
 }
 
 class ProfileHeader extends StatefulWidget {
   const ProfileHeader(
-      {Key? key, required this.profileData, required this.avatarImage})
+      {Key? key, required this.profileData})
       : super(key: key);
 
   final ProfileData profileData;
-  final String? avatarImage;
 
   @override
   _ProfileHeaderState createState() => _ProfileHeaderState();
@@ -227,7 +162,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     SizeConfig().init(context);
 
     late List<String> profileOptions = [
-      widget.profileData.isUserOnOwnProfile ? 'Edit Profile' : 'Block',
+      widget.profileData.deactivateFollowButton ? 'Edit Profile' : 'Block',
       'Settings',
       'Log Out'
     ];
@@ -273,7 +208,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           left: SizeConfig.blockSizeHorizontal * 1),
                       child: UserAvatar(
                         hue: widget.profileData.hue,
-                        avatarImage: widget.avatarImage!,
+                        avatarImage: widget.profileData.avatarImage!,
                         username: widget.profileData.username,
                         userId: widget.profileData.userId,
                         avatarSize: AvatarSize.large,
@@ -282,12 +217,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     ),
                     Transform.translate(
                         offset: Offset(0, SizeConfig.blockSizeHorizontal * 5),
-                        child: widget.profileData.isUserOnOwnProfile
-                            ? null
-                            : FollowButton(
+                        child: FollowButton(
                                 buttonProfile: FollowButtonProfile.follow,
                                 userId: widget.profileData.userId,
-                          isActive: widget.profileData.isFollowed,
+                                deactivate: widget.profileData.deactivateFollowButton,
+                                isActive: widget.profileData.isFollowed,
                               ))
                   ],
                 ),
@@ -478,8 +412,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
           bioLine += ' ';
         }
         bioLineLength = bioLine.length;
-      }
-      else {
+      } else {
         forceNewLine = true;
       }
       if (bioLineLength > 39 || i == bio.length - 1 || forceNewLine) {
@@ -505,4 +438,31 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       )
     ]);
   }
+}
+
+class ProfileData {
+  const ProfileData(
+      {required this.userId,
+        required this.username,
+        required this.bio,
+        required this.hue,
+        required this.avatarImage,
+        required this.followersCount,
+        required this.followingCount,
+        required this.eggRating,
+        required this.joined,
+        required this.isFollowed,
+        required this.deactivateFollowButton});
+
+  final int userId;
+  final String username;
+  final String bio;
+  final double hue;
+  final String? avatarImage;
+  final int followersCount;
+  final int followingCount;
+  final int eggRating;
+  final String joined;
+  final bool isFollowed;
+  final bool deactivateFollowButton;
 }
