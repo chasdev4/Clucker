@@ -1,13 +1,19 @@
+import 'package:clucker_client/components/cluck_widget.dart';
+import 'package:clucker_client/components/end_card.dart';
 import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:clucker_client/components/user_avatar.dart';
+import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/user_result_model.dart';
+import 'package:clucker_client/services/cluck_service.dart';
+import 'package:clucker_client/services/user_service.dart';
 import 'package:clucker_client/utilities/count_format.dart';
 import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, required this.userId, required this.username})
@@ -23,12 +29,10 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   late bool startedSearch;
 
-  var searchPages = [
-    const _StartSearchPage(),
-    const _UserResultPage(),
-    const _CluckResultPage(),
-    const _NoResultsFoundPage()
-  ];
+  _SearchResultPage cluckResultPage = const _SearchResultPage(isCluckResults: true,);
+  _SearchResultPage userResultPage = const _SearchResultPage(isCluckResults: false,);
+
+  late List<Widget> searchPages;
   final searchNode = FocusNode();
   final cluckNode = FocusNode();
   final searchController = TextEditingController();
@@ -40,15 +44,12 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
     searchPageIndex = 0;
     startedSearch = false;
-  }
-
-  @override
-  void dispose() {
-    searchPageIndex = 0;
-    startedSearch = false;
-    searchNode.dispose();
-    cluckNode.dispose();
-    super.dispose();
+    searchPages = [
+      const _StartSearchPage(),
+      cluckResultPage,
+      userResultPage,
+      const _NoResultsFoundPage()
+    ];
   }
 
   @override
@@ -62,6 +63,7 @@ class _SearchPageState extends State<SearchPage> {
             toolbarHeight: 150,
             backgroundColor: Palette.white,
             title: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 const SizedBox(
                   height: 12,
@@ -71,20 +73,8 @@ class _SearchPageState extends State<SearchPage> {
                   focusNode: searchNode,
                   extraFunction: () {
                     setState(() {
-                      if (searchController.text.isEmpty && !startedSearch) {
-                        searchPageIndex = 0;
-                      } else {
-                        startedSearch = true;
-                        if (searchPageIndex == 1) {
-                          //TODO: Populate Cluck Results in the method below
-                          getClucks();
-                        } else if (searchPageIndex == 2) {
-                          //TODO: Populate User Results
-                        } else {
-                          searchPageIndex = 1;
-                          getClucks();
-                        }
-                      }
+                      cluckResultPage = _SearchResultPage(term: searchController.text, isCluckResults: (searchPageIndex == 2 ? false : true),);
+                      userResultPage = _SearchResultPage(term: searchController.text, isCluckResults: (searchPageIndex == 2 ? false : true),);
                     });
                   },
                 ),
@@ -96,6 +86,7 @@ class _SearchPageState extends State<SearchPage> {
             bottom: TabControls(
               height: SizeConfig.blockSizeHorizontal * 13,
               onPressedLeft: () {
+                searchPageIndex = 1;
                 if (startedSearch) {
                   setState(() {
                     searchPageIndex = 1;
@@ -103,6 +94,7 @@ class _SearchPageState extends State<SearchPage> {
                 }
               },
               onPressedRight: () {
+                searchPageIndex = 2;
                 if (startedSearch) {
                   setState(() {
                     searchPageIndex = 2;
@@ -114,10 +106,6 @@ class _SearchPageState extends State<SearchPage> {
           )),
       body: searchPages[searchPageIndex],
     );
-  }
-
-  void getClucks() {
-    throw UnimplementedError('Create the method to retrieve clucks');
   }
 }
 
@@ -149,40 +137,108 @@ class _StartSearchPage extends StatelessWidget {
   }
 }
 
-class _CluckResultPage extends StatefulWidget {
-  const _CluckResultPage({Key? key}) : super(key: key);
+class _SearchResultPage extends StatefulWidget {
+  const _SearchResultPage({Key? key, this.term = '', required this.isCluckResults}) : super(key: key);
+  final String term;
+  final bool isCluckResults;
 
   @override
-  _CluckResultPageState createState() => _CluckResultPageState();
+  _SearchResultPageState createState() => _SearchResultPageState();
 }
 
-class _CluckResultPageState extends State<_CluckResultPage> {
+class _SearchResultPageState extends State<_SearchResultPage> {
+  final cluckService = CluckService();
+  final userService = UserService();
+  static const pageSize = 15;
+
+  final PagingController<int, CluckModel> _pagingCluckController =
+  PagingController(firstPageKey: 0,);
+  final PagingController<int, UserResultModel> _pagingUserController =
+  PagingController(firstPageKey: 0,);
+
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100,
-      height: 100,
-      color: Colors.blue,
-    );
+  void initState() {
+      _pagingCluckController.addPageRequestListener((pageKey) {
+        _fetchPage(pageKey);
+      });
+      _pagingUserController.addPageRequestListener((pageKey) {
+        _fetchPage(pageKey);
+      });
+    super.initState();
   }
-}
 
-class _UserResultPage extends StatefulWidget {
-  const _UserResultPage({Key? key}) : super(key: key);
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      if (widget.isCluckResults){
+        final cluckModels = await cluckService.getCluckResults(
+            size: pageSize, page: pageKey, term: widget.term);
+        final userService = UserService();
 
-  @override
-  _UserResultPageState createState() => _UserResultPageState();
-}
+        for (int i = 0; i < cluckModels.length; i++) {
+          final avatarData =
+              await userService.getUserAvatarById(cluckModels[i].userId);
+          cluckModels[i].update(avatarData.hue, avatarData.image ?? '');
+        }
 
-class _UserResultPageState extends State<_UserResultPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100,
-      height: 100,
-      color: Colors.green,
-    );
+        final isLastPage = cluckModels.length < pageSize;
+
+        if (isLastPage) {
+          _pagingCluckController.appendLastPage(cluckModels);
+        } else {
+          _pagingCluckController.appendPage(cluckModels, ++pageKey);
+        }
+      } else {
+        final userResultModels = await userService.getUserResults(
+            size: pageSize, page: pageKey, term: widget.term);
+
+        final isLastPage = userResultModels.length < pageSize;
+
+        print(isLastPage);
+        if (isLastPage) {
+          _pagingUserController.appendLastPage(userResultModels);
+        } else {
+          _pagingUserController.appendPage(userResultModels, ++pageKey);
+        }
+      }
+    } catch (error) {
+      if (widget.isCluckResults) {
+        _pagingCluckController.error = error;
+      } else {
+        _pagingUserController.error = error;
+      }
+
+
+    }
   }
+
+  @override
+  Widget build(BuildContext context) => RefreshIndicator(
+      onRefresh: () => Future.sync(
+            () => widget.isCluckResults ? _pagingCluckController.refresh() : _pagingUserController.refresh(),
+      ),
+      child: widget.isCluckResults ? PagedListView<int, CluckModel>(
+        pagingController: _pagingCluckController,
+        builderDelegate: PagedChildBuilderDelegate<CluckModel>(
+          noMoreItemsIndicatorBuilder: (context) {
+            return const EndCard();
+          },
+          animateTransitions: true,
+          itemBuilder: (context, item, index) => CluckWidget(
+            cluck: item,
+          ),
+        ),
+      ) : PagedListView<int, UserResultModel>(
+        pagingController: _pagingUserController,
+        builderDelegate: PagedChildBuilderDelegate<UserResultModel>(
+          noMoreItemsIndicatorBuilder: (context) {
+            return const EndCard();
+          },
+          animateTransitions: true,
+          itemBuilder: (context, item, index) => _UserResultWidget(
+            userResult: item,
+          ),
+        ),
+      ));
 }
 
 class _NoResultsFoundPage extends StatelessWidget {
@@ -232,6 +288,7 @@ class _UserResultWidget extends StatelessWidget {
                   const EdgeInsets.only(top: 6, bottom: 6, left: 20, right: 2),
               child: UserAvatar(
                   userId: userResult.id,
+                  avatarImage: userResult.avatarImage ?? '',
                   onProfile: false,
                   username: userResult.username,
                   hue: userResult.hue,

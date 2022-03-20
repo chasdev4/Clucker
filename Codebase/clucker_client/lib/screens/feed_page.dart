@@ -15,7 +15,7 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> {
   final cluckService = CluckService();
-  static const pageSize = 6;
+  static const pageSize = 15;
 
   final PagingController<int, CluckModel> _pagingController =
       PagingController(firstPageKey: 0,);

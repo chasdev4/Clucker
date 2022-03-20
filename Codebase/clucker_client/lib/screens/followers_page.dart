@@ -67,7 +67,7 @@ class _FollowersPageState extends State<FollowersPage> {
       }
         followers.add(AccountWidget(
             accountWidgetProfile: AccountWidgetProfile.follower,
-            deactivateFollowButton: true,
+            deactivateFollowButton: deactivate,
             userAccountModel: userAccounts[i]));
 
     }

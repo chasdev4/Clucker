@@ -73,7 +73,7 @@ class UserAvatar extends StatelessWidget {
             );
           }
         },
-        child: avatarImage! == ''
+        child: avatarImage == ''
             ? Stack(
                 children: [
                   Positioned(

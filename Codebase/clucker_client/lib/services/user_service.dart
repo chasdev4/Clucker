@@ -18,6 +18,22 @@ class UserService {
   static const String url =
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
 
+  Future<List<UserResultModel>> getUserResults({String term = '', int size = 20, int page = 0}) async {
+    final response = await http.read(
+      Uri.parse('${url}users?search=$term&size=$size&page=$page'),
+    );
+
+   // print(response);
+
+    var jsonUsers = json.decode(response)['content'];
+
+    print(jsonUsers);
+
+    return jsonUsers
+        .map<UserResultModel>((json) => UserResultModel.fromJson(json))
+        .toList();
+  }
+
   Future<bool> usernameAvailable(String _username) async {
     final response = await http
         .get(Uri.parse('${url}users/available-usernames?username=$_username'));

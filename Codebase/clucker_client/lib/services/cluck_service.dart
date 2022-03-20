@@ -16,6 +16,18 @@ class CluckService {
   static const String url =
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
 
+  Future<List<CluckModel>> getCluckResults({String term = '', int size = 20, int page = 0}) async {
+    final response = await http.read(
+        Uri.parse('${url}clucks?search=$term&size=$size&page=$page'),
+    );
+
+      var jsonClucks = json.decode(response)['content'];
+
+      return jsonClucks
+          .map<CluckModel>((json) => CluckModel.fromJson(json))
+          .toList();
+  }
+
   Future<http.Response> postCluck(CluckPostRequest postRequest) async {
     String? token = await getToken();
     return await http.post(
