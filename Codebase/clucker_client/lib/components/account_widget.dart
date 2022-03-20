@@ -12,10 +12,12 @@ class AccountWidget extends StatelessWidget {
   const AccountWidget(
       {Key? key,
       required this.accountWidgetProfile,
+        this.deactivateFollowButton = false,
       required this.userAccountModel})
       : super(key: key);
   final UserAccountModel userAccountModel;
   final AccountWidgetProfile accountWidgetProfile;
+  final bool deactivateFollowButton;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,8 @@ class AccountWidget extends StatelessWidget {
               FollowButton(
                 buttonProfile: FollowButtonProfile.followSmall,
                 userId: userAccountModel.id,
+                deactivate: deactivateFollowButton,
+                isActive: false,
               )
             ],
           ),

@@ -10,12 +10,14 @@ class FollowButton extends StatefulWidget {
     Key? key,
     required this.buttonProfile,
     required this.userId,
-    this.onPressed,
+    required this.isActive,
+    this.deactivate = false,
   }) : super(key: key);
 
   final FollowButtonProfile buttonProfile;
   final int userId;
-  final Function? onPressed;
+  final bool isActive;
+  final bool deactivate;
 
   @override
   _FollowButtonState createState() => _FollowButtonState();
@@ -23,7 +25,13 @@ class FollowButton extends StatefulWidget {
 
 class _FollowButtonState extends State<FollowButton> {
   final userService = UserService();
-  bool isSecondary = false;
+  late bool isSecondary;
+
+  @override
+  void initState() {
+    super.initState();
+    isSecondary = widget.isActive;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +44,7 @@ class _FollowButtonState extends State<FollowButton> {
     Size buttonSize = Size(SizeConfig.blockSizeHorizontal * 25, SizeConfig.blockSizeHorizontal * 11.5);
 
     return Padding(
-      child: ElevatedButton(
+      child: widget.deactivate ? null : ElevatedButton(
         child: Text(
           isNotFollowed()
               ? 'Follow'
@@ -65,8 +73,12 @@ class _FollowButtonState extends State<FollowButton> {
             isSecondary = !isSecondary;
 
             if (isFollowButton()) {
-              // TODO: Follow / Unfollow
-              userService.followUser(widget.userId);
+              if (widget.isActive) {
+                userService.unfollowUser(widget.userId);
+              } else {
+                userService.followUser(widget.userId);
+              }
+
             } else if (isBlockButton()) {
               //TODO: Block / Unblock
             }

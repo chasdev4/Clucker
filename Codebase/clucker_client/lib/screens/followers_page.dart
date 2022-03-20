@@ -3,6 +3,7 @@ import 'package:clucker_client/components/clucker_app_bar.dart';
 import 'package:clucker_client/models/user_account_model.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum PageContext { followers, following }
 
@@ -53,13 +54,22 @@ class _FollowersPageState extends State<FollowersPage> {
   }
 
   Future<Object?> getFollowers() async {
+    const storage = FlutterSecureStorage();
+    String? currentUser = await storage.read(key: 'id');
+
     List<UserAccountModel> userAccounts = await userService.getFollowers(
         id: widget.userId, pageContext: widget.pageContext);
 
     for (int i = 0; i < userAccounts.length; i++) {
-      followers.add(AccountWidget(
-          accountWidgetProfile: AccountWidgetProfile.follower,
-          userAccountModel: userAccounts[i]));
+      bool deactivate = false;
+      if (userAccounts[i].id.toString() == currentUser) {
+        deactivate = true;
+      }
+        followers.add(AccountWidget(
+            accountWidgetProfile: AccountWidgetProfile.follower,
+            deactivateFollowButton: true,
+            userAccountModel: userAccounts[i]));
+
     }
 
     return followers;

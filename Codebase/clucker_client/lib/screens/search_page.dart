@@ -249,6 +249,7 @@ class _UserResultWidget extends StatelessWidget {
             FollowButton(
               buttonProfile: FollowButtonProfile.followSmall,
               userId: userResult.id,
+              isActive: false,
             )
           ],
         ),

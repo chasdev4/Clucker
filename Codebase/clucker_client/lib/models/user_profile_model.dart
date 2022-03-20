@@ -21,6 +21,7 @@ class UserProfileModel {
   late String joined;
   late double hue;
   late String avatarImage;
+  late bool isFollowed;
 
   UserProfileModel.fromJson(Map<dynamic, dynamic> json) {
     id = json['id'];
@@ -33,5 +34,6 @@ class UserProfileModel {
     joined = json['joined'].toString();
     hue = json['avatarHue'];
     avatarImage = json['avatarImage'] ?? '';
+    isFollowed = json['currentlyFollowingUser'];
   }
 }

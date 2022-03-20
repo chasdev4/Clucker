@@ -165,6 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
         eggRating: userProfileModel.eggRating,
         joined: userProfileModel.joined,
         cluckWidgets: cluckWidgets,
+        isFollowed: userProfileModel.isFollowed,
         isUserOnOwnProfile: userProfileModel.id.toString() == currentUserId);
 
     return Future.delayed(const Duration(seconds: 2), () {
@@ -184,7 +185,8 @@ class ProfileData {
       required this.eggRating,
       required this.joined,
       required this.cluckWidgets,
-      required this.isUserOnOwnProfile});
+      required this.isUserOnOwnProfile,
+      required this.isFollowed});
 
   final int userId;
   final String username;
@@ -196,6 +198,7 @@ class ProfileData {
   final String joined;
   final List<Widget> cluckWidgets;
   final bool isUserOnOwnProfile;
+  final bool isFollowed;
 }
 
 class ProfileHeader extends StatefulWidget {
@@ -284,9 +287,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             : FollowButton(
                                 buttonProfile: FollowButtonProfile.follow,
                                 userId: widget.profileData.userId,
-                          onPressed: () {
-
-                          },
+                          isActive: widget.profileData.isFollowed,
                               ))
                   ],
                 ),
