@@ -1,9 +1,7 @@
 import 'package:clucker_client/components/account_widget.dart';
-import 'package:clucker_client/components/clucker_app_bar.dart';
 import 'package:clucker_client/models/user_account_model.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../components/end_card.dart';
@@ -42,14 +40,12 @@ class _FollowersPageState extends State<FollowersPage> {
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      print('try');
       UserService userService = UserService();
 
       List<UserAccountModel> followers = await userService.getFollowers(id: widget.userId, pageContext: widget.pageContext);
-      print('followers length = ${followers.length}');
 
       final isLastPage = followers.length < pageSize;
-      print('isLastPage = $isLastPage');
+
       if (isLastPage) {
         _pagingController.appendLastPage(followers);
       } else {

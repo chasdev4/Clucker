@@ -1,13 +1,14 @@
 import 'package:clucker_client/components/cluck_widget.dart';
 import 'package:clucker_client/components/end_card.dart';
-import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/user_result_model.dart';
+import 'package:clucker_client/screens/profile_page.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:clucker_client/utilities/count_format.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -222,11 +223,46 @@ class _UserResultWidget extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            FollowButton(
-              buttonProfile: FollowButtonProfile.followSmall,
-              userId: userResult.id,
-              isActive: false,
-            )
+              SizedBox(
+                width: 40,
+                height: 40,
+                child: RawMaterialButton(
+                  child: Icon(
+                    CupertinoIcons.forward,
+                    color: Palette.offBlack,
+                  ),
+                  onPressed: () async {
+                    final userService = UserService();
+                    String? currentUser = await userService.storage.read(key: 'id');
+                    final profile = await userService.getUserProfileById(userResult.id);
+
+                    final profileData = ProfileData(
+                        userId: profile.id,
+                        username: profile.username,
+                        bio: profile.bio,
+                        hue: profile.hue,
+                        avatarImage: profile.avatarImage,
+                        followersCount: profile.followersCount,
+                        followingCount: profile.followingCount,
+                        eggRating: profile.eggRating,
+                        joined: profile.joined,
+                        isFollowed: profile.isFollowed,
+                        deactivateFollowButton: (currentUser == profile.id.toString()));
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePage(profileData: profileData),
+                        ));
+                  },
+                ),
+              ),
+            const SizedBox(width: 15,)
+            // FollowButton(
+            //   buttonProfile: FollowButtonProfile.followSmall,
+            //   userId: userResult.id,
+            //   isActive: false,
+            // )
           ],
         ),
         Transform.translate(
