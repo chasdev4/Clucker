@@ -23,13 +23,17 @@ class UserService {
       Uri.parse('${url}users?search=$term&size=$size&page=$page'),
     );
 
-   // print(response);
+    bool isEmpty = json.decode(response)['empty'];
 
-    var jsonUsers = json.decode(response)['content'];
+    if (isEmpty) {
+      return [];
+    } else {
+      var jsonUsers = json.decode(response)['content'];
 
-    return jsonUsers
-        .map<UserResultModel>((json) => UserResultModel.fromJson(json))
-        .toList();
+      return jsonUsers
+          .map<UserResultModel>((json) => UserResultModel.fromJson(json))
+          .toList();
+    }
   }
 
   Future<bool> usernameAvailable(String _username) async {

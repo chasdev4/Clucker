@@ -49,7 +49,6 @@ class _FeedPageState extends State<FeedPage> {
       }
     } catch (error) {
       _pagingController.error = error;
-      throw Exception(error);
     }
   }
 

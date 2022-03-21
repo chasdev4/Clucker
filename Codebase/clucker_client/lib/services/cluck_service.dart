@@ -21,11 +21,17 @@ class CluckService {
         Uri.parse('${url}clucks?search=$term&size=$size&page=$page'),
     );
 
+    bool isEmpty = json.decode(response)['empty'];
+
+    if (isEmpty) {
+      return [];
+    } else {
       var jsonClucks = json.decode(response)['content'];
 
       return jsonClucks
           .map<CluckModel>((json) => CluckModel.fromJson(json))
           .toList();
+    }
   }
 
   Future<http.Response> postCluck(CluckPostRequest postRequest) async {
