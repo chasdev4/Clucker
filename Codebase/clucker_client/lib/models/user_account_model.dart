@@ -16,6 +16,6 @@ class UserAccountModel {
     username = json['username'];
     hue = json['avatarHue'];
     avatarImage = json['avatarImage'] ?? '';
-    isFollowed = json['currentlyFollowingUser'];
+    isFollowed = json['currentlyFollowingUser'] ?? false;
   }
 }
