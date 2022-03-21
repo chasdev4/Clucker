@@ -470,7 +470,9 @@ class _TextBoxState extends State<TextBox> {
                       padding: const EdgeInsets.only(
                           left: 10, top: 5, bottom: 20, right: 10),
                       onPressed: () {
-                        widget.extraFunction!();
+                        if (widget.controller!.text.isNotEmpty) {
+                          widget.extraFunction!();
+                        }
                       },
                     )
                   : (isAnyValidationField() && iconAnimation == false)

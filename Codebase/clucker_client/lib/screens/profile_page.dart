@@ -20,10 +20,7 @@ import 'package:clucker_client/components/end_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage(
-      {Key? key,
-      required this.profileData})
-      : super(key: key);
+  const ProfilePage({Key? key, required this.profileData}) : super(key: key);
 
   final ProfileData profileData;
 
@@ -32,7 +29,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   @override
   void initState() {
     super.initState();
@@ -55,6 +51,9 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       ),
       floatingActionButton: NewCluckButton(
+        fetchFeedPageAgain: () {
+          return false;
+        },
         userId: widget.profileData.userId,
         username: widget.profileData.username,
       ),
@@ -92,10 +91,10 @@ class _ProfileBodyState extends State<ProfileBody> {
     try {
       final userService = UserService();
       UserProfileModel userProfileModel =
-      await userService.getUserProfileById(widget.userId);
+          await userService.getUserProfileById(widget.userId);
 
-      final cluckModels =
-      await cluckService.getProfileClucksById(widget.userId, pageSize, pageKey);
+      final cluckModels = await cluckService.getProfileClucksById(
+          widget.userId, pageSize, pageKey);
 
       for (int i = 0; i < cluckModels.length; i++) {
         cluckModels[i]
@@ -116,17 +115,16 @@ class _ProfileBodyState extends State<ProfileBody> {
 
   @override
   Widget build(BuildContext context) => PagedSliverList<int, CluckModel>(
-        pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<CluckModel>(
-          noMoreItemsIndicatorBuilder: (context) {
-            return const EndCard();
-          },
-          animateTransitions: true,
-          itemBuilder: (context, item, index) => CluckWidget(
-            cluck: item,
-          ),)
-
-  );
+      pagingController: _pagingController,
+      builderDelegate: PagedChildBuilderDelegate<CluckModel>(
+        noMoreItemsIndicatorBuilder: (context) {
+          return const EndCard();
+        },
+        animateTransitions: true,
+        itemBuilder: (context, item, index) => CluckWidget(
+          cluck: item,
+        ),
+      ));
 
   @override
   void dispose() {
@@ -136,9 +134,7 @@ class _ProfileBodyState extends State<ProfileBody> {
 }
 
 class ProfileHeader extends StatefulWidget {
-  const ProfileHeader(
-      {Key? key, required this.profileData})
-      : super(key: key);
+  const ProfileHeader({Key? key, required this.profileData}) : super(key: key);
 
   final ProfileData profileData;
 
@@ -216,11 +212,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     Transform.translate(
                         offset: Offset(0, SizeConfig.blockSizeHorizontal * 5),
                         child: FollowButton(
-                                buttonProfile: FollowButtonProfile.follow,
-                                userId: widget.profileData.userId,
-                                deactivate: widget.profileData.deactivateFollowButton,
-                                isActive: widget.profileData.isFollowed,
-                              ))
+                          buttonProfile: FollowButtonProfile.follow,
+                          userId: widget.profileData.userId,
+                          deactivate: widget.profileData.deactivateFollowButton,
+                          isActive: widget.profileData.isFollowed,
+                        ))
                   ],
                 ),
                 Row(
@@ -441,16 +437,16 @@ class _ProfileHeaderState extends State<ProfileHeader> {
 class ProfileData {
   const ProfileData(
       {required this.userId,
-        required this.username,
-        required this.bio,
-        required this.hue,
-        required this.avatarImage,
-        required this.followersCount,
-        required this.followingCount,
-        required this.eggRating,
-        required this.joined,
-        required this.isFollowed,
-        required this.deactivateFollowButton});
+      required this.username,
+      required this.bio,
+      required this.hue,
+      required this.avatarImage,
+      required this.followersCount,
+      required this.followingCount,
+      required this.eggRating,
+      required this.joined,
+      required this.isFollowed,
+      required this.deactivateFollowButton});
 
   final int userId;
   final String username;

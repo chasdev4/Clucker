@@ -20,6 +20,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final storage = const FlutterSecureStorage();
   final cluckNode = FocusNode();
+  late FeedPage feedPage;
+  late bool fetchFeedPageAgain = false;
 
   late HomePageDetails details;
 
@@ -30,13 +32,22 @@ class _HomeState extends State<Home> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
               return Center(
-                child: Container(color: Colors.white, child: Text(
+                  child: Container(
+                color: Colors.white,
+                child: Text(
                   '${snapshot.error}... ${snapshot.stackTrace}',
                   style: const TextStyle(fontSize: 18),
-                ),)
-              );
+                ),
+              ));
             } else if (snapshot.hasData) {
-              return _Hub(details: details);
+              return _Hub(
+                details: details,
+                refreshFeedPage: (value) {
+                  setState(() {
+                    feedPage = value;
+                  });
+                },
+              );
             }
           }
 
@@ -47,6 +58,9 @@ class _HomeState extends State<Home> {
 
   Future<Object?> getHomePageDetails() async {
     UserService userService = UserService();
+    feedPage = FeedPage(
+      fetchAgain: fetchFeedPageAgain,
+    );
 
     UserSelfModel currentUser = await userService.getSelf();
 
@@ -67,9 +81,11 @@ class _HomeState extends State<Home> {
 }
 
 class _Hub extends StatefulWidget {
-  const _Hub({Key? key, required this.details}) : super(key: key);
+  const _Hub({Key? key, required this.details, required this.refreshFeedPage})
+      : super(key: key);
 
   final HomePageDetails details;
+  final Function refreshFeedPage;
 
   @override
   _HubState createState() => _HubState();
@@ -92,17 +108,20 @@ class _HubState extends State<_Hub> {
     pageIndex = 0;
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: pageIndex != 2 ? CluckerAppBar(
-        username: widget.details.currentUser.username,
-        userId: widget.details.currentUser.id,
-        hue: widget.details.currentUser.hue,
-        avatarImage: widget.details.currentUser.avatarImage,
-        appBarProfile: AppBarProfile.avatar,
-        title: title,
-      ) : null,
+      appBar: pageIndex != 2
+          ? CluckerAppBar(
+              username: widget.details.currentUser.username,
+              userId: widget.details.currentUser.id,
+              hue: widget.details.currentUser.hue,
+              avatarImage: widget.details.currentUser.avatarImage,
+              appBarProfile: AppBarProfile.avatar,
+              title: title,
+            )
+          : null,
       body: widget.details.pages[pageIndex],
       bottomNavigationBar: MainNavigationBar(
         sendIndex: (index) {
@@ -127,14 +146,19 @@ class _HubState extends State<_Hub> {
         focusNode: cluckNode,
       ),
       floatingActionButton: NewCluckButton(
-        userId: widget.details.currentUser.id,
-        username: widget.details.currentUser.username,
-      ),
+          userId: widget.details.currentUser.id,
+          username: widget.details.currentUser.username,
+          fetchFeedPageAgain: (value) {
+            if (value) {
+              widget.refreshFeedPage(const FeedPage(
+                fetchAgain: true,
+              ));
+            }
+          }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
-
 
 class HomePageDetails {
   const HomePageDetails({required this.currentUser, required this.pages});
@@ -147,8 +171,10 @@ class NotificationsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Notifications!', style: TextStyle(fontSize: 30),));
+    return const Center(
+        child: Text(
+      'Notifications!',
+      style: TextStyle(fontSize: 30),
+    ));
   }
 }
-
-

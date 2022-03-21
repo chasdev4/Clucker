@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class FeedPage extends StatefulWidget {
-  const FeedPage({Key? key}) : super(key: key);
+  const FeedPage({Key? key, this.fetchAgain = false}) : super(key: key);
+
+  final bool fetchAgain;
 
   @override
   _FeedPageState createState() => _FeedPageState();
@@ -52,23 +54,30 @@ class _FeedPageState extends State<FeedPage> {
     }
   }
 
+  Future<void> refresh() {
+    return Future.sync(() => _pagingController.refresh());
+  }
+
   @override
-  Widget build(BuildContext context) => RefreshIndicator(
-      onRefresh: () => Future.sync(
-            () => _pagingController.refresh(),
+  Widget build(BuildContext context) {
+    if (widget.fetchAgain) {
+      refresh();
+    }
+    return RefreshIndicator(
+        onRefresh: () => refresh(),
+        child: PagedListView<int, CluckModel>(
+          pagingController: _pagingController,
+          builderDelegate: PagedChildBuilderDelegate<CluckModel>(
+            noMoreItemsIndicatorBuilder: (context) {
+              return const EndCard();
+            },
+            animateTransitions: true,
+            itemBuilder: (context, item, index) => CluckWidget(
+              cluck: item,
+            ),
           ),
-      child: PagedListView<int, CluckModel>(
-        pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<CluckModel>(
-          noMoreItemsIndicatorBuilder: (context) {
-            return const EndCard();
-          },
-          animateTransitions: true,
-          itemBuilder: (context, item, index) => CluckWidget(
-            cluck: item,
-          ),
-        ),
-      ));
+        ));
+  }
 
   @override
   void dispose() {

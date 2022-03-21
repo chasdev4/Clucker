@@ -15,10 +15,12 @@ class NewCluckButton extends StatefulWidget {
   const NewCluckButton(
       {Key? key,
       required this.userId,
-      required this.username})
+      required this.username,
+      required this.fetchFeedPageAgain})
       : super(key: key);
   final int userId;
   final String username;
+  final Function fetchFeedPageAgain;
 
   @override
   _NewCluckButtonState createState() => _NewCluckButtonState();
@@ -157,8 +159,8 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                       child: Column(
                         children: [
                           Container(
-                              padding: EdgeInsets.all(
-                                  cluckNode.hasFocus ? 3 : 13),
+                              padding:
+                                  EdgeInsets.all(cluckNode.hasFocus ? 3 : 13),
                               width: MediaQuery.of(context).size.width - 50,
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -167,8 +169,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(
-                                        left:
-                                        cluckNode.hasFocus ? 10 : 0),
+                                        left: cluckNode.hasFocus ? 10 : 0),
                                     child: const Text(
                                       'New Cluck',
                                       style: TextStyle(
@@ -205,6 +206,8 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                       eggRating: '0'));
 
                               if (response.statusCode == 201) {
+                                cluckNode.unfocus();
+                                widget.fetchFeedPageAgain(true);
                                 setState(() {
                                   overlayEntry.remove();
                                   overlayVisible = false;
