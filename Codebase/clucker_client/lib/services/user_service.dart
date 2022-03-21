@@ -149,13 +149,15 @@ class UserService {
     final response = await http.get(Uri.parse('${url}users/$id/${pageContext == PageContext.followers ? 'followers' : 'following'}'),
         headers: {'authorization': token!});
 
+    print(response.body);
+
     if (response.statusCode == 200) {
       var jsonFollowers = json.decode(response.body)['content'];
-      List<UserAccountModel> userAccounts = jsonFollowers
-          .map<UserAccountModel>((json) => UserAccountModel.fromJson(json))
-          .toList();
+        List<UserAccountModel> userAccounts = jsonFollowers
+            .map<UserAccountModel>((json) => UserAccountModel.fromJson(json))
+            .toList();
 
-      return userAccounts;
+        return userAccounts;
     }
 
     throw Exception('An error has occurred on the method getFollowers(). Status Code: ${response.statusCode}');

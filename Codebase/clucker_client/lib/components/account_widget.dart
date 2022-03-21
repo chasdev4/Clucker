@@ -58,7 +58,7 @@ class AccountWidget extends StatelessWidget {
                 buttonProfile: FollowButtonProfile.followSmall,
                 userId: userAccountModel.id,
                 deactivate: deactivateFollowButton,
-                isActive: false,
+                isActive: userAccountModel.isFollowed,
               )
             ],
           ),

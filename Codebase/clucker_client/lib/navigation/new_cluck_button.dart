@@ -27,7 +27,7 @@ class NewCluckButton extends StatefulWidget {
 }
 
 class _NewCluckButtonState extends State<NewCluckButton> {
-  final cluckNode = FocusNode();
+  late FocusNode cluckNode;
   late TextEditingController cluckController;
   late KeyboardVisibilityController keyboardVisibilityController;
 
@@ -39,6 +39,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   @override
   void initState() {
     super.initState();
+    cluckNode = FocusNode();
     keyboardVisibilityController = KeyboardVisibilityController();
     cluckController = TextEditingController();
     numNewLines = 0;
@@ -57,7 +58,11 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   void dispose() {
     keyboardSubscription.cancel();
     cluckController.dispose();
-    overlayEntry.remove();
+    cluckNode.dispose();
+    if (overlayVisible) {
+      overlayEntry.remove();
+      overlayVisible = false;
+    }
     super.dispose();
   }
 

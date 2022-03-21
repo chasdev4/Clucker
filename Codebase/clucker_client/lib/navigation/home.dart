@@ -19,7 +19,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final storage = const FlutterSecureStorage();
-  final cluckNode = FocusNode();
   late FeedPage feedPage;
   late bool fetchFeedPageAgain = false;
 
