@@ -147,7 +147,9 @@ class UserService {
       {required int id, required PageContext pageContext}) async {
     String? token = await getToken();
     final response = await http.get(Uri.parse('${url}users/$id/${pageContext == PageContext.followers ? 'followers' : 'following'}'),
-        headers: {'authorization': token!});
+        headers: {'Authorization': token!});
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var jsonFollowers = json.decode(response.body)['content'];

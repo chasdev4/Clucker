@@ -1,11 +1,9 @@
 import 'package:clucker_client/components/account_widget.dart';
+import 'package:clucker_client/components/clucker_app_bar.dart';
 import 'package:clucker_client/models/user_account_model.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
-import '../components/clucker_app_bar.dart';
-import '../components/end_card.dart';
 
 enum PageContext { followers, following }
 
@@ -27,6 +25,7 @@ class FollowersPage extends StatefulWidget {
 class _FollowersPageState extends State<FollowersPage> {
   static const pageSize = 15;
   late String title;
+  late int followersLength = 0;
 
   final PagingController<int, UserAccountModel> _pagingController = PagingController(
     firstPageKey: 0,
@@ -68,6 +67,8 @@ class _FollowersPageState extends State<FollowersPage> {
 
       List<UserAccountModel> followers = await userService.getFollowers(id: widget.userId, pageContext: widget.pageContext);
 
+      followersLength = followers.length;
+
       final isLastPage = followers.length < pageSize;
 
       if (isLastPage) {
@@ -99,9 +100,6 @@ class _FollowersPageState extends State<FollowersPage> {
             child: PagedListView<int, UserAccountModel>(
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<UserAccountModel>(
-                noMoreItemsIndicatorBuilder: (context) {
-                  return const EndCard();
-                },
                 animateTransitions: true,
                 itemBuilder: (context, item, index) => AccountWidget(
                   accountWidgetProfile: AccountWidgetProfile.follower,
