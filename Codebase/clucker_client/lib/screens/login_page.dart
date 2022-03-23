@@ -60,34 +60,25 @@ class _LogInFormState extends State<_LogInForm> {
     SizeConfig().init(context);
     return Form(
       key: _logInFormKey,
-      child: Column(
+      child: Transform.translate(
+        offset: Offset(0,
+        (MediaQuery.of(context).viewInsets.bottom * offsetScale * 0.3)),
+    child: Container(
+    alignment: Alignment.center,
+    child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Column(
             children: [
-              Transform.translate(
-                  offset: Offset(
-                      0,
-                      (MediaQuery.of(context).viewInsets.bottom *
-                          offsetScale *
-                          0.3)),
-                  child: Image(
+             Image(
                     height: SizeConfig.blockSizeVertical * 40,
                     image: const AssetImage(
                       'assets/icons/clucker-icon.png',
                     ),
-                  )),
+                  ),
               SizedBox(
                 width: SizeConfig.blockSizeVertical * 40 * 0.55,
-                child: Transform.translate(
-                  offset: Offset(
-                      0,
-                      -15 -
-                          (MediaQuery.of(context).viewInsets.bottom) *
-                              -1 *
-                              offsetScale *
-                              0.3),
-                  child: const FittedBox(
+                child: const FittedBox(
                     fit: BoxFit.fitWidth,
                     child: Text(
                       'Clucker',
@@ -97,18 +88,12 @@ class _LogInFormState extends State<_LogInForm> {
                       ),
                     ),
                   ),
-                ),
               ),
             ],
           ),
           Column(
             children: [
-              Transform.translate(
-                offset: Offset(
-                    0,
-                    (MediaQuery.of(context).viewInsets.bottom * offsetScale) *
-                        0.30),
-                child: TextBox(
+             TextBox(
                   textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
                   controller: emailOrUsernameController,
                   focusNode: emailOrUsernameFocusNode,
@@ -120,25 +105,14 @@ class _LogInFormState extends State<_LogInForm> {
                     FocusScope.of(context).nextFocus();
                     return true;
                   },
-                ),
               ),
-              Transform.translate(
-                  offset: Offset(
-                      0,
-                      (MediaQuery.of(context).viewInsets.bottom * offsetScale) *
-                          0.30),
-                  child: TextBox(
+             TextBox(
                     textBoxProfile: TextBoxProfile.passwordFieldLogin,
                     controller: passwordController,
                     focusNode: passwordFocusNode,
                     onFieldSubmitted: () => FocusScope.of(context).unfocus(),
-                  )),
-              Transform.translate(
-                  offset: Offset(
-                      0,
-                      (MediaQuery.of(context).viewInsets.bottom * offsetScale) *
-                          0.30),
-                  child: StandardButton(
+                  ),
+             StandardButton(
                     text: 'Log-In',
                     routeName: '',
                     onPress: () async {
@@ -170,13 +144,8 @@ class _LogInFormState extends State<_LogInForm> {
                         dialogUtil.oneButtonDialog(context, title, message);
                       }
                     },
-                  )),
-              Transform.translate(
-                  offset: Offset(
-                      0,
-                      (MediaQuery.of(context).viewInsets.bottom * offsetScale) *
-                          0.30),
-                  child: StandardButton(
+                  ),
+             StandardButton(
                     text: 'Sign-Up',
                     routeName: '',
                     onPress: () {
@@ -187,7 +156,7 @@ class _LogInFormState extends State<_LogInForm> {
                       );
                     },
                     isSecondary: true,
-                  )),
+                  ),
             ],
           ),
           const SizedBox(
@@ -195,6 +164,6 @@ class _LogInFormState extends State<_LogInForm> {
           ),
         ],
       ),
-    );
+    )));
   }
 }
