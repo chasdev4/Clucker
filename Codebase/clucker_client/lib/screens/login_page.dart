@@ -112,7 +112,14 @@ class _LogInFormState extends State<_LogInForm> {
                   textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
                   controller: emailOrUsernameController,
                   focusNode: emailOrUsernameFocusNode,
-                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                  onEditingComplete: () {
+                    FocusScope.of(context).nextFocus();
+                    return true;
+                  },
+                  onChanged: () {
+                    FocusScope.of(context).nextFocus();
+                    return true;
+                  },
                 ),
               ),
               Transform.translate(

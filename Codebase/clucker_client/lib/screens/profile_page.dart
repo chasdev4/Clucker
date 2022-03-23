@@ -356,7 +356,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           break;
                         case 'Log Out':
                           const storage = FlutterSecureStorage();
-                          storage.delete(key: 'authentication');
+                          storage.deleteAll();
                           while (Navigator.canPop(context)) {
                             Navigator.pop(context);
                           }
