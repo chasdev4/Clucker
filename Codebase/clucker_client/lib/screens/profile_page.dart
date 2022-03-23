@@ -338,11 +338,39 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => EditProfilePage(
-                                  refresh: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => ProfilePage(profileData: widget.profileData)),);
-                                  },
+                                    refresh: (value) {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ProfilePage(
+                                                profileData: ProfileData(
+                                                    userId: widget
+                                                        .profileData.userId,
+                                                    username: widget
+                                                        .profileData.username,
+                                                    bio: value,
+                                                    hue: widget.profileData.hue,
+                                                    avatarImage: widget
+                                                        .profileData
+                                                        .avatarImage,
+                                                    followersCount: widget
+                                                        .profileData
+                                                        .followersCount,
+                                                    followingCount: widget
+                                                        .profileData
+                                                        .followingCount,
+                                                    eggRating: widget
+                                                        .profileData.eggRating,
+                                                    joined: widget
+                                                        .profileData.joined,
+                                                    isFollowed: widget
+                                                        .profileData.isFollowed,
+                                                    deactivateFollowButton: widget
+                                                        .profileData
+                                                        .deactivateFollowButton))),
+                                      );
+                                    },
                                     username: widget.profileData.username,
                                     userId: widget.profileData.userId,
                                     bio: widget.profileData.bio)),

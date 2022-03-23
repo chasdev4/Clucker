@@ -24,9 +24,10 @@ class EditProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late String? initalValue;
     final TextEditingController bioController = TextEditingController();
-    final FocusNode bioNode = FocusNode();
-    bioController.text = bio;
+    bioController.text = initalValue = bio;
+    bioController.selection = TextSelection.fromPosition(TextPosition(offset: bioController.text.length));
 
     return Scaffold(
         appBar: CluckerAppBar(
@@ -69,8 +70,6 @@ class EditProfilePage extends StatelessWidget {
                         maxLength: 120,
                         keyboardType: TextInputType.text,
                         cursorColor: Palette.lightGrey,
-                        initialValue: bio.isEmpty ? null : bio,
-                        focusNode: bioNode,
                         controller: bioController,
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(
@@ -94,9 +93,6 @@ class EditProfilePage extends StatelessWidget {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        onFieldSubmitted: (value) {
-                          bioNode.unfocus();
-                        },
                       ))
                 ],
               ),
@@ -111,24 +107,26 @@ class EditProfilePage extends StatelessWidget {
                 Navigator.pop(context);
               },
               onPressRight: () async {
-                UserService userService = UserService();
-                Response response = await userService.updateBio(
-                    userId, BioUpdateRequest(bio: bioController.text));
+              if (bioController.text != initalValue) {
+                  UserService userService = UserService();
+                  Response response = await userService.updateBio(
+                      userId, BioUpdateRequest(bio: bioController.text));
 
-                print(response.statusCode);
+                  print(response.statusCode);
 
-                if (response.statusCode != 200) {
-                  DialogUtil dialogUtil = DialogUtil();
-                  dialogUtil.oneButtonDialog(
-                      context,
-                      'Unexpected error',
-                      'We encountered an'
-                          ' unexpected error while processing your request,'
-                          ' please try again later.');
+                  if (response.statusCode != 200) {
+                    DialogUtil dialogUtil = DialogUtil();
+                    dialogUtil.oneButtonDialog(
+                        context,
+                        'Unexpected error',
+                        'We encountered an'
+                            ' unexpected error while processing your request,'
+                            ' please try again later.');
+                  }
                 }
                 Navigator.pop(context);
 
-                refresh();
+                refresh(bioController.text);
               },
               standardButtonProfile: StandardButtonProfile.saveCancel,
             ),

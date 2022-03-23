@@ -315,11 +315,11 @@ class _UserResultWidget extends StatelessWidget {
               ),
             )),
         Container(
-          padding: const EdgeInsets.only(
-            bottom: 12,
+          padding: EdgeInsets.only(
+            bottom: userResult.bio.isNotEmpty ? 12 : 6,
           ),
           width: MediaQuery.of(context).size.width - 60,
-          child: Text(
+          child: userResult.bio.isNotEmpty ? Text(
             userResult.bio,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -327,7 +327,7 @@ class _UserResultWidget extends StatelessWidget {
               fontFamily: 'OpenSans',
               fontSize: 17,
             ),
-          ),
+          ) : null,
         ),
         const SizedBox(
           height: 5,
