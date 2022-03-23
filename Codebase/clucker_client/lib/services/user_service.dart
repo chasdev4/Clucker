@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:clucker_client/models/bio_update_request.dart';
 import 'package:clucker_client/models/user_account_model.dart';
 import 'package:clucker_client/models/user_avatar_model.dart';
 import 'package:clucker_client/models/user_self_model.dart';
@@ -53,6 +54,20 @@ class UserService {
     );
   }
 
+  Future<http.Response> updateBio(int userId, BioUpdateRequest request) async {
+    String? token = await getToken();
+    return await http.put(
+      Uri.parse(
+        '${url}users/$userId',
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'authorization': token!
+      },
+      body: jsonEncode(request.toJSON()),
+    );
+  }
+
   Future<UserAccountModel> getUserAccountById(int id) async {
     String? token = await getToken();
     final response = await http.get(Uri.parse('${url}users/$id'),
@@ -71,6 +86,8 @@ class UserService {
     String? token = await getToken();
     final response = await http.get(Uri.parse('${url}users/$id'),
         headers: {'authorization': token!});
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
@@ -148,8 +165,6 @@ class UserService {
     String? token = await getToken();
     final response = await http.get(Uri.parse('${url}users/$id/${pageContext == PageContext.followers ? 'followers' : 'following'}'),
         headers: {'Authorization': token!});
-
-    print(response.body);
 
     if (response.statusCode == 200) {
       var jsonFollowers = json.decode(response.body)['content'];

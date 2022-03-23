@@ -7,6 +7,7 @@ import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/user_profile_model.dart';
 import 'package:clucker_client/navigation/main_navigation_bar.dart';
 import 'package:clucker_client/navigation/new_cluck_button.dart';
+import 'package:clucker_client/screens/edit_profile_page.dart';
 import 'package:clucker_client/screens/followers_page.dart';
 import 'package:clucker_client/screens/login_page.dart';
 import 'package:clucker_client/services/cluck_service.dart';
@@ -333,7 +334,19 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     onSelected: (String selection) {
                       switch (selection) {
                         case 'Edit Profile':
-                          //TODO: Go to edit profile page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfilePage(
+                                  refresh: () {
+                                    Navigator.pop(context);
+                                    Navigator.push(context, MaterialPageRoute(
+                                        builder: (context) => ProfilePage(profileData: widget.profileData)),);
+                                  },
+                                    username: widget.profileData.username,
+                                    userId: widget.profileData.userId,
+                                    bio: widget.profileData.bio)),
+                          );
                           break;
                         case 'Block':
                           //TODO: Block user
