@@ -4,7 +4,7 @@ import 'package:clucker_client/components/user_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-enum AppBarProfile { avatar, noAvatar, centered, followers }
+enum AppBarProfile { avatar, noAvatar, staticAvatar, centered, followers }
 
 class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
   const CluckerAppBar(
@@ -70,6 +70,7 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
               child: isAvatar()
                   ? UserAvatar(
                 userId: userId,
+                      onProfile: isStaticAvatar() ? true : false,
                       username: username,
                       hue: hue,
                       avatarImage: '',
@@ -82,7 +83,11 @@ class CluckerAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   bool isAvatar() {
-    return appBarProfile == AppBarProfile.avatar;
+    return appBarProfile == AppBarProfile.avatar || appBarProfile == AppBarProfile.staticAvatar;
+  }
+
+  bool isStaticAvatar() {
+    return appBarProfile == AppBarProfile.staticAvatar;
   }
 
   bool isFollowers() {

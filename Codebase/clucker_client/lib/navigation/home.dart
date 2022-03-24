@@ -44,13 +44,23 @@ class _HomeState extends State<Home> {
                 refreshFeedPage: (value) {
                   setState(() {
                     feedPage = value;
+                    fetchFeedPageAgain = feedPage.fetchAgain;
                   });
                 },
               );
             }
           }
 
-          return const SplashScreen();
+          return fetchFeedPageAgain
+              ? Scaffold(
+                  appBar: CluckerAppBar(
+                      username: details.currentUser.username,
+                      userId: details.currentUser.id,
+                      title: 'Feed',
+                      hue: details.currentUser.hue,
+                      appBarProfile: AppBarProfile.staticAvatar),
+                  body: Center(child: CircularProgressIndicator()))
+              : const SplashScreen();
         },
         future: getHomePageDetails());
   }
