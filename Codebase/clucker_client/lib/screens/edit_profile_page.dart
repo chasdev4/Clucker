@@ -8,7 +8,7 @@ import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
-class EditProfilePage extends StatelessWidget {
+class EditProfilePage extends StatefulWidget {
   const EditProfilePage(
       {Key? key,
       required this.username,
@@ -23,17 +23,28 @@ class EditProfilePage extends StatelessWidget {
   final Function refresh;
 
   @override
-  Widget build(BuildContext context) {
-    late String? initalValue;
-    final TextEditingController bioController = TextEditingController();
-    bioController.text = initalValue = bio;
-    bioController.selection = TextSelection.fromPosition(TextPosition(offset: bioController.text.length));
+  State<EditProfilePage> createState() => _EditProfilePageState();
+}
 
+class _EditProfilePageState extends State<EditProfilePage> {
+  late String? initalValue;
+  late String bioText;
+  final TextEditingController bioController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    bioController.text = initalValue = bioText = widget.bio;
+    bioController.selection = TextSelection.fromPosition(TextPosition(offset: bioController.text.length));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: CluckerAppBar(
-            username: username,
+            username: widget.username,
             appBarProfile: AppBarProfile.noAvatar,
-            userId: userId,
+            userId: widget.userId,
             title: 'Edit Profile'),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -71,6 +82,9 @@ class EditProfilePage extends StatelessWidget {
                         keyboardType: TextInputType.text,
                         cursorColor: Palette.lightGrey,
                         controller: bioController,
+                        onChanged: (value) {
+                          bioText = value;
+                        },
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(
                               borderRadius:
@@ -107,10 +121,10 @@ class EditProfilePage extends StatelessWidget {
                 Navigator.pop(context);
               },
               onPressRight: () async {
-              if (bioController.text != initalValue) {
+              if (bioText != initalValue) {
                   UserService userService = UserService();
                   Response response = await userService.updateBio(
-                      userId, BioUpdateRequest(bio: bioController.text));
+                      widget.userId, BioUpdateRequest(bio: bioText));
 
                   print(response.statusCode);
 
@@ -126,7 +140,7 @@ class EditProfilePage extends StatelessWidget {
                 }
                 Navigator.pop(context);
 
-                refresh(bioController.text);
+                widget.refresh(bioController.text);
               },
               standardButtonProfile: StandardButtonProfile.saveCancel,
             ),
