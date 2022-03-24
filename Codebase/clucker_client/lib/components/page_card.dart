@@ -8,6 +8,7 @@ enum CardType {
   noItems,
   noComments,
   noResults,
+  noCard
 }
 
 class PageCard extends StatelessWidget {
@@ -19,7 +20,7 @@ class PageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return cardType == CardType.noCard ? const SizedBox() : SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.width -
           MediaQuery.of(context).size.width / 5,

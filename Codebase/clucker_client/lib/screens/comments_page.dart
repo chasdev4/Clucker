@@ -254,7 +254,7 @@ class _CommentsBodyState extends State<CommentsBody> {
 
   @override
   Widget build(BuildContext context) => RefreshIndicator(
-    triggerMode: RefreshIndicatorTriggerMode.anywhere,
+      triggerMode: RefreshIndicatorTriggerMode.anywhere,
       edgeOffset: 100,
       displacement: 200,
       onRefresh: () => Future.sync(
@@ -263,32 +263,30 @@ class _CommentsBodyState extends State<CommentsBody> {
       child: PagedListView<int, CluckModel>(
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<CluckModel>(
-           noItemsFoundIndicatorBuilder: (context) {
-            if (widget.cluckModel.commentCount! > 2) {
-              return const PageCard(cardType: CardType.endCard, commentsPage: true,);
-            }
-            return Container();
-          },
-          animateTransitions: true,
+            animateTransitions: true,
             noMoreItemsIndicatorBuilder: (context) {
-            return const PageCard(cardType: CardType.noComments);
+              return PageCard(
+                  cardType: widget.cluckModel.commentCount! > 3
+                      ? CardType.endCard
+                      : widget.cluckModel.commentCount! == 0
+                          ? CardType.noComments
+                          : CardType.noCard);
             },
-          itemBuilder: (context, item, index) {
-            if (index == 0) {
+            itemBuilder: (context, item, index) {
+              if (index == 0) {
+                return CluckWidget(
+                  cluck: widget.cluckModel,
+                  cluckType: CluckType.cluckHeader,
+                  commentButtonStatic: true,
+                  isVisible: false,
+                  onProfile: true,
+                );
+              }
               return CluckWidget(
-                cluck: widget.cluckModel,
-                cluckType: CluckType.cluckHeader,
-                commentButtonStatic: true,
-                isVisible: false,
-                onProfile: true,
+                cluck: item,
+                cluckType: CluckType.comment,
               );
-            }
-            return CluckWidget(
-              cluck: item,
-              cluckType: CluckType.comment,
-            );
-          }
-        ),
+            }),
       ));
 
   @override
