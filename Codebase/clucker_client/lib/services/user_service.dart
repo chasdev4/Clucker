@@ -87,8 +87,6 @@ class UserService {
     final response = await http.get(Uri.parse('${url}users/$id'),
         headers: {'authorization': token!});
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
       return UserProfileModel.fromJson(userJson);

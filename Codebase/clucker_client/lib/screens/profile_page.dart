@@ -124,6 +124,7 @@ class _ProfileBodyState extends State<ProfileBody> {
         animateTransitions: true,
         itemBuilder: (context, item, index) => CluckWidget(
           cluck: item,
+          onProfile: true,
         ),
       ));
 

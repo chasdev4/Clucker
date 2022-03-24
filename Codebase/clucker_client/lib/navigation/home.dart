@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
                       title: 'Feed',
                       hue: details.currentUser.hue,
                       appBarProfile: AppBarProfile.staticAvatar),
-                  body: Center(child: CircularProgressIndicator()))
+                  body: const Center(child: CircularProgressIndicator()))
               : const SplashScreen();
         },
         future: getHomePageDetails());
@@ -144,7 +144,7 @@ class _HubState extends State<_Hub> {
                 title = 'Discover';
                 break;
               case 2:
-                title = '';
+                title = ''; // 'Search'
                 break;
               case 3:
                 title = 'Notifications';
