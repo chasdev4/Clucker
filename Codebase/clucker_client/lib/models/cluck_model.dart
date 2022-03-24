@@ -6,7 +6,8 @@ class CluckModel {
       this.userId,
       this.posted,
        this.commentCount,
-      this.eggRating,);
+      this.eggRating,
+      this.currentRating);
 
   late int userId;
   late String id;

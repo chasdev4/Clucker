@@ -263,13 +263,16 @@ class _CommentsBodyState extends State<CommentsBody> {
       child: PagedListView<int, CluckModel>(
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<CluckModel>(
-          noMoreItemsIndicatorBuilder: (context) {
+           noItemsFoundIndicatorBuilder: (context) {
             if (widget.cluckModel.commentCount! > 2) {
               return const PageCard(cardType: CardType.endCard, commentsPage: true,);
             }
             return Container();
           },
           animateTransitions: true,
+            noMoreItemsIndicatorBuilder: (context) {
+            return const PageCard(cardType: CardType.noComments);
+            },
           itemBuilder: (context, item, index) {
             if (index == 0) {
               return CluckWidget(
@@ -292,24 +295,5 @@ class _CommentsBodyState extends State<CommentsBody> {
   void dispose() {
     _pagingController.dispose();
     super.dispose();
-  }
-}
-
-class NoCommentsCard extends StatelessWidget {
-  const NoCommentsCard({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Text(
-          'Be the first to post a\ncomment on this cluck',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Palette.offBlack.toMaterialColor().shade100,
-              fontWeight: FontWeight.w500,
-              fontSize: 20),
-          maxLines: 2,
-        ));
   }
 }
