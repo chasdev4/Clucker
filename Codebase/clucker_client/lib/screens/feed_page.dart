@@ -1,5 +1,5 @@
 import 'package:clucker_client/components/cluck_widget.dart';
-import 'package:clucker_client/components/end_card.dart';
+import 'package:clucker_client/components/page_card.dart';
 import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/services/cluck_service.dart';
 import 'package:clucker_client/services/user_service.dart';
@@ -69,7 +69,7 @@ class _FeedPageState extends State<FeedPage> {
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<CluckModel>(
             noMoreItemsIndicatorBuilder: (context) {
-              return const EndCard();
+              return const PageCard(cardType: CardType.endCard,);
             },
             animateTransitions: true,
             itemBuilder: (context, item, index) => CluckWidget(

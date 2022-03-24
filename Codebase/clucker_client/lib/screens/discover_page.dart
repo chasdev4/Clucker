@@ -12,7 +12,11 @@ class DiscoverPage extends StatefulWidget {
 class _DiscoverPageState extends State<DiscoverPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Center(
+        child: Text(
+          'Coming Soon!',
+          style: TextStyle(fontSize: 30),
+        ));
   }
 }
 

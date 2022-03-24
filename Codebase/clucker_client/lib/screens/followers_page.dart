@@ -1,8 +1,10 @@
 import 'package:clucker_client/components/account_widget.dart';
 import 'package:clucker_client/components/clucker_app_bar.dart';
+import 'package:clucker_client/components/page_card.dart';
 import 'package:clucker_client/models/user_account_model.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 enum PageContext { followers, following }
@@ -26,6 +28,7 @@ class _FollowersPageState extends State<FollowersPage> {
   static const pageSize = 15;
   late String title;
   late int followersLength = 0;
+  late String? currentUserId;
 
   final PagingController<int, UserAccountModel> _pagingController = PagingController(
     firstPageKey: 0,
@@ -67,6 +70,10 @@ class _FollowersPageState extends State<FollowersPage> {
 
       List<UserAccountModel> followers = await userService.getFollowers(id: widget.userId, pageContext: widget.pageContext);
 
+      const storage = FlutterSecureStorage();
+
+      currentUserId = await storage.read(key: 'id');
+
       followersLength = followers.length;
 
       final isLastPage = followers.length < pageSize;
@@ -101,9 +108,13 @@ class _FollowersPageState extends State<FollowersPage> {
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<UserAccountModel>(
                 animateTransitions: true,
+                noItemsFoundIndicatorBuilder: (context) {
+                 return const PageCard(cardType: CardType.noItems);
+                },
                 itemBuilder: (context, item, index) => AccountWidget(
                   accountWidgetProfile: AccountWidgetProfile.follower,
                   userAccountModel: item,
+                  deactivateFollowButton: (currentUserId == item.id.toString()) ? true : false,
                 ),
               ),
             )));

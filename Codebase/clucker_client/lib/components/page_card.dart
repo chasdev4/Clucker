@@ -2,9 +2,16 @@ import 'package:clucker_client/components/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class EndCard extends StatelessWidget {
-  const EndCard({Key? key, this.commentsPage = false}) : super(key: key);
+enum CardType {
+  endCard,
+  noItems,
+}
 
+class PageCard extends StatelessWidget {
+  const PageCard({Key? key, required this.cardType, this.commentsPage = false})
+      : super(key: key);
+
+  final CardType cardType;
   final bool commentsPage;
 
   @override
@@ -24,7 +31,11 @@ class EndCard extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    'You\'ve reached the end!',
+                    cardType == CardType.endCard
+                        ? 'You\'ve reached the end!'
+                        : cardType == CardType.noItems
+                            ? 'Nothing to show here!'
+                            : 'Data not found',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Palette.offBlack.toMaterialColor().shade100,
@@ -32,7 +43,9 @@ class EndCard extends StatelessWidget {
                         fontSize: 20),
                     maxLines: 2,
                   )),
-           SizedBox(height: commentsPage ? 75 : 0,)
+              SizedBox(
+                height: commentsPage ? 75 : 0,
+              )
             ]),
       ),
     );

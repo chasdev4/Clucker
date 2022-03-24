@@ -10,7 +10,7 @@ import 'package:clucker_client/components/text_box.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
-import 'package:clucker_client/components/end_card.dart';
+import 'package:clucker_client/components/page_card.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -265,7 +265,7 @@ class _CommentsBodyState extends State<CommentsBody> {
         builderDelegate: PagedChildBuilderDelegate<CluckModel>(
           noMoreItemsIndicatorBuilder: (context) {
             if (widget.cluckModel.commentCount! > 2) {
-              return const EndCard(commentsPage: true,);
+              return const PageCard(cardType: CardType.endCard, commentsPage: true,);
             }
             return Container();
           },

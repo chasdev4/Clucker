@@ -1,5 +1,5 @@
 import 'package:clucker_client/components/cluck_widget.dart';
-import 'package:clucker_client/components/end_card.dart';
+import 'package:clucker_client/components/page_card.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/user_avatar.dart';
 import 'package:clucker_client/models/cluck_model.dart';
@@ -95,7 +95,7 @@ class _CluckResultsPageState extends State<CluckResultsPage> {
           pagingController: _pagingCluckController,
           builderDelegate: PagedChildBuilderDelegate<CluckModel>(
             noMoreItemsIndicatorBuilder: (context) {
-              return const EndCard();
+              return const PageCard(cardType: CardType.endCard,);
             },
             animateTransitions: true,
             itemBuilder: (context, item, index) => CluckWidget(
@@ -179,7 +179,7 @@ class _UserResultsPageState extends State<UserResultsPage> {
           pagingController: _pagingUserController,
           builderDelegate: PagedChildBuilderDelegate<UserResultModel>(
             noMoreItemsIndicatorBuilder: (context) {
-              return const EndCard();
+              return const PageCard(cardType: CardType.endCard,);
             },
             animateTransitions: true,
             itemBuilder: (context, item, index) => _UserResultWidget(

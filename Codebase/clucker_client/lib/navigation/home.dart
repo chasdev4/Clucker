@@ -182,7 +182,7 @@ class NotificationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
         child: Text(
-      'Notifications!',
+      'Coming Soon!',
       style: TextStyle(fontSize: 30),
     ));
   }

@@ -127,7 +127,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       widget.userId, BioUpdateRequest(bio: bioText));
 
                   if (response.statusCode != 200) {
-                    print (response.statusCode);
+                    print(response.statusCode);
                     DialogUtil dialogUtil = DialogUtil();
                     dialogUtil.oneButtonDialog(
                         context,
@@ -136,7 +136,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             ' unexpected error while processing your request,'
                             ' please try again later.');
 
-                    return Future.delayed(Duration(seconds: 6), () {
+                    return Future.delayed(const Duration(seconds: 6), () {
                       Navigator.pop(context);
                     });
 
