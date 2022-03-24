@@ -78,10 +78,4 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ));
   }
-
-  @override
-  void dispose() {
-    //_pagingController.dispose();
-    super.dispose();
-  }
 }

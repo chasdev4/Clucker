@@ -110,6 +110,7 @@ class _HubState extends State<_Hub> {
     super.initState();
     pageIndex = 0;
     title = 'Feed';
+
   }
 
   @override
