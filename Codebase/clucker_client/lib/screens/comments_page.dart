@@ -17,8 +17,10 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 late StreamSubscription<bool> keyboardSubscription;
 
 class CommentsPage extends StatefulWidget {
-  const CommentsPage({Key? key, required this.cluck}) : super(key: key);
+  const CommentsPage({Key? key, required this.cluck, this.refresh})
+      : super(key: key);
   final CluckWidget cluck;
+  final Function? refresh;
 
   @override
   _CommentsPageState createState() => _CommentsPageState();
@@ -31,6 +33,9 @@ class _CommentsPageState extends State<CommentsPage> {
   late TextEditingController cluckController;
   late KeyboardVisibilityController keyboardVisibilityController;
   late bool pageHasBeenBuilt = false;
+  late CommentsBody commentsBody = CommentsBody(
+    cluckModel: widget.cluck.cluck,
+  );
 
   late int numNewLines;
   double barHeight = 75;
@@ -56,9 +61,7 @@ class _CommentsPageState extends State<CommentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(children: [
-      CommentsBody(
-        cluckModel: widget.cluck.cluck,
-      ),
+      commentsBody,
       FittedBox(
           child: Container(
               color: Palette.white,
@@ -158,6 +161,10 @@ class _CommentsPageState extends State<CommentsPage> {
                                     setState(() {
                                       cluckController.text = '';
                                       cluckNode.unfocus();
+                                      commentsBody = CommentsBody(
+                                        cluckModel: widget.cluck.cluck,
+                                        fetchAgain: true,
+                                      );
                                     });
                                   }
                                 },
@@ -202,9 +209,12 @@ class _CommentsPageState extends State<CommentsPage> {
 }
 
 class CommentsBody extends StatefulWidget {
-  const CommentsBody({Key? key, required this.cluckModel}) : super(key: key);
+  const CommentsBody(
+      {Key? key, required this.cluckModel, this.fetchAgain = false})
+      : super(key: key);
 
   final CluckModel cluckModel;
+  final bool fetchAgain;
   @override
   _CommentsBodyState createState() => _CommentsBodyState();
 }
@@ -252,42 +262,51 @@ class _CommentsBodyState extends State<CommentsBody> {
     }
   }
 
+  Future<void> refresh() {
+    return Future.sync(() => _pagingController.refresh());
+  }
+
   @override
-  Widget build(BuildContext context) => RefreshIndicator(
-      triggerMode: RefreshIndicatorTriggerMode.anywhere,
-      edgeOffset: 100,
-      displacement: 200,
-      onRefresh: () => Future.sync(
-            () => _pagingController.refresh(),
-          ),
-      child: PagedListView<int, CluckModel>(
-        pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<CluckModel>(
-            animateTransitions: true,
-            noMoreItemsIndicatorBuilder: (context) {
-              return PageCard(
-                  cardType: widget.cluckModel.commentCount! > 3
-                      ? CardType.endCard
-                      : widget.cluckModel.commentCount! == 0
-                          ? CardType.noComments
-                          : CardType.noCard);
-            },
-            itemBuilder: (context, item, index) {
-              if (index == 0) {
+  Widget build(BuildContext context) {
+    if (widget.fetchAgain) {
+      refresh();
+    }
+    return RefreshIndicator(
+        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        edgeOffset: 100,
+        displacement: 200,
+        onRefresh: () => Future.sync(
+              () => _pagingController.refresh(),
+            ),
+        child: PagedListView<int, CluckModel>(
+          pagingController: _pagingController,
+          builderDelegate: PagedChildBuilderDelegate<CluckModel>(
+              animateTransitions: true,
+              noMoreItemsIndicatorBuilder: (context) {
+                return PageCard(
+                    cardType: widget.cluckModel.commentCount! > 3
+                        ? CardType.endCard
+                        : widget.cluckModel.commentCount! == 0
+                            ? CardType.noComments
+                            : CardType.noCard);
+              },
+              itemBuilder: (context, item, index) {
+                if (index == 0) {
+                  return CluckWidget(
+                    cluck: widget.cluckModel,
+                    cluckType: CluckType.cluckHeader,
+                    commentButtonStatic: true,
+                    isVisible: false,
+                    onProfile: true,
+                  );
+                }
                 return CluckWidget(
-                  cluck: widget.cluckModel,
-                  cluckType: CluckType.cluckHeader,
-                  commentButtonStatic: true,
-                  isVisible: false,
-                  onProfile: true,
+                  cluck: item,
+                  cluckType: CluckType.comment,
                 );
-              }
-              return CluckWidget(
-                cluck: item,
-                cluckType: CluckType.comment,
-              );
-            }),
-      ));
+              }),
+        ));
+  }
 
   @override
   void dispose() {
