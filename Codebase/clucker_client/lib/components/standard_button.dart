@@ -10,6 +10,7 @@ class StandardButton extends StatelessWidget {
       required this.text,
       required this.routeName,
       required this.onPress,
+        this.onPressRight,
       this.isSecondary = false,
       this.standardButtonProfile = StandardButtonProfile.standard})
       : super(key: key);
@@ -17,6 +18,7 @@ class StandardButton extends StatelessWidget {
   final String text;
   final String routeName;
   final Function onPress;
+  final Function? onPressRight;
   final bool isSecondary;
   final StandardButtonProfile standardButtonProfile;
 
@@ -67,13 +69,13 @@ class StandardButton extends StatelessWidget {
                       height: buttonHeight,
                       child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                              primary: buttonColor,
+                              primary: textColor,
                               side: BorderSide(
-                                  color: textColor,
+                                  color: buttonColor,
                                   width: 2.5,
                                   style: BorderStyle.solid)),
                           onPressed: () {
-                            //TODO: Implement Cancel logic here
+                            onPress();
                           },
                           icon: Icon(
                             FontAwesomeIcons.solidTrashAlt,
@@ -81,7 +83,7 @@ class StandardButton extends StatelessWidget {
                           ),
                           label: Text(
                             ' Cancel',
-                            style: TextStyle(color: textColor, fontSize: 16,
+                            style: TextStyle(color: buttonColor, fontSize: 16,
                                 fontWeight: FontWeight.w500),
                           ))),
                 ),
@@ -94,10 +96,10 @@ class StandardButton extends StatelessWidget {
                       height: buttonHeight,
                       child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            primary: textColor,
+                            primary: buttonColor,
                           ),
                           onPressed: () {
-                            //TODO: Implement Save logic here
+                            onPressRight!();
                           },
                           icon: const Icon(FontAwesomeIcons.solidSave,),
                           label: const Text(' Save', style: TextStyle(

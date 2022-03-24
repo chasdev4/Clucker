@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:clucker_client/models/bio_update_request.dart';
 import 'package:clucker_client/models/user_account_model.dart';
 import 'package:clucker_client/models/user_avatar_model.dart';
 import 'package:clucker_client/models/user_self_model.dart';
@@ -18,6 +19,24 @@ class UserService {
   static const String url =
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
 
+  Future<List<UserResultModel>> getUserResults({String term = '', int size = 20, int page = 0}) async {
+    final response = await http.read(
+      Uri.parse('${url}users?search=$term&size=$size&page=$page'),
+    );
+
+    bool isEmpty = json.decode(response)['empty'];
+
+    if (isEmpty) {
+      return [];
+    } else {
+      var jsonUsers = json.decode(response)['content'];
+
+      return jsonUsers
+          .map<UserResultModel>((json) => UserResultModel.fromJson(json))
+          .toList();
+    }
+  }
+
   Future<bool> usernameAvailable(String _username) async {
     final response = await http
         .get(Uri.parse('${url}users/available-usernames?username=$_username'));
@@ -32,6 +51,20 @@ class UserService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(_userRegister.toJSON()),
+    );
+  }
+
+  Future<http.Response> updateBio(int userId, BioUpdateRequest request) async {
+    String? token = await getToken();
+    return await http.put(
+      Uri.parse(
+        '${url}users/$userId',
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'authorization': token!
+      },
+      body: jsonEncode(request.toJSON()),
     );
   }
 
@@ -53,6 +86,8 @@ class UserService {
     String? token = await getToken();
     final response = await http.get(Uri.parse('${url}users/$id'),
         headers: {'authorization': token!});
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
@@ -94,6 +129,8 @@ class UserService {
     if (response.statusCode == 200) {
       var userJson = json.decode(response.body);
       return UserSelfModel.fromJson(userJson);
+    } else if (response.statusCode == 500) {
+
     }
 
     throw Exception('An error has occurred on the method getSelf(). Status Code: ${response.statusCode}');
@@ -111,19 +148,31 @@ class UserService {
     throw Exception('An error has occurred on the method followUser(). Status Code: ${response.statusCode}');
   }
 
+  Future<bool> unfollowUser(int id) async {
+    String? token = await getToken();
+    final response = await http.delete(Uri.parse('${url}users/$id/followers'),
+        headers: {'authorization': token!});
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+
+    throw Exception('An error has occurred on the method followUser(). Status Code: ${response.statusCode}');
+  }
+
   Future<List<UserAccountModel>> getFollowers(
       {required int id, required PageContext pageContext}) async {
     String? token = await getToken();
     final response = await http.get(Uri.parse('${url}users/$id/${pageContext == PageContext.followers ? 'followers' : 'following'}'),
-        headers: {'authorization': token!});
+        headers: {'Authorization': token!});
 
     if (response.statusCode == 200) {
       var jsonFollowers = json.decode(response.body)['content'];
-      List<UserAccountModel> userAccounts = jsonFollowers
-          .map<UserAccountModel>((json) => UserAccountModel.fromJson(json))
-          .toList();
+        List<UserAccountModel> userAccounts = jsonFollowers
+            .map<UserAccountModel>((json) => UserAccountModel.fromJson(json))
+            .toList();
 
-      return userAccounts;
+        return userAccounts;
     }
 
     throw Exception('An error has occurred on the method getFollowers(). Status Code: ${response.statusCode}');

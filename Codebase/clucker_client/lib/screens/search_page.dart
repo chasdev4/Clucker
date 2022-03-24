@@ -1,58 +1,61 @@
-import 'package:clucker_client/components/follow_button.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/text_box.dart';
-import 'package:clucker_client/components/user_avatar.dart';
-import 'package:clucker_client/models/user_result_model.dart';
-import 'package:clucker_client/utilities/count_format.dart';
+import 'package:clucker_client/screens/search_results_page.dart';
 import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key, required this.userId, required this.username})
+  const SearchPage(
+      {Key? key,
+      required this.userId,
+      required this.username,
+      this.searchPageIndex = 0})
       : super(key: key);
 
   final int userId;
   final String username;
+  final int searchPageIndex;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-  late bool startedSearch;
+  CluckResultsPage cluckResultPage = CluckResultsPage(
+    term: '',
+    returnIndex: () {},
+  );
+  UserResultsPage userResultPage = UserResultsPage(
+    term: '',
+    returnIndex: () {},
+  );
 
-  var searchPages = [
-    const _StartSearchPage(),
-    const _UserResultPage(),
-    const _CluckResultPage(),
-    const _NoResultsFoundPage()
-  ];
+  late List<Widget> searchPages;
   final searchNode = FocusNode();
   final cluckNode = FocusNode();
   final searchController = TextEditingController();
   late List<Widget> searchResults = [];
   late int searchPageIndex;
+  late bool refresh = false;
+  late bool startedSearch = false;
 
   @override
   void initState() {
     super.initState();
-    searchPageIndex = 0;
-    startedSearch = false;
-  }
-
-  @override
-  void dispose() {
-    searchPageIndex = 0;
-    startedSearch = false;
-    searchNode.dispose();
-    cluckNode.dispose();
-    super.dispose();
+    searchPageIndex = widget.searchPageIndex;
   }
 
   @override
   Widget build(BuildContext context) {
+    searchPages = [
+      const _StartSearchPage(),
+      cluckResultPage,
+      userResultPage,
+      const _NoResultsFoundPage()
+    ];
+
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(110),
@@ -62,6 +65,7 @@ class _SearchPageState extends State<SearchPage> {
             toolbarHeight: 150,
             backgroundColor: Palette.white,
             title: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 const SizedBox(
                   height: 12,
@@ -69,23 +73,66 @@ class _SearchPageState extends State<SearchPage> {
                 TextBox(
                   textBoxProfile: TextBoxProfile.searchField,
                   focusNode: searchNode,
+                  controller: searchController,
                   extraFunction: () {
-                    setState(() {
-                      if (searchController.text.isEmpty && !startedSearch) {
+                    startedSearch = true;
+                    if (searchController.text.isEmpty) {
+                      setState(() {
                         searchPageIndex = 0;
-                      } else {
-                        startedSearch = true;
-                        if (searchPageIndex == 1) {
-                          //TODO: Populate Cluck Results in the method below
-                          getClucks();
-                        } else if (searchPageIndex == 2) {
-                          //TODO: Populate Comment Results
-                        } else {
+                        startedSearch = false;
+                      });
+                    } else {
+                      searchNode.unfocus();
+                      if (searchPageIndex == 0) {
+                        setState(() {
+                          cluckResultPage = CluckResultsPage(
+                            fetchAgain: true,
+                            returnIndex: (value) {
+                              if (value == 3) {
+                                setState(() {
+                                  searchPageIndex = value;
+                                });
+                              }
+                            },
+                            term: searchController.text,
+                          );
                           searchPageIndex = 1;
-                          getClucks();
+                        });
+                      } else {
+                        if (searchPageIndex == 1) {
+                          cluckResultPage = CluckResultsPage(
+                            fetchAgain: true,
+                            returnIndex: (value) {
+                              if (value == 3) {
+                                setState(() {
+                                  searchPageIndex = value;
+                                });
+                              }
+                            },
+                            term: searchController.text,
+                          );
+                          setState(() {
+                            searchPageIndex = 1;
+                          });
+                        } else if (searchPageIndex == 2) {
+                          userResultPage = UserResultsPage(
+                            fetchAgain: true,
+                            returnIndex: (value) {
+                              if (value == 3) {
+                                setState(() {
+                                  searchPageIndex = value;
+                                });
+                              }
+                            },
+                            term: searchController.text,
+                          );
+
+                          setState(() {
+                            searchPageIndex = 2;
+                          });
                         }
                       }
-                    });
+                    }
                   },
                 ),
                 const SizedBox(
@@ -94,20 +141,46 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             bottom: TabControls(
-              //TODO: Configure height with SizeConfig
               height: SizeConfig.blockSizeHorizontal * 13,
               onPressedLeft: () {
-                if (startedSearch) {
+                if (searchController.text.isNotEmpty && startedSearch) {
+                  cluckResultPage = CluckResultsPage(
+                    fetchAgain: true,
+                    returnIndex: (value) {
+                      if (value == 3) {
+                        setState(() {
+                          searchPageIndex = value;
+                        });
+                      }
+                    },
+                    term: searchController.text,
+                  );
                   setState(() {
                     searchPageIndex = 1;
                   });
+                } else {
+                  searchPageIndex = 1;
                 }
               },
               onPressedRight: () {
-                if (startedSearch) {
+                if (searchController.text.isNotEmpty && startedSearch) {
+                  userResultPage = UserResultsPage(
+                    fetchAgain: true,
+                    returnIndex: (value) {
+                      if (value == 3) {
+                        setState(() {
+                          searchPageIndex = value;
+                        });
+                      }
+                    },
+                    term: searchController.text,
+                  );
+
                   setState(() {
                     searchPageIndex = 2;
                   });
+                } else {
+                  searchPageIndex = 2;
                 }
               },
               isSearchTabs: true,
@@ -115,10 +188,6 @@ class _SearchPageState extends State<SearchPage> {
           )),
       body: searchPages[searchPageIndex],
     );
-  }
-
-  void getClucks() {
-    throw UnimplementedError('Create the method to retrieve clucks');
   }
 }
 
@@ -150,42 +219,6 @@ class _StartSearchPage extends StatelessWidget {
   }
 }
 
-class _CluckResultPage extends StatefulWidget {
-  const _CluckResultPage({Key? key}) : super(key: key);
-
-  @override
-  _CluckResultPageState createState() => _CluckResultPageState();
-}
-
-class _CluckResultPageState extends State<_CluckResultPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100,
-      height: 100,
-      color: Colors.blue,
-    );
-  }
-}
-
-class _UserResultPage extends StatefulWidget {
-  const _UserResultPage({Key? key}) : super(key: key);
-
-  @override
-  _UserResultPageState createState() => _UserResultPageState();
-}
-
-class _UserResultPageState extends State<_UserResultPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100,
-      height: 100,
-      color: Colors.green,
-    );
-  }
-}
-
 class _NoResultsFoundPage extends StatelessWidget {
   const _NoResultsFoundPage({Key? key}) : super(key: key);
 
@@ -212,120 +245,5 @@ class _NoResultsFoundPage extends StatelessWidget {
                 ))),
       ],
     ));
-  }
-}
-
-class _UserResultWidget extends StatelessWidget {
-  const _UserResultWidget({
-    Key? key,
-    required this.userResult,
-  }) : super(key: key);
-  final UserResultModel userResult;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 6, bottom: 6, left: 20, right: 2),
-              child: UserAvatar(
-                  userId: userResult.id,
-                  onProfile: false,
-                  username: userResult.username,
-                  hue: userResult.hue,
-                  avatarSize: AvatarSize.small),
-            ),
-            Text(
-              userResult.username,
-              style: const TextStyle(
-                fontFamily: 'OpenSans',
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            const Spacer(),
-            FollowButton(
-              buttonProfile: FollowButtonProfile.followSmall,
-              userId: userResult.id,
-            )
-          ],
-        ),
-        Transform.translate(
-            offset: const Offset(0, -4),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width - 60,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    '${countFormat(userResult.followersCount)} Followers',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: Palette.offBlack.toMaterialColor().shade700,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Transform.translate(
-                        offset: const Offset(0, -2),
-                        child: Stack(
-                          children: [
-                            Icon(FontAwesomeIcons.egg,
-                                color: Palette.cluckerRed, size: 16),
-                            Positioned(
-                                bottom: 0.0001,
-                                right: 0.0001,
-                                child: Icon(FontAwesomeIcons.plus,
-                                    color: Palette.cluckerRedLight,
-                                    size: 16 / 1.7))
-                          ],
-                        ),
-                      ),
-                      Text(
-                        countFormat(userResult.eggRating),
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: Palette.cluckerRed.toMaterialColor().shade700,
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            )),
-        Container(
-          padding: const EdgeInsets.only(
-            bottom: 12,
-          ),
-          width: MediaQuery.of(context).size.width - 60,
-          child: Text(
-            userResult.bio,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontFamily: 'OpenSans',
-              fontSize: 17,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Container(
-          color: Palette.lightGrey.toMaterialColor().shade400,
-          height: 2.5,
-          width: MediaQuery.of(context).size.width - 15 * 2,
-        ),
-      ],
-    );
   }
 }

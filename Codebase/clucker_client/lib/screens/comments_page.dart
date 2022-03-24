@@ -3,21 +3,21 @@ import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/models/comment_post_request.dart';
 import 'package:clucker_client/services/cluck_service.dart';
-import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:clucker_client/components/text_box.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
+import 'package:clucker_client/components/end_card.dart';
+import 'package:clucker_client/services/user_service.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 late StreamSubscription<bool> keyboardSubscription;
 
 class CommentsPage extends StatefulWidget {
-  const CommentsPage({Key? key, required this.cluck})
-      : super(key: key);
+  const CommentsPage({Key? key, required this.cluck}) : super(key: key);
   final CluckWidget cluck;
 
   @override
@@ -56,99 +56,25 @@ class _CommentsPageState extends State<CommentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(children: [
-      FutureBuilder(
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error}',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                );
-              } else if (snapshot.hasData && comments.isNotEmpty) {
-                return RefreshIndicator(
-                    triggerMode: RefreshIndicatorTriggerMode.onEdge,
-                    edgeOffset: SizeConfig.blockSizeHorizontal * 35,
-                    displacement: SizeConfig.blockSizeHorizontal * 30,
-                    child: ListView.builder(
-                        itemCount: comments.length,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (BuildContext context, int index) {
-                          return comments[index];
-                        }),
-                    onRefresh: () async {
-                      setState(() {
-                        getComments();
-                      });
-                    });
-              } else if (comments.isEmpty) {
-                return SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CluckWidget(
-                          hue: widget.cluck.hue,
-                          avatarImage: widget.cluck.avatarImage,
-                          cluckType: CluckType.cluckHeader,
-                          isVisible: false,
-                          cluck: widget.cluck.cluck,
-                          commentCount: widget.cluck.commentCount,
-                        ),
-                        Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(FontAwesomeIcons.solidCommentDots,
-                                  size: 100,
-                                  color: Palette.cluckerRed
-                                      .toMaterialColor()
-                                      .shade200),
-                              Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text(
-                                    'Be the first to post a\ncomment on this cluck',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Palette.offBlack
-                                            .toMaterialColor()
-                                            .shade100,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 20),
-                                    maxLines: 2,
-                                  )),
-                            ]),
-                        const SizedBox(
-                          height: 75,
-                        )
-                      ],
-                    ));
-              }
-            }
-
-            return const Center(
-              child: CircularProgressIndicator(strokeWidth: 5),
-            );
-          },
-          future: getComments()),
+      CommentsBody(
+        cluckModel: widget.cluck.cluck,
+      ),
       FittedBox(
           child: Container(
               color: Palette.white,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                   SizedBox(
-                    height: MediaQuery.of(context).size.height * .05 + (MediaQuery.of(context).size.aspectRatio < (9/16) ? MediaQuery.of(context).size.height * .02 : 0),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .05 +
+                        (MediaQuery.of(context).size.aspectRatio < (9 / 16)
+                            ? MediaQuery.of(context).size.height * .02
+                            : 0),
                   ),
                   CluckWidget(
                     commentButtonStatic: true,
                     cluckType: CluckType.cluckHeader,
                     cluck: widget.cluck.cluck,
-                    commentCount: widget.cluck.commentCount,
-                    hue: widget.cluck.hue,
-                    avatarImage: widget.cluck.avatarImage,
                   ),
                 ],
               ))),
@@ -227,13 +153,11 @@ class _CommentsPageState extends State<CommentsPage> {
                                           body: cluckController.text,
                                           username: username!,
                                           userId: int.parse(id!),
-                                          posted: DateTime.now(),
                                           eggRating: 0));
                                   if (response.statusCode == 201) {
                                     setState(() {
                                       cluckController.text = '';
                                       cluckNode.unfocus();
-                                      getComments();
                                     });
                                   }
                                 },
@@ -248,7 +172,7 @@ class _CommentsPageState extends State<CommentsPage> {
             ],
           ),
         ]),
-      ])
+      ]),
     ]));
   }
 
@@ -264,51 +188,6 @@ class _CommentsPageState extends State<CommentsPage> {
     return numNewLines;
   }
 
-  Future<Object?> getComments() async {
-    List<Widget> commentWidgets = [];
-
-    List<CluckModel> commentData =
-        await cluckService.getCommentsByCluckId(widget.cluck.cluck.id);
-
-    if (commentData.isNotEmpty) {
-      for (int i = 0; i < commentData.length; i++) {
-        commentWidgets.add(CluckWidget(
-            cluck: commentData[i],
-            cluckType: CluckType.comment,
-            avatarImage: widget.cluck.avatarImage,
-            hue: widget.cluck.hue));
-      }
-
-
-        pageHasBeenBuilt = true;
-        commentWidgets.insert(
-            0,
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                CluckWidget(
-                  cluckType: CluckType.cluckHeader,
-                  isVisible: false,
-                  cluck: widget.cluck.cluck,
-                  commentCount: widget.cluck.commentCount,
-                  hue: widget.cluck.hue,
-                  avatarImage: widget.cluck.avatarImage,
-                )
-              ],
-            ));
-        commentWidgets.add(const SizedBox(
-          height: 75,
-        ));
-      }
-
-
-    comments = commentWidgets;
-
-   // commentWidgets.clear();
-
-    return comments;
-  }
-
   void _updateBarHeight({bool override = false}) {
     if (keyboardVisibilityController.isVisible || override == true) {
       barHeight = 168;
@@ -319,5 +198,118 @@ class _CommentsPageState extends State<CommentsPage> {
               ? 168
               : (((numNewLines + 1) * 19.285) + 40);
     }
+  }
+}
+
+class CommentsBody extends StatefulWidget {
+  const CommentsBody({Key? key, required this.cluckModel}) : super(key: key);
+
+  final CluckModel cluckModel;
+  @override
+  _CommentsBodyState createState() => _CommentsBodyState();
+}
+
+class _CommentsBodyState extends State<CommentsBody> {
+  final cluckService = CluckService();
+  static const pageSize = 15;
+
+  final PagingController<int, CluckModel> _pagingController = PagingController(
+    firstPageKey: 0,
+  );
+
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+    super.initState();
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final comments = await cluckService.getCommentsByCluckId(
+          widget.cluckModel.id, pageSize, pageKey);
+      final userService = UserService();
+
+      comments.insert(0, widget.cluckModel);
+
+      for (int i = 0; i < comments.length; i++) {
+        final avatarData =
+            await userService.getUserAvatarById(comments[i].userId);
+        comments[i].update(avatarData.hue, avatarData.image ?? '');
+      }
+
+      final isLastPage = comments.length < pageSize;
+
+      if (isLastPage) {
+        _pagingController.appendLastPage(comments);
+      } else {
+        _pagingController.appendPage(comments, ++pageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+      throw Exception(error);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => RefreshIndicator(
+    triggerMode: RefreshIndicatorTriggerMode.anywhere,
+      edgeOffset: 100,
+      displacement: 200,
+      onRefresh: () => Future.sync(
+            () => _pagingController.refresh(),
+          ),
+      child: PagedListView<int, CluckModel>(
+        pagingController: _pagingController,
+        builderDelegate: PagedChildBuilderDelegate<CluckModel>(
+          noMoreItemsIndicatorBuilder: (context) {
+            if (widget.cluckModel.commentCount! > 2) {
+              return const EndCard(commentsPage: true,);
+            }
+            return Container();
+          },
+          animateTransitions: true,
+          itemBuilder: (context, item, index) {
+            if (index == 0) {
+              return CluckWidget(
+                cluck: widget.cluckModel,
+                cluckType: CluckType.cluckHeader,
+                commentButtonStatic: true,
+                isVisible: false,
+                onProfile: true,
+              );
+            }
+            return CluckWidget(
+              cluck: item,
+              cluckType: CluckType.comment,
+            );
+          }
+        ),
+      ));
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
+}
+
+class NoCommentsCard extends StatelessWidget {
+  const NoCommentsCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.all(10),
+        child: Text(
+          'Be the first to post a\ncomment on this cluck',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Palette.offBlack.toMaterialColor().shade100,
+              fontWeight: FontWeight.w500,
+              fontSize: 20),
+          maxLines: 2,
+        ));
   }
 }

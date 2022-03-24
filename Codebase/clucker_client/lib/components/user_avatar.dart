@@ -1,20 +1,21 @@
 import 'package:clucker_client/screens/profile_page.dart';
+import 'package:clucker_client/services/user_service.dart';
 import 'package:clucker_client/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'circle_crop.dart';
 
-enum AvatarSize { small, medium, large }
+enum AvatarSize { small, smallMedium, medium, large }
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar(
       {Key? key,
-        required this.hue,
-        required this.userId,
-        required this.username,
-        required this.avatarSize,
-        this.onProfile = false,
-        this.avatarImage})
+      required this.hue,
+      required this.userId,
+      required this.username,
+      required this.avatarSize,
+      this.onProfile = false,
+      this.avatarImage})
       : super(key: key);
 
   final double hue;
@@ -37,6 +38,9 @@ class UserAvatar extends StatelessWidget {
         break;
       case AvatarSize.medium:
         size = SizeConfig.blockSizeHorizontal * 18.6;
+        break;
+      case AvatarSize.smallMedium:
+        size = SizeConfig.blockSizeHorizontal * 16.8;
         break;
       case AvatarSize.small:
         size = SizeConfig.blockSizeHorizontal * 14.6;
@@ -61,16 +65,33 @@ class UserAvatar extends StatelessWidget {
       width: size,
       height: size,
       child: RawMaterialButton(
-        onPressed: () {
+        onPressed: () async {
           if (!onProfile) {
+            final userService = UserService();
+            String? currentUser = await userService.storage.read(key: 'id');
+            final profile = await userService.getUserProfileById(userId);
+
+            final profileData = ProfileData(
+                userId: profile.id,
+                username: profile.username,
+                bio: profile.bio,
+                hue: profile.hue,
+                avatarImage: profile.avatarImage,
+                followersCount: profile.followersCount,
+                followingCount: profile.followingCount,
+                eggRating: profile.eggRating,
+                joined: profile.joined,
+                isFollowed: profile.isFollowed,
+                deactivateFollowButton: (currentUser == profile.id.toString()));
+
             Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ProfilePage(userId: userId, hue: hue, avatarImage: avatarImage!,)),
-            );
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(profileData: profileData),
+                ));
           }
         },
-        child: avatarImage! == ''
+        child: avatarImage == ''
             ? Stack(
                 children: [
                   Positioned(

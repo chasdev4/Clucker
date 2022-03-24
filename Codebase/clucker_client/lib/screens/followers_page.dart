@@ -3,15 +3,15 @@ import 'package:clucker_client/components/clucker_app_bar.dart';
 import 'package:clucker_client/models/user_account_model.dart';
 import 'package:clucker_client/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 enum PageContext { followers, following }
 
 class FollowersPage extends StatefulWidget {
-  const FollowersPage(
-      {Key? key,
-      required this.userId,
-      required this.username,
-      required this.pageContext})
+  const FollowersPage({Key? key,
+    required this.userId,
+    required this.username,
+    required this.pageContext})
       : super(key: key);
 
   final int userId;
@@ -19,17 +19,24 @@ class FollowersPage extends StatefulWidget {
   final PageContext pageContext;
 
   @override
-  State<FollowersPage> createState() => _FollowersPageState();
+  _FollowersPageState createState() => _FollowersPageState();
 }
 
 class _FollowersPageState extends State<FollowersPage> {
-  final userService = UserService();
-  List<Widget> followers = [];
+  static const pageSize = 15;
   late String title;
+  late int followersLength = 0;
+
+  final PagingController<int, UserAccountModel> _pagingController = PagingController(
+    firstPageKey: 0,
+  );
 
   @override
   void initState() {
-    super.initState();
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+
     title = widget.username + '\'';
 
     if (widget.username[widget.username.length - 1] != 's') {
@@ -50,63 +57,61 @@ class _FollowersPageState extends State<FollowersPage> {
         title += 'Following';
         break;
     }
+
+    super.initState();
   }
 
-  Future<Object?> getFollowers() async {
-    List<UserAccountModel> userAccounts = await userService.getFollowers(
-        id: widget.userId, pageContext: widget.pageContext);
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      UserService userService = UserService();
 
-    for (int i = 0; i < userAccounts.length; i++) {
-      followers.add(AccountWidget(
-          accountWidgetProfile: AccountWidgetProfile.follower,
-          userAccountModel: userAccounts[i]));
+      List<UserAccountModel> followers = await userService.getFollowers(id: widget.userId, pageContext: widget.pageContext);
+
+      followersLength = followers.length;
+
+      final isLastPage = followers.length < pageSize;
+
+      if (isLastPage) {
+        _pagingController.appendLastPage(followers);
+      } else {
+        _pagingController.appendPage(followers, ++pageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
     }
+  }
 
-    return followers;
+  Future<void> refresh() {
+    return Future.sync(() => _pagingController.refresh());
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getFollowers(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error}',
-                  style: const TextStyle(fontSize: 18),
+    return Scaffold(
+        appBar: CluckerAppBar(
+          username: widget.username,
+          userId: widget.userId,
+          appBarProfile: AppBarProfile.followers,
+          title: title,
+          fontSize: 24,
+        ),
+        body: RefreshIndicator(
+            onRefresh: () => refresh(),
+            child: PagedListView<int, UserAccountModel>(
+              pagingController: _pagingController,
+              builderDelegate: PagedChildBuilderDelegate<UserAccountModel>(
+                animateTransitions: true,
+                itemBuilder: (context, item, index) => AccountWidget(
+                  accountWidgetProfile: AccountWidgetProfile.follower,
+                  userAccountModel: item,
                 ),
-              );
-            } else if (snapshot.hasData) {
-              return Scaffold(
-                  appBar: CluckerAppBar(
-                    username: widget.username,
-                    userId: widget.userId,
-                    appBarProfile: AppBarProfile.followers,
-                    title: title,
-                    fontSize: 24,
-                  ),
-                  body: RefreshIndicator(
-                    onRefresh: () async {
-                      getFollowers();
-                    },
-                    child: ListView.builder(
-                      itemCount: followers.length,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemExtent: 50,
-                      itemBuilder: (BuildContext context, int index) {
-                        return followers[index];
-                      },
-                    ),
-                  ));
-            }
-          }
+              ),
+            )));
+  }
 
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator(strokeWidth: 5)),
-          );
-        });
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 }

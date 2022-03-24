@@ -1,10 +1,14 @@
 import 'package:clucker_client/components/div.dart';
 import 'package:clucker_client/components/palette.dart';
+import 'package:clucker_client/models/cluck_like_request.dart';
 import 'package:clucker_client/models/cluck_model.dart';
 import 'package:clucker_client/screens/comments_page.dart';
+import 'package:clucker_client/services/cluck_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:clucker_client/components/user_avatar.dart';
+import 'package:instant/instant.dart';
 import 'package:intl/intl.dart';
 
 enum CluckType { cluck, comment, cluckHeader }
@@ -16,26 +20,21 @@ class CluckWidget extends StatefulWidget {
       required this.cluck,
       this.commentButtonStatic = false,
       this.isVisible = true,
-      this.commentCount = 0,
-      this.onProfile = false,
-      required this.hue,
-     required this.avatarImage})
+      this.onProfile = false,})
       : super(key: key);
 
   final CluckType cluckType;
   final CluckModel cluck;
   final bool commentButtonStatic;
-  final int commentCount;
   final bool isVisible;
   final bool onProfile;
-  final double hue;
-  final String? avatarImage;
 
   @override
   _CluckWidgetState createState() => _CluckWidgetState();
 }
 
 class _CluckWidgetState extends State<CluckWidget> {
+  final storage = const FlutterSecureStorage();
   final DateFormat timeStampDate = DateFormat.yMMMMd('en_US');
   final DateFormat timeStampTime = DateFormat('h:mm a');
   final FocusNode focusNode = FocusNode();
@@ -74,9 +73,9 @@ class _CluckWidgetState extends State<CluckWidget> {
                         padding: const EdgeInsets.only(
                             top: 6, bottom: 6, left: 20, right: 2),
                         child: UserAvatar(
-                          username: widget.cluck.username,
+                            username: widget.cluck.username,
                             userId: widget.cluck.userId,
-                            hue: widget.hue,
+                            hue: widget.cluck.hue,
                             onProfile: widget.onProfile,
                             avatarImage: '',
                             avatarSize: AvatarSize.small),
@@ -146,9 +145,7 @@ class _CluckWidgetState extends State<CluckWidget> {
                       child: widget.cluckType != CluckType.comment
                           ? _CommentButton(
                               isStatic: widget.commentButtonStatic,
-                              commentCount: widget.commentButtonStatic && widget.commentCount > 0
-                                  ? widget.commentCount - 2
-                                  : widget.commentCount,
+                              commentCount: widget.cluck.commentCount!,
                               buttonSize: 25,
                               onPressed: () {
                                 Navigator.push(
@@ -157,8 +154,6 @@ class _CluckWidgetState extends State<CluckWidget> {
                                       builder: (context) => CommentsPage(
                                             cluck: CluckWidget(
                                               cluck: widget.cluck,
-                                              commentCount: widget.commentCount,
-                                              hue: widget.hue, avatarImage: widget.avatarImage!,
                                             ),
                                           )),
                                 );
@@ -166,10 +161,10 @@ class _CluckWidgetState extends State<CluckWidget> {
                             )
                           : null),
                   _EggControls(
-                    eggRating: widget.cluck.eggRating,
+                    cluckId: widget.cluck.id,
+                    eggRating: widget.cluck.eggRating!,
                     buttonSize: 25,
-                    //TODO: Pass the current rating from the logged in user
-                    currentRating: 0,
+                    currentRating: widget.cluck.currentRating,
                   ),
                   const SizedBox(
                     width: 10,
@@ -201,7 +196,9 @@ class _CluckWidgetState extends State<CluckWidget> {
                               width: 13,
                             ),
                             Text(
-                              '${timeStampDate.format(widget.cluck.posted)} at ${timeStampTime.format(widget.cluck.posted)}',
+                              timeStampDate.format(dateTimeToZone(zone: DateTime.now().timeZoneName, datetime: widget.cluck.posted)) +
+                                  ' at ' +
+                                  timeStampTime.format(dateTimeToZone(zone: DateTime.now().timeZoneName, datetime: widget.cluck.posted)),
                               style: TextStyle(
                                 fontFamily: 'OpenSans',
                                 fontSize: 13.44,
@@ -308,9 +305,15 @@ class _CommentButtonState extends State<_CommentButton> {
 }
 
 class _EggControls extends StatefulWidget {
-  const _EggControls({Key? key, required this.eggRating, required this.buttonSize, required this.currentRating})
+  const _EggControls(
+      {Key? key,
+      required this.cluckId,
+      required this.eggRating,
+      required this.buttonSize,
+      required this.currentRating})
       : super(key: key);
 
+  final String cluckId;
   final double buttonSize;
   final int eggRating;
   final int currentRating;
@@ -333,17 +336,17 @@ class _EggControlsState extends State<_EggControls> {
   void initState() {
     super.initState();
     switch (widget.currentRating) {
-      case -1:
+      case 1:
         isSelected = [true, false];
-        previousSelection = [true, false];
+        previousSelection = [false, false];
         break;
       case 0:
         isSelected = [false, false];
         previousSelection = [false, false];
         break;
-      case 1:
+      case -1:
         isSelected = [false, true];
-        previousSelection = [false, true];
+        previousSelection = [false, false];
         break;
     }
   }
@@ -352,7 +355,7 @@ class _EggControlsState extends State<_EggControls> {
   Widget build(BuildContext context) {
     return Flexible(
         child: Column(children: [
-      Text(widget.eggRating != 0 ? widget.eggRating.toString() : '',
+      Text(eggCount != 0 ? eggCount.toString() : '',
           style: TextStyle(
               height: 0,
               fontWeight: FontWeight.w900,
@@ -373,18 +376,35 @@ class _EggControlsState extends State<_EggControls> {
               }
             }
 
-            if ((index == 0 && isSelected[index] == true) ||
-                (index == 1 && isSelected[index] == false)) {
+            final cluckService = CluckService();
+
+            if ((index == 0 && isSelected[index]) ||
+                (index == 1 && !isSelected[index])) {
               eggCount++;
+              if (!isSelected[0] && !isSelected[1]) {
+                cluckService.removeEggToCluck(cluckId: widget.cluckId);
+               } else {
+                cluckService.addEggToCluck(
+                    request: CluckLikeRequest(cluckId: widget.cluckId));
+              }
             } else if ((index == 0 && isSelected[index] == false) ||
                 (index == 1 && isSelected[index] == true)) {
               eggCount--;
+              if (!isSelected[0] && !isSelected[1]) {
+                cluckService.addEggToCluck(
+                    request: CluckLikeRequest(cluckId: widget.cluckId));
+              } else {
+                cluckService.removeEggToCluck(cluckId: widget.cluckId);
+              }
             }
 
             if (index == 1 && previousSelection[0] == true) {
               eggCount--;
+              cluckService.removeEggToCluck(cluckId: widget.cluckId);
             } else if (index == 0 && previousSelection[1] == true) {
               eggCount++;
+              cluckService.addEggToCluck(
+                  request: CluckLikeRequest(cluckId: widget.cluckId));
             }
           });
         },

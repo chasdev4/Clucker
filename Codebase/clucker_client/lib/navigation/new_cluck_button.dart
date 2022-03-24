@@ -15,17 +15,19 @@ class NewCluckButton extends StatefulWidget {
   const NewCluckButton(
       {Key? key,
       required this.userId,
-      required this.username})
+      required this.username,
+      required this.fetchFeedPageAgain})
       : super(key: key);
   final int userId;
   final String username;
+  final Function fetchFeedPageAgain;
 
   @override
   _NewCluckButtonState createState() => _NewCluckButtonState();
 }
 
 class _NewCluckButtonState extends State<NewCluckButton> {
-  final cluckNode = FocusNode();
+  late FocusNode cluckNode;
   late TextEditingController cluckController;
   late KeyboardVisibilityController keyboardVisibilityController;
 
@@ -37,6 +39,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   @override
   void initState() {
     super.initState();
+    cluckNode = FocusNode();
     keyboardVisibilityController = KeyboardVisibilityController();
     cluckController = TextEditingController();
     numNewLines = 0;
@@ -55,7 +58,11 @@ class _NewCluckButtonState extends State<NewCluckButton> {
   void dispose() {
     keyboardSubscription.cancel();
     cluckController.dispose();
-    overlayEntry.remove();
+    cluckNode.dispose();
+    if (overlayVisible) {
+      overlayEntry.remove();
+      overlayVisible = false;
+    }
     super.dispose();
   }
 
@@ -157,8 +164,8 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                       child: Column(
                         children: [
                           Container(
-                              padding: EdgeInsets.all(
-                                  cluckNode.hasFocus ? 3 : 13),
+                              padding:
+                                  EdgeInsets.all(cluckNode.hasFocus ? 3 : 13),
                               width: MediaQuery.of(context).size.width - 50,
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -167,8 +174,7 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(
-                                        left:
-                                        cluckNode.hasFocus ? 10 : 0),
+                                        left: cluckNode.hasFocus ? 10 : 0),
                                     child: const Text(
                                       'New Cluck',
                                       style: TextStyle(
@@ -201,11 +207,12 @@ class _NewCluckButtonState extends State<NewCluckButton> {
                                       body: cluckController.text,
                                       username: widget.username,
                                       userId: widget.userId.toString(),
-                                      posted: DateTime.now().toString(),
                                       commentCount: '0',
                                       eggRating: '0'));
 
                               if (response.statusCode == 201) {
+                                cluckNode.unfocus();
+                                widget.fetchFeedPageAgain(true);
                                 setState(() {
                                   overlayEntry.remove();
                                   overlayVisible = false;
