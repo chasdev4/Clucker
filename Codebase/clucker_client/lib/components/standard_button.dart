@@ -8,7 +8,6 @@ class StandardButton extends StatelessWidget {
   const StandardButton(
       {Key? key,
       required this.text,
-      required this.routeName,
       required this.onPress,
         this.onPressRight,
       this.isSecondary = false,
@@ -16,7 +15,6 @@ class StandardButton extends StatelessWidget {
       : super(key: key);
 
   final String text;
-  final String routeName;
   final Function onPress;
   final Function? onPressRight;
   final bool isSecondary;

@@ -59,111 +59,116 @@ class _LogInFormState extends State<_LogInForm> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Form(
-      key: _logInFormKey,
-      child: Transform.translate(
-        offset: Offset(0,
-        (MediaQuery.of(context).viewInsets.bottom * offsetScale * 0.3)),
-    child: Container(
-    alignment: Alignment.center,
-    child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Column(
-            children: [
-             Image(
-                    height: SizeConfig.blockSizeVertical * 40,
-                    image: const AssetImage(
-                      'assets/icons/clucker-icon.png',
-                    ),
-                  ),
-              SizedBox(
-                width: SizeConfig.blockSizeVertical * 40 * 0.55,
-                child: const FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: Text(
-                      'Clucker',
-                      style: TextStyle(
-                        fontFamily: 'OpenSans',
-                        fontWeight: FontWeight.w700,
+        key: _logInFormKey,
+        child: Transform.translate(
+            offset: Offset(0,
+                (MediaQuery.of(context).viewInsets.bottom * offsetScale * 0.3)),
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image(
+                        height: SizeConfig.blockSizeVertical * 40,
+                        image: const AssetImage(
+                          'assets/icons/clucker-icon.png',
+                        ),
                       ),
-                    ),
+                      SizedBox(
+                        width: SizeConfig.blockSizeVertical * 40 * 0.55,
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Transform.translate(
+                              offset: const Offset(0, -7),
+                              child: const Text(
+                                'Clucker',
+                                style: TextStyle(
+                                  fontFamily: 'OpenSans',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
                   ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-             TextBox(
-                  textBoxProfile: TextBoxProfile.emailOrUsernameFieldLogin,
-                  controller: emailOrUsernameController,
-                  focusNode: emailOrUsernameFocusNode,
-                  onEditingComplete: () {
-                    FocusScope.of(context).nextFocus();
-                    return true;
-                  },
-                  onChanged: () {
-                    FocusScope.of(context).nextFocus();
-                    return true;
-                  },
-              ),
-             TextBox(
-                    textBoxProfile: TextBoxProfile.passwordFieldLogin,
-                    controller: passwordController,
-                    focusNode: passwordFocusNode,
-                    onFieldSubmitted: () => FocusScope.of(context).unfocus(),
-                  ),
-             StandardButton(
-                    text: 'Log-In',
-                    routeName: '',
-                    onPress: () async {
-                      AuthRequest authRequest = AuthRequest(
-                          username: emailOrUsernameController.text,
-                          password: passwordController.text);
-                      AuthService authService = AuthService();
+                  Column(
+                    children: [
+                      TextBox(
+                        textBoxProfile:
+                            TextBoxProfile.emailOrUsernameFieldLogin,
+                        controller: emailOrUsernameController,
+                        focusNode: emailOrUsernameFocusNode,
+                        onEditingComplete: () {
+                          FocusScope.of(context).nextFocus();
+                          return true;
+                        },
+                        onChanged: () {
+                          FocusScope.of(context).nextFocus();
+                          return true;
+                        },
+                      ),
+                      TextBox(
+                        textBoxProfile: TextBoxProfile.passwordFieldLogin,
+                        controller: passwordController,
+                        focusNode: passwordFocusNode,
+                        onFieldSubmitted: () =>
+                            FocusScope.of(context).unfocus(),
+                      ),
+                      StandardButton(
+                        text: 'Log-In',
+                        onPress: () async {
+                          AuthRequest authRequest = AuthRequest(
+                              username: emailOrUsernameController.text,
+                              password: passwordController.text);
+                          AuthService authService = AuthService();
 
-                      Response response = await authService.login(authRequest);
+                          Response response =
+                              await authService.login(authRequest);
 
-                      if (response.statusCode == 200) {
-                        response.headers.forEach((key, value) {
-                          if (key == 'authorization') {
-                            storage.write(key: key, value: value);
+                          if (response.statusCode == 200) {
+                            response.headers.forEach((key, value) {
+                              if (key == 'authorization') {
+                                storage.write(key: key, value: value);
+                              }
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()),
+                              );
+                            });
+                          } else {
+                            passwordController.text = '';
+                            emailOrUsernameController.text = '';
+                            String title = 'Log-In Error';
+                            String message =
+                                'There was an issue with your password or username.'
+                                '\nPlease try again.';
+                            dialogUtil.oneButtonDialog(context, title, message);
                           }
-
+                        },
+                      ),
+                      StandardButton(
+                        text: 'Sign-Up',
+                        onPress: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const Home()),
+                                builder: (context) => const UsernamePage()),
                           );
-                        });
-                      } else {
-                        passwordController.text = '';
-                        emailOrUsernameController.text = '';
-                        String title = 'Log-In Error';
-                        String message = 'There was an issue with your password or username.'
-                            '\nPlease try again.';
-                        dialogUtil.oneButtonDialog(context, title, message);
-                      }
-                    },
+                        },
+                        isSecondary: true,
+                      ),
+                    ],
                   ),
-             StandardButton(
-                    text: 'Sign-Up',
-                    routeName: '',
-                    onPress: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const UsernamePage()),
-                      );
-                    },
-                    isSecondary: true,
+                  const SizedBox(
+                    height: 50,
                   ),
-            ],
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-        ],
-      ),
-    )));
+                ],
+              ),
+            )));
   }
 }
