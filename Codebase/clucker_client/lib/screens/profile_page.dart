@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:clucker_client/components/end_card.dart';
+import 'package:clucker_client/components/page_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -119,11 +119,41 @@ class _ProfileBodyState extends State<ProfileBody> {
       pagingController: _pagingController,
       builderDelegate: PagedChildBuilderDelegate<CluckModel>(
         noMoreItemsIndicatorBuilder: (context) {
-          return const EndCard();
+          return const PageCard(cardType: CardType.endCard,);
         },
         animateTransitions: true,
+        noItemsFoundIndicatorBuilder: (context) {
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width -
+                MediaQuery.of(context).size.width / 5,
+            child: Center(
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(FontAwesomeIcons.egg,
+                        size: 100,
+                        color: Palette.cluckerRed.toMaterialColor().shade200),
+                    Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          'Nothing to show here!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Palette.offBlack.toMaterialColor().shade100,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20),
+                          maxLines: 2,
+                        )),
+                    const SizedBox(height: 75,)
+                  ]),
+            ),
+          );
+        },
         itemBuilder: (context, item, index) => CluckWidget(
           cluck: item,
+          onProfile: true,
         ),
       ));
 

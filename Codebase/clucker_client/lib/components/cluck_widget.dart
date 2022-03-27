@@ -20,7 +20,9 @@ class CluckWidget extends StatefulWidget {
       required this.cluck,
       this.commentButtonStatic = false,
       this.isVisible = true,
-      this.onProfile = false,})
+      this.onProfile = false,
+      this.newEggRating = false,
+      this.eggRating = 0})
       : super(key: key);
 
   final CluckType cluckType;
@@ -28,6 +30,8 @@ class CluckWidget extends StatefulWidget {
   final bool commentButtonStatic;
   final bool isVisible;
   final bool onProfile;
+  final bool newEggRating;
+  final int eggRating;
 
   @override
   _CluckWidgetState createState() => _CluckWidgetState();
@@ -38,8 +42,15 @@ class _CluckWidgetState extends State<CluckWidget> {
   final DateFormat timeStampDate = DateFormat.yMMMMd('en_US');
   final DateFormat timeStampTime = DateFormat('h:mm a');
   final FocusNode focusNode = FocusNode();
+  late int eggRating;
 
   DateTime now = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    eggRating = widget.cluck.eggRating ?? 0;
+  }
 
   @override
   void dispose() {
@@ -153,6 +164,12 @@ class _CluckWidgetState extends State<CluckWidget> {
                                   MaterialPageRoute(
                                       builder: (context) => CommentsPage(
                                             cluck: CluckWidget(
+                                              newEggRating:
+                                                  widget.cluck.eggRating !=
+                                                          eggRating
+                                                      ? true
+                                                      : false,
+                                              eggRating: eggRating,
                                               cluck: widget.cluck,
                                             ),
                                           )),
@@ -161,11 +178,15 @@ class _CluckWidgetState extends State<CluckWidget> {
                             )
                           : null),
                   _EggControls(
-                    cluckId: widget.cluck.id,
-                    eggRating: widget.cluck.eggRating!,
-                    buttonSize: 25,
-                    currentRating: widget.cluck.currentRating,
-                  ),
+                      cluckId: widget.cluck.id,
+                      eggRating: widget.newEggRating == true
+                          ? widget.eggRating
+                          : widget.cluck.eggRating!,
+                      buttonSize: 25,
+                      currentRating: widget.cluck.currentRating,
+                      updateEggRating: (value) {
+                        eggRating += value as int;
+                      }),
                   const SizedBox(
                     width: 10,
                   )
@@ -196,9 +217,13 @@ class _CluckWidgetState extends State<CluckWidget> {
                               width: 13,
                             ),
                             Text(
-                              timeStampDate.format(dateTimeToZone(zone: DateTime.now().timeZoneName, datetime: widget.cluck.posted)) +
+                              timeStampDate.format(dateTimeToZone(
+                                      zone: DateTime.now().timeZoneName,
+                                      datetime: widget.cluck.posted)) +
                                   ' at ' +
-                                  timeStampTime.format(dateTimeToZone(zone: DateTime.now().timeZoneName, datetime: widget.cluck.posted)),
+                                  timeStampTime.format(dateTimeToZone(
+                                      zone: DateTime.now().timeZoneName,
+                                      datetime: widget.cluck.posted)),
                               style: TextStyle(
                                 fontFamily: 'OpenSans',
                                 fontSize: 13.44,
@@ -310,13 +335,15 @@ class _EggControls extends StatefulWidget {
       required this.cluckId,
       required this.eggRating,
       required this.buttonSize,
-      required this.currentRating})
+      required this.currentRating,
+      this.updateEggRating})
       : super(key: key);
 
   final String cluckId;
   final double buttonSize;
   final int eggRating;
   final int currentRating;
+  final Function? updateEggRating;
 
   @override
   _EggControlsState createState() => _EggControlsState();
@@ -381,15 +408,17 @@ class _EggControlsState extends State<_EggControls> {
             if ((index == 0 && isSelected[index]) ||
                 (index == 1 && !isSelected[index])) {
               eggCount++;
+              widget.updateEggRating!(1);
               if (!isSelected[0] && !isSelected[1]) {
                 cluckService.removeEggToCluck(cluckId: widget.cluckId);
-               } else {
+              } else {
                 cluckService.addEggToCluck(
                     request: CluckLikeRequest(cluckId: widget.cluckId));
               }
             } else if ((index == 0 && isSelected[index] == false) ||
                 (index == 1 && isSelected[index] == true)) {
               eggCount--;
+              widget.updateEggRating!(-1);
               if (!isSelected[0] && !isSelected[1]) {
                 cluckService.addEggToCluck(
                     request: CluckLikeRequest(cluckId: widget.cluckId));
@@ -400,9 +429,11 @@ class _EggControlsState extends State<_EggControls> {
 
             if (index == 1 && previousSelection[0] == true) {
               eggCount--;
+              widget.updateEggRating!(-1);
               cluckService.removeEggToCluck(cluckId: widget.cluckId);
             } else if (index == 0 && previousSelection[1] == true) {
               eggCount++;
+              widget.updateEggRating!(1);
               cluckService.addEggToCluck(
                   request: CluckLikeRequest(cluckId: widget.cluckId));
             }

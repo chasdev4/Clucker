@@ -1,5 +1,3 @@
-// import 'package:clucker_client/utilities/size_config.dart';
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DiscoverPage extends StatefulWidget {
@@ -12,7 +10,11 @@ class DiscoverPage extends StatefulWidget {
 class _DiscoverPageState extends State<DiscoverPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Center(
+        child: Text(
+          'Coming Soon!',
+          style: TextStyle(fontSize: 30),
+        ));
   }
 }
 

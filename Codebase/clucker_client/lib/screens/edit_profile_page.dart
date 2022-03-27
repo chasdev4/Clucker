@@ -27,14 +27,14 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  late String? initalValue;
+  late String? initialValue;
   late String bioText;
   final TextEditingController bioController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    bioController.text = initalValue = bioText = widget.bio;
+    bioController.text = initialValue = bioText = widget.bio;
     bioController.selection = TextSelection.fromPosition(TextPosition(offset: bioController.text.length));
   }
 
@@ -121,14 +121,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 Navigator.pop(context);
               },
               onPressRight: () async {
-              if (bioText != initalValue) {
+              if (bioText != initialValue) {
                   UserService userService = UserService();
                   Response response = await userService.updateBio(
                       widget.userId, BioUpdateRequest(bio: bioText));
 
-                  print(response.statusCode);
-
                   if (response.statusCode != 200) {
+                    print(response.statusCode);
                     DialogUtil dialogUtil = DialogUtil();
                     dialogUtil.oneButtonDialog(
                         context,
@@ -136,11 +135,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         'We encountered an'
                             ' unexpected error while processing your request,'
                             ' please try again later.');
+
+                    return Future.delayed(const Duration(seconds: 6), () {
+                      Navigator.pop(context);
+                    });
+
                   }
                 }
                 Navigator.pop(context);
 
-                widget.refresh(bioController.text);
+                widget.refresh(bioText);
               },
               standardButtonProfile: StandardButtonProfile.saveCancel,
             ),

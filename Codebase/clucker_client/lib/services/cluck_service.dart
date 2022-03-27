@@ -16,9 +16,10 @@ class CluckService {
   static const String url =
       'http://cluckerapi-env.eba-zjcqgymj.us-east-2.elasticbeanstalk.com:8080/';
 
-  Future<List<CluckModel>> getCluckResults({String term = '', int size = 20, int page = 0}) async {
+  Future<List<CluckModel>> getCluckResults(
+      {String term = '', int size = 20, int page = 0}) async {
     final response = await http.read(
-        Uri.parse('${url}clucks?search=$term&size=$size&page=$page'),
+      Uri.parse('${url}clucks?search=$term&size=$size&page=$page'),
     );
 
     bool isEmpty = json.decode(response)['empty'];
@@ -132,9 +133,10 @@ class CluckService {
         'An error has occurred on the method getCluckByCluckId(). Status Code: ${response.statusCode}');
   }
 
-  Future<List<CluckModel>> getCommentsByCluckId(String cluckId, int size, int page) async {
-    final response =
-        await http.get(Uri.parse('${url}clucks/$cluckId/comments'));
+  Future<List<CluckModel>> getCommentsByCluckId(
+      String cluckId, int size, int page) async {
+    final response = await http.get(Uri.parse(
+        '${url}clucks/$cluckId/comments?sort=posted,asc&size=$size&page=$page'));
 
     if (response.statusCode == 200) {
       var jsonClucks = json.decode(response.body)['content'];
@@ -151,9 +153,12 @@ class CluckService {
         'An error has occurred on the method getCommentsByCluckId(). Status Code: ${response.statusCode}');
   }
 
-  Future<List<CluckModel>> getProfileClucksById(int userId, int size, int page) async {
+  Future<List<CluckModel>> getProfileClucksById(
+      int userId, int size, int page) async {
     String? token = await getToken();
-    final response = await http.get(Uri.parse('${url}users/$userId/clucks?sort=posted,desc&size=$size&page=$page'),
+    final response = await http.get(
+        Uri.parse(
+            '${url}users/$userId/clucks?sort=posted,desc&size=$size&page=$page'),
         headers: {'authorization': token!});
 
     if (response.statusCode == 200) {

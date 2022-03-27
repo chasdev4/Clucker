@@ -1,3 +1,4 @@
+import 'package:clucker_client/components/page_card.dart';
 import 'package:clucker_client/components/palette.dart';
 import 'package:clucker_client/components/tab_controls.dart';
 import 'package:clucker_client/components/text_box.dart';
@@ -224,26 +225,6 @@ class _NoResultsFoundPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width / 1.7,
-          child: Opacity(
-              opacity: 0.5,
-              child: Image.asset(
-                  'assets/icons/no_results_found_icon_512x512.png')),
-        ),
-        Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Text('No results found...',
-                style: TextStyle(
-                  color: Palette.offBlack.toMaterialColor().shade300,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ))),
-      ],
-    ));
+    return const PageCard(cardType: CardType.noResults);
   }
 }
