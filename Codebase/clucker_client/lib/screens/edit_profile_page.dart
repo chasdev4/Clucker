@@ -116,7 +116,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             StandardButton(
               text: '',
-              routeName: '',
               onPress: () {
                 Navigator.pop(context);
               },
@@ -127,7 +126,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       widget.userId, BioUpdateRequest(bio: bioText));
 
                   if (response.statusCode != 200) {
-                    print(response.statusCode);
                     DialogUtil dialogUtil = DialogUtil();
                     dialogUtil.oneButtonDialog(
                         context,

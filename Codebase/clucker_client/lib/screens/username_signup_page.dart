@@ -103,7 +103,6 @@ class _UsernameFormState extends State<UsernameForm> {
                     ),
                     StandardButton(
                       text: 'Next',
-                      routeName: '',
                       onPress: () async {
                         bool isGood =
                             await userService.usernameAvailable(username);
@@ -121,7 +120,6 @@ class _UsernameFormState extends State<UsernameForm> {
                     ),
                     StandardButton(
                       text: 'Back',
-                      routeName: '',
                       onPress: () {
                         Navigator.pop(context);
                       },

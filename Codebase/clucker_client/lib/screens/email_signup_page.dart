@@ -142,7 +142,6 @@ class _EmailFormState extends State<EmailForm> {
                 ),
                 StandardButton(
                   text: 'Sign-Up',
-                  routeName: '',
                   onPress: () async {
                     String errorMessage = '';
                     Response response = Response('', 400);
@@ -207,7 +206,6 @@ class _EmailFormState extends State<EmailForm> {
                 ),
                 StandardButton(
                   text: 'Back',
-                  routeName: '',
                   onPress: () {
                     Navigator.pop(context);
                   },
